@@ -48,7 +48,7 @@ The counter app has already been set up to let us watch what happens inside as w
 
 Open up your browser's DevTools. Then, choose the "Redux" tab in the DevTools, and click the "State" button in the upper-right toolbar. You should see something that looks like this:
 
-![Redux DevTools: initial app state](/img/tutorials/essentials/devtools-initial.png)
+![Redux DevTools: initial app state](/img/tutorials/essentials/devtools-basic-counter.png)
 
 On the right, we can see that our Redux store is starting off with an app state value that looks like this:
 

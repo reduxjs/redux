@@ -29,6 +29,8 @@ In [Part 1: Redux Overview and Concepts](./part-1-overview-concepts.md), we look
 
 Now that you have some idea of what these pieces are, it's time to put that knowledge into practice. We're going to build a small social media feed app, which will include a number of features that demonstrate some real-world use cases. This will help you understand how to use Redux in your own applications.
 
+We'll be using [TypeScript](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html) syntax to write our code. You can use Redux with plain JavaScript, but using TypeScript helps prevent many common mistakes, provides built-in documentation for your code, and lets your editor show you what variable types are needed in places like React components and Redux reducers. **We strongly recommend using TypeScript for all Redux applications.**
+
 :::caution
 
 The example app is not meant as a complete production-ready project. The goal is to help you learn the Redux APIs and typical usage patterns, and point you in the right direction using some limited examples. Also, some of the early pieces we build will be updated later on to show better ways to do things. **Please read through the whole tutorial to see all the concepts in use**.
@@ -59,136 +61,179 @@ If you'd like to see the final version of what we're going to build, you can che
 
 Once you've finished this tutorial, you'll probably want to try working on your own projects. **We recommend using the [Redux template for Vite](../../introduction/Installation.md#create-a-react-redux-app) as the fastest way to create a new Redux + React project**. It comes with Redux Toolkit and React-Redux already configured, using [the same "counter" app example you saw in Part 1](./part-1-overview-concepts.md). This lets you jump right into writing your actual application code without having to add the Redux packages and set up the store.
 
-If you want to know specific details on how to add Redux to a project, see this explanation:
-
-<DetailedExplanation title="Detailed Explanation: Adding Redux to a React Project">
-
-The Redux template for Vite comes with Redux Toolkit and React-Redux already configured. If you're setting up a new project from scratch without that template, follow these steps:
-
-1. Add the `@reduxjs/toolkit` and `react-redux` packages:
-
-```bash
-# Use NPM, or alternatively Yarn or PNPM as preferred
-npm i @reduxjs/toolkit react-redux
-```
-
-2. Create a Redux store using RTK's `configureStore` API, and export the store types needed for the rest of the application:
-
-```ts title="src/app/store.ts"
-import { configureStore } from '@reduxjs/toolkit'
-
-// highlight-start
-export const store = configureStore({
-  reducer: {
-    // Empty to start with, will be filled in next
-  }
-})
-// highlight-end
-
-// Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
-export type AppStore = typeof store
-```
-
-3. Define pre-typed versions of the React-Redux hooks, so that the `RootState` and `AppDispatch` types are built in automatically:
-
-```ts title="src/app/hooks.ts"
-import { useDispatch, useSelector } from 'react-redux'
-import type { AppDispatch, RootState } from './store'
-
-// Use throughout your app instead of plain `useDispatch` and `useSelector`
-export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
-export const useAppSelector = useSelector.withTypes<RootState>()
-```
-
-4. Create a Redux slice file, define a reducer with `createSlice`, and add that reducer to the store:
-
-```ts title="src/features/counter/counterSlice.ts"
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-
-// Define a type for the slice state
-export interface CounterState {
-  value: number
-}
-
-// Define the initial state using that type
-const initialState: CounterState = {
-  value: 0
-}
-
-export const counterSlice = createSlice({
-  name: 'counter',
-  // `createSlice` will infer the state type from the `initialState` argument
-  initialState,
-  reducers: {
-    // Use the PayloadAction type to declare the contents of `action.payload`
-    amountAdded: (state, action: PayloadAction<number>) => {
-      state.value += action.payload
-    }
-  }
-})
-
-export const { amountAdded } = counterSlice.actions
-
-export default counterSlice.reducer
-```
-
-```ts title="src/app/store.ts"
-import { configureStore } from '@reduxjs/toolkit'
-// highlight-next-line
-import counterReducer from "@/features/counter/counterSlice
-
-// highlight-start
-export const store = configureStore({
-  reducer: {
-    // highlight-start
-    // Add the slice reducer to the store
-    counter: counterReducer
-    // highlight-end
-  }
-})
-// highlight-end
-```
-
-5. Wrap your root React component with the `<Provider>` component from React-Redux, like:
-
-```tsx title="@/main.tsx"
-import ReactDOM from 'react-dom/client'
-import { Provider } from 'react-redux'
-import { store } from './app/store'
-import { App } from './App'
-
-const root = ReactDOM.createRoot(document.getElementById('root')!)
-
-root.render(
-  <Provider store={store}>
-    <App />
-  </Provider>
-)
-```
-
-</DetailedExplanation>
-
 #### Exploring the Initial Project
 
 Let's take a quick look at what the initial project contains:
 
-- `/public`: the HTML host page template and other static files like icons
+- `/public`: base CSS styles and other static files like icons
 - `/src`
-  - `index.js`: the entry point file for the application. It renders the React-Redux `<Provider>` component and the main `<App>` component.
-  - `App.js`: the main application component. Renders the top navbar and handles client-side routing for the other content.
+  - `main.tsx`: the entry point file for the application, which renders the `<App>` component. In this example, it also sets up the fake REST API on page load.
+  - `App.tsx`: the main application component. Renders the top navbar and handles client-side routing for the other content.
   - `index.css`: styles for the complete application
   - `/api`
-    - `client.js`: a small AJAX request client that allows us to make GET and POST requests
-    - `server.js`: provides a fake REST API for our data. Our app will fetch data from these fake endpoints later.
+    - `client.ts`: a small AJAX request client that allows us to make GET and POST requests
+    - `server.ts`: provides a fake REST API for our data. Our app will fetch data from these fake endpoints later.
   - `/app`
-    - `Navbar.js`: renders the top header and nav content
-    - `store.js`: creates the Redux store instance
+    - `Navbar.tsx`: renders the top header and nav content
 
-If you load the app now, you should see the header and a welcome message. We can also open up the Redux DevTools Extension and see that our initial Redux state is entirely empty.
+If you load the app now, you should see the header and a welcome message, but no functionality.
+
+The project is configured to use [Yarn 4](https://yarnpkg.com/) as the package manager, but you can use any package manager ([NPM](https://docs.npmjs.com/cli/v10), [PNPM](https://pnpm.io/), or [Bun](https://bun.sh/docs/cli/install)) as you prefer.
 
 With that, let's get started!
+
+## Setting Up the Redux Store
+
+Right now the project is empty, so we'll need to start by doing the one-time setup for the Redux pieces.
+
+### Adding the Redux Packages
+
+If you look at `package.json`, you'll see that we've already installed the two packages needed to use Redux:
+
+- `@reduxjs/toolkit`: the modern Redux package, which includes all the Redux functions we'll be using to build the app
+- `react-redux`: the functions needed to let your React components talk to a Redux store
+
+If you're setting up a project from scratch, start by adding those packages to the project yourself.
+
+### Creating the Store
+
+The first step is to create an actual Redux store. **One of the principles of Redux is that there should only be _one_ store instance for an entire application**.
+
+We typically create and export the Redux store instance in its own file. The actual folder structure for the application is up to you, but it's standard to have application-wide setup and configuration in a `src/app/` folder.
+
+We'll start by adding a `src/app/store.ts` file and creating the store.
+
+**Redux Toolkit includes a method called `configureStore`**. This function creates a new Redux store instance. It has several options that you can pass in to change the store's behavior. It also applies the most common and useful configuration settings automatically, including checking for typical mistakes, and enabling the Redux DevTools extension so that you can view the state contents and action history.
+
+```ts title="src/app/store.ts"
+import { configureStore } from '@reduxjs/toolkit'
+
+// highlight-start
+export const store = configureStore({
+  // Pass in the root reducer setup as the `reducer` argument
+  reducer: {
+    // An example slice reducer function that returns a fixed state value
+    value: (state: number = 123) => state
+  }
+})
+// highlight-end
+```
+
+**`configureStore` always requires a `reducer` option**. This should typically be an object containing the individual "slice reducers" for the different parts of the application. (If necessary, you can also create the root reducer function separately and pass that as the `reducer` argument.)
+
+For this first step, we're passing in a mock slice reducer function for the `value` field, to show what the setup looks like. We'll replace this with a real slice reducer in just a minute.
+
+:::tip Setup with Next.js
+
+If you're using Next.js, the setup process takes a few more steps. See the [Setup with Next.js](../../usage/nextjs.mdx) page for details on how to set up Redux with Next.js.
+
+:::
+
+### Providing the Store
+
+Redux by itself is a plain JS library, and can work with any UI layer. In this app, we're using React, so we need a way to let our React components interact with the Redux store.
+
+To make this work, we need to use the React-Redux library and pass the Redux store into a `<Provider>` component. This uses [React's Context API](https://react.dev/learn/passing-data-deeply-with-context) to make the Redux store accessible to all of the React components in our application.
+
+:::tip
+
+It's important that we _should not_ try to directly import the Redux store into other application code files! Because there's only one store file, directly importing the store can accidentally cause circular import issues (where file A imports B imports C imports A), which lead to hard-to-track bugs. Additionally, we want to be able to [write tests for the components and Redux logic](../../usage/WritingTests.mdx), and those tests will need to create their own Redux store instances. Providing the store to the components via Context keeps this flexible and avoids import problems.
+
+:::
+
+To do this, we'll import the `store` into the `main.tsx` entry point file, wrap a `<Provider>` with the store around the `<App>` component:
+
+```tsx title="src/main.tsx"
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+// highlight-next-line
+import { Provider } from 'react-redux'
+
+import App from './App'
+// highlight-next-line
+import { store } from './app/store'
+
+// skip mock API setup
+
+const root = createRoot(document.getElementById('root')!)
+
+root.render(
+  <React.StrictMode>
+    // highlight-start
+    <Provider store={store}>
+      <App />
+    </Provider>
+    // highlight-end
+  </React.StrictMode>
+)
+```
+
+### Inspecting the Redux State
+
+Now that we have a store, we can use the Redux DevTools extension to view the current Redux state.
+
+If you open up your browser's DevTools view (such as by right-clicking anywhere in the page and choosing "Inspect"), you can click on the "Redux" tab. This will show the history of dispatched actions and the current state value:
+
+![Redux DevTools: initial app state](/img/tutorials/essentials/devtools-initial.png)
+
+The current state value should be an object that looks like this:
+
+```ts
+{
+  value: 123
+}
+```
+
+That shape was defined by the `reducer` option we passed into `configureStore`: an object, with a field named `value`, and the slice reducer for the `value` field returns a number as its state.
+
+### Exporting Store Types
+
+Since we're using TypeScript, we're going to frequently refer to TS types for "the type of the Redux state" and "the type of the Redux store `dispatch` function".
+
+We need to export those types from the `store.ts` file. We'll define the types by using the TS `typeof` operator to ask TS to infer the types based on the Redux store definition:
+
+```ts title="src/app/store.ts"
+import { configureStore } from '@reduxjs/toolkit'
+
+export const store = configureStore({
+  // Pass in the root reducer setup as the `reducer` argument
+  reducer: {
+    // An example slice reducer function that returns a fixed state value
+    value: (state: number = 123) => state
+  }
+})
+
+// highlight-start
+// Infer the type of `store`
+export type AppStore = typeof store
+// Infer the `AppDispatch` type from the store itself
+export type AppDispatch = typeof store.dispatch
+// Same for the `RootState` type
+export type RootState = ReturnType<typeof store.getState>
+// highlight-end
+```
+
+If you hover over the `RootState` type in your editor, you should see `type RootState = { value: number; }`. Since this type is automatically derived from the store definition, all the future changes to the `reducer` setup will automatically be reflected in the `RootState` type as well. This way we only need to define it once, and it will always be accurate.
+
+### Exporting Typed Hooks
+
+We're going to be using React-Redux's `useSelector` and `useDispatch` hooks extensively in our components. Those need to reference the `RootState` and `AppDispatch` types each time we use the hooks.
+
+We can simplify the usage and avoid repeating the types if we set up "pre-typed" versions of those hooks that have the right types already built in.
+
+React-Redux 9.1 includes `.withTypes()` methods that apply the right types to those hooks. We can export these pre-typed hooks, then use them in the rest of the application:
+
+```ts title="src/app/hooks.ts"
+// This file serves as a central hub for re-exporting pre-typed Redux hooks.
+import { useDispatch, useSelector } from 'react-redux'
+import type { AppDispatch, RootState } from './store'
+
+// highlight-start
+// Use throughout your app instead of plain `useDispatch` and `useSelector`
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
+export const useAppSelector = useSelector.withTypes<RootState>()
+// highlight-end
+```
 
 ## Main Posts Feed
 
