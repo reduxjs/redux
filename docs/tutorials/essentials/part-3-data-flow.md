@@ -144,7 +144,6 @@ It's important that we _should not_ try to directly import the Redux store into 
 To do this, we'll import the `store` into the `main.tsx` entry point file, wrap a `<Provider>` with the store around the `<App>` component:
 
 ```tsx title="src/main.tsx"
-import React from 'react'
 import { createRoot } from 'react-dom/client'
 // highlight-next-line
 import { Provider } from 'react-redux'
@@ -463,7 +462,7 @@ Our posts slice is responsible for handling all updates to the posts data. Insid
 
 Inside of `reducers`, add a function named `postAdded`, which will receive two arguments: the current `state` value, and the `action` object that was dispatched. Since the posts slice _only_ knows about the data it's responsible for, the `state` argument will be the array of posts by itself, and not the entire Redux state object.
 
-The `action` object will have our new post entry as the `action.payload` field. In order to have this typed correctly, we need to declare the type of the `action` argument as `action: PayloadAction<Post>`.
+The `action` object will have our new post entry as the `action.payload` field. When we declare the reducer function, we also need to tell TypeScript what that actual `action.payload` type is, so that it can correctly check when we pass in the argument and access the `action.payload` contents. To do that, we need to import the `PayloadAction` type from Redux Toolkit, and declare the `action` argument as `action: PayloadAction<ThePayloadTypeHere>`. In this case, that will be `action: PayloadAction<Post>`.
 
 The actual state update is adding the new post object into the `state` array, which we can do via `state.push()` in the reducer.
 
@@ -619,6 +618,7 @@ Let's recap what you've learned in this section:
   - Call `dispatch(someActionCreator())` in a component to dispatch an action
   - Reducers will run, check to see if this action is relevant, and return new state if appropriate
   - Temporary data like form input values should be kept as React component state or plain HTML input fields. Dispatch a Redux action to update the store when the user is done with the form.
+- **If you're using TypeScript, the initial app setup should define TS types for `RootState` and `AppDispatch` based on the store, and export pre-typed versions of the React-Redux `useSelector` and `useDispatch` hooks**
 
 :::
 

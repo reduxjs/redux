@@ -24,9 +24,9 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 ## Introduction
 
-In [Part 3: Basic Redux Data Flow](./part-3-data-flow.md), we saw how to start from an empty Redux+React project setup, add a new slice of state, and create React components that can read data from the Redux store and dispatch actions to update that data. We also looked at how data flows through the application, with components dispatching actions, reducers processing actions and returning new state, and components reading the new state and rerendering the UI.
+In [Part 3: Basic Redux Data Flow](./part-3-data-flow.md), we saw how to start from an empty Redux+React project setup, add a new slice of state, and create React components that can read data from the Redux store and dispatch actions to update that data. We also looked at how data flows through the application, with components dispatching actions, reducers processing actions and returning new state, and components reading the new state and rerendering the UI. We also saw how to create "pre-typed" versions of the `useSelector` and `useDispatch` hooks that have the correct store types applied automatically.
 
-Now that you know the core steps to write Redux logic, we're going to use those same steps to add some new features to our social media feed that will make it more useful: viewing a single post, editing existing posts, showing post author details, post timestamps, and reaction buttons.
+Now that you know the core steps to write Redux logic, we're going to use those same steps to add some new features to our social media feed that will make it more useful: viewing a single post, editing existing posts, showing post author details, post timestamps, reaction buttons, and auth.
 
 :::info
 
@@ -44,14 +44,15 @@ Currently, our post entries are being shown in the main feed page, but if the te
 
 First, we need to add a new `SinglePostPage` component to our `posts` feature folder. We'll use React Router to show this component when the page URL looks like `/posts/123`, where the `123` part should be the ID of the post we want to show.
 
-```jsx title="features/posts/SinglePostPage.js"
-import React from 'react'
-import { useSelector } from 'react-redux'
+```tsx title="features/posts/SinglePostPage.tsx"
+import { useParams } from 'react-router-dom'
 
-export const SinglePostPage = ({ match }) => {
-  const { postId } = match.params
+import { useAppSelector } from '@/app/hooks'
 
-  const post = useSelector(state =>
+export const SinglePostPage = () => {
+  const { postId } = useParams()
+
+  const post = useAppSelector(state =>
     state.posts.find(post => post.id === postId)
   )
 
@@ -74,15 +75,15 @@ export const SinglePostPage = ({ match }) => {
 }
 ```
 
-React Router will pass in a `match` object as a prop that contains the URL information we're looking for. When we set up the route to render this component, we're going to tell it to parse the second part of the URL as a variable named `postId`, and we can read that value from `match.params`.
+When we set up the route to render this component, we're going to tell it to parse the second part of the URL as a variable named `postId`, and we can read that value from the `useParams` hook.
 
 Once we have that `postId` value, we can use it inside a selector function to find the right post object from the Redux store. We know that `state.posts` should be an array of all post objects, so we can use the `Array.find()` function to loop through the array and return the post entry with the ID we're looking for.
 
-It's important to note that **the component will re-render any time the value returned from `useSelector` changes to a new reference**. Components should always try to select the smallest possible amount of data they need from the store, which will help ensure that it only renders when it actually needs to.
+It's important to note that **the component will re-render any time the value returned from `useAppSelector` changes to a new reference**. Components should always try to select the smallest possible amount of data they need from the store, which will help ensure that it only renders when it actually needs to.
 
 It's possible that we might not have a matching post entry in the store - maybe the user tried to type in the URL directly, or we don't have the right data loaded. If that happens, the `find()` function will return `undefined` instead of an actual post object. Our component needs to check for that and handle it by showing a "Post not found!" message in the page.
 
-Assuming we do have the right post object in the store, `useSelector` will return that, and we can use it to render the title and content of the post in the page.
+Assuming we do have the right post object in the store, `useAppSelector` will return that, and we can use it to render the title and content of the post in the page.
 
 You might notice that this looks fairly similar to the logic we have in the body of our `<PostsList>` component, where we loop over the whole `posts` array to show post excerpts on the main feed. We _could_ try to extract a `Post` component that could be used in both places, but there are already some differences in how we're showing a post excerpt and the whole post. It's usually better to keep writing things separately for a while even if there's some duplication, and then we can decide later if the different sections of code are similar enough that we can really extract a reusable component.
 
@@ -90,50 +91,47 @@ You might notice that this looks fairly similar to the logic we have in the body
 
 Now that we have a `<SinglePostPage>` component, we can define a route to show it, and add links to each post in the front page feed.
 
-We'll import `SinglePostPage` in `App.js`, and add the route:
+While we're at it, it's also worth extracting the "main page" content into a separate `<PostsMainPage>` component as well, just for readability.
 
-```jsx title="App.js"
-import { PostsList } from './features/posts/PostsList'
-import { AddPostForm } from './features/posts/AddPostForm'
-// highlight-next-line
+We'll import `PostsMainPage` and `SinglePostPage` in `App.tsx`, and add the route:
+
+```tsx title="App.tsx"
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+
+import { Navbar } from './components/Navbar'
+// highlight-start
+import { PostsMainPage } from './features/posts/PostsMainPage'
 import { SinglePostPage } from './features/posts/SinglePostPage'
+// highlight-end
 
 function App() {
   return (
     <Router>
       <Navbar />
       <div className="App">
-        <Switch>
-          <Route
-            exact
-            path="/"
-            render={() => (
-              <React.Fragment>
-                <AddPostForm />
-                <PostsList />
-              </React.Fragment>
-            )}
-          />
-          // highlight-next-line
-          <Route exact path="/posts/:postId" component={SinglePostPage} />
-          <Redirect to="/" />
-        </Switch>
+        <Routes>
+          // highlight-start
+          <Route path="/" element={<PostsMainPage />}></Route>
+          <Route path="/posts/:postId" element={<SinglePostPage />} />
+          // highlight-end
+        </Routes>
       </div>
     </Router>
   )
 }
+
+export default App
 ```
 
 Then, in `<PostsList>`, we'll update the list rendering logic to include a `<Link>` that routes to that specific post:
 
-```jsx title="features/posts/PostsList.js"
-import React from 'react'
-import { useSelector } from 'react-redux'
+```tsx title="features/posts/PostsList.tsx"
 // highlight-next-line
 import { Link } from 'react-router-dom'
+import { useAppSelector } from '@/app/hooks'
 
 export const PostsList = () => {
-  const posts = useSelector(state => state.posts)
+  const posts = useAppSelector(state => state.posts)
 
   const renderedPosts = posts.map(post => (
     <article className="post-excerpt" key={post.id}>
@@ -158,9 +156,7 @@ export const PostsList = () => {
 
 And since we can now click through to a different page, it would also be helpful to have a link back to the main posts page in the `<Navbar>` component as well:
 
-```jsx title="app/Navbar.js"
-import React from 'react'
-
+```tsx title="app/Navbar.tsx"
 // highlight-next-line
 import { Link } from 'react-router-dom'
 
@@ -171,11 +167,10 @@ export const Navbar = () => {
         <h1>Redux Essentials Example</h1>
 
         <div className="navContent">
-          // highlight-start
           <div className="navLinks">
+            // highlight-next-line
             <Link to="/">Posts</Link>
           </div>
-          // highlight-end
         </div>
       </section>
     </nav>
@@ -195,6 +190,14 @@ First, we need to update our `postsSlice` to create a new reducer function and a
 
 Inside of the `createSlice()` call, we should add a new function into the `reducers` object. Remember that the name of this reducer should be a good description of what's happening, because we're going to see the reducer name show up as part of the action type string in the Redux DevTools whenever this action is dispatched. Our first reducer was called `postAdded`, so let's call this one `postUpdated`.
 
+:::tip
+
+Redux itself doesn't care what name you use for these reducer functions - it'll run the same if it's named `postAdded`, `addPost`, `POST_ADDED`, or `someRandomName`.
+
+That said, **we encourage naming reducers as past-tense "this happened" names like `postAdded`, because we're describing "an event that occurred in the application"**.
+
+:::
+
 In order to update a post object, we need to know:
 
 - The ID of the post being updated, so that we can find the right post object in the state
@@ -202,7 +205,7 @@ In order to update a post object, we need to know:
 
 Redux action objects are required to have a `type` field, which is normally a descriptive string, and may also contain other fields with more information about what happened. By convention, we normally put the additional info in a field called `action.payload`, but it's up to us to decide what the `payload` field contains - it could be a string, a number, an object, an array, or something else. In this case, since we have three pieces of information we need, let's plan on having the `payload` field be an object with the three fields inside of it. That means the action object will look like `{type: 'posts/postUpdated', payload: {id, title, content}}`.
 
-By default, the action creators generated by `createSlice` expect you to pass in one argument, and that value will be put into the action object as `action.payload`. So, we can pass an object containing those fields as the argument to the `postUpdated` action creator.
+By default, the action creators generated by `createSlice` expect you to pass in one argument, and that value will be put into the action object as `action.payload`. So, we can pass an object containing those fields as the argument to the `postUpdated` action creator. As with `postAdded`, this is an entire `Post` object, so we declare that the reducer argument is `action: PayloadAction<Post>`.
 
 We also know that the reducer is responsible for determining how the state should actually be updated when an action is dispatched. Given that, we should have the reducer find the right post object based on the ID, and specifically update the `title` and `content` fields in that post.
 
@@ -210,16 +213,21 @@ Finally, we'll need to export the action creator function that `createSlice` gen
 
 Given all those requirements, here's how our `postsSlice` definition should look after we're done:
 
-```js title="features/posts/postsSlice.js"
+```ts title="features/posts/postsSlice.ts"
+// highlight-next-line
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
+// omit state types
+
 const postsSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
-    postAdded(state, action) {
+    postAdded(state, action: PayloadAction<Post>) {
       state.push(action.payload)
     },
     // highlight-start
-    postUpdated(state, action) {
+    postUpdated(state, action: PayloadAction<Post>) {
       const { id, title, content } = action.payload
       const existingPost = state.find(post => post.id === id)
       if (existingPost) {
@@ -239,72 +247,83 @@ export default postsSlice.reducer
 
 ### Creating an Edit Post Form
 
-Our new `<EditPostForm>` component will look similar to the `<AddPostForm>`, but the logic needs to be a bit different. We need to retrieve the right `post` object from the store, then use that to initialize the state fields in the component so the user can make changes. We'll save the changed title and content values back to the store after the user is done. We'll also use React Router's history API to switch over to the single post page and show that post.
+Our new `<EditPostForm>` component will look similar to both the the `<AddPostForm>` and `<SinglePostPage>`, but the logic needs to be a bit different. We need to retrieve the right `post` object from the store based on the `postId` in the URL, then use that to initialize the input fields in the component so the user can make changes. We'll save the changed title and content values back to the store when the user submits the form. We'll also use React Router's `useNavigate` hook to switch over to the single post page and show that post after they save the changes.
 
-```jsx title="features/posts/EditPostForm.js"
-import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+```tsx title="features/posts/EditPostForm.tsx"
+import React from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
+import { useAppSelector, useAppDispatch } from '@/app/hooks'
 import { postUpdated } from './postsSlice'
 
-export const EditPostForm = ({ match }) => {
-  const { postId } = match.params
+// omit form element types
 
-  const post = useSelector(state =>
+export const EditPostForm = () => {
+  const { postId } = useParams()
+
+  const post = useAppSelector(state =>
     state.posts.find(post => post.id === postId)
   )
 
-  const [title, setTitle] = useState(post.title)
-  const [content, setContent] = useState(post.content)
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
-  const dispatch = useDispatch()
-  const history = useHistory()
+  if (!post) {
+    return (
+      <section>
+        <h2>Post not found!</h2>
+      </section>
+    )
+  }
 
-  const onTitleChanged = e => setTitle(e.target.value)
-  const onContentChanged = e => setContent(e.target.value)
+  const onSavePostClicked = (e: React.FormEvent<EditPostFormElements>) => {
+    // Prevent server submission
+    e.preventDefault()
 
-  const onSavePostClicked = () => {
+    const { elements } = e.currentTarget
+    const title = elements.postTitle.value
+    const content = elements.postContent.value
+
     if (title && content) {
-      dispatch(postUpdated({ id: postId, title, content }))
-      history.push(`/posts/${postId}`)
+      dispatch(postUpdated({ id: post.id, title, content }))
+      navigate(`/posts/${postId}`)
     }
   }
 
   return (
     <section>
       <h2>Edit Post</h2>
-      <form>
+      <form onSubmit={onSavePostClicked}>
         <label htmlFor="postTitle">Post Title:</label>
         <input
           type="text"
           id="postTitle"
           name="postTitle"
-          placeholder="What's on your mind?"
-          value={title}
-          onChange={onTitleChanged}
+          defaultValue={post.title}
         />
         <label htmlFor="postContent">Content:</label>
         <textarea
           id="postContent"
           name="postContent"
-          value={content}
-          onChange={onContentChanged}
+          defaultValue={post.content}
         />
+
+        <button>Save Post</button>
       </form>
-      <button type="button" onClick={onSavePostClicked}>
-        Save Post
-      </button>
     </section>
   )
 }
 ```
 
+Note that the Redux-specific code here is relatively minimal. Once again, we read a value from the Redux store via `useAppSelector`, and then dispatch an action via `useAppDispatch` when the user interacts with the UI.
+
 Like with `SinglePostPage`, we'll need to import it into `App.js` and add a route that will render this component with the `postId` as a route parameter.
 
-```jsx title="App.js"
-import { PostsList } from './features/posts/PostsList'
-import { AddPostForm } from './features/posts/AddPostForm'
+```tsx title="App.tsx"
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+
+import { Navbar } from './components/Navbar'
+import { PostsMainPage } from './features/posts/PostsMainPage'
 import { SinglePostPage } from './features/posts/SinglePostPage'
 // highlight-next-line
 import { EditPostForm } from './features/posts/EditPostForm'
@@ -314,39 +333,31 @@ function App() {
     <Router>
       <Navbar />
       <div className="App">
-        <Switch>
-          <Route
-            exact
-            path="/"
-            render={() => (
-              <React.Fragment>
-                <AddPostForm />
-                <PostsList />
-              </React.Fragment>
-            )}
-          />
-          <Route exact path="/posts/:postId" component={SinglePostPage} />
+        <Routes>
+          <Route path="/" element={<PostsMainPage />}></Route>
+          <Route path="/posts/:postId" element={<SinglePostPage />} />
           // highlight-next-line
-          <Route exact path="/editPost/:postId" component={EditPostForm} />
-          <Redirect to="/" />
-        </Switch>
+          <Route path="/editPost/:postId" element={<EditPostForm />} />
+        </Routes>
       </div>
     </Router>
   )
 }
+
+export default App
 ```
 
 We should also add a new link to our `SinglePostPage` that will route to `EditPostForm`, like:
 
-```jsx title="features/post/SinglePostPage.js"
+```tsx title="features/post/SinglePostPage.tsx"
 // highlight-next-line
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
-export const SinglePostPage = ({ match }) => {
+export const SinglePostPage = () => {
 
         // omit other contents
 
-        <p  className="post-content">{post.content}</p>
+        <p className="post-content">{post.content}</p>
         // highlight-start
         <Link to={`/editPost/${post.id}`} className="button">
           Edit Post
@@ -368,9 +379,9 @@ If an action needs to contain a unique ID or some other random value, always gen
 
 If we were writing the `postAdded` action creator by hand, we could have put the setup logic inside of it ourselves:
 
-```js
+```ts
 // hand-written action creator
-function postAdded(title, content) {
+function postAdded(title: string, content: string) {
   const id = nanoid()
   return {
     type: 'posts/postAdded',
@@ -385,23 +396,19 @@ Fortunately, `createSlice` lets us define a "prepare callback" function when we 
 
 Inside of the `reducers` field in `createSlice`, we can define one of the fields as an object that looks like `{reducer, prepare}`:
 
-```js title="features/posts/postsSlice.js"
+```ts title="features/posts/postsSlice.ts"
 const postsSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
     // highlight-start
     postAdded: {
-      reducer(state, action) {
+      reducer(state, action: PayloadAction<Post>) {
         state.push(action.payload)
       },
-      prepare(title, content) {
+      prepare(title: string, content: string) {
         return {
-          payload: {
-            id: nanoid(),
-            title,
-            content
-          }
+          payload: { id: nanoid(), title, content }
         }
       }
     }
@@ -413,14 +420,22 @@ const postsSlice = createSlice({
 
 Now our component doesn't have to worry about what the payload object looks like - the action creator will take care of putting it together the right way. So, we can update the component so that it passes in `title` and `content` as arguments when it dispatches `postAdded`:
 
-```jsx title="features/posts/AddPostForm.js"
-const onSavePostClicked = () => {
-  if (title && content) {
-    // highlight-next-line
-    dispatch(postAdded(title, content))
-    setTitle('')
-    setContent('')
-  }
+```ts title="features/posts/AddPostForm.tsx"
+const handleSubmit = (e: React.FormEvent<AddPostFormElements>) => {
+  // Prevent server submission
+  e.preventDefault()
+
+  const { elements } = e.currentTarget
+  const title = elements.postTitle.value
+  const content = elements.postContent.value
+
+  // highlight-start
+  // Now we can pass these in as separate arguments,
+  // and the ID will be generated automatically
+  dispatch(postAdded(title, content))
+  // highlight-end
+
+  e.currentTarget.reset()
 }
 ```
 
