@@ -423,9 +423,14 @@ export const AddPostForm = () => {
       <h2>Add a New Post</h2>
       <form onSubmit={handleSubmit}>
         <label htmlFor="postTitle">Post Title:</label>
-        <input type="text" id="postTitle" defaultValue="" />
+        <input type="text" id="postTitle" defaultValue="" required />
         <label htmlFor="postContent">Content:</label>
-        <textarea id="postContent" name="postContent" defaultValue="" />
+        <textarea
+          id="postContent"
+          name="postContent"
+          defaultValue=""
+          required
+        />
         <button>Save Post</button>
       </form>
     </section>
@@ -435,7 +440,7 @@ export const AddPostForm = () => {
 
 Note that this doesn't have any Redux-specific logic yet - we'll add that next.
 
-In this example we're using ["uncontrolled" inputs](https://react.dev/reference/react-dom/components/input#reading-the-input-values-when-submitting-a-form), but it's up to you how you read values from a form.
+In this example we're using ["uncontrolled" inputs](https://react.dev/reference/react-dom/components/input#reading-the-input-values-when-submitting-a-form) and using HTML5 form validation to prevent submitting empty input fields, but it's up to you how you read values from a form - that's a preference about React usage patterns and not specific to Redux.
 
 Import that component into `App.tsx`, and add it right above the `<PostsList />` component:
 
@@ -567,9 +572,9 @@ export const AddPostForm = () => {
       <h2>Add a New Post</h2>
       <form onSubmit={handleSubmit}>
         <label htmlFor="postTitle">Post Title:</label>
-        <input type="text" id="postTitle" defaultValue="" />
+        <input type="text" id="postTitle" defaultValue="" required />
         <label htmlFor="postContent">Content:</label>
-        <textarea id="postContent" name="postContent" defaultValue="" />
+        <textarea id="postContent" name="postContent" defaultValue="" required />
         <button>Save Post</button>
       </form>
     </section>
