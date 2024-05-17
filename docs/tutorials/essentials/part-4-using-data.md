@@ -626,18 +626,41 @@ Like with the `post.user` field, we'll update our `postAdded` prepare callback t
 
 :::caution
 
-**Redux actions and state should only contain plain JS values like objects, arrays, and primitives. Don't put class instances, functions, or other non-serializable values into Redux!**.
+**Redux actions and state should only contain plain JS values like objects, arrays, and primitives. Don't put class instances, functions, `Date/Map/Set` instances, or other non-serializable values into Redux!**.
 
 :::
 
-Since we can't just put a `Date` class instance into the Redux store, we'll track the `post.date` value as a timestamp string:
+Since we can't just put a `Date` class instance into the Redux store, we'll track the `post.date` value as a timestamp string. We'll add it to the initial state values (using `date-fns` to subtract a few minutes from the current date and time), and also add it to each new post in the prepare callback
 
-```js title="features/posts/postsSlice.js"
+```ts title="features/posts/postsSlice.ts"=
+import { createSlice, nanoid } from '@reduxjs/toolkit'
+// highlight-next-line
+import { sub } from 'date-fns'
+
+const initialState: Post[] = [
+  {
+    // omitted fields
+    content: 'Hello!',
+    // highlight-next-line
+    date: sub(new Date(), { minutes: 10 }).toISOString()
+  },
+  {
+    // omitted fields
+    content: 'More text',
+    // highlight-next-line
+    date: sub(new Date(), { minutes: 5 }).toISOString()
+  }
+]
+
+const postsSlice = createSlice({
+  name: 'posts',
+  initialState,
+  reducers: {
     postAdded: {
-      reducer(state, action) {
+      reducer(state, action: PayloadAction<Post>) {
         state.push(action.payload)
       },
-      prepare(title, content, userId) {
+      prepare(title: string, content: string, userId: string) {
         return {
           payload: {
             id: nanoid(),
@@ -645,20 +668,26 @@ Since we can't just put a `Date` class instance into the Redux store, we'll trac
             date: new Date().toISOString(),
             title,
             content,
-            user: userId,
-          },
+            user: userId
+          }
         }
-      },
-    },
+      }
+    }
+    // omit `postUpdated
+  }
+})
 ```
 
 Like with post authors, we need to show the relative timestamp description in both our `<PostsList>` and `<SinglePostPage>` components. We'll add a `<TimeAgo>` component to handle formatting a timestamp string as a relative description. Libraries like `date-fns` have some useful utility functions for parsing and formatting dates, which we can use here:
 
-```jsx title="features/posts/TimeAgo.js"
-import React from 'react'
+```tsx title="components/TimeAgo.tsx"
 import { parseISO, formatDistanceToNow } from 'date-fns'
 
-export const TimeAgo = ({ timestamp }) => {
+interface TimeAgoProps {
+  timestamp: string
+}
+
+export const TimeAgo = ({ timestamp }: TimeAgoProps) => {
   let timeAgo = ''
   if (timestamp) {
     const date = parseISO(timestamp)
@@ -682,7 +711,7 @@ Typically, social media feeds show the newest posts first, and you scroll down t
 
 Since `array.sort()` mutates the existing array, we need to make a copy of `state.posts` and sort that copy. We know that our `post.date` fields are being kept as date timestamp strings, and we can directly compare those to sort the posts in the right order:
 
-```jsx title="features/posts/PostsList.js"
+```tsx title="features/posts/PostsList.tsx"
 // Sort posts in reverse chronological order by datetime string
 //highlight-start
 const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
@@ -690,89 +719,77 @@ const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
 const renderedPosts = orderedPosts.map(post => {
   //highlight-end
   return (
-    <article className="post-excerpt" key={post.id}>
-      <h3>{post.title}</h3>
-      <div>
-        <PostAuthor userId={post.user} />
-        <TimeAgo timestamp={post.date} />
-      </div>
-      <p className="post-content">{post.content.substring(0, 100)}</p>
-      <Link to={`/posts/${post.id}`} className="button muted-button">
-        View Post
-      </Link>
-    </article>
+    // omit rendering logic
   )
 })
 ```
 
-We also need to add the `date` field to `initialState` in `postsSlice.js`. We'll use `date-fns` here again to subtract minutes from the current date/time so they differ from each other.
-
-```jsx title="features/posts/postsSlice.js"
-import { createSlice, nanoid } from '@reduxjs/toolkit'
-// highlight-next-line
-import { sub } from 'date-fns'
-
-const initialState = [
-  {
-    // omitted fields
-    content: 'Hello!',
-    // highlight-next-line
-    date: sub(new Date(), { minutes: 10 }).toISOString()
-  },
-  {
-    // omitted fields
-    content: 'More text',
-    // highlight-next-line
-    date: sub(new Date(), { minutes: 5 }).toISOString()
-  }
-]
-```
-
 ### Post Reaction Buttons
 
-We have one more new feature to add for this section. Right now, our posts are kind of boring. We need to make them more exciting, and what better way to do that than letting our friends add reaction emoji to our posts?
+Right now, our posts are kind of boring. We need to make them more exciting, and what better way to do that than letting our friends add reaction emoji to our posts? 🎉
 
 We'll add a row of emoji reaction buttons at the bottom of each post in `<PostsList>` and `<SinglePostPage>`. Every time a user clicks one of the reaction buttons, we'll need to update a matching counter field for that post in the Redux store. Since the reaction counter data is in the Redux store, switching between different parts of the app should consistently show the same values in any component that uses that data.
 
-Like with post authors and timestamps, we want to use this everywhere we show posts, so we'll create a `<ReactionButtons>` component that takes a `post` as a prop. We'll start by just showing the buttons inside, with the current reaction counts for each button:
+#### Tracking Reactions Data in Posts
 
-```jsx title="features/posts/ReactionButtons.js"
-import React from 'react'
+We don't yet have a `post.reactions` field in our data, so we'll need to update the `initialState` post objects and our `postAdded` prepare callback function to make sure that every post has that data inside, like `reactions: {thumbsUp: 0, tada: 0, heart: 0, rocket: 0, eyes: 0}`.
 
-const reactionEmoji = {
-  thumbsUp: '👍',
-  hooray: '🎉',
-  heart: '❤️',
-  rocket: '🚀',
-  eyes: '👀'
-}
-
-export const ReactionButtons = ({ post }) => {
-  const reactionButtons = Object.entries(reactionEmoji).map(([name, emoji]) => {
-    return (
-      <button key={name} type="button" className="muted-button reaction-button">
-        {emoji} {post.reactions[name]}
-      </button>
-    )
-  })
-
-  return <div>{reactionButtons}</div>
-}
-```
-
-We don't yet have a `post.reactions` field in our data, so we'll need to update the `initialState` post objects and our `postAdded` prepare callback function to make sure that every post has that data inside, like `reactions: {thumbsUp: 0, hooray: 0, heart: 0, rocket: 0, eyes: 0}`.
-
-Now, we can define a new reducer that will handle updating the reaction count for a post when a user clicks the reaction button.
+Then, we can define a new reducer that will handle updating the reaction count for a post when a user clicks the reaction button.
 
 Like with editing posts, we need to know the ID of the post, and which reaction button the user clicked on. We'll have our `action.payload` be an object that looks like `{id, reaction}`. The reducer can then find the right post object, and update the correct reactions field.
 
-```js
+```ts
+import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
+import { sub } from 'date-fns'
+
+// highlight-start
+export interface Reactions {
+  thumbsUp: number
+  tada: number
+  heart: number
+  rocket: number
+  eyes: number
+}
+
+export type ReactionName = keyof Reactions
+// highlight-end
+
+export interface Post {
+  id: string
+  title: string
+  content: string
+  user: string
+  date: string
+  // highlight-next-line
+  reactions: Reactions
+}
+
+type PostUpdate = Pick<Post, 'id' | 'title' | 'content'>
+
+// highlight-start
+const initialReactions: Reactions = {
+  thumbsUp: 0,
+  tada: 0,
+  heart: 0,
+  rocket: 0,
+  eyes: 0
+}
+// highlight-end
+
+const initialState: Posts[] = [
+  // omit initial state
+]
+
 const postsSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
+    // omit other reducers
     // highlight-start
-    reactionAdded(state, action) {
+    reactionAdded(
+      state,
+      action: PayloadAction<{ postId: string; reaction: ReactionName }>
+    ) {
       const { postId, reaction } = action.payload
       const existingPost = state.find(post => post.id === postId)
       if (existingPost) {
@@ -780,7 +797,6 @@ const postsSlice = createSlice({
       }
     }
     // highlight-end
-    // other reducers
   }
 })
 
@@ -788,60 +804,63 @@ const postsSlice = createSlice({
 export const { postAdded, postUpdated, reactionAdded } = postsSlice.actions
 ```
 
-As we've seen already, `createSlice` lets us write "mutating" logic in our reducers. If we weren't using `createSlice` and the Immer library, the line `existingPost.reactions[reaction]++` would indeed mutate the existing `post.reactions` object, and this would probably cause bugs elsewhere in our app because we didn't follow the rules of reducers. But, since we _are_ using `createSlice`, we can write this more complex update logic in a simpler way, and let Immer do the work of turning this code into a safe immutable update.
+As we've seen already, **`createSlice` lets us write "mutating" logic in our reducers**. If we weren't using `createSlice` and the Immer library, the line `existingPost.reactions[reaction]++` would indeed mutate the existing `post.reactions` object, and this would probably cause bugs elsewhere in our app because we didn't follow the rules of reducers. But, since we _are_ using `createSlice`, we can write this more complex update logic in a simpler way, and let Immer do the work of turning this code into a safe immutable update.
 
-Notice that **our action object just contains the minimum amount of information needed to describe what happened**. We know which post we need to update, and which reaction name was clicked on. We _could_ have calculated the new reaction counter value and put that in the action, but **it's always better to keep the action objects as small as possible, and do the state update calculations in the reducer**. This also means that **reducers can contain as much logic as necessary to calculate the new state**.
+Notice that **our action object just contains the minimum amount of information needed to describe what happened**. We know which post we need to update, and which reaction name was clicked on. We _could_ have calculated the new reaction counter value and put that in the action, but **it's always better to keep the action objects as small as possible, and do the state update calculations in the reducer**. This also means that **reducers can contain as much logic as necessary to calculate the new state**. In fact, **state update logic _should_ go in a reducer!**. This helps avoid issues with duplicating logic in different components, or cases where the UI layer might not have the latest data to work with.
 
 :::info
 
-When using Immer, you can either "mutate" an existing state object, or return a new state value yourself, but not both at the same time. See the Immer docs guides on [Pitfalls](https://immerjs.github.io/immer/pitfalls) and [Returning New Data](https://immerjs.github.io/immer/return) for more details.
+When using Immer, you can either "mutate" an existing state object, or return a new state value yourself, but _not_ both at the same time. See the Immer docs guides on [Pitfalls](https://immerjs.github.io/immer/pitfalls) and [Returning New Data](https://immerjs.github.io/immer/return) for more details.
 
 :::
 
-Our last step is to update the `<ReactionButtons>` component to dispatch the `reactionAdded` action when the user clicks a button:
+#### Showing Reaction Buttons
 
-```jsx title="features/posts/ReactionButtons.jsx"
-import React from 'react'
-// highlight-start
-import { useDispatch } from 'react-redux'
+Like with post authors and timestamps, we want to use this everywhere we show posts, so we'll create a `<ReactionButtons>` component that takes a `post` as a prop. When the user clicks a button, we'll dispatch the `reactionAdded` action with the name of that reaction emoji.
 
+```tsx title="features/posts/ReactionButtons.tsx"
+import { useAppDispatch } from '@/app/hooks'
+
+import type { Post, ReactionName } from './postsSlice'
 import { reactionAdded } from './postsSlice'
-// highlight-end
 
-const reactionEmoji = {
+const reactionEmoji: Record<ReactionName, string> = {
   thumbsUp: '👍',
-  hooray: '🎉',
+  tada: '🎉',
   heart: '❤️',
   rocket: '🚀',
   eyes: '👀'
 }
 
-export const ReactionButtons = ({ post }) => {
-  // highlight-next-line
-  const dispatch = useDispatch()
+interface ReactionButtonsProps {
+  post: Post
+}
 
-  const reactionButtons = Object.entries(reactionEmoji).map(([name, emoji]) => {
-    return (
-      <button
-        key={name}
-        type="button"
-        className="muted-button reaction-button"
-        // highlight-start
-        onClick={() =>
-          dispatch(reactionAdded({ postId: post.id, reaction: name }))
-        }
-        // highlight-end
-      >
-        {emoji} {post.reactions[name]}
-      </button>
-    )
-  })
+export const ReactionButtons = ({ post }: ReactionButtonsProps) => {
+  const dispatch = useAppDispatch()
+
+  const reactionButtons = Object.entries(reactionEmoji).map(
+    ([stringName, emoji]) => {
+      // Ensure TS knows this is a _specific_ string type
+      const reaction = stringName as ReactionName
+      return (
+        <button
+          key={reaction}
+          type="button"
+          className="muted-button reaction-button"
+          onClick={() => dispatch(reactionAdded({ postId: post.id, reaction }))}
+        >
+          {emoji} {post.reactions[reaction]}
+        </button>
+      )
+    }
+  )
 
   return <div>{reactionButtons}</div>
 }
 ```
 
-Now, every time we click a reaction button, the counter should increment. If we browse around to different parts of the app, we should see the correct counter values displayed any time we look at this post, even if we click a reaction button in the `<PostsList>` and then look at the post by itself on the `<SinglePostPage>`.
+Now, every time we click a reaction button, the counter for that reaction should increment. If we browse around to different parts of the app, we should see the correct counter values displayed any time we look at this post, even if we click a reaction button in the `<PostsList>` and then look at the post by itself on the `<SinglePostPage>`. This is because each component is reading the same post data from the Redux store.
 
 ## [TODO] Auth Stuff Here
 
