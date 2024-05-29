@@ -10,8 +10,6 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 <!-- prettier-ignore -->
 import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
 
-# Redux Fundamentals, Part 2: Concepts and Data Flow
-
 :::tip What You'll Learn
 
 - Key terms and concepts for using Redux
