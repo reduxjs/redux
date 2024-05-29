@@ -10,8 +10,6 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 <!-- prettier-ignore -->
 import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
 
-# Redux Fundamentals, Part 3: State, Actions, and Reducers
-
 :::tip What You'll Learn
 
 - How to define state values that contain your app's data

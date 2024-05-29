@@ -10,8 +10,6 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 <!-- prettier-ignore -->
 import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
 
-# Redux Fundamentals, Part 1: Redux Overview
-
 :::tip What You'll Learn
 
 - What Redux is and why you might want to use it

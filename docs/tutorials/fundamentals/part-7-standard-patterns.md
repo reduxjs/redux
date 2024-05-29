@@ -10,8 +10,6 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 <!-- prettier-ignore -->
 import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
 
-# Redux Fundamentals, Part 7: Standard Redux Patterns
-
 :::tip What You'll Learn
 
 - Standard patterns used in real-world Redux apps, and why those patterns exist:
