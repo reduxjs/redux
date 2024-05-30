@@ -8,8 +8,6 @@ description: 'The official Redux Fundamentals tutorial: learn how to use async l
 <!-- prettier-ignore -->
 import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
 
-# Redux Fundamentals, Part 6: Async Logic and Data Fetching
-
 :::tip What You'll Learn
 
 - How the Redux data flow works with async data

@@ -10,8 +10,6 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 <!-- prettier-ignore -->
 import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
 
-# Redux Fundamentals, Part 4: Store
-
 :::tip What You'll Learn
 
 - How to create a Redux store

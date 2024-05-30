@@ -7,8 +7,6 @@ description: 'The official Fundamentals tutorial for Redux: learn the modern way
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
 
-# Redux Fundamentals, Part 8: Modern Redux with Redux Toolkit
-
 :::tip What You'll Learn
 
 - How to simplify your Redux logic using Redux Toolkit
