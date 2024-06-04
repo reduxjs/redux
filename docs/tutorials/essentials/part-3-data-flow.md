@@ -511,6 +511,18 @@ export const { postAdded } = postsSlice.actions
 export default postsSlice.reducer
 ```
 
+Terminology-wise, `postAdded` here is an example of a **"case reducer"**. It's a reducer function, inside of a slice, that handles one specific action type that was dispatched. Conceptually, it's like we wrote a `case` statement inside of a `switch` - "when we see this exact action type, run this logic":
+
+```ts
+function sliceReducer(state = initialState, action) {
+  switch (action.type) {
+    case 'posts/postAdded': {
+      // update logic here
+    }
+  }
+}
+```
+
 #### Dispatching the "Post Added" Action
 
 Our `AddPostForm` has text inputs and a "Save Post" button that triggers a submit handler, but the button doesn't do anything yet. We need to update the submit handler to dispatch the `postAdded` action creator and pass in a new post object containing the title and content the user wrote.

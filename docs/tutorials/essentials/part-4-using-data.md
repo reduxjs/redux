@@ -862,11 +862,362 @@ export const ReactionButtons = ({ post }: ReactionButtonsProps) => {
 
 Now, every time we click a reaction button, the counter for that reaction should increment. If we browse around to different parts of the app, we should see the correct counter values displayed any time we look at this post, even if we click a reaction button in the `<PostsList>` and then look at the post by itself on the `<SinglePostPage>`. This is because each component is reading the same post data from the Redux store.
 
-## [TODO] Auth Stuff Here
+## Adding User Login
 
-Ideally, we'd have some sort of a `state.currentUser` field that keeps track of the current logged-in user, and use that information whenever they add a post.
+We've got one more feature to add in this section.
+
+Right now, we just select which user is writing each post in the `<AddPostForm>`. To add a bit more realism, we ought to have the user log in to the application, so that we already know who is writing the posts (and be useful for other features later).
+
+Since this is a small example app, **we aren't going to implement any _real_ authentication checks (and the point here is to learn how to use Redux features, not how to actually implement real auth)**. Instead, we'll just show a list of user names and let the actual user select one of them.
+
+For this example, we'll just add an `auth` slice that tracks `state.auth.username` so we know who the user is. Then, we can use that information whenever they add a post to automatically add the right user ID to the post.
+
+### Adding an Auth Slice
+
+The first step is to create the `authSlice` and add it to the store. This is the same pattern we've seen already - define the initial state, write the slice with a couple of reducers to handle updates for login and logout, and add the slice reducer to the store.
+
+In this case, our auth state is really just the current logged-in username, and we'll reset it to `null` if they log out.
+
+```ts title="features/auth/authSlice.ts"
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
+interface AuthState {
+  username: string | null
+}
+
+const initialState: AuthState = {
+  // Note: a real app would probably have more complex auth state,
+  // but for this example we'll keep things simple
+  username: null
+}
+
+const authSlice = createSlice({
+  name: 'auth',
+  initialState,
+  reducers: {
+    userLoggedIn(state, action: PayloadAction<string>) {
+      state.username = action.payload
+    },
+    userLoggedOut(state) {
+      state.username = null
+    }
+  }
+})
+
+export const { userLoggedIn, userLoggedOut } = authSlice.actions
+
+export default authSlice.reducer
+```
+
+```ts title="app/store.ts"
+import { configureStore } from '@reduxjs/toolkit'
+
+// highlight-next-line
+import authReducer from '@/features/auth/authSlice'
+import postsReducer from '@/features/posts/postsSlice'
+import usersReducer from '@/features/users/usersSlice'
+
+export const store = configureStore({
+  reducer: {
+    // highlight-next-line
+    auth: authReducer,
+    posts: postsReducer,
+    users: usersReducer
+  }
+})
+```
+
+### Adding the Login Page
+
+Currently, the app's main screen is the `<Posts>` component with the posts list and add post form. We're going to change that behavior. Instead, we want the user to first see a login screen, and only be able to see the posts page after they've logged in.
+
+First, we'll create a `<LoginPage>` component. This will read the list of users from the store, show them in a dropdown, and dispatch the `userLoggedIn` action when the form is submitted. We'll also navigate to the `/posts` route so that we can see the `<PostsMainPage>` after login:
+
+```tsx title="features/auth/LoginPage.tsx"
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+
+import { useAppDispatch, useAppSelector } from '@/app/hooks'
+import { userLoggedIn } from './authSlice'
+
+interface LoginPageFormFields extends HTMLFormControlsCollection {
+  username: HTMLSelectElement
+}
+interface LoginPageFormElements extends HTMLFormElement {
+  readonly elements: LoginPageFormFields
+}
+
+export const LoginPage = () => {
+  const dispatch = useAppDispatch()
+  const users = useAppSelector(state => state.users)
+  const navigate = useNavigate()
+
+  const handleSubmit = (e: React.FormEvent<LoginPageFormElements>) => {
+    e.preventDefault()
+
+    const username = e.currentTarget.elements.username.value
+    dispatch(userLoggedIn(username))
+    navigate('/posts')
+  }
+
+  const usersOptions = users.map(user => (
+    <option key={user.id} value={user.id}>
+      {user.name}
+    </option>
+  ))
+
+  return (
+    <section>
+      <h2>Welcome to Tweeter!</h2>
+      <h3>Please log in:</h3>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="username">User:</label>
+        <select id="username" name="username" required>
+          <option value=""></option>
+          {usersOptions}
+        </select>
+        <button>Log In</button>
+      </form>
+    </section>
+  )
+}
+```
+
+Next, we need to update the routing in the `<App>` component. It needs to show `<LoginPage>` for the root `/` route, and also redirect any unauthorized access to other pages so that the user goes back to the login screen instead.
+
+One common way to do this is to add a "protected route" component that accepts some React components as `children`, does an authorization check, and only shows the child components if the user is authorized. We can add a `<ProtectedRoute>` component that reads our `state.auth.username` value and uses that for the auth check, then wrap the entire posts-related section of the routing setup in that `<ProtectedRoute>`:
+
+```tsx title="App.tsx"
+// highlight-next-line
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate
+} from 'react-router-dom'
+
+// highlight-next-line
+import { useAppSelector } from './app/hooks'
+import { Navbar } from './components/Navbar'
+// highlight-next-line
+import { LoginPage } from './features/auth/LoginPage'
+import { PostsMainPage } from './features/posts/PostsMainPage'
+import { SinglePostPage } from './features/posts/SinglePostPage'
+import { EditPostForm } from './features/posts/EditPostForm'
+
+// highlight-start
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const user = useAppSelector(state => state.auth.username)
+
+  if (!user) {
+    return <Navigate to="/" replace />
+  }
+
+  return children
+}
+// highlight-end
+
+function App() {
+  return (
+    <Router>
+      <Navbar />
+      <div className="App">
+        <Routes>
+          // highlight-start
+          <Route path="/" element={<LoginPage />} />
+          <Route
+            path="/*"
+            element={
+              <ProtectedRoute>
+                <Routes>
+                  <Route path="/posts" element={<PostsMainPage />} />
+                  <Route path="/posts/:postId" element={<SinglePostPage />} />
+                  <Route path="/editPost/:postId" element={<EditPostForm />} />
+                </Routes>
+              </ProtectedRoute>
+            }
+          />
+          // highlight-end
+        </Routes>
+      </div>
+    </Router>
+  )
+}
+
+export default App
+```
+
+We should now see both sides of the auth behavior working:
+
+- If the user tries to access `/posts` without having logged in, the `<ProtectedRoute>` component will redirect back to `/` and show the `<LoginPage>`
+- When the user logs in, we dispatch `userLoggedIn()` to update the Redux state, and then force a navigation to `/posts`, and this time `<ProtectedRoute>` will display the posts page.
+
+### Showing the Logged-In User
+
+Since we now know who is logged in while using the app, we can show the user's actual name in the navbar. We should also give them a way to log out as well, by adding a "Log Out" button.
+
+As with the other features we've built, we'll select the relevant state (the username and corresponding user object) from the store, display the values, and dispatch the `userLoggedOut()` action when they click the "Log Out" button:
+
+```tsx title="components/Navbar.tsx"
+import { Link } from 'react-router-dom'
+
+// highlight-start
+import { useAppDispatch, useAppSelector } from '@/app/hooks'
+import { UserIcon } from './UserIcon'
+import { userLoggedOut } from '@/features/auth/authSlice'
+// highlight-end
+
+export const Navbar = () => {
+  // highlight-start
+  const dispatch = useAppDispatch()
+  const username = useAppSelector(state => state.auth.username)
+  const user = useAppSelector(state =>
+    state.users.find(user => user.id === username)
+  )
+
+  const isLoggedIn = !!username && !!user
+
+  let navContent: React.ReactNode = null
+
+  if (isLoggedIn) {
+    const onLogoutClicked = () => {
+      dispatch(userLoggedOut())
+    }
+
+    navContent = (
+      <div className="navContent">
+        <div className="navLinks">
+          <Link to="/posts">Posts</Link>
+        </div>
+        <div className="userDetails">
+          <UserIcon size={32} />
+          {user.name}
+          <button className="button small" onClick={onLogoutClicked}>
+            Log Out
+          </button>
+        </div>
+      </div>
+    )
+  }
+  // highlight-end
+
+  return (
+    <nav>
+      <section>
+        <h1>Redux Essentials Example</h1>
+        {navContent}
+      </section>
+    </nav>
+  )
+}
+```
+
+While we're at it, we should also switch the `<AddPostForm>` to use the logged-in username from state, instead of showing a user selection dropdown. This can be done by removing all references to the `postAuthor` input field, and adding a `useAppSelector` to read the user ID:
+
+```tsx title="features/posts/AddPostForm.tsx"
+export const AddPostForm = () => {
+  const dispatch = useAppDispatch()
+  // highlight-next-line
+  const userId = useAppSelector((state) => state.auth.username)!
+
+  const handleSubmit = (e: React.FormEvent<AddPostFormElements>) => {
+    // Prevent server submission
+    e.preventDefault()
+
+    const { elements } = e.currentTarget
+    const title = elements.postTitle.value
+    const content = elements.postContent.value
+    // highlight-next-line
+    // Removed the `postAuthor` field everywhere in the component
+
+    dispatch(postAdded(title, content, userId))
+
+    e.currentTarget.reset()
+  }
+```
+
+### Clearing Other State on Logout
+
+There's one more piece of the auth handling that we need to look at. Right now, if we log in as user A, create a new post, log out, and then log back in as user B, we'll see both the initial example posts and the new post.
+
+This is "correct", in that Redux is working as intended for the code we've written so far. We updated the posts lists state in the Redux store, and we haven't refreshed the page, so the same JS data is still in memory. But in terms of app behavior, it's kind of confusing, and probably even a breach of privacy. What if user B and user A aren't connected to each other? What if multiple people are sharing the same computer? They shouldn't be able to see each other's data when they log in.
+
+Given that, it would be good if we can clear out the existing posts state when the current user logs out.
+
+#### Handling Actions in Multiple Slices
+
+So far, every time we've wanted to make another state update, we've defined a new Redux case reducer, exported the generated action creator, and dispatched that action from a component. We _could_ do that here. But, we'd end up dispatching two separate Redux actions back-to-back, like:
+
+```ts
+dispatch(userLoggedOut())
+// highlight-start
+// This seems like it's duplicate behavior
+dispatch(clearUserData())
+// highlight-end
+```
+
+Every time we dispatch an action, the whole Redux store update process has to happen - running the reducer, notifying subscribed UI components, and re-rendering updated components. That's fine, that's how Redux and React work, but dispatching two actions in a row is usually a sign that we need to rethink how we're defining our logic.
+
+We've already got the `userLoggedOut()` action being dispatched, but that's an action that was exported from the `auth` slice. It would be nice if we could just listen for that in the `posts` slice too.
+
+We mentioned earlier that it helps if we think about the action as **"an event that occurred in the app"**, rather than "a command to set a value". This is a good example of that in practice. We don't _need_ a separate action for `clearUserData`, because there's only one event that occurred - "the user logged out". We just need a way to handle the one `userLoggedOut` action in multiple places, so that we can apply all the relevant state updates at the same time.
+
+#### Using `extraReducers` to Handle Actions
+
+Happily, we can! `createSlice` accepts an option called **`extraReducers`**, which can be used to have the slice listen for actions that were defined elsewhere in the app. Any time those other actions are dispatched, this slice can update its own state as well. That means **_many_ different slice reducers can _all_ respond to the same dispatched action, and each slice can update its own state if needed!**
+
+The `extraReducers` field is a function that receives a parameter named `builder`. The `builder` object has three methods attached, each of which lets the slice listen for other actions and do its own state updates:
+
+- `builder.addCase(actionCreator, caseReducer)`: listens for one specific action type
+- `builder.addMatcher(matcherFunction, caseReducer)`: listens for any one of multiple action types, using [a Redux Toolkit "matcher" function](https://redux-toolkit.js.org/api/matching-utilities) for comparing action objects
+- `builder.addDefaultCase(caseReducer)`: adds a case reducer that runs if nothing else in this slice matched the action (equivalent to a `default` case inside of a `switch`).
+
+Given that, we can import the `userLoggedOut` action from `authSlice.ts` into `postsSlice.ts`, listen for that action inside of `postsSlice.extraReducers`, and return an empty posts array to reset the posts list on logout:
+
+```ts title="features/posts/postsSlice.ts"
+import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
+import { sub } from 'date-fns'
+
+// highlight-next-line
+import { userLoggedOut } from '@/features/auth/authSlice'
+
+// omit initial state and types
+
+const postsSlice = createSlice({
+  name: 'posts',
+  initialState,
+  reducers: {
+    postAdded: {
+      // omit postAdded and other case reducers
+  },
+  // highlight-start
+  extraReducers: (builder) => {
+    // Pass the action creator to `builder.addCase()`
+    builder.addCase(userLoggedOut, (state) => {
+      // Clear out the list of posts whenever the user logs out
+      return []
+    })
+  },
+  // highlight-end
+})
+```
+
+We call `builder.addCase(userLoggedOut, caseReducer)`. Inside of that reducer, we _could_ write a "mutating" state update, same as any of the other case reducers inside of a `createSlice` call. But, since we want to _replace_ the existing state entirely, the simplest thing is to just return an empty array for the new posts state.
+
+Now, if we click the "Log Out" button, then log in as another user, the "Posts" page should be empty. That's great! We've successfully cleared out the posts state on logout.
+
+:::tip What's the Difference between `reducers` and `extraReducers`?
+
+The `reducers` and `extraReducers` fields inside of `createSlice` serve different purposes:
+
+- The `reducers` field is normally an object. For every case reducer defined in the `reducers` object, `createSlice` will automatically generate an action creator with the same name, as well as an action type string to show in the Redux DevTools. **Use `reducers` to define new actions as part of the slice**.
+- `extraReducers` accepts a function with a `builder` parameter, and the `builder.addCase()` and `builder.addMatcher()` methods are used to handle other action types, _without_ defining new actions. **Use `extraReducers` to handle actions that were defined _outside_ of the slice.**
+
+:::
 
 ## What You've Learned
+
+And that's it for this section! We've done a lot of work. We can now view and edit individual posts, see authors for each post, add emoji reactions, and track the current user as they log in and log out.
 
 Here's what our app looks like after all these changes:
 
@@ -896,6 +1247,12 @@ We've covered a lot of information and concepts in this section. Let's recap the
 - **Reducers should contain the actual state update logic**
   - Reducers can contain whatever logic is needed to calculate the next state
   - Action objects should contain just enough info to describe what happened
+- **Actions should be thought of as describing "events that happened", and many reducers can respond to the same dispatched action**
+  - Apps should normally only dispatch one action at a time
+  - Case reducer names (and actions) should typically be named past-tense, like `postAdded`
+  - Many slice reducers can each do their own state updates in response to the same action
+  - `createSlice.extraReducers` lets slices listen for actions that were defined outside of the slice
+  - State values can be reset by returning a new value from the case reducer as a replacement, instead of mutating the existing state
 
 :::
 
