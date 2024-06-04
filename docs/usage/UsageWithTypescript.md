@@ -652,7 +652,10 @@ const booksAdapter = createEntityAdapter<Book>({
 
 const booksSlice = createSlice({
   name: 'books',
+  // highlight-start
+  // The type of the state is inferred here
   initialState: booksAdapter.getInitialState(),
+  // highlight-end
   reducers: {
     bookAdded: booksAdapter.addOne,
     booksReceived(state, action: PayloadAction<{ books: Book[] }>) {
@@ -679,7 +682,10 @@ const booksAdapter = createEntityAdapter({
 
 const booksSlice = createSlice({
   name: 'books',
+  // highlight-start
+  // The type of the state is inferred here
   initialState: booksAdapter.getInitialState(),
+  // highlight-end
   reducers: {
     bookAdded: booksAdapter.addOne,
     booksReceived(state, action: PayloadAction<{ books: Book[] }>) {
