@@ -149,7 +149,7 @@ Thunks are typically written in ["slice" files](./part-2-app-structure.md#redux-
 
 For more details on defining thunks with TypeScript, see:
 
-- [Type Checking Redux Thunks](../../usage/usage-with-typescript.md#type-checking-redux-thunks)
+- [Type Checking Redux Thunks](../../usage/UsageWithTypescript.md#type-checking-redux-thunks)
 
 :::
 
@@ -217,17 +217,32 @@ So far, our `postsSlice` has used some hardcoded sample data as its initial stat
 
 In order to do that, we're going to have to change the structure of the state in our `postsSlice`, so that we can keep track of the current state of the API request.
 
-### Extracting Posts Selectors
+### Extracting Selectors for Slices
 
 Right now, the `postsSlice` state is a single array of `posts`. We need to change that to be an object that has the `posts` array, plus the loading state fields.
 
 Meanwhile, the UI components like `<PostsList>` are trying to read posts from `state.posts` in their `useSelector` hooks, assuming that field is an array. We need to change those locations also to match the new data.
 
-It would be nice if we didn't have to keep rewriting our components every time we made a change to the data format in our reducers. One way to avoid this is to define reusable selector functions in the slice files, and have the components use those selectors to extract the data they need instead of repeating the selector logic in each component. That way, if we do change our state structure again, we only need to update the code in the slice file.
+It would be nice if we didn't have to keep rewriting our components every time we made a change to the data format in our reducers. One way to avoid this is to **define reusable selector functions in the slice files**, and have the components use those selectors to extract the data they need instead of repeating the selector logic in each component. That way, if we do change our state structure again, we only need to update the code in the slice file.
 
-The `<PostsList>` component needs to read a list of all the posts, and the `<SinglePostPage>` and `<EditPostForm>` components need to look up a single post by its ID. Let's export two small selector functions from `postsSlice.js` to cover those cases:
+#### Defining Selector Functions
 
-```js title="features/posts/postsSlice.js"
+You've already been writing selector functions every time we called `useAppSelector`, such as `useAppSelector( state => state.posts )`. In that case, the selector is being defined inline. Since it's just a function, we could also write it as:
+
+```ts
+const selectPosts = (state: RootState) => state.posts
+const posts = useAppSelector(selectPosts)
+```
+
+Selectors are typically written as standalone individual functions in a slice file. They normally accept the entire Redux `RootState` as the first argument, and may also accept other arguments as well.
+
+#### Writing Posts Selectors
+
+The `<PostsList>` component needs to read a list of all the posts, and the `<SinglePostPage>` and `<EditPostForm>` components need to look up a single post by its ID. Let's export two small selector functions from `postsSlice.ts` to cover those cases:
+
+```ts title="features/posts/postsSlice.ts"
+import type { RootState } from '@/app/store'
+
 const postsSlice = createSlice(/* omit slice code*/)
 
 export const { postAdded, postUpdated, reactionAdded } = postsSlice.actions
@@ -235,39 +250,39 @@ export const { postAdded, postUpdated, reactionAdded } = postsSlice.actions
 export default postsSlice.reducer
 
 // highlight-start
-export const selectAllPosts = state => state.posts
+export const selectAllPosts = (state: RootState) => state.posts
 
-export const selectPostById = (state, postId) =>
+export const selectPostById = (state: RootState, postId: string) =>
   state.posts.find(post => post.id === postId)
 //highlight-end
 ```
 
-Note that the `state` parameter for these selector functions is the root Redux state object, as it was for the inlined anonymous selectors we wrote directly inside of `useSelector`.
+Note that the `state` parameter for these selector functions is the root Redux state object, as it was for the inlined anonymous selectors we wrote directly inside of `useAppSelector`.
 
 We can then use them in the components:
 
-```js title="features/posts/PostsList.js"
+```tsx title="features/posts/PostsList.tsx"
 // omit imports
 // highlight-next-line
 import { selectAllPosts } from './postsSlice'
 
 export const PostsList = () => {
   // highlight-next-line
-  const posts = useSelector(selectAllPosts)
+  const posts = useAppSelector(selectAllPosts)
   // omit component contents
 }
 ```
 
-```js title="features/posts/SinglePostPage.js"
+```tsx title="features/posts/SinglePostPage.tsx"
 // omit imports
 //highlight-next-line
 import { selectPostById } from './postsSlice'
 
-export const SinglePostPage = ({ match }) => {
-  const { postId } = match.params
+export const SinglePostPage = () => {
+  const { postId } = useParams()
 
   // highlight-next-line
-  const post = useSelector(state => selectPostById(state, postId))
+  const post = useAppSelector(state => selectPostById(state, postId!))
   // omit component logic
 }
 ```
@@ -286,9 +301,115 @@ export const EditPostForm = ({ match }) => {
 }
 ```
 
-It's often a good idea to encapsulate data lookups by writing reusable selectors. You can also create "memoized" selectors that can help improve performance, which we'll look at in a later part of this tutorial.
+#### Extracting Auth and Users Selectors
+
+While we're at it, we also have several more components that have inlined selectors for accessing `state.auth` and `state.users`. That includes multiple components that are checking the current logged-in username or getting the current user object.
+
+We can extract those into reusable selectors in their respective slices as well:
+
+```ts title="features/auth/authSlice.ts"
+export default authSlice.reducer
+
+// highlight-next-line
+export const selectCurrentUsername = (state: RootState) => state.auth.username
+```
+
+```ts title="features/users/usersSlice.ts"
+// highlight-start
+import type { RootState } from '@/app/store'
+
+import { selectCurrentUsername } from '../auth/authSlice'
+// highlight-end
+
+// omit slice definition
+
+export default usersSlice.reducer
+
+// highlight-start
+export const selectAllUsers = (state: RootState) => state.users
+
+export const selectUserById = (state: RootState, userId?: string) => {
+  return state.users.find(user => user.id === userId)
+}
+
+export const selectCurrentUser = (state: RootState) => {
+  const currentUsername = selectCurrentUsername(state)
+  if (currentUsername) {
+    return selectUserById(state, currentUsername)
+  }
+}
+// highlight-end
+```
+
+Notice that `selectCurrentUser` actually makes use of the `selectCurrentUsername` selector from the auth slice! Since selectors are just normal functions, they can call each other to look up necessary pieces of data from the state.
+
+Once we've written these new selectors, we can replace all of the remaining inlined selectors in our components with the matching selectors from the slice files.
+
+#### Using Selectors Effectively
+
+It's often a good idea to encapsulate data lookups by writing reusable selectors. Ideally, components don't even have to know where in the Redux `state` a value lives - they just use a selector from the slice to access the data.
+
+You can also create "memoized" selectors that can help improve performance by optimizing rerenders and skipping unnecessary recalculations, which we'll look at in a later part of this tutorial.
 
 But, like any abstraction, it's not something you should do _all_ the time, everywhere. Writing selectors means more code to understand and maintain. **Don't feel like you need to write selectors for every single field of your state**. Try starting without any selectors, and add some later when you find yourself looking up the same values in many parts of your application code.
+
+#### Optional: Defining Selectors Inside of `createSlice`
+
+We've seen that we can write selectors as standalone functions in slice files. In some cases, you can shorten this a bit by defining selectors directly inside `createSlice` itself.
+
+<DetailedExplanation title="Defining Selectors inside createSlice" >
+
+We've already seen that `createSlice` requires the `name`, `initialState`, and `reducers` fields, and also accepts an optional `extraReducers` field.
+
+If you want to define selectors directly inside of `createSlice`, you can pass in an additional `selectors` field. The `selectors` field should be an object similar to `reducers`, where the keys will be the selector function names, and the values are the selector functions to be generated.
+
+**Note that unlike writing a standalone selector function, the `state` argument to these selectors will be just the _slice state_, and _not_ the entire `RootState`!**.
+
+There _are_ still times you'll need to write selectors as standalone functions outside of `createSlice`. This is especially true if you're calling other selectors that need the entire `RootState` as their argument, in order to make sure the types match up correctly.
+
+Here's what it might look like to convert the users slice selectors to be defined inside of `createSlice`:
+
+```ts
+const usersSlice = createSlice({
+  name: 'users',
+  initialState,
+  reducers: {},
+  // highlight-start
+  selectors: {
+    // Note that `state` here is just the `UsersState`!
+    selectAllUsers: state => state,
+    selectUserById: (state, userId?: string) => {
+      return state.find(user => user.id === userId)
+    }
+  }
+  // highlight-end
+})
+
+export const { selectAllUsers, selectUserById } = usersSlice.selectors
+
+export default usersSlice.reducer
+
+// highlight-start
+// We've replaced these standalone selectors:
+// export const selectAllUsers = (state: RootState) => state.users
+
+// export const selectUserById = (state: RootState, userId?: string) => {
+//   return state.users.find((user) => user.id === userId)
+// }
+
+// But this selector still needs to be written standalone,
+// because `selectCurrentUsername` is typed to need `RootState`
+// as its argument:
+export const selectCurrentUser = (state: RootState) => {
+  const currentUsername = selectCurrentUsername(state)
+  if (currentUsername) {
+    return selectUserById(state, currentUsername)
+  }
+}
+// highlight-end
+```
+
+</DetailedExplanation>
 
 ### Loading State for Requests
 
@@ -641,7 +762,7 @@ const ARTIFICIAL_DELAY_MS = 2000
 
 Feel free to turn that on and off as we go if you want the API calls to complete faster.
 
-### [TODO] Defining Thunks Inside of `createSlice`
+### [TODO] Optional: Defining Thunks Inside of `createSlice`
 
 ## Loading Users
 

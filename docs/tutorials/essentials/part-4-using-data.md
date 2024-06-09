@@ -1052,7 +1052,7 @@ We should now see both sides of the auth behavior working:
 - If the user tries to access `/posts` without having logged in, the `<ProtectedRoute>` component will redirect back to `/` and show the `<LoginPage>`
 - When the user logs in, we dispatch `userLoggedIn()` to update the Redux state, and then force a navigation to `/posts`, and this time `<ProtectedRoute>` will display the posts page.
 
-### Showing the Logged-In User
+### Updating the UI with the Current User
 
 Since we now know who is logged in while using the app, we can show the user's actual name in the navbar. We should also give them a way to log out as well, by adding a "Log Out" button.
 
@@ -1134,6 +1134,52 @@ export const AddPostForm = () => {
 
     e.currentTarget.reset()
   }
+```
+
+Finally, it also doesn't make sense to allow the current user to edit posts defined by _other_ users. We can update the `<SinglePostPage>` to only show an "Edit Post" button if the post author ID matches the current user ID:
+
+```tsx title="features/posts/SinglePostPage.tsx"
+export const SinglePostPage = () => {
+  const { postId } = useParams()
+
+  const post = useAppSelector(state =>
+    state.posts.find(post => post.id === postId)
+  )
+  // highlight-next-line
+  const user = useAppSelector(state => state.auth.username)
+
+  if (!post) {
+    return (
+      <section>
+        <h2>Post not found!</h2>
+      </section>
+    )
+  }
+
+  // highlight-next-line
+  const canEdit = user === post.user
+
+  return (
+    <section>
+      <article className="post">
+        <h2>{post.title}</h2>
+        <div>
+          <PostAuthor userId={post.user} />
+          <TimeAgo timestamp={post.date} />
+        </div>
+        <p className="post-content">{post.content}</p>
+        <ReactionButtons post={post} />
+        // highlight-start
+        {canEdit && (
+          <Link to={`/editPost/${post.id}`} className="button">
+            Edit Post
+          </Link>
+        )}
+        // highlight-end
+      </article>
+    </section>
+  )
+}
 ```
 
 ### Clearing Other State on Logout
