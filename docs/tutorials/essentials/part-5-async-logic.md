@@ -11,13 +11,14 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 - How to use the Redux "thunk" middleware for async logic
 - Patterns for handling async request state
-- How to use the Redux Toolkit `createAsyncThunk` API to simplify async calls
+- How to use the Redux Toolkit `createAsyncThunk` API to manage async calls
+- How to use the Redux Toolkit `createListenerMiddleware` API for reactive logic
 
 :::
 
 :::info Prerequisites
 
-- Familiarity with using AJAX requests to fetch and update data from a server
+- Familiarity with using HTTP requests to fetch and update data from a server REST API
 
 :::
 
@@ -39,13 +40,13 @@ We'll cover how to use RTK Query starting in [Part 7: RTK Query Basics](./part-7
 
 ### Example REST API and Client
 
-To keep the example project isolated but realistic, the initial project setup already includes a fake in-memory REST API for our data (configured using [the Mock Service Worker mock API tool](https://mswjs.io/)). The API uses `/fakeApi` as the base URL for the endpoints, and supports the typical `GET/POST/PUT/DELETE` HTTP methods for `/fakeApi/posts`, `/fakeApi/users`, and `fakeApi/notifications`. It's defined in `src/api/server.js`.
+To keep the example project isolated but realistic, the initial project setup already includes a fake in-memory REST API for our data (configured using [the Mock Service Worker mock API tool](https://mswjs.io/)). The API uses `/fakeApi` as the base URL for the endpoints, and supports the typical `GET/POST/PUT/DELETE` HTTP methods for `/fakeApi/posts`, `/fakeApi/users`, and `fakeApi/notifications`. It's defined in `src/api/server.ts`.
 
-The project also includes a small HTTP API client object that exposes `client.get()` and `client.post()` methods, similar to popular HTTP libraries like `axios`. It's defined in `src/api/client.js`.
+The project also includes a small HTTP API client object that exposes `client.get()` and `client.post()` methods, similar to popular HTTP libraries like `axios`. It's defined in `src/api/client.ts`.
 
 We'll use the `client` object to make HTTP calls to our in-memory fake REST API for this section.
 
-Also, the mock server has been set up to reuse the same random seed each time the page is loaded, so that it will generate the same list of fake users and fake posts. If you want to reset that, delete the `'randomTimestampSeed'` value in your browser's Local Storage and reload the page, or you can turn that off by editing `src/api/server.js` and setting `useSeededRNG` to `false`.
+Also, the mock server has been set up to reuse the same random seed each time the page is loaded, so that it will generate the same list of fake users and fake posts. If you want to reset that, delete the `'randomTimestampSeed'` value in your browser's Local Storage and reload the page, or you can turn that off by editing `src/api/server.ts` and setting `useSeededRNG` to `false`.
 
 :::info
 
@@ -53,13 +54,11 @@ As a reminder, the code examples focus on the key concepts and changes for each 
 
 :::
 
-## Thunks and Async Logic
-
-### Using Middleware to Enable Async Logic
+## Using Middleware to Enable Async Logic
 
 By itself, a Redux store doesn't know anything about async logic. It only knows how to synchronously dispatch actions, update the state by calling the root reducer function, and notify the UI that something has changed. Any asynchronicity has to happen outside the store.
 
-But, what if you want to have async logic interact with the store by dispatching or checking the current store state? That's where [Redux middleware](../fundamentals/part-4-store.md#middleware) come in. They extend the store, and allow you to:
+But, what if you want to have async logic interact with the store by dispatching actions or checking the current store state? That's where [Redux middleware](../fundamentals/part-4-store.md#middleware) come in. They extend the store to add additional capabilities, and allow you to:
 
 - Execute extra logic when any action is dispatched (such as logging the action and state)
 - Pause, modify, delay, replace, or halt dispatched actions
@@ -68,22 +67,56 @@ But, what if you want to have async logic interact with the store by dispatching
 
 [The most common reason to use middleware is to allow different kinds of async logic to interact with the store](../../faq/Actions.md#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior). This allows you to write code that can dispatch actions and check the store state, while keeping that logic separate from your UI.
 
-There are many kinds of async middleware for Redux, and each lets you write your logic using different syntax. The most common async middleware is [`redux-thunk`](https://github.com/reduxjs/redux-thunk), which lets you write plain functions that may contain async logic directly. Redux Toolkit's `configureStore` function [automatically sets up the thunk middleware by default](https://redux-toolkit.js.org/api/getDefaultMiddleware#included-default-middleware), and [we recommend using thunks as a standard approach for writing async logic with Redux](../../style-guide/style-guide.md#use-thunks-and-listeners-for-other-async-logic).
+:::info Middleware and the Redux Store
 
-Earlier, we saw [what the synchronous data flow for Redux looks like](part-1-overview-concepts.md#redux-application-data-flow). When we introduce asynchronous logic, we add an extra step where middleware can run logic like AJAX requests, then dispatch actions. That makes the async data flow look like this:
+For more details on how middleware let you customize the Redux store, see:
+
+- [Redux Fundamentals, Part 4: Store > Middleware](../fundamentals/part-4-store.md#middleware)
+
+:::
+
+### Middleware and Redux Data Flow
+
+Earlier, we saw [what the synchronous data flow for Redux looks like](part-1-overview-concepts.md#redux-application-data-flow).
+
+Middleware update the Redux data flow by adding an extra step at the start of `dispatch`. That way, middleware can run logic like AJAX requests, then dispatch actions. That makes the async data flow look like this:
 
 ![Redux async data flow diagram](/img/tutorials/essentials/ReduxAsyncDataFlowDiagram.gif)
+
+## Thunks and Async Logic
+
+There are many kinds of async middleware for Redux, and each lets you write your logic using different syntax. The most common async middleware is [`redux-thunk`](https://github.com/reduxjs/redux-thunk), which lets you write plain functions that may contain async logic directly. Redux Toolkit's `configureStore` function [automatically sets up the thunk middleware by default](https://redux-toolkit.js.org/api/getDefaultMiddleware#included-default-middleware), and [we recommend using thunks as a standard approach for writing async logic with Redux](../../style-guide/style-guide.md#use-thunks-and-listeners-for-other-async-logic).
+
+:::info What is a "Thunk"?
+
+The word "thunk" is a programming term that means ["a piece of code that does some delayed work"](https://en.wikipedia.org/wiki/Thunk).
+
+For more details on how to use Redux thunks, see the thunk usage guide page:
+
+- [Using Redux: Writing Logic with Thunks](../../usage/writing-logic-thunks.mdx)
+
+as well as these posts:
+
+- [What the heck is a thunk?](https://daveceddia.com/what-is-a-thunk/)
+- [Thunks in Redux: the basics](https://medium.com/fullstack-academy/thunks-in-redux-the-basics-85e538a3fe60)
+
+:::
 
 ### Thunk Functions
 
 Once the thunk middleware has been added to the Redux store, it allows you to pass _thunk functions_ directly to `store.dispatch`. A thunk function will always be called with `(dispatch, getState)` as its arguments, and you can use them inside the thunk as needed.
 
+A thunk function can contain _any_ logic, sync or async.
+
 Thunks typically dispatch plain actions using action creators, like `dispatch(increment())`:
 
-```js
+```ts
 const store = configureStore({ reducer: counterReducer })
 
-const exampleThunkFunction = (dispatch, getState) => {
+const exampleThunkFunction = (
+  dispatch: AppDispatch,
+  getState: () => RootState
+) => {
   const stateBefore = getState()
   console.log(`Counter before: ${stateBefore.counter}`)
   dispatch(increment())
@@ -96,9 +129,9 @@ store.dispatch(exampleThunkFunction)
 
 For consistency with dispatching normal action objects, we typically write these as _thunk action creators_, which return the thunk function. These action creators can take arguments that can be used inside the thunk.
 
-```js
-const logAndAdd = amount => {
-  return (dispatch, getState) => {
+```ts
+const logAndAdd = (amount: number) => {
+  return (dispatch: AppDispatch, getState: () => RootState) => {
     const stateBefore = getState()
     console.log(`Counter before: ${stateBefore.counter}`)
     dispatch(incrementByAmount(amount))
@@ -110,18 +143,13 @@ const logAndAdd = amount => {
 store.dispatch(logAndAdd(5))
 ```
 
-Thunks are typically written in "slice" files. `createSlice` itself does not have any special support for defining thunks, so you should write them as separate functions in the same slice file. That way, they have access to the plain action creators for that slice, and it's easy to find where the thunk lives.
+Thunks are typically written in ["slice" files](./part-2-app-structure.md#redux-slices), since the thunk data fetching is usually conceptually related to a particular slice's update logic. We'll look at a couple different ways to define thunks as we go through this section.
 
-:::info
+:::info Typing Thunks
 
-The word "thunk" is a programming term that means ["a piece of code that does some delayed work"](https://en.wikipedia.org/wiki/Thunk). For more details on how to use thunks, see the thunk usage guide page:
+For more details on defining thunks with TypeScript, see:
 
-- [Using Redux: Writing Logic with Thunks](../../usage/writing-logic-thunks.mdx)
-
-as well as these posts:
-
-- [What the heck is a thunk?](https://daveceddia.com/what-is-a-thunk/)
-- [Thunks in Redux: the basics](https://medium.com/fullstack-academy/thunks-in-redux-the-basics-85e538a3fe60)
+- [Type Checking Redux Thunks](../../usage/usage-with-typescript.md#type-checking-redux-thunks)
 
 :::
 
@@ -132,36 +160,39 @@ Thunks may have async logic inside of them, such as `setTimeout`, `Promise`s, an
 Data fetching logic for Redux typically follows a predictable pattern:
 
 - A "start" action is dispatched before the request, to indicate that the request is in progress. This may be used to track loading state to allow skipping duplicate requests or show loading indicators in the UI.
-- The async request is made
-- Depending on the request result, the async logic dispatches either a "success" action containing the result data, or a "failure" action containing error details. The reducer logic clears the loading state in both cases, and either processes the result data from the success case, or stores the error value for potential display.
+- The async request is made with `fetch` or a wrapper library, with a promise for the result
+- When the request promise resolves, the async logic dispatches either a "success" action containing the result data, or a "failure" action containing error details. The reducer logic clears the loading state in both cases, and either processes the result data from the success case, or stores the error value for potential display.
 
 These steps are not _required_, but are commonly used. (If all you care about is a successful result, you can just dispatch a single "success" action when the request finishes, and skip the "start" and "failure" actions.)
 
-Redux Toolkit provides a `createAsyncThunk` API to implement the creation and dispatching of these actions, and we'll look at how to use it shortly.
+**Redux Toolkit provides a `createAsyncThunk` API to implement the creation and dispatching of actions describing an async request**, and we'll look at how to use it shortly.
 
 <DetailedExplanation title="Detailed Explanation: Dispatching Request Status Actions in Thunks">
 
 If we were to write out the code for a typical async thunk by hand, it might look like this:
 
-```js
+```ts
 const getRepoDetailsStarted = () => ({
   type: 'repoDetails/fetchStarted'
 })
-const getRepoDetailsSuccess = repoDetails => ({
+const getRepoDetailsSuccess = (repoDetails: RepoDetails) => ({
   type: 'repoDetails/fetchSucceeded',
   payload: repoDetails
 })
-const getRepoDetailsFailed = error => ({
+const getRepoDetailsFailed = (error: any) => ({
   type: 'repoDetails/fetchFailed',
   error
 })
-const fetchIssuesCount = (org, repo) => async dispatch => {
-  dispatch(getRepoDetailsStarted())
-  try {
-    const repoDetails = await getRepoDetails(org, repo)
-    dispatch(getRepoDetailsSuccess(repoDetails))
-  } catch (err) {
-    dispatch(getRepoDetailsFailed(err.toString()))
+
+const fetchIssuesCount = (org: string, repo: string) => {
+  return async (dispatch: AppDispatch) => {
+    dispatch(getRepoDetailsStarted())
+    try {
+      const repoDetails = await getRepoDetails(org, repo)
+      dispatch(getRepoDetailsSuccess(repoDetails))
+    } catch (err) {
+      dispatch(getRepoDetailsFailed(err.toString()))
+    }
   }
 }
 ```
@@ -173,6 +204,8 @@ However, writing code using this approach is tedious. Each separate type of requ
 - A thunk has to be written that dispatches the correct actions in the right sequence
 
 `createAsyncThunk` abstracts this pattern by generating the action types and action creators, and generating a thunk that dispatches those actions automatically. You provide a callback function that makes the async call and returns a Promise with the result.
+
+It's also easy to make mistakes with error handling when writing thunk logic yourself. In this case, the `try` block will actually catch errors from _both_ a failed request, _and_ any errors while dispatching. Handling this correctly would require restructuring the logic to separate those. `createAsyncThunk` already handles errors correctly for you internally.
 
 </DetailedExplanation>
 
@@ -607,6 +640,8 @@ const ARTIFICIAL_DELAY_MS = 2000
 ```
 
 Feel free to turn that on and off as we go if you want the API calls to complete faster.
+
+### [TODO] Defining Thunks Inside of `createSlice`
 
 ## Loading Users
 
