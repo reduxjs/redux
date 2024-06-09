@@ -319,7 +319,7 @@ export const EditPostForm = () => {
 
 Note that the Redux-specific code here is relatively minimal. Once again, we read a value from the Redux store via `useAppSelector`, and then dispatch an action via `useAppDispatch` when the user interacts with the UI.
 
-Like with `SinglePostPage`, we'll need to import it into `App.js` and add a route that will render this component with the `postId` as a route parameter.
+Like with `SinglePostPage`, we'll need to import it into `App.tsx` and add a route that will render this component with the `postId` as a route parameter.
 
 ```tsx title="App.tsx"
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
@@ -632,7 +632,7 @@ Like with the `post.user` field, we'll update our `postAdded` prepare callback t
 
 Since we can't just put a `Date` class instance into the Redux store, we'll track the `post.date` value as a timestamp string. We'll add it to the initial state values (using `date-fns` to subtract a few minutes from the current date and time), and also add it to each new post in the prepare callback
 
-```ts title="features/posts/postsSlice.ts"=
+```ts title="features/posts/postsSlice.ts"
 import { createSlice, nanoid } from '@reduxjs/toolkit'
 // highlight-next-line
 import { sub } from 'date-fns'

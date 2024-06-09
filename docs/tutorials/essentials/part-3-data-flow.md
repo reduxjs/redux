@@ -539,7 +539,7 @@ In order to dispatch actions from a component, **we need access to the store's `
 
 Once we have the `dispatch` function available in our component, we can call `dispatch(postAdded())` in a click handler. We can take the title and content values from our form, generate a new ID, and put them together into a new post object that we pass to `postAdded()`.
 
-```jsx title="features/posts/AddPostForm"
+```tsx title="features/posts/AddPostForm.tsx"
 import React from 'react'
 // highlight-start
 import { nanoid } from '@reduxjs/toolkit'
@@ -571,7 +571,7 @@ export const AddPostForm = () => {
     const newPost: Post = {
       id: nanoid(),
       title,
-      content,
+      content
     }
     dispatch(postAdded(newPost))
     // highlight-end
@@ -586,7 +586,12 @@ export const AddPostForm = () => {
         <label htmlFor="postTitle">Post Title:</label>
         <input type="text" id="postTitle" defaultValue="" required />
         <label htmlFor="postContent">Content:</label>
-        <textarea id="postContent" name="postContent" defaultValue="" required />
+        <textarea
+          id="postContent"
+          name="postContent"
+          defaultValue=""
+          required
+        />
         <button>Save Post</button>
       </form>
     </section>
