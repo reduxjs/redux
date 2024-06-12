@@ -1208,7 +1208,7 @@ We've already got the `userLoggedOut()` action being dispatched, but that's an a
 
 We mentioned earlier that it helps if we think about the action as **"an event that occurred in the app"**, rather than "a command to set a value". This is a good example of that in practice. We don't _need_ a separate action for `clearUserData`, because there's only one event that occurred - "the user logged out". We just need a way to handle the one `userLoggedOut` action in multiple places, so that we can apply all the relevant state updates at the same time.
 
-#### Using `extraReducers` to Handle Actions
+#### Using `extraReducers` to Handle Other Actions
 
 Happily, we can! `createSlice` accepts an option called **`extraReducers`**, which can be used to have the slice listen for actions that were defined elsewhere in the app. Any time those other actions are dispatched, this slice can update its own state as well. That means **_many_ different slice reducers can _all_ respond to the same dispatched action, and each slice can update its own state if needed!**
 
@@ -1217,6 +1217,8 @@ The `extraReducers` field is a function that receives a parameter named `builder
 - `builder.addCase(actionCreator, caseReducer)`: listens for one specific action type
 - `builder.addMatcher(matcherFunction, caseReducer)`: listens for any one of multiple action types, using [a Redux Toolkit "matcher" function](https://redux-toolkit.js.org/api/matching-utilities) for comparing action objects
 - `builder.addDefaultCase(caseReducer)`: adds a case reducer that runs if nothing else in this slice matched the action (equivalent to a `default` case inside of a `switch`).
+
+You can chain these together, like `builder.addCase().addCase().addMatcher().addDefaultCase()`. If multiple matchers match the action, they will run in the order they were defined.
 
 Given that, we can import the `userLoggedOut` action from `authSlice.ts` into `postsSlice.ts`, listen for that action inside of `postsSlice.extraReducers`, and return an empty posts array to reset the posts list on logout:
 

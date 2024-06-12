@@ -32,7 +32,9 @@ In this section, we'll convert our social media app to fetch the posts and users
 
 :::tip
 
-Redux Toolkit includes the [**RTK Query data fetching and caching API**](https://redux-toolkit.js.org/rtk-query/overview). RTK Query is a purpose built data fetching and caching solution for Redux apps, and **can eliminate the need to write _any_ thunks or reducers to manage data fetching**. We specifically teach RTK Query as the default approach for data fetching, and RTK Query is built on the same patterns shown in this page.
+Redux Toolkit includes the [**RTK Query data fetching and caching API**](https://redux-toolkit.js.org/rtk-query/overview). RTK Query is a purpose built data fetching and caching solution for Redux apps, and **can eliminate the need to write _any_ additional Redux logic like thunks or reducers to manage data fetching**. We specifically teach RTK Query as the default approach for data fetching.
+
+RTK Query is built on the same patterns shown in this page, so this section will help you understand the underlying mechanics of how data fetching works with Redux.
 
 We'll cover how to use RTK Query starting in [Part 7: RTK Query Basics](./part-7-rtk-query-basics.md).
 
@@ -425,7 +427,7 @@ We _could_ track that information using some booleans, like `isLoading: true`, b
 ```ts
 {
   // Multiple possible status enum values
-  status: 'idle' | 'loading' | 'succeeded' | 'failed',
+  status: 'idle' | 'loading' | 'failed' | 'succeeded',
   error: string | null
 }
 ```
@@ -436,11 +438,19 @@ We can use this information to decide what to show in our UI as the request prog
 
 Let's update our `postsSlice` to use this pattern to track loading state for a "fetch posts" request. We'll switch our state from being an array of posts by itself, to look like `{posts, status, error}`. We'll also remove the old sample post entries from our initial state. As part of this change, we also need to change any uses of `state` as an array to be `state.posts` instead, because the array is now one level deeper:
 
-```js title="features/posts/postsSlice.js"
+```ts title="features/posts/postsSlice.ts"
 import { createSlice, nanoid } from '@reduxjs/toolkit'
 
+// omit reactions and other types
+
 // highlight-start
-const initialState = {
+interface PostsState {
+  posts: Post[]
+  status: 'idle' | 'pending' | 'failed' | 'succeeded'
+  error: string | null
+}
+
+const initialState: PostsState = {
   posts: [],
   status: 'idle',
   error: null
@@ -452,23 +462,15 @@ const postsSlice = createSlice({
   initialState,
   reducers: {
     postAdded: {
-      reducer(state, action) {
+      reducer(state, action: PayloadAction<Post>) {
         // highlight-next-line
         state.posts.push(action.payload)
       },
-      prepare(title, content, userId) {
+      prepare(title: string, content: string, userId: string) {
         // omit prepare logic
       }
     },
-    reactionAdded(state, action) {
-      const { postId, reaction } = action.payload
-      // highlight-next-line
-      const existingPost = state.posts.find(post => post.id === postId)
-      if (existingPost) {
-        existingPost.reactions[reaction]++
-      }
-    },
-    postUpdated(state, action) {
+    postUpdated(state, action: PayloadAction<PostUpdate>) {
       const { id, title, content } = action.payload
       // highlight-next-line
       const existingPost = state.posts.find(post => post.id === id)
@@ -476,7 +478,26 @@ const postsSlice = createSlice({
         existingPost.title = title
         existingPost.content = content
       }
+    },
+    reactionAdded(
+      state,
+      action: PayloadAction<{ postId: string; reaction: ReactionName }>
+    ) {
+      const { postId, reaction } = action.payload
+      // highlight-next-line
+      const existingPost = state.posts.find(post => post.id === postId)
+      if (existingPost) {
+        existingPost.reactions[reaction]++
+      }
     }
+  },
+  extraReducers: builder => {
+    builder.addCase(userLoggedOut, state => {
+      // highlight-start
+      // Clear out the list of posts whenever the user logs out
+      return initialState
+      // highlight-end
+    })
   }
 })
 
@@ -485,9 +506,9 @@ export const { postAdded, postUpdated, reactionAdded } = postsSlice.actions
 export default postsSlice.reducer
 
 // highlight-start
-export const selectAllPosts = state => state.posts.posts
+export const selectAllPosts = (state: RootState) => state.posts.posts
 
-export const selectPostById = (state, postId) =>
+export const selectPostById = (state: RootState, postId: string) =>
   state.posts.posts.find(post => post.id === postId)
 // highlight-end
 ```
@@ -498,26 +519,28 @@ Yes, this _does_ mean that we now have a nested object path that looks like `sta
 
 Redux Toolkit's `createAsyncThunk` API generates thunks that automatically dispatch those "start/success/failure" actions for you.
 
-Let's start by adding a thunk that will make an AJAX call to retrieve a list of posts. We'll import the `client` utility from the `src/api` folder, and use that to make a request to `'/fakeApi/posts'`.
+Let's start by adding a thunk that will make an HTTP request to retrieve a list of posts. We'll import the `client` utility from the `src/api` folder, and use that to make a request to `'/fakeApi/posts'`.
 
-```js title="features/posts/postsSlice"
+```ts title="features/posts/postsSlice.ts"
 // highlight-next-line
 import { createSlice, nanoid, createAsyncThunk } from '@reduxjs/toolkit'
 // highlight-next-line
-import { client } from '../../api/client'
+import { client } from '@/api/client'
 
-const initialState = {
+// omit other imports and types
+
+// highlight-start
+export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
+  const response = await client.get<Post[]>('/fakeApi/posts')
+  return response.data
+})
+// highlight-end
+
+const initialState: PostsState = {
   posts: [],
   status: 'idle',
   error: null
 }
-
-// highlight-start
-export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
-  const response = await client.get('/fakeApi/posts')
-  return response.data
-})
-// highlight-end
 ```
 
 `createAsyncThunk` accepts two arguments:
@@ -525,7 +548,7 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
 - A string that will be used as the prefix for the generated action types
 - A "payload creator" callback function that should return a `Promise` containing some data, or a rejected `Promise` with an error
 
-The payload creator will usually make an AJAX call of some kind, and can either return the `Promise` from the AJAX call directly, or extract some data from the API response and return that. We typically write this using the JS `async/await` syntax, which lets us write functions that use `Promise`s while using standard `try/catch` logic instead of `somePromise.then()` chains.
+The payload creator will usually make an HTTP request of some kind, and can either return the `Promise` from the HTTP request directly, or extract some data from the API response and return that. We typically write this using the JS `async/await` syntax, which lets us write functions that use `Promise`s while using standard `try/catch` logic instead of `somePromise.then()` chains.
 
 In this case, we pass in `'posts/fetchPosts'` as the action type prefix. Our payload creation callback waits for the API call to return a response. The response object looks like `{data: []}`, and we want our dispatched Redux action to have a payload that is _just_ the array of posts. So, we extract `response.data`, and return that from the callback.
 
@@ -538,42 +561,6 @@ We can listen for this action in our reducer and mark the request status as `'lo
 Once the `Promise` resolves, the `fetchPosts` thunk takes the `response.data` array we returned from the callback, and dispatches a `'posts/fetchPosts/fulfilled'` action containing the posts array as `action.payload`:
 
 ![`createAsyncThunk`: posts pending action](/img/tutorials/essentials/devtools-posts-fulfilled.png)
-
-#### Dispatching Thunks from Components
-
-So, let's update our `<PostsList>` component to actually fetch this data automatically for us.
-
-We'll import the `fetchPosts` thunk into the component. Like all of our other action creators, we have to dispatch it, so we'll also need to add the `useDispatch` hook. Since we want to fetch this data when `<PostsList>` mounts, we need to import the React `useEffect` hook:
-
-```js title="features/posts/PostsList.js"
-// highlight-start
-import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-// omit other imports
-// highlight-end
-//highlight-next-line
-import { selectAllPosts, fetchPosts } from './postsSlice'
-
-export const PostsList = () => {
-  // highlight-next-line
-  const dispatch = useDispatch()
-  const posts = useSelector(selectAllPosts)
-
-  // highlight-start
-  const postStatus = useSelector(state => state.posts.status)
-
-  useEffect(() => {
-    if (postStatus === 'idle') {
-      dispatch(fetchPosts())
-    }
-  }, [postStatus, dispatch])
-  // highlight-end
-
-  // omit rendering logic
-}
-```
-
-It's important that we only try to fetch the list of posts once. If we do it every time the `<PostsList>` component renders, or is re-created because we've switched between views, we might end up fetching the posts several times. We can use the `posts.status` enum to help decide if we need to actually start fetching, by selecting that into the component and only starting the fetch if the status is `'idle'`.
 
 ### Reducers and Loading Actions
 
@@ -597,46 +584,13 @@ console.log(
 */
 ```
 
-However, there are times when a slice reducer needs to respond to _other_ actions that weren't defined as part of this slice's `reducers` field. We can do that using the slice `extraReducers` field instead.
-
-The `extraReducers` option should be a function that receives a parameter called `builder`. The `builder` object provides methods that let us define additional case reducers that will run in response to actions defined outside of the slice. We'll use `builder.addCase(actionCreator, reducer)` to handle each of the actions dispatched by our async thunks.
-
-<DetailedExplanation title="Detailed Explanation: Adding Extra Reducers to Slices">
-
-The `builder` object in `extraReducers` provides methods that let us define additional case reducers that will run in response to actions defined outside of the slice:
-
-- `builder.addCase(actionCreator, reducer)`: defines a case reducer that handles a single known action type based on either an RTK action creator or a plain action type string
-- `builder.addMatcher(matcher, reducer)`: defines a case reducer that can run in response to any action where the `matcher` function returns `true`
-- `builder.addDefaultCase(reducer)`: defines a case reducer that will run if no other case reducers were executed for this action.
-
-You can chain these together, like `builder.addCase().addCase().addMatcher().addDefaultCase()`. If multiple matchers match the action, they will run in the order they were defined.
-
-```js
-import { increment } from '../features/counter/counterSlice'
-
-const postsSlice = createSlice({
-  name: 'posts',
-  initialState,
-  reducers: {
-    // slice-specific reducers here
-  },
-  // highlight-start
-  extraReducers: builder => {
-    builder
-      .addCase('counter/decrement', (state, action) => {})
-      .addCase(increment, (state, action) => {})
-  }
-  // highlight-end
-})
-```
-
-</DetailedExplanation>
+We've also seen that we can use [the `extraReducers` field in `createSlice` to respond to actions that were defined outside of the slice](./part-4-using-data.md##using-extrareducers-to-handle-other-actions).
 
 In this case, we need to listen for the "pending" and "fulfilled" action types dispatched by our `fetchPosts` thunk. Those action creators are attached to our actual `fetchPost` function, and we can pass those to `extraReducers` to listen for those actions:
 
-```js
+```ts title="features/posts/postsSlice.ts"
 export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
-  const response = await client.get('/fakeApi/posts')
+  const response = await client.get<Post[]>('/fakeApi/posts')
   return response.data
 })
 
@@ -646,54 +600,191 @@ const postsSlice = createSlice({
   reducers: {
     // omit existing reducers here
   },
-  // highlight-start
-  extraReducers(builder) {
+
+  extraReducers: builder => {
     builder
+      .addCase(userLoggedOut, state => {
+        // Clear out the list of posts whenever the user logs out
+        return initialState
+      })
+      // highlight-start
       .addCase(fetchPosts.pending, (state, action) => {
-        state.status = 'loading'
+        state.status = 'pending'
       })
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.status = 'succeeded'
         // Add any fetched posts to the array
-        state.posts = state.posts.concat(action.payload)
+        state.posts.push(...action.payload)
       })
       .addCase(fetchPosts.rejected, (state, action) => {
         state.status = 'failed'
-        state.error = action.error.message
+        state.error = action.error.message ?? 'Unknown Error'
       })
+    // highlight-end
   }
-  // highlight-end
 })
 ```
 
 We'll handle all three action types that could be dispatched by the thunk, based on the `Promise` we returned:
 
-- When the request starts, we'll set the `status` enum to `'loading'`
+- When the request starts, we'll set the `status` enum to `'pending'`
 - If the request succeeds, we mark the `status` as `'succeeded'`, and add the fetched posts to `state.posts`
 - If the request fails, we'll mark the `status` as `'failed'`, and save any error message into the state so we can display it
 
+### Dispatching Thunks from Components
+
+Now that we have the `fetchPosts` thunk written and the slice updated to handle those actions, let's update our `<PostsList>` component to actually kick off the data fetch for us.
+
+We'll import the `fetchPosts` thunk into the component. Like all of our other action creators, we have to dispatch it, so we'll also need to add the `useAppDispatch` hook. Since we want to fetch this data when `<PostsList>` mounts, we need to import the React `useEffect` hook, and dispatch the action.
+
+It's important that we only try to fetch the list of posts once. If we do it every time the `<PostsList>` component renders, or is re-created because we've switched between views, we might end up fetching the posts several times. We can use the `posts.status` enum to help decide if we need to actually start fetching, by selecting that into the component and only starting the fetch if the status is `'idle'`, meaning it hasn't started yet.
+
+```ts title="features/posts/PostsList.tsx"
+// highlight-next-line
+import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
+
+// highlight-next-line
+import { useAppSelector, useAppDispatch } from '@/app/hooks'
+import { TimeAgo } from '@/components/TimeAgo'
+
+import { PostAuthor } from './PostAuthor'
+import { ReactionButtons } from './ReactionButtons'
+// highlight-next-line
+import { selectAllPosts, fetchPosts } from './postsSlice'
+
+export const PostsList = () => {
+  const dispatch = useAppDispatch()
+  // highlight-start
+  const posts = useAppSelector(selectAllPosts)
+  const postStatus = useAppSelector(state => state.posts.status)
+
+  useEffect(() => {
+    if (postStatus === 'idle') {
+      dispatch(fetchPosts())
+    }
+  }, [postStatus, dispatch])
+  // highlight-end
+
+  // omit rendering logic
+}
+```
+
+And with that, we should now see a fresh list of posts showing up after we log in to our app!
+
+**TODO Lorem ipsum screenshot here**
+
+#### Avoiding Duplicate Fetches
+
+The good news is we've successfully fetched those post objects from our mock server API.
+
+Unfortunately, we've got a problem. Right now our posts list is showing duplicates of each post:
+
+**TODO Duplicate post screenshot here**
+
+In fact, if we look at the Redux DevTools, we can see _two_ sets of `'pending'` and `'fulfilled'` actions were dispatched:
+
+**TODO Duplicate actions screenshot here**
+
+Why is that? Didn't we just add a check for `postStatus === 'idle'`? Shouldn't that be enough to make sure we only dispatch the thunk once?
+
+Well, yes... and no :)
+
+The actual logic here in the `useEffect` is correct. The issue is that right now we're looking at a development build of our application, and [in development, React will run all `useEffect` hooks twice on mount when inside of its `<StrictMode>` component](https://react.dev/reference/react/StrictMode) in order to make some kinds of bugs happen more obviously.
+
+In this case, what happened is:
+
+- The `<PostsList>` component mounted
+- The `useEffect` hook ran for the first time. The `postStatus` value is `'idle'`, so it dispatches the `fetchPosts` thunk.
+- `fetchPosts` immediately dispatches its `fetchPosts.pending` action, so the Redux store _did_ update the status to `'pending'` right away...
+- **but React runs the `useEffect` _again_ without re-rendering the component, so the effect still thinks that `postStatus` is `'idle'` and dispatches `fetchPosts` a second time**
+- Both thunks finish fetching their data, dispatch the `fetchPosts.fulfilled` action, and the `fulfilled` reducer runs twice, adding resulting in a duplicate set of posts being added to the state
+
+So, how can we fix this?
+
+One option would be to remove the `<StrictMode>` tag from our app. But, the React team recommends using it, and it _is_ helpful for catching other issues.
+
+We could write some complicated logic with the `useRef` hook to track if this component is _actually_ rendering for the first time, and use that to only dispatch `fetchPosts` once. But, that's kind of ugly.
+
+The last option would be to use the actual `state.posts.status` value from the Redux state to check if there's already a request in progress, and have the thunk itself bail out if that's the case. Fortunately, `createAsyncThunk` gives us a way to do this.
+
+#### Typing `createAsyncThunk`
+
+`createAsyncThunk` accepts an optional `condition` callback we can use to do that check. If provided, it runs at the start of the thunk call, and it will cancel the entire thunk if `condition` returns `false.`
+
+When we do this, we also need to pass some more TS types into the `createAsyncThunk` call. Our `fetchPosts` thunk currently takes no argument, and returns a `Post[]` list. We didn't declare that explicitly, but TypeScript inferred it because the return value of the payload callback was a `Post[]` value.
+
+In order to write this `condition` callback, we need to call `getState()` inside of the thunk. That means we also need to tell TypeScript what the right TS type is for the `state` value.
+
+`createAsyncThunk` accepts two primary and one optional generic arguments: `createAsyncThunk<ReturnType, ArgumentType, OptionalTypes>()`. In this case, we need to provide all three in order to pass in the specific `state` type:
+
+- The return type is `Post[]`
+- This thunk accepts no arguments, so the argument type is `void`
+- The only optional type we need to provide is `state: RootState`
+
+Then, we can provide the `condition` option, check the value of `state.posts.status`, and return `false` if it's not `'idle'`:
+
+```ts title="features/posts/postsSlice.ts
+/// highlight-start
+export const fetchPosts = createAsyncThunk<
+  Post[],
+  void,
+  { state: RootState }
+  // highlight-end
+>(
+  'posts/fetchPosts',
+  async () => {
+    const response = await client.get<Post[]>('/fakeApi/posts')
+    return response.data
+  },
+  // highlight-start
+  {
+    condition(arg, thunkApi) {
+      const { posts } = thunkApi.getState()
+      if (posts.status !== 'idle') {
+        return false
+      }
+    }
+  }
+  // highlight-start
+)
+```
+
+Now when we reload the page and look at the `<PostsList>`, we should only see one set of posts, with no duplicates, and we should only see one set of dispatched actions in the Redux DevTools.
+
+:::tip
+
+Note that RTK Query will manage this for you! It deduplicates requests across _all_ components, so that each request only happens once, and you don't have to worry about doing this yourself.
+
+:::
+
 ### Displaying Loading State
 
-Our `<PostsList>` component is already checking for any updates to the posts that are stored in Redux, and rerendering itself any time that list changes. So, if we refresh the page, we should see a random set of posts from our fake API show up on screen:
+Our `<PostsList>` component is already checking for any updates to the posts that are stored in Redux, and rerendering itself any time that list changes. So, if we refresh the page, we should see a random set of posts from our fake API show up on screen. But, it seems like there's some lag - the `<PostsList>` is empty at first, and after a couple seconds the posts are displayed.
 
-The fake API we're using returns data immediately. However, a real API call will probably take some time to return a response. It's usually a good idea to show some kind of "loading..." indicator in the UI so the user knows we're waiting for data.
+A real API call will probably take some time to return a response, so it's usually a good idea to show some kind of "loading..." indicator in the UI so the user knows we're waiting for data.
 
 We can update our `<PostsList>` to show a different bit of UI based on the `state.posts.status` enum: a spinner if we're loading, an error message if it failed, or the actual posts list if we have the data. While we're at it, this is probably a good time to extract a `<PostExcerpt>` component to encapsulate the rendering for one item in the list as well.
 
 The result might look like this:
 
-```jsx title="features/posts/PostsList.js"
-// highlight-next-line
-import { Spinner } from '../../components/Spinner'
-import { PostAuthor } from './PostAuthor'
-import { TimeAgo } from './TimeAgo'
-import { ReactionButtons } from './ReactionButtons'
-import { selectAllPosts, fetchPosts } from './postsSlice'
+```tsx title="features/posts/PostsList.tsx"
+import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
-// highlight-start
-const PostExcerpt = ({ post }) => {
+import { useAppSelector, useAppDispatch } from '@/app/hooks'
+
+// highlight-next-line
+import { Spinner } from '@/components/Spinner'
+import { TimeAgo } from '@/components/TimeAgo'
+
+import { PostAuthor } from './PostAuthor'
+import { ReactionButtons } from './ReactionButtons'
+import { Post, selectAllPosts, fetchPosts } from './postsSlice'
+
+const PostExcerpt = ({ post }: { post: Post }) => {
   return (
-    <article className="post-excerpt">
+    <article className="post-excerpt" key={post.id}>
       <h3>{post.title}</h3>
       <div>
         <PostAuthor userId={post.user} />
@@ -708,15 +799,13 @@ const PostExcerpt = ({ post }) => {
     </article>
   )
 }
-// highlight-end
 
 export const PostsList = () => {
-  const dispatch = useDispatch()
-  const posts = useSelector(selectAllPosts)
-
-  const postStatus = useSelector(state => state.posts.status)
+  const dispatch = useAppDispatch()
+  const posts = useAppSelector(selectAllPosts)
+  const postStatus = useAppSelector(state => state.posts.status)
   // highlight-next-line
-  const error = useSelector(state => state.posts.error)
+  const error = useAppSelector(state => state.posts.error)
 
   useEffect(() => {
     if (postStatus === 'idle') {
@@ -725,9 +814,9 @@ export const PostsList = () => {
   }, [postStatus, dispatch])
 
   // highlight-start
-  let content
+  let content: React.ReactNode
 
-  if (postStatus === 'loading') {
+  if (postStatus === 'pending') {
     content = <Spinner text="Loading..." />
   } else if (postStatus === 'succeeded') {
     // Sort posts in reverse chronological order by datetime string
@@ -746,16 +835,15 @@ export const PostsList = () => {
   return (
     <section className="posts-list">
       <h2>Posts</h2>
-      // highlight-next-line
       {content}
     </section>
   )
 }
 ```
 
-You might notice that the API calls are taking a while to complete, and that the loading spinner is staying on screen for a couple seconds. Our mock API server is configured to add a 2-second delay to all responses, specifically to help visualize times when there's a loading spinner visible. If you want to change this behavior, you can open up `api/server.js`, and alter this line:
+You might notice that the API calls are taking a while to complete, and that the loading spinner is staying on screen for a couple seconds. Our mock API server is configured to add a 2-second delay to all responses, specifically to help visualize times when there's a loading spinner visible. If you want to change this behavior, you can open up `api/server.ts`, and alter this line:
 
-```js title="api/server.js"
+```ts title="api/server.ts"
 // Add an extra delay to all endpoints, so loading spinners show up.
 const ARTIFICIAL_DELAY_MS = 2000
 ```
@@ -763,6 +851,148 @@ const ARTIFICIAL_DELAY_MS = 2000
 Feel free to turn that on and off as we go if you want the API calls to complete faster.
 
 ### [TODO] Optional: Defining Thunks Inside of `createSlice`
+
+Right now, our `fetchPosts` thunk is defined in the `postsSlice.ts` file, but _outside_ of the `createSlice()` call.
+
+There's an optional way to define thunks _inside_ of `createSlice`, which requires changing how the `reducers` field is defined. See this explanation for details if you want to try it:
+
+<DetailedExplanation title="Defining Thunks in createSlice">
+
+We've seen that the standard way to write the `createSlice.reducers` field is as an object, where the keys become the action names, and the values are reducers. We also saw that the values can be [an object with the `{reducer, prepare}` functions](./part-4-using-data.md#preparing-action-payloads) for creating an action object with the values we want.
+
+Alternately, the `reducers` field can be a callback function that receives a `create` object. This is somewhat similar to what we saw with `extraReducers`, but with a different set of methods for creating reducers and actions:
+
+- `create.reducer<PayloadType>(caseReducer)`: defines a case reducer
+- `create.preparedReducer(prepare, caseReducer)`: defines a reducer with a prepare callback
+
+Then, return an object like before with the reducer names as the fields, but call the `create` methods to make each reducer. Here's what the `postsSlice` would look like converted to this syntax:
+
+```ts
+const postsSlice = createSlice({
+  name: 'posts',
+  initialState,
+  // highlight-start
+  reducers: create => {
+    return {
+      postAdded: create.preparedReducer(
+        (title: string, content: string, userId: string) => {
+          return {
+            payload: {
+              id: nanoid(),
+              date: new Date().toISOString(),
+              title,
+              content,
+              user: userId,
+              reactions: initialReactions
+            }
+          }
+        },
+        (state, action) => {
+          state.posts.push(action.payload)
+        }
+      ),
+      postUpdated: create.reducer<PostUpdate>((state, action) => {
+        const { id, title, content } = action.payload
+        const existingPost = state.posts.find(post => post.id === id)
+        if (existingPost) {
+          existingPost.title = title
+          existingPost.content = content
+        }
+      }),
+      reactionAdded: create.reducer<{ postId: string; reaction: ReactionName }>(
+        (state, action) => {
+          const { postId, reaction } = action.payload
+          const existingPost = state.posts.find(post => post.id === postId)
+          if (existingPost) {
+            existingPost.reactions[reaction]++
+          }
+        }
+      )
+    }
+  },
+  // highlight-end
+  extraReducers: builder => {
+    // same as before
+  }
+})
+```
+
+Writing `reducers` as a callback opens the door for extending the capabilities of `createSlice`. In particular, it's possible to make a special version of `createSlice` that has the ability to use `createAsyncThunk` baked in.
+
+First, import `buildCreateSlice` and `asyncThunkCreator`, then call `buildCreateSlice` like this:
+
+```ts
+import { buildCreateSlice, asyncThunkCreator } from '@reduxjs/toolkit'
+
+export const createAppSlice = buildCreateSlice({
+  creators: { asyncThunk: asyncThunkCreator }
+})
+```
+
+That gives you a version of `createSlice` with the ability to write thunks inside.
+
+Finally, we can use that `createAppSlice` method to define our `postsSlice` with the `fetchPosts` thunk inside. When we do that, a couple other things changeg:
+
+- We can't pass in the `RootState` generic directly, so we have to do `getState() as RootState` to cast it
+- We can pass in all of the reducers that handle the thunk actions as part of the options to `create.asyncThunk()`, and remove those from the `extraReducers` field:
+
+```ts
+const postsSlice = createAppSlice({
+  name: 'posts',
+  initialState,
+  reducers: create => {
+    return {
+      // omit the other reducers
+      // highlight-start
+      fetchPosts: create.asyncThunk(
+        // Payload creator function to fetch the data
+        async () => {
+          const response = await client.get<Post[]>('/fakeApi/posts')
+          return response.data
+        },
+        {
+          // Options for `createAsyncThunk`
+          options: {
+            condition(arg, thunkApi) {
+              const { posts } = thunkApi.getState() as RootState
+              if (posts.status !== 'idle') {
+                return false
+              }
+            }
+          },
+          // The case reducers to handle the dispatched actions.
+          // Each of these is optional, but must use these names.
+          pending: (state, action) => {
+            state.status = 'pending'
+          },
+          fulfilled: (state, action) => {
+            state.status = 'succeeded'
+            // Add any fetched posts to the array
+            state.posts.push(...action.payload)
+          },
+          rejected: (state, action) => {
+            state.status = 'failed'
+            state.error = action.error.message ?? 'Unknown Error'
+          }
+        }
+      )
+      // highlight-end
+    }
+  },
+  extraReducers: builder => {
+    builder.addCase(userLoggedOut, state => {
+      // Clear out the list of posts whenever the user logs out
+      return initialState
+    })
+    // highlight-next-line
+    // The thunk handlers have been removed here
+  }
+})
+```
+
+Remember, **the `create` callback syntax is optional!** The only time you _have_ to use it is if you really want to write thunks inside of `createSlice`. That said, it does remove the need to use the `PayloadAction` type, and cuts down on `extraReducers` as well.
+
+</DetailedExplanation>
 
 ## Loading Users
 
