@@ -282,7 +282,7 @@ We said earlier that reducers must **always** follow some special rules:
 
 - They should only calculate the new state value based on the `state` and `action` arguments
 - They are not allowed to modify the existing `state`. Instead, they must make _immutable updates_, by copying the existing `state` and making changes to the copied values.
-- They must not do any asynchronous logic or other "side effects"
+- They must be "pure" - they cannot do any asynchronous logic or other "side effects"
 
 But why are these rules important? There are a few different reasons:
 

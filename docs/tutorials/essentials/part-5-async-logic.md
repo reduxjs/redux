@@ -59,12 +59,13 @@ As a reminder, the code examples focus on the key concepts and changes for each 
 
 By itself, a Redux store doesn't know anything about async logic. It only knows how to synchronously dispatch actions, update the state by calling the root reducer function, and notify the UI that something has changed. Any asynchronicity has to happen outside the store.
 
-But, what if you want to have async logic interact with the store by dispatching actions or checking the current store state? That's where [Redux middleware](../fundamentals/part-4-store.md#middleware) come in. They extend the store to add additional capabilities, and allow you to:
+But, what if you want to have async logic interact with the store by dispatching actions, checking the current store state, or some kind of side effect? That's where [Redux middleware](../fundamentals/part-4-store.md#middleware) come in. They extend the store to add additional capabilities, and allow you to:
 
 - Execute extra logic when any action is dispatched (such as logging the action and state)
 - Pause, modify, delay, replace, or halt dispatched actions
 - Write extra code that has access to `dispatch` and `getState`
 - Teach `dispatch` how to accept other values besides plain action objects, such as functions and promises, by intercepting them and dispatching real action objects instead
+- Write code that uses async logic or other side effects
 
 [The most common reason to use middleware is to allow different kinds of async logic to interact with the store](../../faq/Actions.md#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior). This allows you to write code that can dispatch actions and check the store state, while keeping that logic separate from your UI.
 
@@ -166,7 +167,7 @@ Data fetching logic for Redux typically follows a predictable pattern:
 
 These steps are not _required_, but are commonly used. (If all you care about is a successful result, you can just dispatch a single "success" action when the request finishes, and skip the "start" and "failure" actions.)
 
-**Redux Toolkit provides a `createAsyncThunk` API to implement the creation and dispatching of actions describing an async request**, and we'll look at how to use it shortly.
+**Redux Toolkit provides a [`createAsyncThunk`](https://redux-toolkit.js.org/api/createAsyncThunk) API to implement the creation and dispatching of actions describing an async request**, and we'll look at how to use it shortly.
 
 <DetailedExplanation title="Detailed Explanation: Dispatching Request Status Actions in Thunks">
 
