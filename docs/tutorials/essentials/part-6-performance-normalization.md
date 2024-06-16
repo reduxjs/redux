@@ -1038,7 +1038,7 @@ For more details on why normalizing state is useful, see [Normalizing State Shap
 
 ### Managing Normalized State with `createEntityAdapter`
 
-Redux Toolkit's `createEntityAdapter` API provides a standardized way to store your data in a slice by taking a collection of items and putting them into the shape of `{ ids: [], entities: {} }`. Along with this predefined state shape, it generates a set of reducer functions and selectors that know how to work with that data.
+Redux Toolkit's [**`createEntityAdapter`**](https://redux-toolkit.js.org/api/createEntityAdapter) API provides a standardized way to store your data in a slice by taking a collection of items and putting them into the shape of `{ ids: [], entities: {} }`. Along with this predefined state shape, it generates a set of reducer functions and selectors that know how to work with that data.
 
 This has several benefits:
 
@@ -1322,6 +1322,158 @@ We again import `createEntityAdapter`, call it, and call `notificationsAdapter.g
 
 Ironically, we do have a couple places in here where we need to loop over all notification objects and update them. Since those are no longer being kept in an array, we have to use `Object.values(state.entities)` to get an array of those notifications and loop over that. On the other hand, we can replace the previous fetch update logic with `notificationsAdapter.upsertMany`.
 
+## Writing Reactive Logic
+
+Thus far, all of our application behavior has been relatively imperative. The user does something (adding a post, fetching notifications), and we dispatch actions in either a click handler or a component `useEffect` hook in response. That includes the data fetching thunks like `fetchPosts` and `login`.
+
+However, sometimes we need to write more logic that runs in response to things that happened in the app, such as certain actions being dispatched.
+
+We've shown some loading indicators for things like fetching posts. It would be nice to have some kind of a visual confirmation for the user when they add a new post, like popping up a toast message.
+
+We've already seen that we can have [many reducers respond to the same dispatched action](./part-4-using-data.md#handling-actions-in-multiple-slices). That works great for logic that is just "update more parts of the state", but what if we need to write logic that is async or has other side effects? We can't put that in the reducers - [reducers must be "pure" and must _not_ have any side effects](./part-2-app-structure.md#rules-of-reducers).
+
+If we can't put this logic with side effects in reducers, where _can_ we put it?
+
+The answer is inside of [Redux middleware, because middleware is designed to enable side effects](./part-5-async-logic.md#using-middleware-to-enable-async-logic).
+
+### Reactive Logic with `createListenerMiddleware`
+
+We've already used the thunk middleware for async logic that has to run "right now". However, thunks are just functions. We need a different kind of middleware that lets us say "when a specific action is dispatched, go run this additional logic in response".
+
+**Redux Toolkit includes the [`createListenerMiddleware`](https://redux-toolkit.js.org/api/createListenerMiddleware) API to let us write logic that runs in response to specific actions being dispatched**. It lets us add "listener" entries that define what actions to look for, and an `effect` callback that will run whenever it matches against an action.
+
+Conceptually, you can think of `createListenerMiddleware` as being similar to [React's `useEffect` hook](https://react.dev/learn/synchronizing-with-effects), except that they are defined as part of your Redux logic instead of inside a React component, and they run in response to dispatched actions and Redux state updates instead of as part of React's rendering lifecycle.
+
+### Setting Up the Listener Middleware
+
+We didn't have to specifically set up or define the thunk middleware, because Redux Toolkit's `configureStore` automatically adds the thunk middleware to the store setup. For the listener middleware, we'll have to do a bit of setup work to create it and add it to the store.
+
+We'll create a new `app/listenerMiddleware.ts` file and create an instance of the listener middleware there. Similar to `createAsyncThunk`, we'll pass through the correct `dispatch` and `state` types so that we can safely access state fields and dispatch actions.
+
+```ts title="app/listenerMiddleware.ts"
+import { createListenerMiddleware, addListener } from '@reduxjs/toolkit'
+import type { RootState, AppDispatch } from './store'
+
+export const listenerMiddleware = createListenerMiddleware()
+
+export const startAppListening = listenerMiddleware.startListening.withTypes<
+  RootState,
+  AppDispatch
+>()
+export type AppStartListening = typeof startAppListening
+
+export const addAppListener = addListener.withTypes<RootState, AppDispatch>()
+export type AppAddListener = typeof addAppListener
+```
+
+Like `createSlice`, `createListenerMiddleware` returns an object that contains multiple fields:
+
+- `listenerMiddleware.middleware`: the actual Redux middleware instance that needs to be added to the store
+- `listenerMiddleware.startListening`: adds a new listener entry to the middleware directly
+- `listenerMiddleware.addListener`: an action creator that can be dispatched to add a listener entry from anywhere in the codebase that has access to `dispatch`, even if you didn't import the `listenerMiddleware` object
+
+As with async thunks and hooks, we can use the `.withTypes()` methods to define pre-typed `startAppListening` and `addAppListener` functions with the right types built in.
+
+### Showing Toasts for New Posts
+
+Now that we have the listener middleware configured, we can add a new listener entry that will show a toast message any time a new post successfully gets added.
+
+We're going to use the `react-tiny-toast` library to manage showing toasts with the right appearance. It's already included in the project repo, so we don't have to install it.
+
+We do need to import and render its `<ToastContainer>` component in our `<App>`:
+
+```tsx title="App.tsx"
+import React from 'react'
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate
+} from 'react-router-dom'
+// highlight-next-line
+import { ToastContainer } from 'react-tiny-toast'
+
+// omit other imports and ProtectedRoute definition
+
+function App() {
+  return (
+    <Router>
+      <Navbar />
+      <div className="App">
+        <Routes>{/* omit routes content */}</Routes>
+        // highlight-next-line
+        <ToastContainer />
+      </div>
+    </Router>
+  )
+}
+```
+
+Now we can go add a listener that will watch for the `addNewPost.fulfilled` action, show a toast that says "Post Added", and remove it after a delay.
+
+There's [multiple approaches we can use for defining listeners in our codebase](https://redux-toolkit.js.org/api/createListenerMiddleware#organizing-listeners-in-files). That said, it's usually a good practice to define listeners in whatever slice file seems most related to the logic we want to add. In this case, we want to show a toast when a post gets added, so let's add this listener in the `postsSlice` file:
+
+```ts title="features/posts/postsSlice.ts"
+import {
+  createEntityAdapter,
+  createSelector,
+  createSlice,
+  EntityState,
+  PayloadAction
+} from '@reduxjs/toolkit'
+import { client } from '@/api/client'
+
+import type { RootState } from '@/app/store'
+// highlight-next-line
+import { AppStartListening } from '@/app/listenerMiddleware'
+import { createAppAsyncThunk } from '@/app/withTypes'
+
+// omit types, initial state, slice definition, and selectors
+
+export const selectPostsByUser = createSelector(
+  [selectAllPosts, (state: RootState, userId: string) => userId],
+  (posts, userId) => posts.filter(post => post.user === userId)
+)
+
+// highlight-start
+export const addPostsListeners = (startListening: AppStartListening) => {
+  startAppListening({
+    actionCreator: addNewPost.fulfilled,
+    effect: async (action, listenerApi) => {
+      const { toast } = await import('react-tiny-toast')
+
+      const toastId = toast.show('New post added!', {
+        variant: 'success',
+        position: 'bottom-right',
+        pause: true
+      })
+
+      await listenerApi.delay(5000)
+      toast.remove(toastId)
+    }
+  })
+}
+// highlight-end
+```
+
+To add a listener, we need to call the `startAppListening` function that was defined in `app/listenerMiddleware.ts`. However, it's better if we _don't_ import `startAppListening` directly into the slice file, to help keep the import chains more consistent. Instead, we can export a function that accepts `startAppListening` as an argument. That way, the `app/listenerMiddleware.ts` file can import this function, similar to the way `app/store.ts` imports the slice reducers from each slice file.
+
+To add a listener entry, call `startAppListening` and pass in an object with an `effect` callback function, and one of these options to define when the effect callback will run:
+
+- `actionCreator: ActionCreator`: any RTK action creator function, like `reactionAdded` or `addNewPost.fulfilled`. This will run the effect when that one specific action is dispatched.
+- `matcher: (action: UnknownAction) => boolean`: Any RTK ["matcher" function](https://redux-toolkit.js.org/api/matching-utilities), like `isAnyOf(reactionAdded, addNewPost.fulfilled)`. This will run the effect any time the matcher returns `true`.
+- `predicate: (action: UnknownAction, currState: RootState, prevState: RootState) => boolean`: a more general matching function that has access to `currState` and `prevState`. This can be used to make any check you want against the action or state values, including seeing if a piece of state has changed (such as `currState.counter.value !== prevState.counter.value`)
+
+In this case, we specifically want to show our toast any time the `addNewPost` thunk succeeds, so we'll specify the effect should run with `actionCreator: addNewPost.fulfilled`.
+
+The `effect` callback itself is much like an async thunk. It gets the matched `action` as the first argument, and a `listenerApi` object as the second argument.
+
+The `listenerApi` includes the usual `dispatch` and `getState` methods, but also [several other functions that can be used to implement complex async logic and workflows](https://redux-toolkit.js.org/api/createListenerMiddleware#listener-api). That includes methods like `condition()` to pause until some other action is dispatched or state value changes, `unsubscribe()/subscribe()` to change whether this listener entry is active, `fork()` to kick off a child task, and more.
+
+In this case, we want to import the actual `react-tiny-toast` library dynamically, show the success toast, wait a few seconds, and then remove the toast.
+
+And that works! Now when we add a new post, we should see a small green toast pop up in the lower right-hand corner of the page, and disappear after 5 seconds. This works because the listener middleware in the Redux store checks and runs the effect callback, even though we didn't specifically add any more logic to the React components themselves.
+
 ## What You've Learned
 
 We've built a lot of new behavior in this section. Let's see what how the app looks with all those changes:
@@ -1357,6 +1509,12 @@ Here's what we covered in this section:
     - `adapter.getInitialState`, which can accept additional state fields like loading state
     - Prebuilt reducers for common cases, like `setAll`, `addMany`, `upsertOne`, and `removeMany`
     - `adapter.getSelectors`, which generates selectors like `selectAll` and `selectById`
+- **Redux Toolkit's `createListenerMiddleware` API is used to run reactive logic in response to dispatched actions**
+  - The listener middleware should be added to the store setup, with the right store types attached
+  - Listeners are typically defined in slice files, but may be structured other ways as well
+  - Listeners can match against individual actions, many actions, or use custom comparisons
+  - Listener effect callbacks can contain any sync or async logic
+  - The `listenerApi` object provides many methods for managing async workflows and behavior
 
 :::
 
