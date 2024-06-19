@@ -1374,6 +1374,41 @@ Like `createSlice`, `createListenerMiddleware` returns an object that contains m
 
 As with async thunks and hooks, we can use the `.withTypes()` methods to define pre-typed `startAppListening` and `addAppListener` functions with the right types built in.
 
+Then, we need to add it to the store:
+
+```ts title="app/store.ts"
+import { configureStore } from '@reduxjs/toolkit'
+
+import authReducer from '@/features/auth/authSlice'
+import postsReducer from '@/features/posts/postsSlice'
+import usersReducer from '@/features/users/usersSlice'
+import notificationsReducer from '@/features/notifications/notificationsSlice'
+
+// highlight-next-line
+import { listenerMiddleware } from './listenerMiddleware'
+
+export const store = configureStore({
+  reducer: {
+    auth: authReducer,
+    posts: postsReducer,
+    users: usersReducer,
+    notifications: notificationsReducer
+  },
+  // highlight-start
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware().prepend(listenerMiddleware.middleware)
+  // highlight-end
+})
+```
+
+`configureStore` already adds the `redux-thunk` middleware to the store setup by default, along with some additional middleware in development that add safety checks. We want to preserve those, but also add the listener middleware as well.
+
+Order can matter when setting up middleware, because they form a pipeline: `m1` -> `m2` -> `m3` -> `store.dispatch()`. In this case, the listener middleware needs to be at the _start_ of the pipeline, so that it can intercept some actions first and process them.
+
+`getDefaultMiddleware()` returns an array of the configured middleware. Since it's an array, it already has a `.concat()` method that returns a copy with the new items at the _end_ of the array, but `configureStore` also adds an equivalent `.prepend()` method that makes a copy with the new items at the _start_ of the array.
+
+So, we'll call `getDefaultMiddleware().prepend(listenerMiddleware.middleware)` to add this to the front of the list.
+
 ### Showing Toasts for New Posts
 
 Now that we have the listener middleware configured, we can add a new listener entry that will show a toast message any time a new post successfully gets added.
