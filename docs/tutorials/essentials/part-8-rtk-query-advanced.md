@@ -42,20 +42,20 @@ We've already added a mutation endpoint to save new Post entries to the server, 
 
 As with adding posts, the first step is to define a new mutation endpoint in our API slice. This will look much like the mutation for adding a post, but the endpoint needs to include the post ID in the URL and use an HTTP `PATCH` request to indicate that it's updating some of the fields.
 
-```js title="features/api/apiSlice.js"
+```ts title="features/api/apiSlice.ts"
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: '/fakeApi' }),
   tagTypes: ['Post'],
   endpoints: builder => ({
-    getPosts: builder.query({
+    getPosts: builder.query<Post[], void>({
       query: () => '/posts',
       providesTags: ['Post']
     }),
-    getPost: builder.query({
+    getPost: builder.query<Post, string>({
       query: postId => `/posts/${postId}`
     }),
-    addNewPost: builder.mutation({
+    addNewPost: builder.mutation<Post, NewPost>({
       query: initialPost => ({
         url: '/posts',
         method: 'POST',
@@ -64,9 +64,9 @@ export const apiSlice = createApi({
       invalidatesTags: ['Post']
     }),
     // highlight-start
-    editPost: builder.mutation({
+    editPost: builder.mutation<Post, PostUpdate>({
       query: post => ({
-        url: `/posts/${post.id}`,
+        url: `posts/${post.id}`,
         method: 'PATCH',
         body: post
       })
@@ -88,39 +88,53 @@ Once that's added, we can update the `<EditPostForm>`. It needs to read the orig
 
 We can use the same `useGetPostQuery` hook that we used in `<SinglePostPage>` to read the `Post` entry from the cache in the store, and we'll use the new `useEditPostMutation` hook to handle saving the changes.
 
-```jsx title="features/posts/EditPostForm.js"
-import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+```tsx title="features/posts/EditPostForm.tsx"
+import React from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
-import { Spinner } from '../../components/Spinner'
+import { Spinner } from '@/components/Spinner'
+
 // highlight-next-line
-import { useGetPostQuery, useEditPostMutation } from '../api/apiSlice'
+import { useGetPostQuery, useEditPostMutation } from '@/features/api/apiSlice'
 
-export const EditPostForm = ({ match }) => {
-  const { postId } = match.params
+// omit form types
 
-  // highlight-next-line
-  const { data: post } = useGetPostQuery(postId)
-  // highlight-next-line
+export const EditPostForm = () => {
+  const { postId } = useParams()
+  const navigate = useNavigate()
+
+  // highlight-start
+  const { data: post } = useGetPostQuery(postId!)
+
   const [updatePost, { isLoading }] = useEditPostMutation()
+  // highlight-end
 
-  const [title, setTitle] = useState(post.title)
-  const [content, setContent] = useState(post.content)
+  if (!post) {
+    return (
+      <section>
+        <h2>Post not found!</h2>
+      </section>
+    )
+  }
 
-  const history = useHistory()
+  const onSavePostClicked = async (
+    e: React.FormEvent<EditPostFormElements>
+  ) => {
+    // Prevent server submission
+    e.preventDefault()
 
-  const onTitleChanged = e => setTitle(e.target.value)
-  const onContentChanged = e => setContent(e.target.value)
+    const { elements } = e.currentTarget
+    const title = elements.postTitle.value
+    const content = elements.postContent.value
 
-  const onSavePostClicked = async () => {
     if (title && content) {
       // highlight-next-line
-      await updatePost({ id: postId, title, content })
-      history.push(`/posts/${postId}`)
+      await updatePost({ id: post.id, title, content })
+      navigate(`/posts/${postId}`)
     }
   }
 
-  // omit rendering logic
+  // omit rendering
 }
 ```
 
@@ -157,44 +171,46 @@ In order to get the right behavior, we need to set up each endpoint with the rig
 - `addNewPost`: invalidates the general `'Post'` tag, to refetch the whole list
 - `editPost`: invalidates the specific `{type: 'Post', id}` tag. This will force a refetch of both the _individual_ post from `getPost`, as well as the _entire_ list of posts from `getPosts`, because they both provide a tag that matches that `{type, id}` value.
 
-```js title="features/api/apiSlice.js"
+```ts title="features/api/apiSlice.ts"
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: '/fakeApi' }),
   tagTypes: ['Post'],
   endpoints: builder => ({
-    getPosts: builder.query({
+    getPosts: builder.query<Post[], void>({
       query: () => '/posts',
       // highlight-start
       providesTags: (result = [], error, arg) => [
         'Post',
-        ...result.map(({ id }) => ({ type: 'Post', id }))
+        ...result.map(({ id }) => ({ type: 'Post', id }) as const)
       ]
       // highlight-end
     }),
-    getPost: builder.query({
+    getPost: builder.query<Post, string>({
       query: postId => `/posts/${postId}`,
       // highlight-start
       providesTags: (result, error, arg) => [{ type: 'Post', id: arg }]
       // highlight-end
     }),
-    addNewPost: builder.mutation({
+    addNewPost: builder.mutation<Post, NewPost>({
       query: initialPost => ({
         url: '/posts',
         method: 'POST',
         body: initialPost
       }),
-      // highlight-next-line
+      // highlight-start
       invalidatesTags: ['Post']
+      // highlight-end
     }),
-    editPost: builder.mutation({
+    editPost: builder.mutation<Post, PostUpdate>({
       query: post => ({
         url: `posts/${post.id}`,
         method: 'PATCH',
         body: post
       }),
-      // highlight-next-line
+      // highlight-start
       invalidatesTags: (result, error, arg) => [{ type: 'Post', id: arg.id }]
+      // highlight-end
     })
   })
 })
@@ -231,11 +247,46 @@ RTK Query has many other options for controlling when and how to refetch data, i
 
 :::
 
+### Updating Toast Display
+
+When we switched from dispatching thunks for adding posts to using an RTK Query mutation, we accidentally broke the "New post added" toast message behavior, because the the `addNewPost.fulfilled` action is no longer getting dispatched.
+
+Fortunately, this is simple to fix. RTK Query actually uses `createAsyncThunk` internally, and we've already seen that it dispatches Redux actions as the requests are made. We can update the toast listener to watch for RTKQ's internal actions being dispatched, and show the toast message when that happens.
+
+`createApi` automatically generates thunks internally for each endpoint. It also automatically generates [RTK "matcher" functions](https://redux-toolkit.js.org/api/matching-utilities), which accept an action object and return `true` if the action matches some condition. These matchers can be used inside `startAppListening` and any other place that needs to check if an action matches a given condition. They also act as TypeScript type guards, narrowing the TS type of the `action` object so that you can safely access its fields.
+
+Currently, the toast listener is watching for the single specific action type with `actionCreator: addNewPost.fulfilled`. We'll update it to watch for the posts being added with `matcher: apiSlice.endpoints.addNewPost.matchFulfilled`:
+
+```ts title="features/posts/postsSlice.ts"
+import { createEntityAdapter, createSelector, createSlice, EntityState, PayloadAction } from '@reduxjs/toolkit'
+import { client } from '@/api/client'
+
+import type { RootState } from '@/app/store'
+import { AppStartListening } from '@/app/listenerMiddleware'
+import { createAppAsyncThunk } from '@/app/withTypes'
+
+// highlight-next-line
+import { apiSlice } from '@/features/api/apiSlice'
+import { logout } from '@/features/auth/authSlice'
+
+// omit types, posts slice, and selectors
+
+export const addPostsListeners = (startAppListening: AppStartListening) => {
+  startAppListening({
+    // highlight-next-line
+    matcher: apiSlice.endpoints.addNewPost.matchFulfilled,
+    effect: async (action, listenerApi) => {
+```
+
+Now the toast should show correctly again when we add a post.
+
 ## Managing Users Data
 
 We've finished converting our posts data management over to use RTK Query. Next up, we'll convert the list of users.
 
-Since we've already seen how to use the RTK Query hooks for fetching and reading data, for this section we're going to try a different approach. RTK Query's core API is UI-agnostic and can be used with any UI layer, not just React. Normally you should stick with using the hooks, but here we're going to work with the user data using _just_ the RTK Query core API so you can see how to use it.
+Since we've already seen how to use the RTK Query hooks for fetching and reading data, for this section we're going to try a different approach. **Like the rest of Redux Toolkit, RTK Query's core logic is UI-agnostic and can be used with any UI layer, not just React**.
+
+Normally you should use the React hooks that `createApi` generates, since they do a lot of work for you. But, for sake of illustration, here we're going to work with the user data using _just_ the RTK Query core API so you can see how to use it.
 
 ### Fetching Users Manually
 
@@ -243,7 +294,15 @@ We're currently defining a `fetchUsers` async thunk in `usersSlice.js`, and disp
 
 We'll start by defining a `getUsers` query endpoint in `apiSlice.js`, similar to our existing endpoints. We'll export the `useGetUsersQuery` hook just for consistency, but for now we're not going to use it.
 
-```js title="features/api/apiSlice.js"
+```ts title="features/api/apiSlice.ts"
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+
+import type { Post, NewPost, PostUpdate } from '@/features/posts/postsSlice'
+// highlight-next-line
+import type { User } from '@/features/users/usersSlice'
+
+export type { Post }
+
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: '/fakeApi' }),
@@ -252,7 +311,7 @@ export const apiSlice = createApi({
     // omit other endpoints
 
     // highlight-start
-    getUsers: builder.query({
+    getUsers: builder.query<User[], void>({
       query: () => '/users'
     })
     // highlight-end
@@ -283,7 +342,7 @@ Each endpoint object contains:
 
 If we want to fetch the list of users outside of React, we can dispatch the `getUsers.initiate()` thunk in our index file:
 
-```jsx title="index.js"
+```tsx title="main.tsx"
 // omit other imports
 // highlight-next-line
 import { apiSlice } from './features/api/apiSlice'
@@ -307,7 +366,11 @@ async function main() {
 main()
 ```
 
-This dispatch happens automatically inside the query hooks, but we can start it manually if needed.
+This dispatch happens automatically inside the query hooks, but we can start it manually if needed by dispatching the `initiate` thunk.
+
+Note that we didn't provide an argument to `initiate()`. That's because our `getUsers` endpoint doesn't need a specific query argument. Conceptually, this is the same as saying "this cache entry has a query argument of `undefined`". If we did need arguments, we'd pass them to the thunk, like `dispatch(api.endpoints.getPokemon.initiate('pikachu'))`.
+
+In this case, we're manually dispatching the thunk to start prefetching the data in our app's setup function. In practice, you may want to do the prefetching in [React-Router's "data loaders"](https://reactrouter.com/en/main/route/loader) to start the requests before the components are rendered. (See [the RTK repo discussion thread on React-Router loaders](https://github.com/reduxjs/redux-toolkit/discussions/2751) for some ideas.)
 
 :::caution
 
@@ -317,36 +380,45 @@ Manually dispatching an RTKQ request thunk will create a subscription entry, but
 
 ### Selecting Users Data
 
-We currently have selectors like `selectAllUsers` and `selectUserById` that are generated by our `createEntityAdapter` users adapter, and are reading from `state.users`. If we reload the page, all of our user-related display is broken because the `state.users` slice has no data. Now that we're fetching data for RTK Query's cache, we should replace those selectors with equivalents that read from the cache instead.
+We currently have selectors like `selectAllUsers` and `selectUserById` that are generated by our `createEntityAdapter` users adapter, and are reading from `state.users`. If we reload the page, **all of our user-related display is broken because the `state.users` slice has no data**. Now that we're fetching data for RTK Query's cache, **we should replace those selectors with equivalents that read from the cache instead**.
 
 The `endpoint.select()` function in the API slice endpoints will create a new memoized selector function _every_ time we call it. `select()` takes a cache key as its argument, and this must be the _same_ cache key that you pass as an argument to either the query hooks or the `initiate()` thunk. The generated selector uses that cache key to know exactly which cached result it should return from the cache state in the store.
 
 In this case, our `getUsers` endpoint doesn't need any parameters - we always fetch the entire list of users. So, we can create a cache selector with no argument, and the cache key becomes `undefined`.
 
-```js title="features/users/usersSlice.js"
+We can update `usersSlice.ts` to base its selectors on the RTKQ query cache instead of the actual `usersSlice` call:
+
+```ts title="features/users/usersSlice.ts"
 import {
-  createSlice,
+  createAsyncThunk,
   createEntityAdapter,
-  createSelector
+  createSelector,
+  createSlice
 } from '@reduxjs/toolkit'
 
+import { client } from '@/api/client'
+
+import type { RootState } from '@/app/store'
+
 // highlight-next-line
-import { apiSlice } from '../api/apiSlice'
+import { apiSlice } from '@/features/api/apiSlice'
+import { selectCurrentUsername } from '@/features/auth/authSlice'
 
-/* Temporarily ignore adapter - we'll use this again shortly
-const usersAdapter = createEntityAdapter()
+export interface User {
+  id: string
+  name: string
+}
 
-const initialState = usersAdapter.getInitialState()
-*/
+// omit `fetchSlice` and `usersSlice`
 
 // highlight-start
+const emptyUsers: User[] = []
+
 // Calling `someEndpoint.select(someArg)` generates a new selector that will return
 // the query result object for a query with those parameters.
 // To generate a selector for a specific query argument, call `select(theQueryArg)`.
 // In this case, the users query has no params, so we don't pass anything to select()
 export const selectUsersResult = apiSlice.endpoints.getUsers.select()
-
-const emptyUsers = []
 
 export const selectAllUsers = createSelector(
   selectUsersResult,
@@ -355,26 +427,36 @@ export const selectAllUsers = createSelector(
 
 export const selectUserById = createSelector(
   selectAllUsers,
-  (state, userId) => userId,
+  (state: RootState, userId: string) => userId,
   (users, userId) => users.find(user => user.id === userId)
 )
+
+export const selectCurrentUser = (state: RootState) => {
+  const currentUsername = selectCurrentUsername(state)
+  if (currentUsername) {
+    return selectUserById(state, currentUsername)
+  }
+}
 // highlight-end
 
-/* Temporarily ignore selectors - we'll come back to this later
-export const {
-  selectAll: selectAllUsers,
-  selectById: selectUserById,
-} = usersAdapter.getSelectors((state) => state.users)
+/* Temporarily ignore adapter selectors - we'll come back to this later
+export const { selectAll: selectAllUsers, selectById: selectUserById } = usersAdapter.getSelectors(
+  (state: RootState) => state.users,
+)
 */
 ```
+
+We start by creating a specific `selectUsersResult` selector instance that knows how to retrieve the right cache entry.
 
 Once we have that initial `selectUsersResult` selector, we can replace the existing `selectAllUsers` selector with one that returns the array of users from the cache result, and then replace `selectUserById` with one that finds the right user from that array.
 
 For now we're going to comment out those selectors from the `usersAdapter` - we're going to make another change later that switches back to using those.
 
-Our components are already importing `selectAllUsers` and `selectUserById`, so this change should just work! Try refreshing the page and clicking through the posts list and single post view. The correct user names should appear in each displayed post, and in the dropdown in the `<AddPostForm>`.
+Our components are already importing `selectAllUsers`, `selectUserById`, and `selectCurrentUser`, so this change should just work! Try refreshing the page and clicking through the posts list and single post view. The correct user names should appear in each displayed post, and in the dropdown in the `<AddPostForm>`.
 
-Since the `usersSlice` is no longer even being used at all, we can go ahead and delete the `createSlice` call from this file, and remove `users: usersReducer` from our store setup. We've still got a couple bits of code that reference `postsSlice`, so we can't quite remove that yet - we'll get to that shortly.
+**Note that this is a great example of how using selectors makes the code more maintainable!** We already had our components calling these selectors, so they don't care whether the data is coming from the existing `usersSlice` state, or from an RTK Query cache entry, as long as the selectors return the expected data. We were able to change out the selector implementations and _didn't_ have to update the UI components at all.
+
+Since the `usersSlice` state is no longer even being used at all, we can go ahead and delete the `const usersSlice = createSlice()` call and the `fetchUsers` thunk from this file, and remove `users: usersReducer` from our store setup. We've still got a couple bits of code that reference `postsSlice`, so we can't quite remove that yet - we'll get to that shortly.
 
 ### Injecting Endpoints
 
@@ -382,17 +464,19 @@ It's common for larger applications to "code-split" features into separate bundl
 
 **RTK Query supports splitting out endpoint definitions with `apiSlice.injectEndpoints()`**. That way, we can still have a single API slice with a single middleware and cache reducer, but we can move the definition of some endpoints to other files. This enables code-splitting scenarios, as well as co-locating some endpoints alongside feature folders if desired.
 
-To illustrate this process, let's switch the `getUsers` endpoint to be injected in `usersSlice.js`, instead of defined in `apiSlice.js`.
+To illustrate this process, let's switch the `getUsers` endpoint to be injected in `usersSlice.ts`, instead of defined in `apiSlice.ts`.
 
 We're already importing `apiSlice` into `usersSlice.js` so that we can access the `getUsers` endpoint, so we can switch to calling `apiSlice.injectEndpoints()` here instead.
 
-```js title="features/users/usersSlice.js"
+```ts title="features/users/usersSlice.ts"
 import { apiSlice } from '../api/apiSlice'
 
 // highlight-start
+// This is the _same_ reference as `apiSlice`, but this has
+// the TS types updated to include the injected endpoints
 export const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
-    getUsers: builder.query({
+    getUsers: builder.query<User[], void>({
       query: () => '/users'
     })
   })
@@ -404,42 +488,39 @@ export const selectUsersResult = extendedApiSlice.endpoints.getUsers.select()
 // highlight-end
 ```
 
-`injectEndpoints()` **mutates the original API slice object to add the additional endpoint definitions, and then returns it**. The actual caching reducer and middleware that we originally added to the store still work okay as-is. At this point, `apiSlice` and `extendedApiSlice` are the same object, but it can be helpful to refer to the `extendedApiSlice` object instead of `apiSlice` here as a reminder to ourselves. (This is more important if you're using TypeScript, because only the `extendedApiSlice` value has the added types for the new endpoints.)
+`injectEndpoints()` **mutates the original API slice object to add the additional endpoint definitions, and then returns the _same_ API reference**. Additionally, **the return value of `injectEndpoints` has the additional TS types from the injected endpoints included**. Because of that, we should save this as a new variable with a different name, so that we can use the updated TS types, have everything compile correctly, and remind ourselves which version of the API slice we're using.
 
-At the moment, the only file that references the `getUsers` endpoint is our index file, which is dispatching the `initiate` thunk. We need to update that to import the extended API slice instead:
+At the moment, the only file that references the `getUsers` endpoint is our entry point file, which is dispatching the `initiate` thunk. We need to update that to import the extended API slice instead:
 
-```diff title="index.js"
-  // omit other imports
-  // highlight-start
-- import { apiSlice } from './features/api/apiSlice'
-+ import { extendedApiSlice } from './features/users/usersSlice'
-  // highlight-end
+```tsx title="main.tsx"
+// highlight-next-line
+import { extendedApiSlice } from './features/users/usersSlice'
 
+import { worker } from './api/server'
 
-  async function main() {
-    // Start our mock API server
-    await worker.start({ onUnhandledRequest: 'bypass' })
+import './index.css'
 
+// Wrap app rendering so we can wait for the mock API to initialize
+async function start() {
+  // Start our mock API server
+  await worker.start({ onUnhandledRequest: 'bypass' })
 
-    // highlight-start
--   store.dispatch(apiSlice.endpoints.getUsers.initiate())
-+   store.dispatch(extendedApiSlice.endpoints.getUsers.initiate())
-    // highlight-end
+  // highlight-next-line
+  store.dispatch(extendedApiSlice.endpoints.getUsers.initiate())
 
+  const root = createRoot(document.getElementById('root')!)
 
-    ReactDOM.render(
-      <React.StrictMode>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </React.StrictMode>,
-      document.getElementById('root')
-    )
-  }
-  main()
+  root.render(
+    <React.StrictMode>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </React.StrictMode>
+  )
+}
 ```
 
-Alternately, you could just export the specific endpoints themselves from the slice file.
+Alternately, you could just export the specific endpoints themselves from the slice file, the same way we've done with action creators in slices.
 
 ## Manipulating Response Data
 
@@ -459,25 +540,40 @@ Our `selectUserById` selector currently has to loop over the cached array of use
 
 We were previously using `createEntityAdapter` in `usersSlice` to manage normalized users data. We can integrate `createEntityAdapter` into our `extendedApiSlice`, and actually use `createEntityAdapter` to transform the data before it's cached. We'll uncomment the `usersAdapter` lines we originally had, and use its update functions and selectors again.
 
-```js title="features/users/usersSlice.js"
-import { apiSlice } from '../api/apiSlice'
+```ts title="features/users/usersSlice.ts"
+import {
+  createEntityAdapter,
+  createSelector,
+  EntityState
+} from '@reduxjs/toolkit'
+
+import type { RootState } from '@/app/store'
+
+import { apiSlice } from '@/features/api/apiSlice'
+import { selectCurrentUsername } from '@/features/auth/authSlice'
+
+export interface User {
+  id: string
+  name: string
+}
 
 // highlight-start
-const usersAdapter = createEntityAdapter()
-
+const usersAdapter = createEntityAdapter<User>()
 const initialState = usersAdapter.getInitialState()
 // highlight-end
 
+// This is the _same_ reference as `apiSlice`, but this has
+// the TS types updated to include the injected endpoints
 export const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
-    getUsers: builder.query({
+    // highlight-start
+    getUsers: builder.query<EntityState<User, string>, void>({
       query: () => '/users',
-      // highlight-start
-      transformResponse: responseData => {
-        return usersAdapter.setAll(initialState, responseData)
+      transformResponse(res: User[]) {
+        return usersAdapter.setAll(initialState, res)
       }
-      // highlight-end
     })
+    // highlight-end
   })
 })
 
@@ -488,21 +584,29 @@ export const { useGetUsersQuery } = extendedApiSlice
 // To generate a selector for a specific query argument, call `select(theQueryArg)`.
 // In this case, the users query has no params, so we don't pass anything to select()
 export const selectUsersResult = extendedApiSlice.endpoints.getUsers.select()
-
+// highlight-start
 const selectUsersData = createSelector(
   selectUsersResult,
-  usersResult => usersResult.data
+  result => result.data ?? initialState
 )
+// highlight-end
+
+export const selectCurrentUser = (state: RootState) => {
+  const currentUsername = selectCurrentUsername(state)
+  if (currentUsername) {
+    return selectUserById(state, currentUsername)
+  }
+}
 
 // highlight-start
 export const { selectAll: selectAllUsers, selectById: selectUserById } =
-  usersAdapter.getSelectors(state => selectUsersData(state) ?? initialState)
+  usersAdapter.getSelectors(selectUsersData)
 // highlight-end
 ```
 
-We've added a `transformResponse` option to the `getUsers` endpoint. It receives the entire response data body as its argument, and should return the actual data to be cached. By calling `usersAdapter.setAll(initialState, responseData)`, it will return the standard `{ids: [], entities: {}}` normalized data structure containing all of the received items.
+We've added a `transformResponse` option to the `getUsers` endpoint. It receives the entire response data body as its argument (in this case, a `User[]` array), and should return the actual data to be cached. By calling `usersAdapter.setAll(initialState, responseData)`, it will return the standard `{ids: [], entities: {}}` normalized data structure containing all of the received items. We need to tell TS that we're now returning that `EntityState<User, string>` data as the actual contents of the cache entry's `data` field.
 
-The `adapter.getSelectors()` function needs to be given an "input selector" so it knows where to find that normalized data. In this case, the data is nested down inside the RTK Query cache reducer, so we select the right field out of the cache state.
+The `adapter.getSelectors()` function needs to be given an "input selector" so it knows where to find that normalized data. In this case, the data is nested down inside the RTK Query cache reducer, so we select the right field out of the cache state. To make things consistent, we can write a `selectUsersData` selector that falls back to the initial empty normalized state if we haven't yet fetched the data.
 
 ### Normalized vs Document Caches
 
@@ -535,44 +639,49 @@ The last component that is reading from the old `postsSlice` is `<UserPage>`, wh
 
 We can use `selectFromResult` to have `<UserPage>` read just a filtered list of posts from the cache. However, in order for `selectFromResult` to avoid unnecessary re-renders, we need to ensure that whatever data we extract is memoized correctly. To do this, we should create a new selector instance that the `<UsersPage>` component can reuse every time it renders, so that the selector memoizes the result based on its inputs.
 
-```jsx title="features/users/UsersPage.js"
-// highlight-next-line
+```tsx title="features/users/UsersPage.tsx"
+import { Link, useParams } from 'react-router-dom'
+// highlight-start
 import { createSelector } from '@reduxjs/toolkit'
+import type { TypedUseQueryStateResult } from '@reduxjs/toolkit/query/react'
+// highlight-end
 
-import { selectUserById } from '../users/usersSlice'
+import { useAppSelector } from '@/app/hooks'
+
 // highlight-next-line
-import { useGetPostsQuery } from '../api/apiSlice'
+import { useGetPostsQuery, Post } from '@/features/api/apiSlice'
 
-export const UserPage = ({ match }) => {
-  const { userId } = match.params
+import { selectUserById } from './usersSlice'
 
-  const user = useSelector(state => selectUserById(state, userId))
+// highlight-start
+// Create a TS type that represents "the result value passed
+// into the `selectFromResult` function for this hook"
+type GetPostSelectFromResultArg = TypedUseQueryStateResult<Post[], any, any>
+
+const selectPostsForUser = createSelector(
+  (res: GetPostSelectFromResultArg) => res.data,
+  (res: GetPostSelectFromResultArg, userId: string) => userId,
+  (data, userId) => data?.filter(post => post.user === userId)
+)
+// highlight-end
+
+export const UserPage = () => {
+  const { userId } = useParams()
+
+  const user = useAppSelector(state => selectUserById(state, userId!))
 
   // highlight-start
-  const selectPostsForUser = useMemo(() => {
-    const emptyArray = []
-    // Return a unique selector instance for this page so that
-    // the filtered results are correctly memoized
-    return createSelector(
-      res => res.data,
-      (res, userId) => userId,
-      (data, userId) => data?.filter(post => post.user === userId) ?? emptyArray
-    )
-  }, [])
-  // highlight-end
-
   // Use the same posts query, but extract only part of its data
   const { postsForUser } = useGetPostsQuery(undefined, {
-    // highlight-start
     selectFromResult: result => ({
-      // We can optionally include the other metadata fields from the result here
+      // Optional: Include all of the existing result fields like `isFetching`
       ...result,
-      // Include a field called `postsForUser` in the hook result object,
+      // Include a field called `postsForUser` in the result object,
       // which will be a filtered list of posts
-      postsForUser: selectPostsForUser(result, userId)
+      postsForUser: selectPostsForUser(result, userId!)
     })
-    // highlight-end
   })
+  // highlight-end
 
   // omit rendering logic
 }
@@ -580,7 +689,15 @@ export const UserPage = ({ match }) => {
 
 There's a key difference with the memoized selector function we've created here. Normally, [selectors expect the entire Redux `state` as their first argument](../../usage/deriving-data-selectors.md), and extract or derive a value from `state`. However, in this case we're only dealing with the "result" value that is kept in the cache. The result object has a `data` field inside with the actual values we need, as well as some of the request metadata fields.
 
-Our `selectFromResult` callback receives the `result` object containing the original request metadata and the `data` from the server, and should return some extracted or derived values. Because query hooks add an additional `refetch` method to whatever is returned here, it's preferable to always return an object from `selectFromResult` with the fields inside that you need.
+Because this selector is receiving something other than the usual `RootState` type as its first argument, we need to tell TS what that result value looks like. The RTK Query package exports a TS type called `TypedUseQueryStateResult` that represents "the type of the `useQuery` hook return object". We can use that to declare that we expect the result to include a `Post[]` array, and then define our selector using that type.
+
+:::tip Selectors and Memoizing Varying Arguments
+
+If you're using RTK 1.x or Reselect 4.x, note that memoized selectors only have a default cache size of 1. You'll need to [create a unique selector instance per component](../../usage/deriving-data-selectors.md#creating-unique-selector-instances) to ensure the selector memoizes consistently when passed different arguments like IDs.
+
+:::
+
+Our `selectFromResult` callback receives the `result` object containing the original request metadata and the `data` from the server, and should return some extracted or derived values. Because query hooks add an additional `refetch` method to whatever is returned here, `selectFromResult` should always return an object with the fields inside that you need inside.
 
 Since `result` is being kept in the Redux store, we can't mutate it - we need to return a new object. The query hook will do a "shallow" comparison on this returned object, and only re-render the component if one of the fields has changed. We can optimize re-renders by only returning the specific fields needed by this component - if we don't need the rest of the metadata flags, we could omit them entirely. If you do need them, you can spread the original `result` value to include them in the output.
 
@@ -608,7 +725,7 @@ We've completed updating our posts and users data, so all that's left is working
 
 Originally, we only tracked reactions on the client side and did not persist them to the server. Let's add a new `addReaction` mutation and use that to update the corresponding `Post` on the server every time the user clicks a reaction button.
 
-```js title="features/api/apiSlice.js"
+```ts title="features/api/apiSlice.ts"
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: '/fakeApi' }),
@@ -616,7 +733,10 @@ export const apiSlice = createApi({
   endpoints: builder => ({
     // omit other endpoints
     // highlight-start
-    addReaction: builder.mutation({
+    addReaction: builder.mutation<
+      Post,
+      { postId: string; reaction: ReactionName }
+    >({
       query: ({ postId, reaction }) => ({
         url: `posts/${postId}/reactions`,
         method: 'POST',
@@ -648,37 +768,43 @@ We already know that we need to refetch this post in order to see any of the dat
 
 With that in place, let's update `<ReactionButtons>` to use this mutation.
 
-```jsx title="features/posts/ReactionButtons.js"
-import React from 'react'
-
+```tsx title="features/posts/ReactionButtons.tsx"
 // highlight-next-line
-import { useAddReactionMutation } from '../api/apiSlice'
+import { useAddReactionMutation } from '@/features/api/apiSlice'
 
-const reactionEmoji = {
+import type { Post, ReactionName } from './postsSlice'
+
+const reactionEmoji: Record<ReactionName, string> = {
   thumbsUp: '👍',
-  hooray: '🎉',
+  tada: '🎉',
   heart: '❤️',
   rocket: '🚀',
   eyes: '👀'
 }
 
-export const ReactionButtons = ({ post }) => {
+interface ReactionButtonsProps {
+  post: Post
+}
+
+export const ReactionButtons = ({ post }: ReactionButtonsProps) => {
   // highlight-next-line
   const [addReaction] = useAddReactionMutation()
 
   const reactionButtons = Object.entries(reactionEmoji).map(
-    ([reactionName, emoji]) => {
+    ([stringName, emoji]) => {
+      // Ensure TS knows this is a _specific_ string type
+      const reaction = stringName as ReactionName
       return (
         <button
-          key={reactionName}
+          key={reaction}
           type="button"
           className="muted-button reaction-button"
           onClick={() => {
             // highlight-next-line
-            addReaction({ postId: post.id, reaction: reactionName })
+            addReaction({ postId: post.id, reaction })
           }}
         >
-          {emoji} {post.reactions[reactionName]}
+          {emoji} {post.reactions[reaction]}
         </button>
       )
     }
@@ -700,7 +826,7 @@ For a small update like adding a reaction, we probably don't need to re-fetch th
 
 **RTK Query lets you implement optimistic updates by modifying the client-side cache based on "request lifecycle" handlers**. Endpoints can define an `onQueryStarted` function that will be called when a request starts, and we can run additional logic in that handler.
 
-```js title="features/api/apiSlice.js"
+```ts title="features/api/apiSlice.ts"
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: '/fakeApi' }),
@@ -708,7 +834,10 @@ export const apiSlice = createApi({
   endpoints: builder => ({
     // omit other endpoints
 
-    addReaction: builder.mutation({
+    addReaction: builder.mutation<
+      Post,
+      { postId: string; reaction: ReactionName }
+    >({
       query: ({ postId, reaction }) => ({
         url: `posts/${postId}/reactions`,
         method: 'POST',
@@ -720,7 +849,7 @@ export const apiSlice = createApi({
       async onQueryStarted({ postId, reaction }, { dispatch, queryFulfilled }) {
         // `updateQueryData` requires the endpoint name and cache key arguments,
         // so it knows which piece of cache state to update
-        const patchResult = dispatch(
+        const getPostsPatchResult = dispatch(
           apiSlice.util.updateQueryData('getPosts', undefined, draft => {
             // The `draft` is Immer-wrapped and can be "mutated" like in createSlice
             const post = draft.find(post => post.id === postId)
@@ -729,14 +858,24 @@ export const apiSlice = createApi({
             }
           })
         )
+
+        // We also have another copy of the same data in the `getPost` cache
+        // entry for this post ID, so we need to update that as well
+        const getPostPatchResult = dispatch(
+          apiSlice.util.updateQueryData('getPost', postId, draft => {
+            draft.reactions[reaction]++
+          })
+        )
+
         try {
           await queryFulfilled
         } catch {
-          patchResult.undo()
+          getPostsPatchResult.undo()
+          getPostPatchResult.undo()
         }
       }
-      // highlight-end
     })
+    // highlight-end
   })
 })
 ```
@@ -745,7 +884,7 @@ The `onQueryStarted` handler receives two parameters. The first is the cache key
 
 The API slice object includes a `updateQueryData` util function that lets us update cached values. It takes three arguments: the name of the endpoint to update, the same cache key value used to identify the specific cached data, and a callback that updates the cached data. **`updateQueryData` uses Immer, so you can "mutate" the drafted cache data the same way you would in `createSlice`**.
 
-We can implement the optimistic update by finding the specific `Post` entry in the `getPosts` cache, and "mutating" it to increment the reaction counter.
+We can implement the optimistic update by finding the specific `Post` entry in the `getPosts` cache, and "mutating" it to increment the reaction counter. We also may have a second copy of the same conceptual individual `Post` object in the `getPost` cache for that post ID also, so we need to update that cache entry if it exists as well.
 
 `updateQueryData` generates an action object with a patch diff of the changes we made. When we dispatch that action, the return value is a `patchResult` object. If we call `patchResult.undo()`, it automatically dispatches an action that reverses the patch diff changes.
 
