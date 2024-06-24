@@ -11,7 +11,10 @@ export default defineConfig({
     globals: true,
     dir: 'test',
     alias: {
-      redux: path.join(__dirname, './src/index.ts'), // @remap-prod-remove-line
+      redux: path.join(
+        __dirname,
+        process.env.TEST_DIST ? 'node_modules/redux' : 'src/index.ts'
+      ),
 
       // this mapping is disabled as we want `dist` imports in the tests only to be used for "type-only" imports which don't play a role for jest
       '@internal': path.join(__dirname, 'src')
