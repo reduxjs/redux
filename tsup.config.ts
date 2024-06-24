@@ -37,7 +37,7 @@ const mangleErrorsTransform: Plugin = {
   }
 }
 
-export default defineConfig(options => {
+export default defineConfig((options): Options[] => {
   const commonOptions: Options = {
     entry: {
       redux: 'src/index.ts'
@@ -61,7 +61,7 @@ export default defineConfig(options => {
     {
       ...commonOptions,
       format: ['esm'],
-      target: 'es2017',
+      target: ['es2017'],
       dts: false,
       outExtension: () => ({ js: '.js' }),
       entry: { 'redux.legacy-esm': 'src/index.ts' }
@@ -81,9 +81,9 @@ export default defineConfig(options => {
     },
     {
       ...commonOptions,
-      format: 'cjs',
+      format: ['cjs'],
       outDir: './dist/cjs/',
       outExtension: () => ({ js: '.cjs' })
     }
-  ] as Options[]
+  ]
 })
