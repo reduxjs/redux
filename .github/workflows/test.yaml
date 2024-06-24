@@ -47,6 +47,9 @@ jobs:
       - name: Lint
         run: yarn lint
 
+      - name: Run test suite
+        run: yarn test
+
       - name: Build
         run: yarn build
 
