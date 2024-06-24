@@ -47,7 +47,7 @@
     "type-tests": "tsc -p tsconfig.test.json --noEmit",
     "test:watch": "vitest --watch",
     "test:cov": "vitest --coverage",
-    "build": "tsup",
+    "build": "yarn clean && tsup",
     "prepublishOnly": "yarn clean && yarn check-types && yarn format:check && yarn lint && yarn test",
     "prepack": "yarn build",
     "examples:lint": "eslint --ext js,ts examples",
