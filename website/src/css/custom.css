@@ -27,6 +27,7 @@
   --ifm-tabs-padding-horizontal: 0.4rem;
   --ifm-pre-background: rgb(39, 40, 34);
 
+  --ifm-color-content: black;
   --ifm-alert-color: black;
 
   --ra-admonition-color: #ecf4f9;
@@ -65,8 +66,8 @@
   --ifm-color-primary-light: #b97cfd;
   --ifm-color-primary-lighter: #cc8ffc;
   --ifm-color-primary-lightest: #fcf2ff;
-
-  --ifm-blockquote-color: #ecf4f9;
+  --ifm-color-content: #c4c9ce; 
+  --ifm-blockquote-color: #c4c9ce;
   --ifm-blockquote-color-dark: #6d1cac;
   --blockquote-text-color: black;
 }
