@@ -27,6 +27,7 @@
   --ifm-tabs-padding-horizontal: 0.4rem;
   --ifm-pre-background: rgb(39, 40, 34);
 
+  --ifm-color-content: black;
   --ifm-alert-color: black;
 
   --ra-admonition-color: #ecf4f9;
@@ -65,8 +66,8 @@
   --ifm-color-primary-light: #b97cfd;
   --ifm-color-primary-lighter: #cc8ffc;
   --ifm-color-primary-lightest: #fcf2ff;
-
-  --ifm-blockquote-color: #b4b8bd;
+  --ifm-color-content: #c4c9ce; 
+  --ifm-blockquote-color: #c4c9ce;
   --ifm-blockquote-color-dark: #6d1cac;
   --blockquote-text-color: black;
 }
@@ -119,7 +120,7 @@ div[class*='codeBlockTitle'] {
 code {
   background-color: var(--ifm-color-emphasis-300);
   border-radius: 0.2rem;
-  color: var(--ifm-blockquote-color);
+  color: var(--ifm-color-content);
 }
 
 a code,
