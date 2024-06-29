@@ -147,6 +147,43 @@ store.dispatch(logAndAdd(5))
 
 Thunks are typically written in ["slice" files](./part-2-app-structure.md#redux-slices), since the thunk data fetching is usually conceptually related to a particular slice's update logic. We'll look at a couple different ways to define thunks as we go through this section.
 
+For the thunk arguments, you can explicitly declare them as `(dispatch: AppDispatch, getState: () => RootState)`. Since this is common, you can also define a reusable `AppThunk` type and use that instead:
+
+```ts title="app/store.ts"
+// highlight-next-line
+import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit'
+
+// omit actual store setup
+
+// Infer the type of `store`
+export type AppStore = typeof store
+// Infer the `AppDispatch` type from the store itself
+export type AppDispatch = typeof store.dispatch
+// Same for the `RootState` type
+export type RootState = ReturnType<typeof store.getState>
+// highlight-start
+// Export a reusable type for handwritten thunks
+export type AppThunk = ThunkAction<void, RootState, unknown, Action>
+// highlight-end
+```
+
+Then you can use that to describe the thunk functions you're writing:
+
+```ts title="Example typed thunk"
+// highlight-start
+// Use `AppThunk` as the return type, since we return a thunk function
+const logAndAdd = (amount: number): AppThunk => {
+  // highlight-end
+  return (dispatch, getState) => {
+    const stateBefore = getState()
+    console.log(`Counter before: ${stateBefore.counter}`)
+    dispatch(incrementByAmount(amount))
+    const stateAfter = getState()
+    console.log(`Counter after: ${stateAfter.counter}`)
+  }
+}
+```
+
 :::info Typing Thunks
 
 For more details on defining thunks with TypeScript, see:
@@ -548,7 +585,7 @@ const initialState: PostsState = {
 - A string that will be used as the prefix for the generated action types
 - A "payload creator" callback function that should return a `Promise` containing some data, or a rejected `Promise` with an error
 
-The payload creator will usually make an HTTP request of some kind, and can either return the `Promise` from the HTTP request directly, or extract some data from the API response and return that. We typically write this using the JS `async/await` syntax, which lets us write functions that use `Promise`s while using standard `try/catch` logic instead of `somePromise.then()` chains.
+The payload creator will usually make an HTTP request of some kind, and can either return the `Promise` from the HTTP request directly, or extract some data from the API response and return that. We typically write this using the JS `async/await` syntax, which lets us write functions that use promises while using standard `try/catch` logic instead of `somePromise.then()` chains.
 
 In this case, we pass in `'posts/fetchPosts'` as the action type prefix. Our payload creation callback waits for the API call to return a response. The response object looks like `{data: []}`, and we want our dispatched Redux action to have a payload that is _just_ the array of posts. So, we extract `response.data`, and return that from the callback.
 
