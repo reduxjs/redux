@@ -290,9 +290,9 @@ Normally you should use the React hooks that `createApi` generates, since they d
 
 ### Fetching Users Manually
 
-We're currently defining a `fetchUsers` async thunk in `usersSlice.js`, and dispatching that thunk manually in `index.js` so that the list of users is available as soon as possible. We can do that same process using RTK Query.
+We're currently defining a `fetchUsers` async thunk in `usersSlice.ts`, and dispatching that thunk manually in `main.tsx` so that the list of users is available as soon as possible. We can do that same process using RTK Query.
 
-We'll start by defining a `getUsers` query endpoint in `apiSlice.js`, similar to our existing endpoints. We'll export the `useGetUsersQuery` hook just for consistency, but for now we're not going to use it.
+We'll start by defining a `getUsers` query endpoint in `apiSlice.ts`, similar to our existing endpoints. We'll export the `useGetUsersQuery` hook just for consistency, but for now we're not going to use it.
 
 ```ts title="features/api/apiSlice.ts"
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
@@ -460,13 +460,13 @@ Since the `usersSlice` state is no longer even being used at all, we can go ahea
 
 ### Injecting Endpoints
 
-It's common for larger applications to "code-split" features into separate bundles, and then "lazy load" them on demand as the feature is used for the first time. We said that RTK Query normally has a single "API slice" per application, and so far we've defined all of our endpoints directly in `apiSlice.js`. What happens if we want to code-split some of our endpoint definitions, or move them into another file to keep the API slice file from getting too big?
+It's common for larger applications to "code-split" features into separate bundles, and then "lazy load" them on demand as the feature is used for the first time. We said that RTK Query normally has a single "API slice" per application, and so far we've defined all of our endpoints directly in `apiSlice.ts`. What happens if we want to code-split some of our endpoint definitions, or move them into another file to keep the API slice file from getting too big?
 
 **RTK Query supports splitting out endpoint definitions with `apiSlice.injectEndpoints()`**. That way, we can still have a single API slice with a single middleware and cache reducer, but we can move the definition of some endpoints to other files. This enables code-splitting scenarios, as well as co-locating some endpoints alongside feature folders if desired.
 
 To illustrate this process, let's switch the `getUsers` endpoint to be injected in `usersSlice.ts`, instead of defined in `apiSlice.ts`.
 
-We're already importing `apiSlice` into `usersSlice.js` so that we can access the `getUsers` endpoint, so we can switch to calling `apiSlice.injectEndpoints()` here instead.
+We're already importing `apiSlice` into `usersSlice.ts` so that we can access the `getUsers` endpoint, so we can switch to calling `apiSlice.injectEndpoints()` here instead.
 
 ```ts title="features/users/usersSlice.ts"
 import { apiSlice } from '../api/apiSlice'
@@ -900,18 +900,35 @@ Our final feature is the notifications tab. When we originally built this featur
 
 It's common for apps to make an _initial_ request to fetch data from the server, and then open up a Websocket connection to receive additional updates over time. **RTK Query provides an `onCacheEntryAdded` endpoint lifecycle handler that lets us implement "streaming updates" to cached data**. We'll use that capability to implement a more realistic approach to managing notifications.
 
-Our `src/api/server.js` file has a mock Websocket server already configured, similar to the mock HTTP server. We'll write a new `getNotifications` endpoint that fetches the initial list of notifications, and then establishes the Websocket connection to listen for future updates. We still need to manually tell the mock server _when_ to send new notifications, so we'll continue faking that by having a button we click to force the update.
+Our `src/api/server.ts` file has a mock Websocket server already configured, similar to the mock HTTP server. We'll write a new `getNotifications` endpoint that fetches the initial list of notifications, and then establishes the Websocket connection to listen for future updates. We still need to manually tell the mock server _when_ to send new notifications, so we'll continue faking that by having a button we click to force the update.
 
 We'll inject the `getNotifications` endpoint in `notificationsSlice` like we did with `getUsers`, just to show it's possible.
 
-```js title="features/notifications/notificationsSlice.js"
-import { forceGenerateNotifications } from '../../api/server'
-import { apiSlice } from '../api/apiSlice'
+```ts title="features/notifications/notificationsSlice.ts"
+import {
+  createEntityAdapter,
+  createSelector,
+  createSlice
+} from '@reduxjs/toolkit'
+
+import { client } from '@/api/client'
+// highlight-next-line
+import { forceGenerateNotifications } from '@/api/server'
+
+import type { AppThunk, RootState } from '@/app/store'
+
+// highlight-next-line
+import { apiSlice } from '@/features/api/apiSlice'
+
+// omit notification types
 
 export const extendedApi = apiSlice.injectEndpoints({
   endpoints: builder => ({
-    getNotifications: builder.query({
+    getNotifications: builder.query<ServerNotification[], void>({
       query: () => '/notifications',
+      transformResponse: (res: { notifications: ServerNotification[] }) =>
+        res.notifications,
+      // highlight-start
       async onCacheEntryAdded(
         arg,
         { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
@@ -924,8 +941,11 @@ export const extendedApi = apiSlice.injectEndpoints({
 
           // when data is received from the socket connection to the server,
           // update our query result with the received message
-          const listener = event => {
-            const message = JSON.parse(event.data)
+          const listener = (event: any) => {
+            const message: {
+              type: 'notifications'
+              payload: ServerNotification[]
+            } = JSON.parse(event.data)
             switch (message.type) {
               case 'notifications': {
                 updateCachedData(draft => {
@@ -951,13 +971,14 @@ export const extendedApi = apiSlice.injectEndpoints({
         // perform cleanup steps once the `cacheEntryRemoved` promise resolves
         ws.close()
       }
+      // highlight-end
     })
   })
 })
 
 export const { useGetNotificationsQuery } = extendedApi
 
-const emptyNotifications = []
+const emptyNotifications: ServerNotification[] = []
 
 export const selectNotificationsResult =
   extendedApi.endpoints.getNotifications.select()
@@ -967,18 +988,19 @@ const selectNotificationsData = createSelector(
   notificationsResult => notificationsResult.data ?? emptyNotifications
 )
 
-export const fetchNotificationsWebsocket = () => (dispatch, getState) => {
-  const allNotifications = selectNotificationsData(getState())
-  const [latestNotification] = allNotifications
-  const latestTimestamp = latestNotification?.date ?? ''
-  // Hardcode a call to the mock server to simulate a server push scenario over websockets
-  forceGenerateNotifications(latestTimestamp)
-}
+export const fetchNotificationsWebsocket =
+  (): AppThunk => (dispatch, getState) => {
+    const allNotifications = selectNotificationsData(getState())
+    const [latestNotification] = allNotifications
+    const latestTimestamp = latestNotification?.date ?? ''
+    // Hardcode a call to the mock server to simulate a server push scenario over websockets
+    forceGenerateNotifications(latestTimestamp)
+  }
 
 // omit existing slice code
 ```
 
-Like with `onQueryStarted`, the `onCacheEntryAdded` lifecycle handler receives the `arg` cache key as its first parameter, and an options object with the `thunkApi` values as the second parameter. The options object also contains an `updateCachedData` util function, and two lifecycle `Promise`s - `cacheDataLoaded` and `cacheEntryRemoved`. `cacheDataLoaded` resolves when the _initial_ data for this subscription is added to the store. This happens when the first subscription for this endpoint + cache key is added. As long as 1+ subscribers for the data are still active, the cache entry is kept alive. When the number of subscribers goes to 0 and the cache lifetime timer expires, the cache entry will be removed, and `cacheEntryRemoved` will resolve. Typically, the usage pattern is:
+Like with `onQueryStarted`, the `onCacheEntryAdded` lifecycle handler receives the `arg` cache key as its first parameter, and an options object with the `thunkApi` values as the second parameter. The options object also contains an `updateCachedData` util function, and two lifecycle promises - `cacheDataLoaded` and `cacheEntryRemoved`. `cacheDataLoaded` resolves when the _initial_ data for this subscription is added to the store. This happens when the first subscription for this endpoint + cache key is added. As long as 1+ subscribers for the data are still active, the cache entry is kept alive. When the number of subscribers goes to 0 and the cache lifetime timer expires, the cache entry will be removed, and `cacheEntryRemoved` will resolve. Typically, the usage pattern is:
 
 - `await cacheDataLoaded` right away
 - Create a server-side data subscription like a Websocket
@@ -986,7 +1008,7 @@ Like with `onQueryStarted`, the `onCacheEntryAdded` lifecycle handler receives t
 - `await cacheEntryRemoved` at the end
 - Clean up subscriptions afterwards
 
-Our mock Websocket server file exposes a `forceGenerateNotifications` method to mimic pushing data out to the client. That depends on knowing the most recent notification timestamp, so we add a thunk we can dispatch that reads the latest timestamp from the cache state and tells the mock server to generate newer notifications.
+Our mock Websocket server file exposes a `forceGenerateNotifications` method to mimic pushing data out to the client. That depends on knowing the most recent notification timestamp, so we need to call `getState()` to read the latest timestamp from the cache state. To do that, we still need a thunk (since they have access to `getState`), but it no longer needs to be an _async_ thunk (there's no `await` or promises involved) and we don't need `createAsyncThunk` (there's no other actions being dispatched). That means we can switch from using `createAppAsyncThunk` to a handwritten thunk that just calls `getState()` and triggers the websocket push update with newer notifications from the mock server.
 
 Inside of `onCacheEntryAdded`, we create a real `Websocket` connection to `localhost`. In a real app, this could be any kind of external subscription or polling connection you need to receive ongoing updates. Whenever the mock server sends us an update, we push all of the received notifications into the cache and re-sort it.
 
@@ -1002,29 +1024,46 @@ There's two cases when new notification entries are received: when we fetch the 
 
 Let' see what `notificationsSlice` looks like after we add this logic.
 
-```js title="features/notifications/notificationsSlice.js"
+```ts title="features/notifications/notificationsSlice.ts"
 import {
   // highlight-next-line
   createAction,
-  createSlice,
   createEntityAdapter,
   createSelector,
+  createSlice,
   // highlight-next-line
   isAnyOf
 } from '@reduxjs/toolkit'
 
-import { forceGenerateNotifications } from '../../api/server'
-import { apiSlice } from '../api/apiSlice'
+import type { AppThunk, RootState } from '@/app/store'
+
+import { forceGenerateNotifications } from '@/api/server'
+
+import { apiSlice } from '@/features/api/apiSlice'
+
+export interface ServerNotification {
+  id: string
+  date: string
+  message: string
+  user: string
+}
 
 // highlight-start
-const notificationsReceived = createAction(
+// Replaces `ClientNotification`, since we just need these fields
+export interface NotificationMetadata {
+  id: string
+  read: boolean
+  isNew: boolean
+}
+// highlight-end
+
+const notificationsReceived = createAction<ServerNotification[]>(
   'notifications/notificationsReceived'
 )
-// highlight-end
 
 export const extendedApi = apiSlice.injectEndpoints({
   endpoints: builder => ({
-    getNotifications: builder.query({
+    getNotifications: builder.query<ServerNotification[], void>({
       query: () => '/notifications',
       async onCacheEntryAdded(
         arg,
@@ -1039,8 +1078,11 @@ export const extendedApi = apiSlice.injectEndpoints({
 
           // when data is received from the socket connection to the server,
           // update our query result with the received message
-          const listener = event => {
-            const message = JSON.parse(event.data)
+          const listener = (event: any) => {
+            const message: {
+              type: 'notifications'
+              payload: ServerNotification[]
+            } = JSON.parse(event.data)
             switch (message.type) {
               case 'notifications': {
                 updateCachedData(draft => {
@@ -1049,6 +1091,7 @@ export const extendedApi = apiSlice.injectEndpoints({
                   draft.push(...message.payload)
                   draft.sort((a, b) => b.date.localeCompare(a.date))
                 })
+
                 // highlight-start
                 // Dispatch an additional action so we can track "read" state
                 dispatch(notificationsReceived(message.payload))
@@ -1076,11 +1119,13 @@ export const extendedApi = apiSlice.injectEndpoints({
 
 export const { useGetNotificationsQuery } = extendedApi
 
-// omit selectors and websocket thunk
+// omit notifications selectors and websocket thunk
+
+const notificationsAdapter = createEntityAdapter<NotificationMetadata>()
+
+const initialState = notificationsAdapter.getInitialState()
 
 // highlight-start
-const notificationsAdapter = createEntityAdapter()
-
 const matchNotificationsReceived = isAnyOf(
   notificationsReceived,
   extendedApi.endpoints.getNotifications.matchFulfilled
@@ -1089,32 +1134,34 @@ const matchNotificationsReceived = isAnyOf(
 
 const notificationsSlice = createSlice({
   name: 'notifications',
-  initialState: notificationsAdapter.getInitialState(),
+  initialState,
   reducers: {
-    allNotificationsRead(state, action) {
-      Object.values(state.entities).forEach(notification => {
-        notification.read = true
+    allNotificationsRead(state) {
+      // highlight-start
+      Object.values(state.entities).forEach(metadata => {
+        metadata.read = true
       })
+      // highlight-end
     }
   },
   extraReducers(builder) {
-    // highlight-start
     builder.addMatcher(matchNotificationsReceived, (state, action) => {
       // Add client-side metadata for tracking new notifications
-      const notificationsMetadata = action.payload.map(notification => ({
-        id: notification.id,
-        read: false,
-        isNew: true
-      }))
+      const notificationMetadata: NotificationMetadata[] = action.payload.map(
+        notification => ({
+          id: notification.id,
+          read: false,
+          isNew: true
+        })
+      )
 
-      Object.values(state.entities).forEach(notification => {
+      Object.values(state.entities).forEach(metadata => {
         // Any notifications we've read are no longer new
-        notification.isNew = !notification.read
+        metadata.isNew = !metadata.read
       })
 
-      notificationsAdapter.upsertMany(state, notificationsMetadata)
+      notificationsAdapter.upsertMany(state, notificationMetadata)
     })
-    // highlight-end
   }
 })
 
@@ -1127,12 +1174,12 @@ export const {
   selectAll: selectNotificationsMetadata,
   selectEntities: selectMetadataEntities
   // highlight-end
-} = notificationsAdapter.getSelectors(state => state.notifications)
+} = notificationsAdapter.getSelectors((state: RootState) => state.notifications)
 ```
 
 There's a lot going on, but let's break down the changes one at a time.
 
-There isn't currently a good way for the `notificationsSlice` reducer to know when we've received an updated list of new notifications via the Websocket. So, we'll import `createAction`, define a new action type specifically for the "received some notifications" case, and dispatch that action after updating the cache state.
+There isn't currently a good way for the `notificationsSlice` reducer to know when we've received an updated list of new notifications via the Websocket. We're dispatching the `updateCacheData` thunk, but that doesn't really correlate to a specific endpoint or anything "notifications"-specific. So, we'll import `createAction`, define a new action type specifically for the "received some notifications" case, and dispatch that action after updating the cache state.
 
 We want to run the same "add read/new metadata" logic for _both_ the "fulfilled `getNotifications`" action _and_ the "received from Websocket" action. We can create a new "matcher" function by calling `isAnyOf()` and passing in each of those action creators. The `matchNotificationsReceived` matcher function will return true if the current action matches either of those types.
 
@@ -1144,43 +1191,49 @@ Finally, we need change the selectors we're exporting from this slice. Instead o
 
 With those changes in place, we can update our UI components to fetch and display notifications.
 
-```jsx title="app/Navbar.js"
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+```tsx title="app/Navbar.tsx"
 import { Link } from 'react-router-dom'
 
+import { useAppDispatch, useAppSelector } from '@/app/hooks'
+
+import { selectCurrentUsername, logout } from '@/features/auth/authSlice'
 import {
-  // highlight-start
+   // highlight-start
   fetchNotificationsWebsocket,
   selectNotificationsMetadata,
-  useGetNotificationsQuery
+  useGetNotificationsQuery,
   // highlight-end
-} from '../features/notifications/notificationsSlice'
+} from '@/features/notifications/notificationsSlice'
+import { selectCurrentUser } from '@/features/users/usersSlice'
+
+import { UserIcon } from './UserIcon'
 
 export const Navbar = () => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
+  const username = useAppSelector(selectCurrentUsername)
+  const user = useAppSelector(selectCurrentUser)
 
   // highlight-start
   // Trigger initial fetch of notifications and keep the websocket open to receive updates
   useGetNotificationsQuery()
 
-  const notificationsMetadata = useSelector(selectNotificationsMetadata)
-  const numUnreadNotifications = notificationsMetadata.filter(
-    n => !n.read
-  ).length
-
-  const fetchNewNotifications = () => {
-    dispatch(fetchNotificationsWebsocket())
-  }
+  const notificationsMetadata = useAppSelector(selectNotificationsMetadata)
+  const numUnreadNotifications = notificationsMetadata.filter((n) => !n.read).length
   // highlight-end
 
-  let unreadNotificationsBadge
+  const isLoggedIn = !!username && !!user
 
-  if (numUnreadNotifications > 0) {
-    unreadNotificationsBadge = (
-      <span className="badge">{numUnreadNotifications}</span>
-    )
-  }
+  let navContent: React.ReactNode = null
+
+  if (isLoggedIn) {
+    const onLogoutClicked = () => {
+      dispatch(logout())
+    }
+
+    const fetchNewNotifications = () => {
+      // highlight-next-line
+      dispatch(fetchNotificationsWebsocket())
+    }
 
   // omit rendering logic
 }
@@ -1190,22 +1243,29 @@ In `<NavBar>`, we trigger the initial notifications fetch with `useGetNotificati
 
 Our `<NotificationsList>` similarly switches over to reading the cached data and metadata.
 
-```jsx title="features/notifications/NotificationsList.js"
-import {
-  // highlight-start
-  useGetNotificationsQuery,
-  allNotificationsRead,
-  selectMetadataEntities,
-  // highlight-end
-} from './notificationsSlice'
+```tsx title="features/notifications/NotificationsList.tsx"
+import React, { useLayoutEffect } from 'react'
+import { formatDistanceToNow, parseISO } from 'date-fns'
+import classnames from 'classnames'
+
+import { useAppDispatch, useAppSelector } from '@/app/hooks'
+import { selectAllUsers } from '@/features/users/usersSlice'
+
+// highlight-next-line
+import { allNotificationsRead, useGetNotificationsQuery, selectMetadataEntities } from './notificationsSlice'
+
+const UNKNOWN_USER = {
+  name: 'Unknown User',
+}
 
 export const NotificationsList = () => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
+
   // highlight-start
   const { data: notifications = [] } = useGetNotificationsQuery()
-  const notificationsMetadata = useSelector(selectMetadataEntities)
+  const notificationsMetadata = useAppSelector(selectMetadataEntities)
   // highlight-end
-  const users = useSelector(selectAllUsers)
+  const users = useAppSelector(selectAllUsers)
 
   useLayoutEffect(() => {
     dispatch(allNotificationsRead())
@@ -1214,9 +1274,7 @@ export const NotificationsList = () => {
   const renderedNotifications = notifications.map((notification) => {
     const date = parseISO(notification.date)
     const timeAgo = formatDistanceToNow(date)
-    const user = users.find((user) => user.id === notification.user) || {
-      name: 'Unknown User',
-    }
+    const user = users.find((user) => user.id === notification.user) ?? UNKNOWN_USER
 
     // highlight-next-line
     const metadata = notificationsMetadata[notification.id]
@@ -1226,17 +1284,18 @@ export const NotificationsList = () => {
       new: metadata.isNew,
     })
 
+  }
   // omit rendering logic
 }
 ```
 
 We read the list of notifications from cache and the new metadata entries from the notificationsSlice, and continue displaying them the same way as before.
 
-As a final step, we can do some additional cleanup here - the `postsSlice` is no longer being used, so that can be removed entirely.
-
-With that, we've finished converting our application over to use RTK Query! All of the data fetching has been switched over to use RTKQ, and we've improved the user experience by adding optimistic updates and streaming updates.
+As a final step, we can do some additional cleanup. The actual `createSlice` call in `postsSlice.ts` is no longer being used, so we can delete the slice object and its associated selectors + types, then remove `postsReducer` from the Redux store.
 
 ## What You've Learned
+
+With that, we've finished converting our application over to use RTK Query! All of the data fetching has been switched over to use RTKQ, and we've improved the user experience by adding optimistic updates and streaming updates.
 
 As we've seen, RTK Query includes some powerful options for controlling how we manage cached data. While you may not need all of these options right away, they provide flexibility and key capabilities to help implement specific application behaviors.
 
@@ -1264,16 +1323,23 @@ Let's take one last look at the whole application in action:
 - **RTK Query has advanced options for manipulating cached data for better user experience**
   - The `onQueryStarted` lifecycle can be used for optimistic updates by updating cache immediately before a request returns
   - The `onCacheEntryAdded` lifecycle can be used for streaming updates by updating cache over time based on server push connections
+  - RTKQ endpoints have a `matchFulfilled` matcher that can be used inside to listen for RTKQ endpoint actions and run additional logic, like updating a slice's state
 
 :::
 
 ## What's Next?
 
-Congratulations, **you've completed the Redux Essentials tutorial!** You should now have a solid understanding of what Redux Toolkit and React-Redux are, how to write and organize Redux logic, Redux data flow and usage with React, and how to use APIs like `configureStore` and `createSlice`. You should also see how RTK Query can simplify the process of fetching and using cached data.
-
-The ["What's Next?" section in Part 6](./part-6-performance-normalization.md) has links to additional resources for app ideas, tutorials, and documentation.
+Congratulations, **you've completed the Redux Essentials tutorial!** You should now have a solid understanding of what Redux Toolkit and React-Redux are, how to write and organize Redux logic, Redux data flow and usage with React, and how to use APIs like `configureStore` and `createSlice`. You should also know how RTK Query can simplify the process of fetching and using cached data.
 
 For more details on using RTK Query, see [the RTK Query usage guide docs](https://redux-toolkit.js.org/rtk-query/usage/queries) and [API reference](https://redux-toolkit.js.org/rtk-query/api/createApi).
+
+The concepts we've covered in this tutorial so far should be enough to get you started building your own applications using React and Redux. Now's a great time to try working on a project yourself to solidify these concepts and see how they work in practice. If you're not sure what kind of a project to build, see [this list of app project ideas](https://github.com/florinpop17/app-ideas) for some inspiration.
+
+The Redux Essentials tutorial is focused on "how to use Redux correctly", rather than "how it works" or "why it works this way". In particular, Redux Toolkit is a higher-level set of abstractions and utilities, and it's helpful to understand what the abstractions in RTK are actually doing for you. Reading through the ["Redux Fundamentals" tutorial](../fundamentals/part-1-overview.md) will help you understand how to write Redux code "by hand", and why we recommend Redux Toolkit as the default way to write Redux logic.
+
+The [Using Redux](../../usage/index.md) section has information on a number of important concepts, like [how to structure your reducers](../../usage/structuring-reducers/StructuringReducers.md), and [our Style Guide page](../../style-guide/style-guide.md) has important information on our recommended patterns and best practices.
+
+If you'd like to know more about _why_ Redux exists, what problems it tries to solve, and how it's meant to be used, see Redux maintainer Mark Erikson's posts on [The Tao of Redux, Part 1: Implementation and Intent](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/) and [The Tao of Redux, Part 2: Practice and Philosophy](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/).
 
 If you're looking for help with Redux questions, come join [the `#redux` channel in the Reactiflux server on Discord](https://www.reactiflux.com).
 
