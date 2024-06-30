@@ -71,7 +71,7 @@ Let's take a quick look at what the initial project contains:
   - `App.tsx`: the main application component. Renders the top navbar and handles client-side routing for the other content.
   - `index.css`: styles for the complete application
   - `/api`
-    - `client.ts`: a small AJAX request client that allows us to make GET and POST requests
+    - `client.ts`: a small `fetch` wrapper client that allows us to make HTTP GET and POST requests
     - `server.ts`: provides a fake REST API for our data. Our app will fetch data from these fake endpoints later.
   - `/app`
     - `Navbar.tsx`: renders the top header and nav content

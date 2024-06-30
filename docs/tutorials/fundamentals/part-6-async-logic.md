@@ -20,7 +20,7 @@ import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
 
 :::info Prerequisites
 
-- Familiarity with using AJAX requests to fetch and update data from a server
+- Familiarity with using HTTP requests to fetch and update data from a server
 - Understanding asynchronous logic in JS, including Promises
 
 :::
@@ -60,7 +60,7 @@ Earlier, we said that Redux reducers must never contain "side effects". **A "sid
 - Logging a value to the console
 - Saving a file
 - Setting an async timer
-- Making an AJAX HTTP request
+- Making an HTTP request
 - Modifying some state that exists outside of a function, or mutating arguments to a function
 - Generating random numbers or unique random IDs (such as `Math.random()` or `Date.now()`)
 
@@ -169,7 +169,7 @@ Just like with a normal action, we first need to handle a user event in the appl
 
 Once that dispatched value reaches a middleware, it can make an async call, and then dispatch a real action object when the async call completes.
 
-Earlier, we saw [a diagram that represents the normal synchronous Redux data flow](./part-2-concepts-data-flow.md#redux-application-data-flow). When we add async logic to a Redux app, we add an extra step where middleware can run logic like AJAX requests, then dispatch actions. That makes the async data flow look like this:
+Earlier, we saw [a diagram that represents the normal synchronous Redux data flow](./part-2-concepts-data-flow.md#redux-application-data-flow). When we add async logic to a Redux app, we add an extra step where middleware can run logic like HTTP requests, then dispatch actions. That makes the async data flow look like this:
 
 ![Redux async data flow diagram](/img/tutorials/essentials/ReduxAsyncDataFlowDiagram.gif)
 
@@ -221,7 +221,7 @@ export default store
 
 Right now our todo entries can only exist in the client's browser. We need a way to load a list of todos from the server when the app starts up.
 
-We'll start by writing a thunk function that makes an AJAX call to our `/fakeApi/todos` endpoint to request an array of todo objects, and then dispatch an action containing that array as the payload. Since this is related to the todos feature in general, we'll write the thunk function in the `todosSlice.js` file:
+We'll start by writing a thunk function that makes an HTTP call to our `/fakeApi/todos` endpoint to request an array of todo objects, and then dispatch an action containing that array as the payload. Since this is related to the todos feature in general, we'll write the thunk function in the `todosSlice.js` file:
 
 ```js title="src/features/todos/todosSlice.js"
 import { client } from '../../api/client'
@@ -447,7 +447,7 @@ Thunk functions can be used for both asynchronous _and_ synchronous logic. Thunk
 
 ## What You've Learned
 
-We've now successfully updated our todo app so that we can fetch a list of todo items and save new todo items, using "thunk" functions to make the AJAX calls to our fake server API.
+We've now successfully updated our todo app so that we can fetch a list of todo items and save new todo items, using "thunk" functions to make the HTTP requests to our fake server API.
 
 In the process, we saw how Redux middleware are used to let us make async calls and interact with the store by dispatching actions with after the async calls have completed.
 
@@ -464,7 +464,7 @@ Here's what the current app looks like:
 :::tip Summary
 
 - **Redux middleware were designed to enable writing logic that has side effects**
-  - "Side effects" are code that changes state/behavior outside a function, like AJAX calls, modifying function arguments, or generating random values
+  - "Side effects" are code that changes state/behavior outside a function, like HTTP requests, modifying function arguments, or generating random values
 - **Middleware add an extra step to the standard Redux data flow**
   - Middleware can intercept other values passed to `dispatch`
   - Middleware have access to `dispatch` and `getState`, so they can dispatch more actions as part of async logic

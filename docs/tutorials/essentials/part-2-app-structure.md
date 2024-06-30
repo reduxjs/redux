@@ -448,7 +448,7 @@ store.dispatch(incrementAsync(5))
 
 However, using thunks requires that the `redux-thunk` _middleware_ (a type of plugin for Redux) be added to the Redux store when it's created. Fortunately, Redux Toolkit's `configureStore` function already sets that up for us automatically, so we can go ahead and use thunks here.
 
-When you need to make AJAX calls to fetch data from the server, you can put that call in a thunk. Here's an example that's written a bit longer, so you can see how it's defined:
+When you need to make HTTP calls to fetch data from the server, you can put that call in a thunk. Here's an example that's written a bit longer, so you can see how it's defined:
 
 ```js title="features/counter/counterSlice.js"
 // the outside "thunk creator" function

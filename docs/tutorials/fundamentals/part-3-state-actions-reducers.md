@@ -80,7 +80,7 @@ ReactDOM.render(
 
 #### Exploring the Initial Project
 
-This initial project is based on [the standard Create-React-App](https://create-react-app.dev/docs/getting-started) project template, with some modifications.
+This initial project is based on [the standard Vite](https://create-react-app.dev/docs/getting-started) project template, with some modifications.
 
 Let's take a quick look at what the initial project contains:
 
@@ -89,7 +89,7 @@ Let's take a quick look at what the initial project contains:
   - `App.js`: the main application component.
   - `index.css`: styles for the complete application
   - `/api`
-    - `client.js`: a small AJAX request client that allows us to make GET and POST requests
+    - `client.js`: a small `fetch` wrapper client that allows us to make HTTP GET and POST requests
     - `server.js`: provides a fake REST API for our data. Our app will fetch data from these fake endpoints later.
   - `/exampleAddons`: contains some additional Redux addons that we'll use later in the tutorial to show how things work
 
@@ -337,7 +337,7 @@ We said earlier that **reducers must _always_ follow some special rules**:
 - Logging a value to the console
 - Saving a file
 - Setting an async timer
-- Making an AJAX HTTP request
+- Making an HTTP request
 - Modifying some state that exists outside of a function, or mutating arguments to a function
 - Generating random numbers or unique random IDs (such as `Math.random()` or `Date.now()`)
 
@@ -720,7 +720,7 @@ Here's the contents of our app so far:
   - Reducers must always follow special rules:
     - Only calculate the new state based on the `state` and `action` arguments
     - Never mutate the existing `state` - always return a copy
-    - No "side effects" like AJAX calls or async logic
+    - No "side effects" like HTTP requests or async logic
 - **Reducers should be split up to make them easier to read**
   - Reducers are usually split based on top-level state keys or "slices" of state
   - Reducers are usually written in "slice" files, organized into "feature" folders

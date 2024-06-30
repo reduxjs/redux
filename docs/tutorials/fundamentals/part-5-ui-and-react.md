@@ -581,4 +581,4 @@ Let's see how the app looks now, including the components and sections we skippe
 
 ## What's Next?
 
-Now that our UI is working, it's time to see how to make our Redux app talk to a server. In [Part 6: Async Logic](./part-6-async-logic.md), we'll talk about how asynchronous logic like timeouts and AJAX calls fit into the Redux data flow.
+Now that our UI is working, it's time to see how to make our Redux app talk to a server. In [Part 6: Async Logic](./part-6-async-logic.md), we'll talk about how asynchronous logic like timeouts and HTTP requests fit into the Redux data flow.

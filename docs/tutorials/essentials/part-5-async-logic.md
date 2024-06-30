@@ -81,7 +81,7 @@ For more details on how middleware let you customize the Redux store, see:
 
 Earlier, we saw [what the synchronous data flow for Redux looks like](part-1-overview-concepts.md#redux-application-data-flow).
 
-Middleware update the Redux data flow by adding an extra step at the start of `dispatch`. That way, middleware can run logic like AJAX requests, then dispatch actions. That makes the async data flow look like this:
+Middleware update the Redux data flow by adding an extra step at the start of `dispatch`. That way, middleware can run logic like HTTP requests, then dispatch actions. That makes the async data flow look like this:
 
 ![Redux async data flow diagram](/img/tutorials/essentials/ReduxAsyncDataFlowDiagram.gif)
 
@@ -194,7 +194,7 @@ For more details on defining thunks with TypeScript, see:
 
 ### Writing Async Thunks
 
-Thunks may have async logic inside of them, such as `setTimeout`, `Promise`s, and `async/await`. This makes them a good place to put AJAX calls to a server API.
+Thunks may have async logic inside of them, such as `setTimeout`, `Promise`s, and `async/await`. This makes them a good place to put HTTP calls to a server API.
 
 Data fetching logic for Redux typically follows a predictable pattern:
 
