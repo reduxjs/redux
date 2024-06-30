@@ -58,6 +58,8 @@ Finally, you should make sure that you have the React and Redux DevTools extensi
   - [Redux DevTools Extension for Chrome](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en)
   - [Redux DevTools Extension for Firefox](https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/)
 
+[Replay.io](https://replay.io) also includes built-in support for the Redux Devtools and can be used for debugging React and Redux apps.
+
 ## What is Redux?
 
 It helps to understand what this "Redux" thing is in the first place. What does it do? What problems does it help me solve? Why would I want to use it?

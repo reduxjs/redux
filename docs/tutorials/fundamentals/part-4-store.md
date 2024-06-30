@@ -594,6 +594,8 @@ Here's what the "State" and "Diff" tabs look like after we dispatched that "add 
 
 These are very powerful tools that can help us debug our apps and understand exactly what's happening inside.
 
+You can also use [Replay.io](https://replay.io) to make recordings of an app and use its built-in React and Redux DevTools support to investigate the application's behavior.
+
 ## What You've Learned
 
 As you've seen, the store is the central piece of every Redux application. Stores contain state and handle actions by running reducers, and can be customized to add additional behaviors.
