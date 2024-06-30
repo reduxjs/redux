@@ -42,7 +42,7 @@ We've tried to keep these explanations beginner-friendly, but we do need to make
 - Familiarity with [HTML & CSS](https://internetingishard.netlify.app/html-and-css/index.html).
 - Familiarity with [ES2015 syntax and features](https://www.taniarascia.com/es6-syntax-and-feature-overview/)
 - Understanding of [the array and object spread operators](https://javascript.info/rest-parameters-spread#spread-syntax)
-- Knowledge of React terminology: [JSX](https://react.dev/learn/writing-markup-with-jsx), [State](https://react.dev/learn/state-a-components-memory), [Function Components](https://react.dev/learn/your-first-component), [Props](https://react.dev/learn/passing-props-to-a-component), and [Hooks](https://react.dev/reference/react)
+- Knowledge of React terminology: [JSX](https://react.dev/learn/writing-markup-with-jsx), [Function Components](https://react.dev/learn/your-first-component), [Props](https://react.dev/learn/passing-props-to-a-component), [State](https://react.dev/learn/state-a-components-memory), and [Hooks](https://react.dev/reference/react)
 - Knowledge of [asynchronous JavaScript](https://javascript.info/promise-basics) and [making HTTP requests](https://javascript.info/fetch)
 
 :::
@@ -62,7 +62,7 @@ Finally, you should make sure that you have the React and Redux DevTools extensi
 
 It helps to understand what this "Redux" thing is in the first place. What does it do? What problems does it help me solve? Why would I want to use it?
 
-**Redux is a pattern and library for managing and updating application state, using events called "actions".** It serves as a centralized store for state that needs to be used across your entire application, with rules ensuring that the state can only be updated in a predictable fashion.
+**Redux is a pattern and library for managing and updating global application state, where the UI triggers events called "actions" to describe what happened, and separate update logic called "reducers" updates the state in response.** It serves as a centralized store for state that needs to be used across your entire application, with rules ensuring that the state can only be updated in a predictable fashion.
 
 ### Why Should I Use Redux?
 
@@ -98,13 +98,13 @@ If you're not sure whether Redux is a good choice for your app, these resources 
 
 Redux is a small standalone JS library. However, it is commonly used with several other packages:
 
-#### React-Redux
-
-Redux can integrate with any UI framework, and is most frequently used with React. [**React-Redux**](https://react-redux.js.org/) is our official package that lets your React components interact with a Redux store by reading pieces of state and dispatching actions to update the store.
-
 #### Redux Toolkit
 
 [**Redux Toolkit**](https://redux-toolkit.js.org) is our recommended approach for writing Redux logic. It contains packages and functions that we think are essential for building a Redux app. Redux Toolkit builds in our suggested best practices, simplifies most Redux tasks, prevents common mistakes, and makes it easier to write Redux applications.
+
+#### React-Redux
+
+Redux can integrate with any UI framework, and is most frequently used with React. [**React-Redux**](https://react-redux.js.org/) is our official package that lets your React components interact with a Redux store by reading pieces of state and dispatching actions to update the store.
 
 #### Redux DevTools Extension
 
@@ -318,11 +318,18 @@ With that in mind, let's review what we've learned so far:
 
 - **Redux is a library for managing global application state**
   - Redux is typically used with the React-Redux library for integrating Redux and React together
-  - Redux Toolkit is the recommended way to write Redux logic
-- **Redux uses several types of code**
+  - Redux Toolkit is the standard way to write Redux logic
+- **Redux's update pattern separates "what happened" from "how the state changes"**
   - _Actions_ are plain objects with a `type` field, and describe "what happened" in the app
   - _Reducers_ are functions that calculate a new state value based on previous state + an action
   - A Redux _store_ runs the root reducer whenever an action is _dispatched_
+- **Redux uses a "one-way data flow" app structure**
+  - State describes the condition of the app at a point in time, and UI renders based on that state
+  - When something happens in the app:
+    - The UI dispatches an action
+    - The store runs the reducers, and the state is updated based on what occurred
+    - The store notifies the UI that the state has changed
+  - The UI re-renders based on the new state
 
 :::
 
