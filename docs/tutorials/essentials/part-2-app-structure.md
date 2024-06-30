@@ -48,7 +48,7 @@ The counter app has already been set up to let us watch what happens inside as w
 
 Open up your browser's DevTools. Then, choose the "Redux" tab in the DevTools, and click the "State" button in the upper-right toolbar. You should see something that looks like this:
 
-![Redux DevTools: initial app state](/img/tutorials/essentials/devtools-initial.png)
+![Redux DevTools: initial app state](/img/tutorials/essentials/devtools-basic-counter.png)
 
 On the right, we can see that our Redux store is starting off with an app state value that looks like this:
 
@@ -102,6 +102,8 @@ The DevTools have several more commands and options to help you debug your app. 
 
 This makes it easier to trace what part of the code dispatched a specific action.
 
+You can also use [Replay.io](https://replay.io) to make recordings of an app and use its built-in React and Redux DevTools support to investigate the application's behavior.
+
 ## Application Contents
 
 Now that you know what the app does, let's look at how it works.
@@ -145,7 +147,7 @@ When we pass in an object like `{counter: counterReducer}`, that says that we wa
 
 Redux allows store setup to be customized with different kinds of plugins ("middleware" and "enhancers"). `configureStore` automatically adds several middleware to the store setup by default to provide a good developer experience, and also sets up the store so that the Redux DevTools Extension can inspect its contents.
 
-#### Redux Slices
+### Redux Slices
 
 **A "slice" is a collection of Redux reducer logic and actions for a single feature in your app**, typically defined together in a single file. The name comes from splitting up the root Redux state object into multiple "slices" of state.
 
@@ -282,7 +284,7 @@ We said earlier that reducers must **always** follow some special rules:
 
 - They should only calculate the new state value based on the `state` and `action` arguments
 - They are not allowed to modify the existing `state`. Instead, they must make _immutable updates_, by copying the existing `state` and making changes to the copied values.
-- They must not do any asynchronous logic or other "side effects"
+- They must be "pure" - they cannot do any asynchronous logic or other "side effects"
 
 But why are these rules important? There are a few different reasons:
 
@@ -448,7 +450,7 @@ store.dispatch(incrementAsync(5))
 
 However, using thunks requires that the `redux-thunk` _middleware_ (a type of plugin for Redux) be added to the Redux store when it's created. Fortunately, Redux Toolkit's `configureStore` function already sets that up for us automatically, so we can go ahead and use thunks here.
 
-When you need to make AJAX calls to fetch data from the server, you can put that call in a thunk. Here's an example that's written a bit longer, so you can see how it's defined:
+When you need to make HTTP calls to fetch data from the server, you can put that call in a thunk. Here's an example that's written a bit longer, so you can see how it's defined:
 
 ```js title="features/counter/counterSlice.js"
 // the outside "thunk creator" function

@@ -1,7 +1,7 @@
 ---
 id: part-6-performance-normalization
-title: 'Redux Essentials, Part 6: Performance and Normalizing Data'
-sidebar_label: 'Performance and Normalizing Data'
+title: 'Redux Essentials, Part 6: Performance, Normalizing Data, and Reactive Logic'
+sidebar_label: 'Performance, Normalizing Data, and Reactive Logic'
 description: 'The official Redux Essentials tutorial: learn how to improve app performance and structure data correctly'
 ---
 
@@ -12,6 +12,7 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 - How to create memoized selector functions with `createSelector`
 - Patterns for optimizing component rendering performance
 - How to use `createEntityAdapter` to store and update normalized data
+- How to use `createListenerMiddleware` for reactive logic
 
 :::
 
@@ -25,24 +26,27 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 In [Part 5: Async Logic and Data Fetching](./part-5-async-logic.md), we saw how to write async thunks to fetch data from a server API, patterns for handling async request loading state, and use of selector functions for encapsulating lookups of data from the Redux state.
 
-In this section, we'll look at optimized patterns for ensuring good performance in our application, and techniques for automatically handling common updates of data in the store.
+In this section, we'll look at optimized patterns for ensuring good performance in our application, and techniques for automatically handling common updates of data in the store. We'll also look at how to write reactive logic that responds to dispatched actions.
 
 So far, most of our functionality has been centered around the `posts` feature. We're going to add a couple new sections of the app. After those are added, we'll look at some specific details of how we've built things, and talk about some weaknesses with what we've built so far and how we can improve the implementation.
 
-## Adding User Pages
+## Adding More User Features
+
+### Adding User Pages
 
 We're fetching a list of users from our fake API, and we can choose a user as the author when we add a new post. But, a social media app needs the ability to look at the page for a specific user and see all the posts they've made. Let's add a page to show the list of all users, and another to show all posts by a specific user.
 
 We'll start by adding a new `<UsersList>` component. It follows the usual pattern of reading some data from the store with `useSelector`, and mapping over the array to show a list of users with links to their individual pages:
 
-```jsx title="features/users/UsersList.js"
-import React from 'react'
-import { useSelector } from 'react-redux'
+```tsx title="features/users/UsersList.tsx"
 import { Link } from 'react-router-dom'
+
+import { useAppSelector } from '@/app/hooks'
+
 import { selectAllUsers } from './usersSlice'
 
 export const UsersList = () => {
-  const users = useSelector(selectAllUsers)
+  const users = useAppSelector(selectAllUsers)
 
   const renderedUsers = users.map(user => (
     <li key={user.id}>
@@ -60,38 +64,34 @@ export const UsersList = () => {
 }
 ```
 
-We don't yet have a `selectAllUsers` selector, so we'll need to add that to `usersSlice.js` along with a `selectUserById` selector:
-
-```js title="features/users/usersSlice.js"
-export default usersSlice.reducer
-
-// highlight-start
-export const selectAllUsers = state => state.users
-
-export const selectUserById = (state, userId) =>
-  state.users.find(user => user.id === userId)
-// highlight-end
-```
-
 And we'll add a `<UserPage>`, which is similar to our `<SinglePostPage>` in taking a `userId` parameter from the router:
 
-```jsx title="features/users/UserPage.js"
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+```tsx title="features/users/UserPage.ts"
+import { Link, useParams } from 'react-router-dom'
 
-import { selectUserById } from '../users/usersSlice'
-import { selectAllPosts } from '../posts/postsSlice'
+import { useAppSelector } from '@/app/hooks'
+import { selectAllPosts } from '@/features/posts/postsSlice'
 
-export const UserPage = ({ match }) => {
-  const { userId } = match.params
+import { selectUserById } from './usersSlice'
 
-  const user = useSelector(state => selectUserById(state, userId))
+export const UserPage = () => {
+  const { userId } = useParams()
 
-  const postsForUser = useSelector(state => {
+  const user = useAppSelector(state => selectUserById(state, userId!))
+
+  const postsForUser = useAppSelector(state => {
     const allPosts = selectAllPosts(state)
+    // ⁉️ This seems sketchy! See more details below
     return allPosts.filter(post => post.user === userId)
   })
+
+  if (!user) {
+    return (
+      <section>
+        <h2>User not found!</h2>
+      </section>
+    )
+  }
 
   const postTitles = postsForUser.map(post => (
     <li key={post.id}>
@@ -109,11 +109,13 @@ export const UserPage = ({ match }) => {
 }
 ```
 
+Note that we already have the `selectAllUsers` and `selectUserById` selectors available in our `usersSlice`, so we can just import and use those in the components.
+
 As we've seen before, we can take data from one `useSelector` call, or from props, and use that to help decide what to read from the store in another `useSelector` call.
 
 As usual, we will add routes for these components in `<App>`:
 
-```jsx title="App.js"
+```tsx title="App.tsx"
           <Route exact path="/posts/:postId" component={SinglePostPage} />
           <Route exact path="/editPost/:postId" component={EditPostForm} />
           // highlight-start
@@ -125,24 +127,130 @@ As usual, we will add routes for these components in `<App>`:
 
 We'll also add another tab in `<Navbar>` that links to `/users` so that we can click and go to `<UsersList>`:
 
-```jsx title="app/Navbar.js"
+```tsx title="app/Navbar.tsx"
 export const Navbar = () => {
-  return (
-    <nav>
-      <section>
-        <h1>Redux Essentials Example</h1>
+  // omit other logic
 
-        <div className="navContent">
-          <div className="navLinks">
-            <Link to="/">Posts</Link>
-            // highlight-next-line
-            <Link to="/users">Users</Link>
-          </div>
-        </div>
-      </section>
-    </nav>
+  navContent = (
+    <div className="navContent">
+      <div className="navLinks">
+        <Link to="/posts">Posts</Link>
+        // highlight-next-line
+        <Link to="/users">Users</Link>
+      </div>
+      <div className="userDetails">
+        <UserIcon size={32} />
+        {user.name}
+        <button className="button small" onClick={onLogoutClicked}>
+          Log Out
+        </button>
+      </div>
+    </div>
   )
+
+  // omit other rendering
 }
+```
+
+Now we can actually browse to each user's page and see a list of just their posts.
+
+### Sending Login Requests to the Server
+
+Right now our `<LoginPage>` and `authSlice` are just dispatching client-side Redux actions to track the current username. In practice, we really need to send a login request to the server. Like we've done with posts and users, we'll convert the login and logout handling to async thunks instead.
+
+```ts title="features/auth/authSlice.ts"
+// highlight-next-line
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+
+import type { RootState } from '@/app/store'
+
+// highlight-next-line
+import { client } from '@/api/client'
+
+interface AuthState {
+  username: string | null
+}
+
+// highlight-start
+export const login = createAsyncThunk(
+  'auth/login',
+  async (username: string) => {
+    await client.post('/fakeApi/login', { username })
+    return username
+  }
+)
+
+export const logout = createAsyncThunk('auth/logout', async () => {
+  await client.post('/fakeApi/logout', {})
+})
+// highlight-end
+
+const initialState: AuthState = {
+  // Note: a real app would probably have more complex auth state,
+  // but for this example we'll keep things simple
+  username: null
+}
+
+const authSlice = createSlice({
+  name: 'auth',
+  initialState,
+  // highlight-start
+  // Remove the reducer definitions
+  reducers: {},
+  extraReducers: builder => {
+    // and handle the thunk actions instead
+    builder
+      .addCase(login.fulfilled, (state, action) => {
+        state.username = action.payload
+      })
+      .addCase(logout.fulfilled, state => {
+        state.username = null
+      })
+  }
+  // highlight-end
+})
+
+// highlight-next-line
+// Removed the exported actions
+
+export default authSlice.reducer
+```
+
+Along with that, we'll update `<Navbar>` and `<LoginPage>` to import and dispatch the new thunks instead of the previous action creators.
+
+Since the `userLoggedOut` action creator was being used by the `postsSlice`, we can update that to listen to `logout.fulfilled` instead:
+
+```ts title="features/posts/postsSlice.ts"
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { client } from '@/api/client'
+
+import type { RootState } from '@/app/store'
+
+// highlight-start
+// Import this thunk instead
+import { logout } from '@/features/auth/authSlice'
+// highlight-end
+
+// omit types and setup
+
+const postsSlice = createSlice({
+  name,
+  initialState,
+  reducers: {
+    /* omitted */
+  },
+  extraReducers: builder => {
+    builder
+      // highlight-start
+      // switch to handle the thunk fulfilled action
+      .addCase(logout.fulfilled, state => {
+        // highlight-end
+        // Clear out the list of posts whenever the user logs out
+        return initialState
+      })
+    // omit other cases
+  }
+})
 ```
 
 ## Adding Notifications
@@ -155,27 +263,41 @@ In a real application, our app client would be in constant communication with th
 
 Since this is a new part of our app, the first step is to create a new slice for our notifications, and an async thunk to fetch some notification entries from the API. In order to create some realistic notifications, we'll include the timestamp of the latest notification we have in state. That will let our mock server generate notifications newer than that timestamp.
 
-```js title="features/notifications/notificationsSlice.js"
+```ts title="features/notifications/notificationsSlice.ts"
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-import { client } from '../../api/client'
+import { client } from '@/api/client'
 
-export const fetchNotifications = createAsyncThunk(
-  'notifications/fetchNotifications',
-  async (_, { getState }) => {
-    const allNotifications = selectAllNotifications(getState())
-    const [latestNotification] = allNotifications
-    const latestTimestamp = latestNotification ? latestNotification.date : ''
-    const response = await client.get(
-      `/fakeApi/notifications?since=${latestTimestamp}`
-    )
-    return response.data
+import type { RootState } from '@/app/store'
+
+export interface Notification {
+  id: string
+  date: string
+  message: string
+  user: string
+}
+
+export const fetchNotifications = createAsyncThunk<
+  Notification[],
+  void,
+  {
+    state: RootState
   }
-)
+>('notifications/fetchNotifications', async (_unused, thunkApi) => {
+  const allNotifications = selectAllNotifications(thunkApi.getState())
+  const [latestNotification] = allNotifications
+  const latestTimestamp = latestNotification ? latestNotification.date : ''
+  const response = await client.get<Notification[]>(
+    `/fakeApi/notifications?since=${latestTimestamp}`
+  )
+  return response.data
+})
+
+const initialState: Notification[] = []
 
 const notificationsSlice = createSlice({
   name: 'notifications',
-  initialState: [],
+  initialState,
   reducers: {},
   extraReducers(builder) {
     builder.addCase(fetchNotifications.fulfilled, (state, action) => {
@@ -188,10 +310,10 @@ const notificationsSlice = createSlice({
 
 export default notificationsSlice.reducer
 
-export const selectAllNotifications = state => state.notifications
+export const selectAllNotifications = (state: RootState) => state.notifications
 ```
 
-As with the other slices, import `notificationsReducer` into `store.js` and add it to the `configureStore()` call.
+As with the other slices, import `notificationsReducer` into `store.ts` and add it to the `configureStore()` call.
 
 We've written an async thunk called `fetchNotifications`, which will retrieve a list of new notifications from the server. As part of that, we want to use the creation timestamp of the most recent notification as part of our request, so that the server knows it should only send back notifications that are actually new.
 
@@ -201,7 +323,7 @@ We know that we will be getting back an array of notifications, so we can pass t
 
 If you look at our `fetchNotifications` thunk, it has something new that we haven't seen before. Let's talk about thunk arguments for a minute.
 
-We've already seen that we can pass an argument into a thunk action creator when we dispatch it, like `dispatch(addPost(newPost))`. For `createAsyncThunk` specifically, you can only pass in one argument, and whatever we pass in becomes the first argument of the payload creation callback.
+We've already seen that we can pass an argument into a thunk action creator when we dispatch it, like `dispatch(addPost(newPost))`. For `createAsyncThunk` specifically, you can only pass in one argument, and whatever we pass in becomes the first argument of the payload creation callback. If we don't actually pass anything in, then that argument becomes `undefined`.
 
 The second argument to our payload creator is a `thunkAPI` object containing several useful functions and pieces of information:
 
@@ -219,31 +341,122 @@ For more details on these arguments and how to handle canceling thunks and reque
 
 :::
 
-In this case, we know that the list of notifications is in our Redux store state, and that the latest notification should be first in the array. We can destructure the `getState` function out of the `thunkAPI` object, call it to read the state value, and use the `selectAllNotifications` selector to give us just the array of notifications. Since the array of notifications is sorted newest first, we can grab the latest one using array destructuring.
+In this case, we need access to the `thunkApi` argument, which is always the second argument. That means we need to provide _some_ variable name for the first argument, even though we don't pass anything in when we dispatch the thunk, and we don't need to use it inside the payload callback. So, we'll just give it a name of `_unused`.
+
+From there, we know that the list of notifications is in our Redux store state, and that the latest notification should be first in the array. We can call `thunkApi.getState()` to read the state value, and use the `selectAllNotifications` selector to give us just the array of notifications. Since the array of notifications is sorted newest first, we can grab the latest one using array destructuring.
+
+### Simplifying Thunk Types
+
+We've now written two different thunks that needed to call `getState()`: `fetchNotifications`, which needs to access the latest notification entry, and `fetchPosts`, which is checking for an in-progress request. For both of them, we had to pass in the `{state: RootState}` TS generic type argument.
+
+We _know_ that every use of `getState` in a thunk will need access to the `RootState` type. It would be nice if we didn't have to repeat that every time we wrote another async thunk that uses `getState`.
+
+RTK provides a way to define a "pre-typed" version of `createAsyncThunk` that has the correct `dispatch` and `getState` types built in by calling `createAsyncThunk.withTypes()`, equivalent to how we defined pre-typed versions of `useSelector` and `useDispatch`. We'll create a new `src/app/withTypes` files, and export it from there:
+
+```ts title="app/withTypes.ts"
+import { createAsyncThunk } from '@reduxjs/toolkit'
+
+import type { RootState, AppDispatch } from './store'
+
+export const createAppAsyncThunk = createAsyncThunk.withTypes<{
+  state: RootState
+  dispatch: AppDispatch
+}>()
+```
+
+Then we can use that to simplify the thunks we've already written for both notifications and posts:
+
+```ts title="features/notifications/notificationsSlice.ts"
+import { createSlice } from '@reduxjs/toolkit'
+
+import { client } from '@/api/client'
+
+import type { RootState } from '@/app/store'
+// highlight-next-line
+import { createAppAsyncThunk } from '@/app/withTypes'
+
+// highlight-next-line
+export const fetchNotifications = createAppAsyncThunk(
+  'notifications/fetchNotifications',
+  async (_unused, thunkApi) => {
+    const allNotifications = selectAllNotifications(thunkApi.getState())
+    const [latestNotification] = allNotifications
+    const latestTimestamp = latestNotification ? latestNotification.date : ''
+    const response = await client.get<Notification[]>(
+      `/fakeApi/notifications?since=${latestTimestamp}`
+    )
+    return response.data
+  }
+)
+
+// omit the rest of the file
+```
+
+```ts title="features/posts/postsSlice.ts"
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { client } from '@/api/client'
+
+import type { RootState } from '@/app/store'
+// highlight-next-line
+import { createAppAsyncThunk } from '@/app/withTypes'
+
+// omit other types
+
+// highlight-next-line
+export const fetchPosts = createAppAsyncThunk(
+  'posts/fetchPosts',
+  async () => {
+    const response = await client.get<Post[]>('/fakeApi/posts')
+    return response.data
+  },
+  {
+    condition(arg, thunkApi) {
+      const { posts } = thunkApi.getState()
+      if (posts.status !== 'idle') {
+        return false
+      }
+    }
+  }
+)
+
+// highlight-next-line
+export const addNewPost = createAppAsyncThunk(
+  'posts/addNewPost',
+  async (initialPost: NewPost) => {
+    const response = await client.post<Post>('/fakeApi/posts', initialPost)
+    return response.data
+  }
+)
+```
+
+As a nice bonus, we were also able to remove the generic arguments for the return value and arguments, because TS can still infer those from the payload code we've written.
 
 ### Adding the Notifications List
 
-With that slice created, we can add a `<NotificationsList>` component:
+Now that we've got the `notificationsSlice` created, we can add a `<NotificationsList>` component:
 
-```jsx title="features/notifications/NotificationsList.js"
+```tsx title="features/notifications/NotificationsList.tsx"
 import React from 'react'
-import { useSelector } from 'react-redux'
 import { formatDistanceToNow, parseISO } from 'date-fns'
 
-import { selectAllUsers } from '../users/usersSlice'
+import { useAppSelector } from '@/app/hooks'
+import { selectAllUsers } from '@/features/users/usersSlice'
 
 import { selectAllNotifications } from './notificationsSlice'
 
+const UNKNOWN_USER = {
+  name: 'Unknown User'
+}
+
 export const NotificationsList = () => {
-  const notifications = useSelector(selectAllNotifications)
-  const users = useSelector(selectAllUsers)
+  const notifications = useAppSelector(selectAllNotifications)
+  const users = useAppSelector(selectAllUsers)
 
   const renderedNotifications = notifications.map(notification => {
     const date = parseISO(notification.date)
     const timeAgo = formatDistanceToNow(date)
-    const user = users.find(user => user.id === notification.user) || {
-      name: 'Unknown User'
-    }
+    const user =
+      users.find(user => user.id === notification.user) ?? UNKNOWN_USER
 
     return (
       <div key={notification.id} className="notification">
@@ -270,51 +483,61 @@ Once again, we're reading a list of items from the Redux state, mapping over the
 
 We also need to update the `<Navbar>` to add a "Notifications" tab, and a new button to fetch some notifications:
 
-```jsx title="app/Navbar.js"
-import React from 'react'
-// highlight-next-line
-import { useDispatch } from 'react-redux'
+```tsx title="app/Navbar.tsx"
 import { Link } from 'react-router-dom'
 
+import { useAppDispatch, useAppSelector } from '@/app/hooks'
+
+import { selectCurrentUsername, logout } from '@/features/auth/authSlice'
 // highlight-next-line
-import { fetchNotifications } from '../features/notifications/notificationsSlice'
+import { fetchNotifications } from '@/features/notifications/notificationsSlice'
+import { selectCurrentUser } from '@/features/users/usersSlice'
+
+import { UserIcon } from './UserIcon'
 
 export const Navbar = () => {
-  // highlight-start
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
+  const username = useAppSelector(selectCurrentUsername)
+  const user = useAppSelector(selectCurrentUser)
 
-  const fetchNewNotifications = () => {
-    dispatch(fetchNotifications())
-  }
-  // highlight-end
+  const isLoggedIn = !!username && !!user
 
-  return (
-    <nav>
-      <section>
-        <h1>Redux Essentials Example</h1>
+  let navContent: React.ReactNode = null
 
-        <div className="navContent">
-          <div className="navLinks">
-            <Link to="/">Posts</Link>
-            <Link to="/users">Users</Link>
-            // highlight-next-line
-            <Link to="/notifications">Notifications</Link>
-          </div>
-          // highlight-start
-          <button className="button" onClick={fetchNewNotifications}>
+  if (isLoggedIn) {
+    const onLogoutClicked = () => {
+      dispatch(logout())
+    }
+
+    // highlight-start
+    const fetchNewNotifications = () => {
+      dispatch(fetchNotifications())
+    }
+    // highlight-end
+
+    navContent = (
+      <div className="navContent">
+        <div className="navLinks">
+          <Link to="/posts">Posts</Link>
+          <Link to="/users">Users</Link>
+          // highlight-next-line
+          <Link to="/notifications">Notifications</Link>
+          <button className="button small" onClick={fetchNewNotifications}>
             Refresh Notifications
           </button>
-          // highlight-end
         </div>
-      </section>
-    </nav>
-  )
+        {/* omitted */}
+      </div>
+    )
+  }
+
+  // omit other rendering
 }
 ```
 
 Lastly, we need to update `App.js` with the "Notifications" route so we can navigate to it:
 
-```js title="App.js"
+```tsx title="App.tsx"
 // omit imports
 // highlight-next-line
 import { NotificationsList } from './features/notifications/NotificationsList'
@@ -324,12 +547,29 @@ function App() {
     <Router>
       <Navbar />
       <div className="App">
-        <Switch>
-          // highlight-next-line
-          <Route exact path="/notifications" component={NotificationsList} />
-          // omit existing routes
-          <Redirect to="/" />
-        </Switch>
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route
+            path="/*"
+            element={
+              <ProtectedRoute>
+                <Routes>
+                  <Route path="/posts" element={<PostsMainPage />} />
+                  <Route path="/posts/:postId" element={<SinglePostPage />} />
+                  <Route path="/editPost/:postId" element={<EditPostForm />} />
+                  <Route path="/users" element={<UsersList />} />
+                  <Route path="/users/:userId" element={<UserPage />} />
+                  // highlight-start
+                  <Route
+                    path="/notifications"
+                    element={<NotificationsList />}
+                  />
+                  // highlight-end
+                </Routes>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
       </div>
     </Router>
   )
@@ -344,17 +584,55 @@ Here's what the "Notifications" tab looks like so far:
 
 Each time we click "Refresh Notifications", a few more notification entries will be added to our list. In a real app, those could be coming from the server while we're looking at other parts of the UI. We can do something similar by clicking "Refresh Notifications" while we're looking at the `<PostsList>` or `<UserPage>`. But, right now we have no idea how many notifications just arrived, and if we keep clicking the button, there could be many notifications we haven't read yet. Let's add some logic to keep track of which notifications have been read and which of them are "new". That will let us show the count of "Unread" notifications as a badge on our "Notifications" tab in the navbar, and display new notifications in a different color.
 
-Our fake API is already sending back the notification entries with `isNew` and `read` fields, so we can use those in our code.
+#### Tracking Notification Status
 
-First, we'll update `notificationsSlice` to have a reducer that marks all notifications as read, and some logic to handle marking existing notifications as "not new":
+The `Notification` objects that our fake API is sending back look like `{id, date, message, user}`. The idea of "new" or "unread" will only exist on the client. Given that, let's rework the `notificationsSlice` to support that.
 
-```js title="features/notifications/notificationsSlice.js"
+First, we'll rename the existing `Notification` type to `ServerNotification`, create a new `ClientNotification` type that extends it to those two fields. Then, when we receive a new batch of notifications from the server, we'll always add those fields with default values.
+
+Finally, we'll add a reducer that marks all notifications as read, and some logic to handle marking existing notifications as "not new":
+
+```ts title="features/notifications/notificationsSlice.ts"
+// omit imports
+
+// highlight-start
+export interface ServerNotification {
+  id: string
+  date: string
+  message: string
+  user: string
+}
+
+export interface ClientNotification extends ServerNotification {
+  read: boolean
+  isNew: boolean
+}
+// highlight-end
+
+export const fetchNotifications = createAppAsyncThunk(
+  'notifications/fetchNotifications',
+  async (_unused, thunkApi) => {
+    const allNotifications = selectAllNotifications(thunkApi.getState())
+    const [latestNotification] = allNotifications
+    const latestTimestamp = latestNotification ? latestNotification.date : ''
+    // highlight-next-line
+    const response = await client.get<ServerNotification[]>(
+      `/fakeApi/notifications?since=${latestTimestamp}`
+    )
+
+    return response.data
+  }
+)
+
+// highlight-next-line
+const initialState: ClientNotification[] = []
+
 const notificationsSlice = createSlice({
   name: 'notifications',
-  initialState: [],
+  initialState,
   reducers: {
     // highlight-start
-    allNotificationsRead(state, action) {
+    allNotificationsRead(state) {
       state.forEach(notification => {
         notification.read = true
       })
@@ -363,13 +641,22 @@ const notificationsSlice = createSlice({
   },
   extraReducers(builder) {
     builder.addCase(fetchNotifications.fulfilled, (state, action) => {
-      state.push(...action.payload)
       // highlight-start
+      // Add client-side metadata for tracking new notifications
+      const notificationsWithMetadata: ClientNotification[] =
+        action.payload.map(notification => ({
+          ...notification,
+          read: false,
+          isNew: true
+        }))
+
       state.forEach(notification => {
         // Any notifications we've read are no longer new
         notification.isNew = !notification.read
       })
       // highlight-end
+
+      state.push(...notificationsWithMetadata)
       // Sort with newest first
       state.sort((a, b) => b.date.localeCompare(a.date))
     })
@@ -382,31 +669,36 @@ export const { allNotificationsRead } = notificationsSlice.actions
 export default notificationsSlice.reducer
 ```
 
+#### Marking Notifications as Read
+
 We want to mark these notifications as read whenever our `<NotificationsList>` component renders, either because we clicked on the tab to view the notifications, or because we already have it open and we just received some additional notifications. We can do this by dispatching `allNotificationsRead` any time this component re-renders. In order to avoid flashing of old data as this updates, we'll dispatch the action in a `useLayoutEffect` hook. We also want to add an additional classname to any notification list entries in the page, to highlight them:
 
-```jsx title="features/notifications/NotificationsList.js"
+```tsx title="features/notifications/NotificationsList.tsx"
 // highlight-next-line
 import React, { useLayoutEffect } from 'react'
-// highlight-next-line
-import { useSelector, useDispatch } from 'react-redux'
 import { formatDistanceToNow, parseISO } from 'date-fns'
 // highlight-next-line
 import classnames from 'classnames'
 
-import { selectAllUsers } from '../users/usersSlice'
+// highlight-next-line
+import { useAppDispatch, useAppSelector } from '@/app/hooks'
+import { selectAllUsers } from '@/features/users/usersSlice'
 
 // highlight-start
 import {
-  selectAllNotifications,
-  allNotificationsRead
+  allNotificationsRead,
+  selectAllNotifications
 } from './notificationsSlice'
 // highlight-end
 
+const UNKNOWN_USER = {
+  name: 'Unknown User'
+}
+
 export const NotificationsList = () => {
-  // highlight-next-line
-  const dispatch = useDispatch()
-  const notifications = useSelector(selectAllNotifications)
-  const users = useSelector(selectAllUsers)
+  const dispatch = useAppDispatch()
+  const notifications = useAppSelector(selectAllNotifications)
+  const users = useAppSelector(selectAllUsers)
 
   // highlight-start
   useLayoutEffect(() => {
@@ -417,18 +709,18 @@ export const NotificationsList = () => {
   const renderedNotifications = notifications.map(notification => {
     const date = parseISO(notification.date)
     const timeAgo = formatDistanceToNow(date)
-    const user = users.find(user => user.id === notification.user) || {
-      name: 'Unknown User'
-    }
+    const user =
+      users.find(user => user.id === notification.user) ?? UNKNOWN_USER
 
     // highlight-start
     const notificationClassname = classnames('notification', {
       new: notification.isNew
     })
+    // highlight-end
 
     return (
+      // highlight-next-line
       <div key={notification.id} className={notificationClassname}>
-        // highlight-end
         <div>
           <b>{user.name}</b> {notification.message}
         </div>
@@ -460,51 +752,70 @@ Here's how the notifications tab looks now that we've got the "new/read" behavio
 
 ![New notifications](/img/tutorials/essentials/notifications-new.png)
 
+#### Showing Unread Notifications
+
 The last thing we need to do before we move on is to add the badge on our "Notifications" tab in the navbar. This will show us the count of "Unread" notifications when we are in other tabs:
 
-```jsx title="app/Navbar.js"
-// omit imports
-// highlight-next-line
-import { useDispatch, useSelector } from 'react-redux'
+```tsx title="app/Navbar.tsx"
+// omit other imports
 
-// highlight-start
+// highlight-next-line
 import {
   fetchNotifications,
   selectAllNotifications
-} from '../features/notifications/notificationsSlice'
-// highlight-end
+} from '@/features/notifications/notificationsSlice'
 
 export const Navbar = () => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
+  const username = useAppSelector(selectCurrentUsername)
+  const user = useAppSelector(selectCurrentUser)
+
   // highlight-start
-  const notifications = useSelector(selectAllNotifications)
+  const notifications = useAppSelector(selectAllNotifications)
   const numUnreadNotifications = notifications.filter(n => !n.read).length
   // highlight-end
-  // omit component contents
-  // highlight-start
-  let unreadNotificationsBadge
 
-  if (numUnreadNotifications > 0) {
-    unreadNotificationsBadge = (
-      <span className="badge">{numUnreadNotifications}</span>
+  const isLoggedIn = !!username && !!user
+
+  let navContent: React.ReactNode = null
+
+  if (isLoggedIn) {
+    const onLogoutClicked = () => {
+      dispatch(logout())
+    }
+
+    const fetchNewNotifications = () => {
+      dispatch(fetchNotifications())
+    }
+
+    // highlight-start
+    let unreadNotificationsBadge: React.ReactNode | undefined
+
+    if (numUnreadNotifications > 0) {
+      unreadNotificationsBadge = (
+        <span className="badge">{numUnreadNotifications}</span>
+      )
+    }
+    // highlight-end
+
+    navContent = (
+      <div className="navContent">
+        <div className="navLinks">
+          <Link to="/posts">Posts</Link>
+          <Link to="/users">Users</Link>
+          <Link to="/notifications">
+            Notifications {unreadNotificationsBadge}
+          </Link>
+          <button className="button small" onClick={fetchNewNotifications}>
+            Refresh Notifications
+          </button>
+        </div>
+        // omit button
+      </div>
     )
   }
-  // highlight-end
-  return (
-    <nav>
-      // omit component contents
-      <div className="navLinks">
-        <Link to="/">Posts</Link>
-        <Link to="/users">Users</Link>
-        // highlight-start
-        <Link to="/notifications">
-          Notifications {unreadNotificationsBadge}
-        </Link>
-        // highlight-end
-      </div>
-      // omit component contents
-    </nav>
-  )
+
+  // omit other rendering
 }
 ```
 
@@ -524,15 +835,16 @@ If we inspect the last couple dispatched actions in the Redux DevTools, we can s
 
 If we look at `<UserPage>` carefully, there's a specific problem:
 
-```jsx title="features/UserPage.js
-export const UserPage = ({ match }) => {
-  const { userId } = match.params
+```tsx title="features/users/UserPage.tsx"
+export const UserPage = () => {
+  const { userId } = useParams()
 
-  const user = useSelector(state => selectUserById(state, userId))
+  const user = useAppSelector(state => selectUserById(state, userId!))
 
   // highlight-start
-  const postsForUser = useSelector(state => {
+  const postsForUser = useAppSelector(state => {
     const allPosts = selectAllPosts(state)
+    // ❌ WRONG - this _always_ creates a new array reference!
     return allPosts.filter(post => post.user === userId)
   })
   // highlight-end
@@ -545,11 +857,13 @@ We know that `useSelector` will re-run every time an action is dispatched, and t
 
 We're calling `filter()` inside of our `useSelector` hook, so that we only return the list of posts that belong to this user. Unfortunately, **this means that `useSelector` _always_ returns a new array reference, and so our component will re-render after _every_ action even if the posts data hasn't changed!**.
 
+Now, realistically this isn't a meaningful perf issue in this particular example app. The `<UserPage>` component is small, and there's not many actions being dispatched in the app. However, this _can_ be a very major perf issue in real-world apps, with the impact varying based on app structure. Given that, extra components re-rendering when they didn't need to is a common mistake and something we should try to fix.
+
 ### Memoizing Selector Functions
 
 What we really need is a way to only calculate the new filtered array if either `state.posts` or `userId` have changed. If they _haven't_ changed, we want to return the same filtered array reference as the last time.
 
-This idea is called "memoization". We want to save a previous set of inputs and the calculated result, and if the inputs are the same, return the previous result instead of recalculating it again.
+This idea is called **"memoization"**. We want to save a previous set of inputs and the calculated result, and if the inputs are the same, return the previous result instead of recalculating it again.
 
 So far, we've been writing selector functions by ourselves, and just so that we don't have to copy and paste the code for reading data from the store. It would be great if there was a way to make our selector functions memoized.
 
@@ -557,34 +871,45 @@ So far, we've been writing selector functions by ourselves, and just so that we 
 
 Let's make a new `selectPostsByUser` selector function, using Reselect, and use it here.
 
-```js title="features/posts/postsSlice.js"
+```ts title="features/posts/postsSlice.ts"
 // highlight-next-line
 import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit'
 
 // omit slice logic
 
-export const selectAllPosts = state => state.posts.posts
+export const selectAllPosts = (state: RootState) => state.posts.posts
 
-export const selectPostById = (state, postId) =>
+export const selectPostById = (state: RootState, postId: string) =>
   state.posts.posts.find(post => post.id === postId)
 
 // highlight-start
 export const selectPostsByUser = createSelector(
-  [selectAllPosts, (state, userId) => userId],
+  // Pass in one or more "input selectors"
+  [
+    // we can pass in an existing selector function that
+    // reads something from the root `state` and returns it
+    selectAllPosts,
+    // and another function that extracts another argument
+    // and returns that
+    (state: RootState, userId: string) => userId
+  ],
+  // the output function gets those values as its arguments,
+  // and will run when either input value changes
   (posts, userId) => posts.filter(post => post.user === userId)
 )
+
 // highlight-end
 ```
 
-`createSelector` takes one or more "input selector" functions as argument, plus an "output selector" function. When we call `selectPostsByUser(state, userId)`, `createSelector` will pass all of the arguments into each of our input selectors. Whatever those input selectors return becomes the arguments for the output selector.
+`createSelector` takes one or more "input selector" functions as argument, plus an "output function". When we call `selectPostsByUser(state, userId)`, `createSelector` will pass all of the arguments into each of our input selectors. Whatever those input selectors return becomes the arguments for the output selector. (We've already done something similar in `selectCurrentUser`, where we first call `const currentUsername = selectCurrentUsername(state)`.)
 
 In this case, we know that we need the array of all posts and the user ID as the two arguments for our output selector. We can reuse our existing `selectAllPosts` selector to extract the posts array. Since the user ID is the second argument we're passing into `selectPostsByUser`, we can write a small selector that just returns `userId`.
 
-Our output selector then takes `posts` and `userId`, and returns the filtered array of posts for just that user.
+Our output function then gets `posts` and `userId` as its arguments, and returns the filtered array of posts for just that user.
 
 If we try calling `selectPostsByUser` multiple times, it will only re-run the output selector if either `posts` or `userId` has changed:
 
-```js
+```ts Selector Calculation Examples
 const state1 = getState()
 // Output selector runs, because it's the first call
 selectPostsByUser(state1, 'user1')
@@ -607,14 +932,16 @@ selectPostsByUser(state3, 'user2')
 
 If we call this selector in `<UserPage>` and re-run the React profiler while fetching notifications, we should see that `<UserPage>` doesn't re-render this time:
 
-```jsx
-export const UserPage = ({ match }) => {
-  const { userId } = match.params
+```tsx title="features/users/UserPage.tsx"
+export const UserPage = () => {
+  const { userId } = useParams()
 
-  const user = useSelector(state => selectUserById(state, userId))
+  const user = useAppSelector(state => selectUserById(state, userId!))
 
   // highlight-start
-  const postsForUser = useSelector(state => selectPostsByUser(state, userId))
+  const postsForUser = useAppSelector(state =>
+    selectPostsByUser(state, userId!)
+  )
   // highlight-end
 
   // omit rendering logic
@@ -622,6 +949,8 @@ export const UserPage = ({ match }) => {
 ```
 
 Memoized selectors are a valuable tool for improving performance in a React+Redux application, because they can help us avoid unnecessary re-renders, and also avoid doing potentially complex or expensive calculations if the input data hasn't changed.
+
+Note that **not all selectors in an application need to be memoized!** The rest of the selectors we've written are still just plain functions, and those work fine. **Selectors only need to be memoized if they create and return new object or array references, or if the calculation logic is "expensive"**.
 
 :::info
 
@@ -647,7 +976,7 @@ There's a few different ways we could optimize this behavior in `<PostsList>`.
 
 First, we could wrap the `<PostExcerpt>` component in [`React.memo()`](https://react.dev/reference/react/memo), which will ensure that the component inside of it only re-renders if the props have actually changed. This will actually work quite well - try it out and see what happens:
 
-```jsx title="features/posts/PostsList.js
+```tsx title="features/posts/PostsList.tsx"
 // highlight-next-line
 let PostExcerpt = ({ post }) => {
   // omit logic
@@ -709,7 +1038,7 @@ For more details on why normalizing state is useful, see [Normalizing State Shap
 
 ### Managing Normalized State with `createEntityAdapter`
 
-Redux Toolkit's `createEntityAdapter` API provides a standardized way to store your data in a slice by taking a collection of items and putting them into the shape of `{ ids: [], entities: {} }`. Along with this predefined state shape, it generates a set of reducer functions and selectors that know how to work with that data.
+Redux Toolkit's [**`createEntityAdapter`**](https://redux-toolkit.js.org/api/createEntityAdapter) API provides a standardized way to store your data in a slice by taking a collection of items and putting them into the shape of `{ ids: [], entities: {} }`. Along with this predefined state shape, it generates a set of reducer functions and selectors that know how to work with that data.
 
 This has several benefits:
 
@@ -729,7 +1058,7 @@ Finally, the adapter object has a `getInitialState` function that generates an e
 
 With that in mind, let's update our `postsSlice` to use `createEntityAdapter`:
 
-```js title="features/posts/postsSlice.js"
+```ts title="features/posts/postsSlice.ts"
 import {
   // highlight-next-line
   createEntityAdapter
@@ -737,14 +1066,16 @@ import {
 } from '@reduxjs/toolkit'
 
 // highlight-start
-const postsAdapter = createEntityAdapter({
+const postsAdapter = createEntityAdapter<Post>({
+  // Sort in descending date order
   sortComparer: (a, b) => b.date.localeCompare(a.date)
 })
 
-const initialState = postsAdapter.getInitialState({
+const initialState: PostsState = postsAdapter.getInitialState({
   status: 'idle',
   error: null
 })
+
 // highlight-end
 
 // omit thunks
@@ -753,15 +1084,7 @@ const postsSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
-    reactionAdded(state, action) {
-      const { postId, reaction } = action.payload
-      // highlight-next-line
-      const existingPost = state.entities[postId]
-      if (existingPost) {
-        existingPost.reactions[reaction]++
-      }
-    },
-    postUpdated(state, action) {
+    postUpdated(state, action: PayloadAction<PostUpdate>) {
       const { id, title, content } = action.payload
       // highlight-next-line
       const existingPost = state.entities[id]
@@ -769,22 +1092,28 @@ const postsSlice = createSlice({
         existingPost.title = title
         existingPost.content = content
       }
+    },
+    reactionAdded(
+      state,
+      action: PayloadAction<{ postId: string; reaction: ReactionName }>
+    ) {
+      const { postId, reaction } = action.payload
+      // highlight-next-line
+      const existingPost = state.entities[postId]
+      if (existingPost) {
+        existingPost.reactions[reaction]++
+      }
     }
   },
   extraReducers(builder) {
-    // omit other reducers
-
     builder
+      // omit other cases
       .addCase(fetchPosts.fulfilled, (state, action) => {
         state.status = 'succeeded'
-        // Add any fetched posts to the array
         // highlight-start
-        // Use the `upsertMany` reducer as a mutating update utility
-        postsAdapter.upsertMany(state, action.payload)
-        // highlight-end
+        // Save the fetched posts into state
+        postsAdapter.setAll(state, action.payload)
       })
-      // highlight-start
-      // Use the `addOne` reducer for the fulfilled case
       .addCase(addNewPost.fulfilled, postsAdapter.addOne)
     // highlight-end
   }
@@ -818,7 +1147,7 @@ First, we import `createEntityAdapter`, and call it to create our `postsAdapter`
 
 Now that our posts are being kept as a lookup table in `state.entities`, we can change our `reactionAdded` and `postUpdated` reducers to directly look up the right posts by their IDs, instead of having to loop over the old `posts` array.
 
-When we receive the `fetchPosts.fulfilled` action, we can use the `postsAdapter.upsertMany` function to add all of the incoming posts to the state, by passing in the draft `state` and the array of posts in `action.payload`. If there's any items in `action.payload` that already existing in our state, the `upsertMany` function will merge them together based on matching IDs.
+When we receive the `fetchPosts.fulfilled` action, we can use the `postsAdapter.setAll` function to add all of the incoming posts to the state, by passing in the draft `state` and the array of posts in `action.payload`.
 
 When we receive the `addNewPost.fulfilled` action, we know we need to add that one new post object to our state. We can use the adapter functions as reducers directly, so we'll pass `postsAdapter.addOne` as the reducer function to handle that action.
 
@@ -830,7 +1159,7 @@ Now that our posts slice is using `createEntityAdapter`, we can update `<PostsLi
 
 We'll update `<PostsList>` to read just the sorted array of post IDs, and pass `postId` to each `<PostExcerpt>`:
 
-```jsx title="features/posts/PostsList.js"
+```tsx title="features/posts/PostsList.tsx"
 // omit other imports
 
 // highlight-start
@@ -841,7 +1170,7 @@ import {
   selectPostById
 } from './postsSlice'
 
-let PostExcerpt = ({ postId }) => {
+let PostExcerpt = ({ postId }: { postId: string }) => {
   const post = useSelector(state => selectPostById(state, postId))
   // highlight-end
   // omit rendering logic
@@ -874,25 +1203,24 @@ Now, if we try clicking a reaction button on one of the posts while capturing a 
 
 ![React DevTools Profiler render capture - optimized <PostsList>](/img/tutorials/essentials/postslist-optimized.png)
 
-## Converting Other Slices
-
-We're almost done. As a final cleanup step, we'll update our other two slices to use `createEntityAdapter` as well.
-
 ### Converting the Users Slice
+
+We can convert other slices to use `createEntityAdapter` as well.
 
 The `usersSlice` is fairly small, so we've only got a few things to change:
 
-```js title="features/users/usersSlice.js"
+```ts title="features/users/usersSlice.ts"
 import {
   createSlice,
   createAsyncThunk,
   // highlight-next-line
   createEntityAdapter
 } from '@reduxjs/toolkit'
-import { client } from '../../api/client'
+
+import { client } from '@/api/client'
 
 // highlight-start
-const usersAdapter = createEntityAdapter()
+const usersAdapter = createEntityAdapter<User>()
 
 const initialState = usersAdapter.getInitialState()
 // highlight-end
@@ -916,42 +1244,41 @@ export default usersSlice.reducer
 
 // highlight-start
 export const { selectAll: selectAllUsers, selectById: selectUserById } =
-  usersAdapter.getSelectors(state => state.users)
+  usersAdapter.getSelectors((state: RootState) => state.users)
 // highlight-end
 ```
 
 The only action we're handling here always replaces the entire list of users with the array we fetched from the server. We can use `usersAdapter.setAll` to implement that instead.
 
-Our `<AddPostForm>` is still trying to read `state.users` as an array, as is `<PostAuthor>`. Update them to use `selectAllUsers` and `selectUserById`, respectively.
+We were already exporting the `selectAllUsers` and `selectUserById` selectors we'd written by hand. We can replace those with the versions generated by `usersAdapter.getSelectors()`.
 
 ### Converting the Notifications Slice
 
 Last but not least, we'll update `notificationsSlice` as well:
 
-```js title="features/notifications/notificationsSlice.js"
-import {
-  createSlice,
-  createAsyncThunk,
-  // highlight-next-line
-  createEntityAdapter
-} from '@reduxjs/toolkit'
+```ts title="features/notifications/notificationsSlice.ts"
+// highlight-next-line
+import { createEntityAdapter, createSlice } from '@reduxjs/toolkit'
 
-import { client } from '../../api/client'
+import { client } from '@/api/client'
+
+// omit types and fetchNotifications thunk
 
 // highlight-start
-const notificationsAdapter = createEntityAdapter({
+const notificationsAdapter = createEntityAdapter<ClientNotification>({
+  // Sort with newest first
   sortComparer: (a, b) => b.date.localeCompare(a.date)
 })
-// highlight-end
 
-// omit fetchNotifications thunk
+const initialState = notificationsAdapter.getInitialState()
+// highlight-end
 
 const notificationsSlice = createSlice({
   name: 'notifications',
   // highlight-next-line
-  initialState: notificationsAdapter.getInitialState(),
+  initialState,
   reducers: {
-    allNotificationsRead(state, action) {
+    allNotificationsRead(state) {
       // highlight-start
       Object.values(state.entities).forEach(notification => {
         notification.read = true
@@ -961,12 +1288,21 @@ const notificationsSlice = createSlice({
   },
   extraReducers(builder) {
     builder.addCase(fetchNotifications.fulfilled, (state, action) => {
+      // Add client-side metadata for tracking new notifications
+      const notificationsWithMetadata: ClientNotification[] =
+        action.payload.map(notification => ({
+          ...notification,
+          read: false,
+          isNew: true
+        }))
+
       // highlight-start
-      notificationsAdapter.upsertMany(state, action.payload)
       Object.values(state.entities).forEach(notification => {
         // Any notifications we've read are no longer new
         notification.isNew = !notification.read
       })
+
+      notificationsAdapter.upsertMany(state, notificationsWithMetadata)
       // highlight-end
     })
   }
@@ -978,7 +1314,7 @@ export default notificationsSlice.reducer
 
 // highlight-start
 export const { selectAll: selectAllNotifications } =
-  notificationsAdapter.getSelectors(state => state.notifications)
+  notificationsAdapter.getSelectors((state: RootState) => state.notifications)
 // highlight-end
 ```
 
@@ -986,7 +1322,192 @@ We again import `createEntityAdapter`, call it, and call `notificationsAdapter.g
 
 Ironically, we do have a couple places in here where we need to loop over all notification objects and update them. Since those are no longer being kept in an array, we have to use `Object.values(state.entities)` to get an array of those notifications and loop over that. On the other hand, we can replace the previous fetch update logic with `notificationsAdapter.upsertMany`.
 
-And with that... we're done learning the core concepts and functionality of Redux Toolkit!
+## Writing Reactive Logic
+
+Thus far, all of our application behavior has been relatively imperative. The user does something (adding a post, fetching notifications), and we dispatch actions in either a click handler or a component `useEffect` hook in response. That includes the data fetching thunks like `fetchPosts` and `login`.
+
+However, sometimes we need to write more logic that runs in response to things that happened in the app, such as certain actions being dispatched.
+
+We've shown some loading indicators for things like fetching posts. It would be nice to have some kind of a visual confirmation for the user when they add a new post, like popping up a toast message.
+
+We've already seen that we can have [many reducers respond to the same dispatched action](./part-4-using-data.md#handling-actions-in-multiple-slices). That works great for logic that is just "update more parts of the state", but what if we need to write logic that is async or has other side effects? We can't put that in the reducers - [reducers must be "pure" and must _not_ have any side effects](./part-2-app-structure.md#rules-of-reducers).
+
+If we can't put this logic with side effects in reducers, where _can_ we put it?
+
+The answer is inside of [Redux middleware, because middleware is designed to enable side effects](./part-5-async-logic.md#using-middleware-to-enable-async-logic).
+
+### Reactive Logic with `createListenerMiddleware`
+
+We've already used the thunk middleware for async logic that has to run "right now". However, thunks are just functions. We need a different kind of middleware that lets us say "when a specific action is dispatched, go run this additional logic in response".
+
+**Redux Toolkit includes the [`createListenerMiddleware`](https://redux-toolkit.js.org/api/createListenerMiddleware) API to let us write logic that runs in response to specific actions being dispatched**. It lets us add "listener" entries that define what actions to look for, and an `effect` callback that will run whenever it matches against an action.
+
+Conceptually, you can think of `createListenerMiddleware` as being similar to [React's `useEffect` hook](https://react.dev/learn/synchronizing-with-effects), except that they are defined as part of your Redux logic instead of inside a React component, and they run in response to dispatched actions and Redux state updates instead of as part of React's rendering lifecycle.
+
+### Setting Up the Listener Middleware
+
+We didn't have to specifically set up or define the thunk middleware, because Redux Toolkit's `configureStore` automatically adds the thunk middleware to the store setup. For the listener middleware, we'll have to do a bit of setup work to create it and add it to the store.
+
+We'll create a new `app/listenerMiddleware.ts` file and create an instance of the listener middleware there. Similar to `createAsyncThunk`, we'll pass through the correct `dispatch` and `state` types so that we can safely access state fields and dispatch actions.
+
+```ts title="app/listenerMiddleware.ts"
+import { createListenerMiddleware, addListener } from '@reduxjs/toolkit'
+import type { RootState, AppDispatch } from './store'
+
+export const listenerMiddleware = createListenerMiddleware()
+
+export const startAppListening = listenerMiddleware.startListening.withTypes<
+  RootState,
+  AppDispatch
+>()
+export type AppStartListening = typeof startAppListening
+
+export const addAppListener = addListener.withTypes<RootState, AppDispatch>()
+export type AppAddListener = typeof addAppListener
+```
+
+Like `createSlice`, `createListenerMiddleware` returns an object that contains multiple fields:
+
+- `listenerMiddleware.middleware`: the actual Redux middleware instance that needs to be added to the store
+- `listenerMiddleware.startListening`: adds a new listener entry to the middleware directly
+- `listenerMiddleware.addListener`: an action creator that can be dispatched to add a listener entry from anywhere in the codebase that has access to `dispatch`, even if you didn't import the `listenerMiddleware` object
+
+As with async thunks and hooks, we can use the `.withTypes()` methods to define pre-typed `startAppListening` and `addAppListener` functions with the right types built in.
+
+Then, we need to add it to the store:
+
+```ts title="app/store.ts"
+import { configureStore } from '@reduxjs/toolkit'
+
+import authReducer from '@/features/auth/authSlice'
+import postsReducer from '@/features/posts/postsSlice'
+import usersReducer from '@/features/users/usersSlice'
+import notificationsReducer from '@/features/notifications/notificationsSlice'
+
+// highlight-next-line
+import { listenerMiddleware } from './listenerMiddleware'
+
+export const store = configureStore({
+  reducer: {
+    auth: authReducer,
+    posts: postsReducer,
+    users: usersReducer,
+    notifications: notificationsReducer
+  },
+  // highlight-start
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware().prepend(listenerMiddleware.middleware)
+  // highlight-end
+})
+```
+
+`configureStore` already adds the `redux-thunk` middleware to the store setup by default, along with some additional middleware in development that add safety checks. We want to preserve those, but also add the listener middleware as well.
+
+Order can matter when setting up middleware, because they form a pipeline: `m1` -> `m2` -> `m3` -> `store.dispatch()`. In this case, the listener middleware needs to be at the _start_ of the pipeline, so that it can intercept some actions first and process them.
+
+`getDefaultMiddleware()` returns an array of the configured middleware. Since it's an array, it already has a `.concat()` method that returns a copy with the new items at the _end_ of the array, but `configureStore` also adds an equivalent `.prepend()` method that makes a copy with the new items at the _start_ of the array.
+
+So, we'll call `getDefaultMiddleware().prepend(listenerMiddleware.middleware)` to add this to the front of the list.
+
+### Showing Toasts for New Posts
+
+Now that we have the listener middleware configured, we can add a new listener entry that will show a toast message any time a new post successfully gets added.
+
+We're going to use the `react-tiny-toast` library to manage showing toasts with the right appearance. It's already included in the project repo, so we don't have to install it.
+
+We do need to import and render its `<ToastContainer>` component in our `<App>`:
+
+```tsx title="App.tsx"
+import React from 'react'
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate
+} from 'react-router-dom'
+// highlight-next-line
+import { ToastContainer } from 'react-tiny-toast'
+
+// omit other imports and ProtectedRoute definition
+
+function App() {
+  return (
+    <Router>
+      <Navbar />
+      <div className="App">
+        <Routes>{/* omit routes content */}</Routes>
+        // highlight-next-line
+        <ToastContainer />
+      </div>
+    </Router>
+  )
+}
+```
+
+Now we can go add a listener that will watch for the `addNewPost.fulfilled` action, show a toast that says "Post Added", and remove it after a delay.
+
+There's [multiple approaches we can use for defining listeners in our codebase](https://redux-toolkit.js.org/api/createListenerMiddleware#organizing-listeners-in-files). That said, it's usually a good practice to define listeners in whatever slice file seems most related to the logic we want to add. In this case, we want to show a toast when a post gets added, so let's add this listener in the `postsSlice` file:
+
+```ts title="features/posts/postsSlice.ts"
+import {
+  createEntityAdapter,
+  createSelector,
+  createSlice,
+  EntityState,
+  PayloadAction
+} from '@reduxjs/toolkit'
+import { client } from '@/api/client'
+
+import type { RootState } from '@/app/store'
+// highlight-next-line
+import { AppStartListening } from '@/app/listenerMiddleware'
+import { createAppAsyncThunk } from '@/app/withTypes'
+
+// omit types, initial state, slice definition, and selectors
+
+export const selectPostsByUser = createSelector(
+  [selectAllPosts, (state: RootState, userId: string) => userId],
+  (posts, userId) => posts.filter(post => post.user === userId)
+)
+
+// highlight-start
+export const addPostsListeners = (startListening: AppStartListening) => {
+  startAppListening({
+    actionCreator: addNewPost.fulfilled,
+    effect: async (action, listenerApi) => {
+      const { toast } = await import('react-tiny-toast')
+
+      const toastId = toast.show('New post added!', {
+        variant: 'success',
+        position: 'bottom-right',
+        pause: true
+      })
+
+      await listenerApi.delay(5000)
+      toast.remove(toastId)
+    }
+  })
+}
+// highlight-end
+```
+
+To add a listener, we need to call the `startAppListening` function that was defined in `app/listenerMiddleware.ts`. However, it's better if we _don't_ import `startAppListening` directly into the slice file, to help keep the import chains more consistent. Instead, we can export a function that accepts `startAppListening` as an argument. That way, the `app/listenerMiddleware.ts` file can import this function, similar to the way `app/store.ts` imports the slice reducers from each slice file.
+
+To add a listener entry, call `startAppListening` and pass in an object with an `effect` callback function, and one of these options to define when the effect callback will run:
+
+- `actionCreator: ActionCreator`: any RTK action creator function, like `reactionAdded` or `addNewPost.fulfilled`. This will run the effect when that one specific action is dispatched.
+- `matcher: (action: UnknownAction) => boolean`: Any RTK ["matcher" function](https://redux-toolkit.js.org/api/matching-utilities), like `isAnyOf(reactionAdded, addNewPost.fulfilled)`. This will run the effect any time the matcher returns `true`.
+- `predicate: (action: UnknownAction, currState: RootState, prevState: RootState) => boolean`: a more general matching function that has access to `currState` and `prevState`. This can be used to make any check you want against the action or state values, including seeing if a piece of state has changed (such as `currState.counter.value !== prevState.counter.value`)
+
+In this case, we specifically want to show our toast any time the `addNewPost` thunk succeeds, so we'll specify the effect should run with `actionCreator: addNewPost.fulfilled`.
+
+The `effect` callback itself is much like an async thunk. It gets the matched `action` as the first argument, and a `listenerApi` object as the second argument.
+
+The `listenerApi` includes the usual `dispatch` and `getState` methods, but also [several other functions that can be used to implement complex async logic and workflows](https://redux-toolkit.js.org/api/createListenerMiddleware#listener-api). That includes methods like `condition()` to pause until some other action is dispatched or state value changes, `unsubscribe()/subscribe()` to change whether this listener entry is active, `fork()` to kick off a child task, and more.
+
+In this case, we want to import the actual `react-tiny-toast` library dynamically, show the success toast, wait a few seconds, and then remove the toast.
+
+And that works! Now when we add a new post, we should see a small green toast pop up in the lower right-hand corner of the page, and disappear after 5 seconds. This works because the listener middleware in the Redux store checks and runs the effect callback, even though we didn't specifically add any more logic to the React components themselves.
 
 ## What You've Learned
 
@@ -1023,23 +1544,15 @@ Here's what we covered in this section:
     - `adapter.getInitialState`, which can accept additional state fields like loading state
     - Prebuilt reducers for common cases, like `setAll`, `addMany`, `upsertOne`, and `removeMany`
     - `adapter.getSelectors`, which generates selectors like `selectAll` and `selectById`
+- **Redux Toolkit's `createListenerMiddleware` API is used to run reactive logic in response to dispatched actions**
+  - The listener middleware should be added to the store setup, with the right store types attached
+  - Listeners are typically defined in slice files, but may be structured other ways as well
+  - Listeners can match against individual actions, many actions, or use custom comparisons
+  - Listener effect callbacks can contain any sync or async logic
+  - The `listenerApi` object provides many methods for managing async workflows and behavior
 
 :::
 
 ## What's Next?
 
-There's a couple more sections in the Redux Essentials tutorial, but this is a good spot to pause and put what you've learned into practice.
-
-The concepts we've covered in this tutorial so far should be enough to get you started building your own applications using React and Redux. Now's a great time to try working on a project yourself to solidify these concepts and see how they work in practice. If you're not sure what kind of a project to build, see [this list of app project ideas](https://github.com/florinpop17/app-ideas) for some inspiration.
-
 **Redux Toolkit also includes a powerful data fetching and caching API called "RTK Query"**. RTK Query is an optional addon that can completely eliminate the need to write any data fetching logic yourself. In [Part 7: RTK Query Basics](./part-7-rtk-query-basics.md), you'll learn what RTK Query is, what problems it solves, and how to use it to fetch and use cached data in your application.
-
-The Redux Essentials tutorial is focused on "how to use Redux correctly", rather than "how it works" or "why it works this way". In particular, Redux Toolkit is a higher-level set of abstractions and utilities, and it's helpful to understand what the abstractions in RTK are actually doing for you. Reading through the ["Redux Fundamentals" tutorial](../fundamentals/part-1-overview.md) will help you understand how to write Redux code "by hand", and why we recommend Redux Toolkit as the default way to write Redux logic.
-
-The [Using Redux](../../usage/index.md) section has information on a number of important concepts, like [how to structure your reducers](../../usage/structuring-reducers/StructuringReducers.md), and [our Style Guide page](../../style-guide/style-guide.md) has important information on our recommended patterns and best practices.
-
-If you'd like to know more about _why_ Redux exists, what problems it tries to solve, and how it's meant to be used, see Redux maintainer Mark Erikson's posts on [The Tao of Redux, Part 1: Implementation and Intent](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/) and [The Tao of Redux, Part 2: Practice and Philosophy](https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/).
-
-If you're looking for help with Redux questions, come join [the `#redux` channel in the Reactiflux server on Discord](https://www.reactiflux.com).
-
-**Thanks for reading through this tutorial, and we hope you enjoy building applications with Redux!**

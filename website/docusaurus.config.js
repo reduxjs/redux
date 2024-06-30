@@ -14,6 +14,10 @@ module.exports = {
   organizationName: 'reduxjs',
   projectName: 'redux',
   themeConfig: {
+    tableOfContents: {
+      minHeadingLevel: 2,
+      maxHeadingLevel: 4
+    },
     image: 'img/redux-logo-landscape.png',
     metadata: [{ name: 'twitter:card', content: 'summary' }],
     prism: {
