@@ -228,7 +228,7 @@ In this case, our endpoint is `getPosts` and it's a query endpoint, so the gener
 
 ### Configuring the Store
 
-We now need to hook up the API slice to our Redux store. We can modify the existing `store.js` file to add the API slice's cache reducer to the state. Also, the API slice generates a custom middleware that needs to be added to the store. This middleware _must_ be added as well - it manages cache lifetimes and expiration.
+We now need to hook up the API slice to our Redux store. We can modify the existing `store.ts` file to add the API slice's cache reducer to the state. Also, the API slice generates a custom middleware that needs to be added to the store. This middleware _must_ be added as well - it manages cache lifetimes and expiration.
 
 ```ts title="app/store.ts"
 import { configureStore } from '@reduxjs/toolkit'

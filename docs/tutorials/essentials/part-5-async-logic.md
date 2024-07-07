@@ -326,7 +326,7 @@ export const SinglePostPage = () => {
 }
 ```
 
-```js title="features/posts/EditPostForm.js"
+```ts title="features/posts/EditPostForm.tsx"
 // omit imports
 //highlight-next-line
 import { postUpdated, selectPostById } from './postsSlice'
