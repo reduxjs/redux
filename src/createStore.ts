@@ -14,6 +14,8 @@ import ActionTypes from './utils/actionTypes'
 import isPlainObject from './utils/isPlainObject'
 import { kindOf } from './utils/kindOf'
 
+type NoInfer<T> = [T][T extends any ? 0 : never]
+
 /**
  * @deprecated
  *
@@ -47,7 +49,7 @@ export function createStore<
 >(
   reducer: Reducer<S, A>,
   enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<S, A, UnknownIfNonSpecific<StateExt>> & Ext
+): Store<S, A, UnknownIfNonSpecific<StateExt>> & NoInfer<Ext>
 /**
  * @deprecated
  *
@@ -83,7 +85,7 @@ export function createStore<
   reducer: Reducer<S, A, PreloadedState>,
   preloadedState?: PreloadedState | undefined,
   enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<S, A, UnknownIfNonSpecific<StateExt>> & Ext
+): Store<S, A, UnknownIfNonSpecific<StateExt>> & NoInfer<Ext>
 export function createStore<
   S,
   A extends Action,
@@ -94,7 +96,7 @@ export function createStore<
   reducer: Reducer<S, A, PreloadedState>,
   preloadedState?: PreloadedState | StoreEnhancer<Ext, StateExt> | undefined,
   enhancer?: StoreEnhancer<Ext, StateExt>
-): Store<S, A, UnknownIfNonSpecific<StateExt>> & Ext {
+): Store<S, A, UnknownIfNonSpecific<StateExt>> & NoInfer<Ext> {
   if (typeof reducer !== 'function') {
     throw new Error(
       `Expected the root reducer to be a function. Instead, received: '${kindOf(
