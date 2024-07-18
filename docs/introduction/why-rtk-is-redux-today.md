@@ -79,7 +79,7 @@ export const addTodo = text => ({
 
 export const todoToggled = id => ({
   type: TODO_TOGGLED,
-  payload: { id }
+  payload: id
 })
 
 export const todosReducer = (state = [], action) => {
@@ -92,7 +92,7 @@ export const todosReducer = (state = [], action) => {
       })
     case TODO_TOGGLED:
       return state.map(todo => {
-        if (todo.id !== action.payload.id) return todo
+        if (todo.id !== action.payload) return todo
 
         return {
           ...todo,
