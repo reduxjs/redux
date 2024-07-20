@@ -11,7 +11,9 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 - Using Redux data in multiple React components
 - Organizing logic that dispatches actions
+- Using selectors to look up state values
 - Writing more complex update logic in reducers
+- How to think about Redux actions
 
 :::
 
@@ -135,13 +137,11 @@ export const PostsList = () => {
 
   const renderedPosts = posts.map(post => (
     <article className="post-excerpt" key={post.id}>
-      <h3>{post.title}</h3>
+      <h3>
+        // highlight-next-line
+        <Link to={`/posts/${post.id}`}>{post.title}</Link>
+      </h3>
       <p className="post-content">{post.content.substring(0, 100)}</p>
-      // highlight-start
-      <Link to={`/posts/${post.id}`} className="button muted-button">
-        View Post
-      </Link>
-      // highlight-end
     </article>
   ))
 
@@ -441,6 +441,150 @@ const handleSubmit = (e: React.FormEvent<AddPostFormElements>) => {
 }
 ```
 
+## Writing Selectors for Slices
+
+We now have a couple different components that are looking up a post by ID, and repeating the `state.posts.find()` call. This is duplicate code, and it's always worth _considering_ if we should de-duplicate things. It's also fragile - as we'll see in later sections, we are eventually going to start changing the posts slice state structure. When we do that, we'll have to find each place that we reference `state.posts` and update the logic accordingly. TypeScript will help catch broken code that no longer matches the expected state type by throwing errors at compile time, but it would be nice if we didn't have to keep rewriting our components every time we made a change to the data format in our reducers, and didn't have to repeat logic in the components.
+
+One way to avoid this is to **define reusable selector functions in the slice files**, and have the components use those selectors to extract the data they need instead of repeating the selector logic in each component. That way, if we do change our state structure again, we only need to update the code in the slice file.
+
+### Defining Selector Functions
+
+You've already been writing selector functions every time we called `useAppSelector`, such as `useAppSelector( state => state.posts )`. In that case, the selector is being defined inline. Since it's just a function, we could also write it as:
+
+```ts
+const selectPosts = (state: RootState) => state.posts
+const posts = useAppSelector(selectPosts)
+```
+
+Selectors are typically written as standalone individual functions in a slice file. They normally accept the entire Redux `RootState` as the first argument, and may also accept other arguments as well.
+
+### Extracting Posts Selectors
+
+The `<PostsList>` component needs to read a list of all the posts, and the `<SinglePostPage>` and `<EditPostForm>` components need to look up a single post by its ID. Let's export two small selector functions from `postsSlice.ts` to cover those cases:
+
+```ts title="features/posts/postsSlice.ts"
+import type { RootState } from '@/app/store'
+
+const postsSlice = createSlice(/* omit slice code*/)
+
+export const { postAdded, postUpdated, reactionAdded } = postsSlice.actions
+
+export default postsSlice.reducer
+
+// highlight-start
+export const selectAllPosts = (state: RootState) => state.posts
+
+export const selectPostById = (state: RootState, postId: string) =>
+  state.posts.find(post => post.id === postId)
+//highlight-end
+```
+
+Note that the `state` parameter for these selector functions is the root Redux state object, as it was for the inlined anonymous selectors we wrote directly inside of `useAppSelector`.
+
+We can then use them in the components:
+
+```tsx title="features/posts/PostsList.tsx"
+// omit imports
+// highlight-next-line
+import { selectAllPosts } from './postsSlice'
+
+export const PostsList = () => {
+  // highlight-next-line
+  const posts = useAppSelector(selectAllPosts)
+  // omit component contents
+}
+```
+
+```tsx title="features/posts/SinglePostPage.tsx"
+// omit imports
+//highlight-next-line
+import { selectPostById } from './postsSlice'
+
+export const SinglePostPage = () => {
+  const { postId } = useParams()
+
+  // highlight-next-line
+  const post = useAppSelector(state => selectPostById(state, postId!))
+  // omit component logic
+}
+```
+
+```ts title="features/posts/EditPostForm.tsx"
+// omit imports
+//highlight-next-line
+import { postUpdated, selectPostById } from './postsSlice'
+
+export const EditPostForm = () => {
+  const { postId } = useParams()
+
+  // highlight-next-line
+  const post = useAppSelector(state => selectPostById(state, postId!))
+  // omit component logic
+}
+```
+
+Note that the `postId` we get from `useParams()` is typed as `string | undefined`, but `selectPostById` expects a valid `string` as the argument. We can use the TS `!` operator to tell the TS compiler this value will not be `undefined` at this point in the code. (This can be dangerous, but we can make the assumption because we know the routing setup only shows `<EditPostForm>` if there's a post ID in the URL.)
+
+We'll continue this pattern of writing selectors in slices as we go forward, rather than writing them inline inside of `useAppSelector` in components. Remember, this isn't required, but it's a good pattern to follow!
+
+### Using Selectors Effectively
+
+It's often a good idea to encapsulate data lookups by writing reusable selectors. Ideally, components don't even have to know where in the Redux `state` a value lives - they just use a selector from the slice to access the data.
+
+You can also create "memoized" selectors that can help improve performance by optimizing rerenders and skipping unnecessary recalculations, which we'll look at in a later part of this tutorial.
+
+But, like any abstraction, it's not something you should do _all_ the time, everywhere. Writing selectors means more code to understand and maintain. **Don't feel like you need to write selectors for every single field of your state**. Try starting without any selectors, and add some later when you find yourself looking up the same values in many parts of your application code.
+
+### Optional: Defining Selectors Inside of `createSlice`
+
+We've seen that we can write selectors as standalone functions in slice files. In some cases, you can shorten this a bit by defining selectors directly inside `createSlice` itself.
+
+<DetailedExplanation title="Defining Selectors inside createSlice" >
+
+We've already seen that `createSlice` requires the `name`, `initialState`, and `reducers` fields, and also accepts an optional `extraReducers` field.
+
+If you want to define selectors directly inside of `createSlice`, you can pass in an additional `selectors` field. The `selectors` field should be an object similar to `reducers`, where the keys will be the selector function names, and the values are the selector functions to be generated.
+
+**Note that unlike writing a standalone selector function, the `state` argument to these selectors will be just the _slice state_, and _not_ the entire `RootState`!**.
+
+Here's what it might look like to convert the posts slice selectors to be defined inside of `createSlice`:
+
+```ts
+const postsSlice = createSlice({
+  name: 'posts',
+  initialState,
+  reducers: {
+    /* omit reducer logic */
+  },
+  // highlight-start
+  selectors: {
+    // Note that `state` here is just the `PostsState`!
+    selectAllPosts: state => state,
+    selectPostById: (state, postId: string) => {
+      return state.find(user => post.id === postId)
+    }
+  }
+  // highlight-end
+})
+
+export const { postAdded, postUpdated } = postsSlice.selectors
+
+export default postsSlice.reducer
+
+// highlight-start
+// We've replaced these standalone selectors:
+// export const selectAllPosts = (state: RootState) => state.posts
+
+// export const selectPostById = (state: RootState, postId: string) =>
+//   state.posts.find(post => post.id === postId)
+
+// highlight-end
+```
+
+There _are_ still times you'll need to write selectors as standalone functions outside of `createSlice`. This is especially true if you're calling other selectors that need the entire `RootState` as their argument, in order to make sure the types match up correctly.
+
+</DetailedExplanation>
+
 ## Users and Posts
 
 So far, we only have one slice of state. The logic is defined in `postsSlice.ts`, the data is stored in `state.posts`, and all of our components have been related to the posts feature. Real applications will probably have many different slices of state, and several different "feature folders" for the Redux logic and React components.
@@ -453,6 +597,8 @@ Since the concept of "users" is different than the concept of "posts", we want t
 
 ```ts title="features/users/usersSlice.ts"
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
+import type { RootState } from '@/app/store'
 
 interface User {
   id: string
@@ -472,6 +618,11 @@ const usersSlice = createSlice({
 })
 
 export default usersSlice.reducer
+
+export const selectAllUsers = (state: RootState) => state.users
+
+export const selectUserById = (state: RootState, userId: string | null) =>
+  state.users.find(user => user.id === userId)
 ```
 
 For now, we don't need to actually update the data, so we'll leave the `reducers` field as an empty object. (We'll come back to this in a later section.)
@@ -498,13 +649,29 @@ Now, the root state looks like `{posts, users}`, matching the object we passed i
 
 ### Adding Authors for Posts
 
-Every post in our app was written by one of our users, and every time we add a new post, we should keep track of which user wrote that post.
+Every post in our app was written by one of our users, and every time we add a new post, we should keep track of which user wrote that post. This will need changes for both the Redux state and the `<AddPostForm>` component.
 
-To keep things simpler for this example, we'll update our `<AddPostForm>` component so that we can select a user from a dropdown list, and we'll include that user's ID as part of the post. Once our post objects have a user ID in them, we can use that to look up the user's name and show it in each individual post in the UI.
+First, we need to update the existing `Post` data type to include a `user: string` field that contains the user ID that created the post. We'll also update the existing post entries in `initialState` to have a `post.user` field with one of the example user IDs.
 
-First, we need to update our `postAdded` action creator to accept a user ID as an argument, and include that in the action. (We'll also update the existing post entries in `initialState` to have a `post.user` field with one of the example user IDs.)
+Then, we need to update our existing reducers accordingly The `postAdded` prepare callback needs to accept a user ID as an argument, and include that in the action. Also, we _don't_ want to include the `user` field when we update a post - the only things we need are the `id` of the post that changed, and the new `title` and `content` fields for the updated text. We'll define a `PostUpdate` type that contains just those three fields from `Post`, and use that as the payload for `postUpdated` instead.
 
 ```ts title="features/posts/postsSlice.ts"
+export interface Post {
+  id: string
+  title: string
+  content: string
+  user: string
+}
+
+// highlight-start
+type PostUpdate = Pick<Post, 'id' | 'title' | 'content'>
+
+const initialState: Post[] = [
+  { id: '1', title: 'First Post!', content: 'Hello!', user: '0' },
+  { id: '2', title: 'Second Post', content: 'More text', user: '2' }
+]
+// highlight-end
+
 const postsSlice = createSlice({
   name: 'posts',
   initialState,
@@ -525,8 +692,16 @@ const postsSlice = createSlice({
           }
         }
       }
+    },
+    // highlight-next-line
+    postUpdated(state, action: PayloadAction<PostUpdate>) {
+      const { id, title, content } = action.payload
+      const existingPost = state.find(post => post.id === id)
+      if (existingPost) {
+        existingPost.title = title
+        existingPost.content = content
+      }
     }
-    // other reducers
   }
 })
 ```
@@ -534,12 +709,15 @@ const postsSlice = createSlice({
 Now, in our `<AddPostForm>`, we can read the list of users from the store with `useSelector` and show them as a dropdown. We'll then take the ID of the selected user and pass that to the `postAdded` action creator. While we're at it, we can add a bit of validation logic to our form so that the user can only click the "Save Post" button if the title and content inputs have some actual text in them:
 
 ```tsx title="features/posts/AddPostForm.tsx"
-// omit imports and form typesexport
+// highlight-next-line
+import { selectAllUsers } from '@/features/users/usersSlice'
+
+// omit other imports and form types
 
 const AddPostForm = () => {
   const dispatch = useAppDispatch()
   // highlight-next-line
-  const users = useAppSelector(state => state.users)
+  const users = useAppSelector(selectAllUsers)
 
   const handleSubmit = (e: React.FormEvent<AddPostFormElements>) => {
     // Prevent server submission
@@ -597,14 +775,14 @@ Now, we need a way to show the name of the post's author inside of our post list
 ```tsx title="features/posts/PostAuthor.tsx"
 import { useAppSelector } from '@/app/hooks'
 
+import { selectUserById } from '@/features/users/usersSlice'
+
 interface PostAuthorProps {
   userId: string
 }
 
 export const PostAuthor = ({ userId }: PostAuthorProps) => {
-  const author = useAppSelector(state =>
-    state.users.find(user => user.id === userId)
-  )
+  const author = useAppSelector(state => selectUserById(state, userId))
 
   return <span>by {author?.name ?? 'Unknown author'}</span>
 }
@@ -696,9 +874,9 @@ export const TimeAgo = ({ timestamp }: TimeAgoProps) => {
   }
 
   return (
-    <span title={timestamp}>
+    <time dateTime={timestamp} title={timestamp}>
       &nbsp; <i>{timeAgo}</i>
-    </span>
+    </time>
   )
 }
 ```
@@ -938,6 +1116,8 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
+import { selectAllUsers } from '@/features/users/usersSlice'
+
 import { userLoggedIn } from './authSlice'
 
 interface LoginPageFormFields extends HTMLFormControlsCollection {
@@ -949,7 +1129,7 @@ interface LoginPageFormElements extends HTMLFormElement {
 
 export const LoginPage = () => {
   const dispatch = useAppDispatch()
-  const users = useAppSelector(state => state.users)
+  const users = useAppSelector(selectAllUsers)
   const navigate = useNavigate()
 
   const handleSubmit = (e: React.FormEvent<LoginPageFormElements>) => {
@@ -1063,17 +1243,18 @@ import { Link } from 'react-router-dom'
 
 // highlight-start
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
+
+import { selectCurrentUsername, userLoggedOut } from '@/features/auth/authSlice'
+import { selectUserById } from '@/features/users/usersSlice'
+
 import { UserIcon } from './UserIcon'
-import { userLoggedOut } from '@/features/auth/authSlice'
 // highlight-end
 
 export const Navbar = () => {
   // highlight-start
   const dispatch = useAppDispatch()
-  const username = useAppSelector(state => state.auth.username)
-  const user = useAppSelector(state =>
-    state.users.find(user => user.id === username)
-  )
+  const username = useAppSelector(selectCurrentUsername)
+  const user = useAppSelector(state => selectUserById(state, username))
 
   const isLoggedIn = !!username && !!user
 
@@ -1112,13 +1293,13 @@ export const Navbar = () => {
 }
 ```
 
-While we're at it, we should also switch the `<AddPostForm>` to use the logged-in username from state, instead of showing a user selection dropdown. This can be done by removing all references to the `postAuthor` input field, and adding a `useAppSelector` to read the user ID:
+While we're at it, we should also switch the `<AddPostForm>` to use the logged-in username from state, instead of showing a user selection dropdown. This can be done by removing all references to the `postAuthor` input field, and adding a `useAppSelector` to read the user ID from the `authSlice`:
 
 ```tsx title="features/posts/AddPostForm.tsx"
 export const AddPostForm = () => {
   const dispatch = useAppDispatch()
   // highlight-next-line
-  const userId = useAppSelector((state) => state.auth.username)!
+  const userId = useAppSelector(selectCurrentUsername)!
 
   const handleSubmit = (e: React.FormEvent<AddPostFormElements>) => {
     // Prevent server submission
@@ -1139,14 +1320,15 @@ export const AddPostForm = () => {
 Finally, it also doesn't make sense to allow the current user to edit posts defined by _other_ users. We can update the `<SinglePostPage>` to only show an "Edit Post" button if the post author ID matches the current user ID:
 
 ```tsx title="features/posts/SinglePostPage.tsx"
+// highlight-next-line
+import { selectCurrentUsername } from '@/features/auth/authSlice'
+
 export const SinglePostPage = () => {
   const { postId } = useParams()
 
-  const post = useAppSelector(state =>
-    state.posts.find(post => post.id === postId)
-  )
+  const post = useAppSelector(state => selectPostById(state, postId!))
   // highlight-next-line
-  const user = useAppSelector(state => state.auth.username)
+  const currentUsername = useAppSelector(selectCurrentUsername)!
 
   if (!post) {
     return (
@@ -1157,7 +1339,7 @@ export const SinglePostPage = () => {
   }
 
   // highlight-next-line
-  const canEdit = user === post.user
+  const canEdit = currentUsername === post.user
 
   return (
     <section>
@@ -1182,7 +1364,7 @@ export const SinglePostPage = () => {
 }
 ```
 
-### Clearing Other State on Logout
+## Clearing Other State on Logout
 
 There's one more piece of the auth handling that we need to look at. Right now, if we log in as user A, create a new post, log out, and then log back in as user B, we'll see both the initial example posts and the new post.
 
@@ -1190,7 +1372,7 @@ This is "correct", in that Redux is working as intended for the code we've writt
 
 Given that, it would be good if we can clear out the existing posts state when the current user logs out.
 
-#### Handling Actions in Multiple Slices
+### Handling Actions in Multiple Slices
 
 So far, every time we've wanted to make another state update, we've defined a new Redux case reducer, exported the generated action creator, and dispatched that action from a component. We _could_ do that here. But, we'd end up dispatching two separate Redux actions back-to-back, like:
 
@@ -1208,7 +1390,7 @@ We've already got the `userLoggedOut()` action being dispatched, but that's an a
 
 We mentioned earlier that it helps if we think about the action as **"an event that occurred in the app"**, rather than "a command to set a value". This is a good example of that in practice. We don't _need_ a separate action for `clearUserData`, because there's only one event that occurred - "the user logged out". We just need a way to handle the one `userLoggedOut` action in multiple places, so that we can apply all the relevant state updates at the same time.
 
-#### Using `extraReducers` to Handle Other Actions
+### Using `extraReducers` to Handle Other Actions
 
 Happily, we can! `createSlice` accepts an option called **`extraReducers`**, which can be used to have the slice listen for actions that were defined elsewhere in the app. Any time those other actions are dispatched, this slice can update its own state as well. That means **_many_ different slice reducers can _all_ respond to the same dispatched action, and each slice can update its own state if needed!**
 
@@ -1295,6 +1477,8 @@ We've covered a lot of information and concepts in this section. Let's recap the
 - **Reducers should contain the actual state update logic**
   - Reducers can contain whatever logic is needed to calculate the next state
   - Action objects should contain just enough info to describe what happened
+- **You can write reusable "selector" functions to encapsulate reading values from the Redux state**
+  - Selectors are functions that get the Redux `state` as an argument, and return some data
 - **Actions should be thought of as describing "events that happened", and many reducers can respond to the same dispatched action**
   - Apps should normally only dispatch one action at a time
   - Case reducer names (and actions) should typically be named past-tense, like `postAdded`

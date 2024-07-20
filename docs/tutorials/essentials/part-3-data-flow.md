@@ -107,13 +107,29 @@ We'll start by adding a `src/app/store.ts` file and creating the store.
 
 ```ts title="src/app/store.ts"
 import { configureStore } from '@reduxjs/toolkit'
+import type { Action } from '@reduxjs/toolkit'
+
+interface CounterState {
+  value: number
+}
+
+// An example slice reducer function that shows how a Redux reducer works inside.
+// We'll replace this soon with real app logic.
+function counterReducer(state: CounterState = { value: 0 }, action: Action) {
+  switch (action.type) {
+    // Handle actions here
+    default: {
+      return state
+    }
+  }
+}
 
 // highlight-start
 export const store = configureStore({
   // Pass in the root reducer setup as the `reducer` argument
   reducer: {
-    // An example slice reducer function that returns a fixed state value
-    value: (state: number = 123) => state
+    // Declare that `state.counter` will be updated by the `counterReducer` function
+    counter: counterReducer
   }
 })
 // highlight-end
@@ -121,7 +137,7 @@ export const store = configureStore({
 
 **`configureStore` always requires a `reducer` option**. This should typically be an object containing the individual "slice reducers" for the different parts of the application. (If necessary, you can also create the root reducer function separately and pass that as the `reducer` argument.)
 
-For this first step, we're passing in a mock slice reducer function for the `value` field, to show what the setup looks like. We'll replace this with a real slice reducer in just a minute.
+For this first step, we're passing in a mock slice reducer function for the `counter` slice, to show what the setup looks like. We'll replace this with a real slice reducer for the actual app we want to build in just a minute.
 
 :::tip Setup with Next.js
 
@@ -173,17 +189,21 @@ Now that we have a store, we can use the Redux DevTools extension to view the cu
 
 If you open up your browser's DevTools view (such as by right-clicking anywhere in the page and choosing "Inspect"), you can click on the "Redux" tab. This will show the history of dispatched actions and the current state value:
 
+**[TODO] Update screenshot**
+
 ![Redux DevTools: initial app state](/img/tutorials/essentials/devtools-initial.png)
 
 The current state value should be an object that looks like this:
 
 ```ts
 {
-  value: 123
+  counter: {
+    value: 123
+  }
 }
 ```
 
-That shape was defined by the `reducer` option we passed into `configureStore`: an object, with a field named `value`, and the slice reducer for the `value` field returns a number as its state.
+That shape was defined by the `reducer` option we passed into `configureStore`: an object, with a field named `counter`, and the slice reducer for the `counter` field returns an object like `{value}` as its state.
 
 ### Exporting Store Types
 
@@ -194,11 +214,11 @@ We need to export those types from the `store.ts` file. We'll define the types b
 ```ts title="src/app/store.ts"
 import { configureStore } from '@reduxjs/toolkit'
 
+// omit counter slice setup
+
 export const store = configureStore({
-  // Pass in the root reducer setup as the `reducer` argument
   reducer: {
-    // An example slice reducer function that returns a fixed state value
-    value: (state: number = 123) => state
+    counter: counterReducer
   }
 })
 
@@ -212,7 +232,7 @@ export type RootState = ReturnType<typeof store.getState>
 // highlight-end
 ```
 
-If you hover over the `RootState` type in your editor, you should see `type RootState = { value: number; }`. Since this type is automatically derived from the store definition, all the future changes to the `reducer` setup will automatically be reflected in the `RootState` type as well. This way we only need to define it once, and it will always be accurate.
+If you hover over the `RootState` type in your editor, you should see `type RootState = { counter: CounterState; }`. Since this type is automatically derived from the store definition, all the future changes to the `reducer` setup will automatically be reflected in the `RootState` type as well. This way we only need to define it once, and it will always be accurate.
 
 ### Exporting Typed Hooks
 
@@ -283,10 +303,13 @@ const postsSlice = createSlice({
 export default postsSlice.reducer
 ```
 
-Every time we create a new slice, we need to add its reducer function to our Redux store. We already have a Redux store being created, but right now it doesn't have any data inside. Open up `app/store.ts`, import the `postsReducer` function, and update the call to `configureStore` so that the `postsReducer` is being passed as a reducer field named `posts`:
+Every time we create a new slice, we need to add its reducer function to our Redux store. We already have a Redux store being created, but right now it doesn't have any data inside. Open up `app/store.ts`, import the `postsReducer` function, remove all of the `counter` code, and update the call to `configureStore` so that the `postsReducer` is being passed as a reducer field named `posts`:
 
 ```ts title="app/store.ts"
 import { configureStore } from '@reduxjs/toolkit'
+
+// highlight-next-line
+// Removed the `counterReducer` function, `CounterState` type, and `Action` import
 
 // highlight-next-line
 import postsReducer from '@/features/posts/postsSlice'
@@ -307,7 +330,7 @@ We can confirm that this works by opening the Redux DevTools Extension and looki
 
 ### Showing the Posts List
 
-Now that we have some posts data in our store, we can create a React component that shows the list of posts. All of the code related to our feed posts feature should go in the `posts` folder, so go ahead and create a new file named `PostsList.tsx` in there.
+Now that we have some posts data in our store, we can create a React component that shows the list of posts. All of the code related to our feed posts feature should go in the `posts` folder, so go ahead and create a new file named `PostsList.tsx` in there. (Note that since this is a React component written in TypeScript and using JSX syntax, it needs a `.tsx` file extension for TypeScript to compile it properly)
 
 If we're going to render a list of posts, we need to get the data from somewhere. React components can read data from the Redux store using the `useSelector` hook from the React-Redux library. The "selector functions" that you write will be called with the entire Redux `state` object as a parameter, and should return the specific data that this component needs from the store.
 
@@ -647,11 +670,8 @@ Let's recap what you've learned in this section:
 Here's what the app looks like so far:
 
 <iframe
-  class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/checkpoint-1-postAdded/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
-  title="redux-quick-start-example-app"
-  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+class="codesandbox"
+  src="https://stackblitz.com/github/reduxjs/redux-essentials-example-app/tree/ts-checkpoint-1/?ctl=1&embed=1&file=src%2Ffeatures%2Fposts%2FpostsSlice.ts&terminalHeight=0"
 ></iframe>
 
 ## What's Next?

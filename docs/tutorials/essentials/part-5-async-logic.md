@@ -33,7 +33,7 @@ In this section, we'll convert our social media app to fetch the posts and users
 
 Redux Toolkit includes the [**RTK Query data fetching and caching API**](https://redux-toolkit.js.org/rtk-query/overview). RTK Query is a purpose built data fetching and caching solution for Redux apps, and **can eliminate the need to write _any_ additional Redux logic like thunks or reducers to manage data fetching**. We specifically teach RTK Query as the default approach for data fetching.
 
-RTK Query is built on the same patterns shown in this page, so this section will help you understand the underlying mechanics of how data fetching works with Redux.
+RTK Query is built on the same patterns shown in this page, so **this section will help you understand the underlying mechanics of how data fetching works with Redux**.
 
 We'll cover how to use RTK Query starting in [Part 7: RTK Query Basics](./part-7-rtk-query-basics.md).
 
@@ -147,51 +147,6 @@ store.dispatch(logAndAdd(5))
 
 Thunks are typically written in ["slice" files](./part-2-app-structure.md#redux-slices), since the thunk data fetching is usually conceptually related to a particular slice's update logic. We'll look at a couple different ways to define thunks as we go through this section.
 
-For the thunk arguments, you can explicitly declare them as `(dispatch: AppDispatch, getState: () => RootState)`. Since this is common, you can also define a reusable `AppThunk` type and use that instead:
-
-```ts title="app/store.ts"
-// highlight-next-line
-import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit'
-
-// omit actual store setup
-
-// Infer the type of `store`
-export type AppStore = typeof store
-// Infer the `AppDispatch` type from the store itself
-export type AppDispatch = typeof store.dispatch
-// Same for the `RootState` type
-export type RootState = ReturnType<typeof store.getState>
-// highlight-start
-// Export a reusable type for handwritten thunks
-export type AppThunk = ThunkAction<void, RootState, unknown, Action>
-// highlight-end
-```
-
-Then you can use that to describe the thunk functions you're writing:
-
-```ts title="Example typed thunk"
-// highlight-start
-// Use `AppThunk` as the return type, since we return a thunk function
-const logAndAdd = (amount: number): AppThunk => {
-  // highlight-end
-  return (dispatch, getState) => {
-    const stateBefore = getState()
-    console.log(`Counter before: ${stateBefore.counter}`)
-    dispatch(incrementByAmount(amount))
-    const stateAfter = getState()
-    console.log(`Counter after: ${stateAfter.counter}`)
-  }
-}
-```
-
-:::info Typing Thunks
-
-For more details on defining thunks with TypeScript, see:
-
-- [Type Checking Redux Thunks](../../usage/UsageWithTypescript.md#type-checking-redux-thunks)
-
-:::
-
 ### Writing Async Thunks
 
 Thunks may have async logic inside of them, such as `setTimeout`, `Promise`s, and `async/await`. This makes them a good place to put HTTP calls to a server API.
@@ -204,7 +159,23 @@ Data fetching logic for Redux typically follows a predictable pattern:
 
 These steps are not _required_, but are commonly used. (If all you care about is a successful result, you can just dispatch a single "success" action when the request finishes, and skip the "start" and "failure" actions.)
 
-**Redux Toolkit provides a [`createAsyncThunk`](https://redux-toolkit.js.org/api/createAsyncThunk) API to implement the creation and dispatching of actions describing an async request**, and we'll look at how to use it shortly.
+**Redux Toolkit provides a [`createAsyncThunk`](https://redux-toolkit.js.org/api/createAsyncThunk) API to implement the creation and dispatching of actions describing an async request**.
+
+Basic `createAsyncThunk` usage looks like this:
+
+```ts title="createAsyncThunk example"
+import { createAsyncThunk } from '@reduxjs/toolkit'
+
+export const fetchItemById = createAsyncThunk(
+  'items/fetchItemById',
+  async (itemId: string) => {
+    const item = await someHttpRequest(itemId)
+    return item
+  }
+)
+```
+
+See this details section for more info on how `createAsyncThunk` simplifies the code for dispatching actions for async requests. We'll see how it gets used in practice shortly.
 
 <DetailedExplanation title="Detailed Explanation: Dispatching Request Status Actions in Thunks">
 
@@ -250,205 +221,77 @@ It's also easy to make mistakes with error handling when writing thunk logic you
 
 <br />
 
+### Typing Redux Thunks
+
+#### Typing Handwritten Thunks
+
+If you're writing a thunk by hand, you can declare explicitly type the thunk arguments as `(dispatch: AppDispatch, getState: () => RootState)`. Since this is common, you can also define a reusable `AppThunk` type and use that instead:
+
+```ts title="app/store.ts"
+// highlight-next-line
+import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit'
+
+// omit actual store setup
+
+// Infer the type of `store`
+export type AppStore = typeof store
+// Infer the `AppDispatch` type from the store itself
+export type AppDispatch = typeof store.dispatch
+// Same for the `RootState` type
+export type RootState = ReturnType<typeof store.getState>
+// highlight-start
+// Export a reusable type for handwritten thunks
+export type AppThunk = ThunkAction<void, RootState, unknown, Action>
+// highlight-end
+```
+
+Then you can use that to describe the thunk functions you're writing:
+
+```ts title="Example typed thunk"
+// highlight-start
+// Use `AppThunk` as the return type, since we return a thunk function
+const logAndAdd = (amount: number): AppThunk => {
+  // highlight-end
+  return (dispatch, getState) => {
+    const stateBefore = getState()
+    console.log(`Counter before: ${stateBefore.counter}`)
+    dispatch(incrementByAmount(amount))
+    const stateAfter = getState()
+    console.log(`Counter after: ${stateAfter.counter}`)
+  }
+}
+```
+
+#### Typing `createAsyncThunk`
+
+For `createAsyncThunk` specifically: if your payload function accepts an argument, provide a type for that argument, like `async (userId: string)`.
+
+If you need to access `dispatch` or `getState` inside of `createAsyncThunk, RTK provides a way to define a "pre-typed" version that has the correct `dispatch`and`getState`types built in by calling`createAsyncThunk.withTypes()`, equivalent to how we defined pre-typed versions of `useSelector`and`useDispatch`. We'll create a new `src/app/withTypes` files, and export it from there:
+
+```ts title="app/withTypes.ts"
+import { createAsyncThunk } from '@reduxjs/toolkit'
+
+import type { RootState, AppDispatch } from './store'
+
+export const createAppAsyncThunk = createAsyncThunk.withTypes<{
+  state: RootState
+  dispatch: AppDispatch
+}>()
+```
+
+:::info Typing Thunks
+
+For more details on defining thunks with TypeScript, see:
+
+- [Type Checking Redux Thunks](../../usage/UsageWithTypescript.md#type-checking-redux-thunks)
+
+:::
+
 ## Loading Posts
 
 So far, our `postsSlice` has used some hardcoded sample data as its initial state. We're going to switch that to start with an empty array of posts instead, and then fetch a list of posts from the server.
 
 In order to do that, we're going to have to change the structure of the state in our `postsSlice`, so that we can keep track of the current state of the API request.
-
-### Extracting Selectors for Slices
-
-Right now, the `postsSlice` state is a single array of `posts`. We need to change that to be an object that has the `posts` array, plus the loading state fields.
-
-Meanwhile, the UI components like `<PostsList>` are trying to read posts from `state.posts` in their `useSelector` hooks, assuming that field is an array. We need to change those locations also to match the new data.
-
-It would be nice if we didn't have to keep rewriting our components every time we made a change to the data format in our reducers. One way to avoid this is to **define reusable selector functions in the slice files**, and have the components use those selectors to extract the data they need instead of repeating the selector logic in each component. That way, if we do change our state structure again, we only need to update the code in the slice file.
-
-#### Defining Selector Functions
-
-You've already been writing selector functions every time we called `useAppSelector`, such as `useAppSelector( state => state.posts )`. In that case, the selector is being defined inline. Since it's just a function, we could also write it as:
-
-```ts
-const selectPosts = (state: RootState) => state.posts
-const posts = useAppSelector(selectPosts)
-```
-
-Selectors are typically written as standalone individual functions in a slice file. They normally accept the entire Redux `RootState` as the first argument, and may also accept other arguments as well.
-
-#### Writing Posts Selectors
-
-The `<PostsList>` component needs to read a list of all the posts, and the `<SinglePostPage>` and `<EditPostForm>` components need to look up a single post by its ID. Let's export two small selector functions from `postsSlice.ts` to cover those cases:
-
-```ts title="features/posts/postsSlice.ts"
-import type { RootState } from '@/app/store'
-
-const postsSlice = createSlice(/* omit slice code*/)
-
-export const { postAdded, postUpdated, reactionAdded } = postsSlice.actions
-
-export default postsSlice.reducer
-
-// highlight-start
-export const selectAllPosts = (state: RootState) => state.posts
-
-export const selectPostById = (state: RootState, postId: string) =>
-  state.posts.find(post => post.id === postId)
-//highlight-end
-```
-
-Note that the `state` parameter for these selector functions is the root Redux state object, as it was for the inlined anonymous selectors we wrote directly inside of `useAppSelector`.
-
-We can then use them in the components:
-
-```tsx title="features/posts/PostsList.tsx"
-// omit imports
-// highlight-next-line
-import { selectAllPosts } from './postsSlice'
-
-export const PostsList = () => {
-  // highlight-next-line
-  const posts = useAppSelector(selectAllPosts)
-  // omit component contents
-}
-```
-
-```tsx title="features/posts/SinglePostPage.tsx"
-// omit imports
-//highlight-next-line
-import { selectPostById } from './postsSlice'
-
-export const SinglePostPage = () => {
-  const { postId } = useParams()
-
-  // highlight-next-line
-  const post = useAppSelector(state => selectPostById(state, postId!))
-  // omit component logic
-}
-```
-
-```ts title="features/posts/EditPostForm.tsx"
-// omit imports
-//highlight-next-line
-import { postUpdated, selectPostById } from './postsSlice'
-
-export const EditPostForm = ({ match }) => {
-  const { postId } = match.params
-
-  // highlight-next-line
-  const post = useSelector(state => selectPostById(state, postId))
-  // omit component logic
-}
-```
-
-#### Extracting Auth and Users Selectors
-
-While we're at it, we also have several more components that have inlined selectors for accessing `state.auth` and `state.users`. That includes multiple components that are checking the current logged-in username or getting the current user object.
-
-We can extract those into reusable selectors in their respective slices as well:
-
-```ts title="features/auth/authSlice.ts"
-export default authSlice.reducer
-
-// highlight-next-line
-export const selectCurrentUsername = (state: RootState) => state.auth.username
-```
-
-```ts title="features/users/usersSlice.ts"
-// highlight-start
-import type { RootState } from '@/app/store'
-
-import { selectCurrentUsername } from '../auth/authSlice'
-// highlight-end
-
-// omit slice definition
-
-export default usersSlice.reducer
-
-// highlight-start
-export const selectAllUsers = (state: RootState) => state.users
-
-export const selectUserById = (state: RootState, userId?: string) => {
-  return state.users.find(user => user.id === userId)
-}
-
-export const selectCurrentUser = (state: RootState) => {
-  const currentUsername = selectCurrentUsername(state)
-  if (currentUsername) {
-    return selectUserById(state, currentUsername)
-  }
-}
-// highlight-end
-```
-
-Notice that `selectCurrentUser` actually makes use of the `selectCurrentUsername` selector from the auth slice! Since selectors are just normal functions, they can call each other to look up necessary pieces of data from the state.
-
-Once we've written these new selectors, we can replace all of the remaining inlined selectors in our components with the matching selectors from the slice files.
-
-#### Using Selectors Effectively
-
-It's often a good idea to encapsulate data lookups by writing reusable selectors. Ideally, components don't even have to know where in the Redux `state` a value lives - they just use a selector from the slice to access the data.
-
-You can also create "memoized" selectors that can help improve performance by optimizing rerenders and skipping unnecessary recalculations, which we'll look at in a later part of this tutorial.
-
-But, like any abstraction, it's not something you should do _all_ the time, everywhere. Writing selectors means more code to understand and maintain. **Don't feel like you need to write selectors for every single field of your state**. Try starting without any selectors, and add some later when you find yourself looking up the same values in many parts of your application code.
-
-#### Optional: Defining Selectors Inside of `createSlice`
-
-We've seen that we can write selectors as standalone functions in slice files. In some cases, you can shorten this a bit by defining selectors directly inside `createSlice` itself.
-
-<DetailedExplanation title="Defining Selectors inside createSlice" >
-
-We've already seen that `createSlice` requires the `name`, `initialState`, and `reducers` fields, and also accepts an optional `extraReducers` field.
-
-If you want to define selectors directly inside of `createSlice`, you can pass in an additional `selectors` field. The `selectors` field should be an object similar to `reducers`, where the keys will be the selector function names, and the values are the selector functions to be generated.
-
-**Note that unlike writing a standalone selector function, the `state` argument to these selectors will be just the _slice state_, and _not_ the entire `RootState`!**.
-
-There _are_ still times you'll need to write selectors as standalone functions outside of `createSlice`. This is especially true if you're calling other selectors that need the entire `RootState` as their argument, in order to make sure the types match up correctly.
-
-Here's what it might look like to convert the users slice selectors to be defined inside of `createSlice`:
-
-```ts
-const usersSlice = createSlice({
-  name: 'users',
-  initialState,
-  reducers: {},
-  // highlight-start
-  selectors: {
-    // Note that `state` here is just the `UsersState`!
-    selectAllUsers: state => state,
-    selectUserById: (state, userId?: string) => {
-      return state.find(user => user.id === userId)
-    }
-  }
-  // highlight-end
-})
-
-export const { selectAllUsers, selectUserById } = usersSlice.selectors
-
-export default usersSlice.reducer
-
-// highlight-start
-// We've replaced these standalone selectors:
-// export const selectAllUsers = (state: RootState) => state.users
-
-// export const selectUserById = (state: RootState, userId?: string) => {
-//   return state.users.find((user) => user.id === userId)
-// }
-
-// But this selector still needs to be written standalone,
-// because `selectCurrentUsername` is typed to need `RootState`
-// as its argument:
-export const selectCurrentUser = (state: RootState) => {
-  const currentUsername = selectCurrentUsername(state)
-  if (currentUsername) {
-    return selectUserById(state, currentUsername)
-  }
-}
-// highlight-end
-```
-
-</DetailedExplanation>
 
 ### Loading State for Requests
 
@@ -464,16 +307,16 @@ We _could_ track that information using some booleans, like `isLoading: true`, b
 ```ts
 {
   // Multiple possible status enum values
-  status: 'idle' | 'loading' | 'failed' | 'succeeded',
+  status: 'idle' | 'pending' | 'succeeded' | 'rejected',
   error: string | null
 }
 ```
 
-These fields would exist alongside whatever actual data is being stored. These specific string state names aren't required - feel free to use other names if you want, like `'pending'` instead of `'loading'`, or `'complete'` instead of `'succeeded'`.
+These fields would exist alongside whatever actual data is being stored. These specific string state names aren't required - feel free to use other names if you want, like `'loading'` instead of `'pending'`, or `'completed'` instead of `'succeeded'`.
 
 We can use this information to decide what to show in our UI as the request progresses, and also add logic in our reducers to prevent cases like loading data twice.
 
-Let's update our `postsSlice` to use this pattern to track loading state for a "fetch posts" request. We'll switch our state from being an array of posts by itself, to look like `{posts, status, error}`. We'll also remove the old sample post entries from our initial state. As part of this change, we also need to change any uses of `state` as an array to be `state.posts` instead, because the array is now one level deeper:
+Let's update our `postsSlice` to use this pattern to track loading state for a "fetch posts" request. We'll switch our state from being an array of posts by itself, to look like `{posts, status, error}`. We'll also remove the old sample post entries from our initial state, and add a couple new selectors for the loading and error fields:
 
 ```ts title="features/posts/postsSlice.ts"
 import { createSlice, nanoid } from '@reduxjs/toolkit'
@@ -483,7 +326,7 @@ import { createSlice, nanoid } from '@reduxjs/toolkit'
 // highlight-start
 interface PostsState {
   posts: Post[]
-  status: 'idle' | 'pending' | 'failed' | 'succeeded'
+  status: 'idle' | 'pending' | 'succeeded' | 'rejected'
   error: string | null
 }
 
@@ -543,12 +386,18 @@ export const { postAdded, postUpdated, reactionAdded } = postsSlice.actions
 export default postsSlice.reducer
 
 // highlight-start
+
 export const selectAllPosts = (state: RootState) => state.posts.posts
 
 export const selectPostById = (state: RootState, postId: string) =>
   state.posts.posts.find(post => post.id === postId)
+
+export const selectPostsStatus = (state: RootState) => state.posts.status
+export const selectPostsError = (state: RootState) => state.posts.error
 // highlight-end
 ```
+
+As part of this change, we also need to change any uses of `state` as an array to be `state.posts` instead, because the array is now one level deeper.
 
 Yes, this _does_ mean that we now have a nested object path that looks like `state.posts.posts`, which is somewhat repetitive and silly :) We _could_ change the nested array name to be `items` or `data` or something if we wanted to avoid that, but we'll leave it as-is for now.
 
@@ -559,15 +408,18 @@ Redux Toolkit's `createAsyncThunk` API generates thunks that automatically dispa
 Let's start by adding a thunk that will make an HTTP request to retrieve a list of posts. We'll import the `client` utility from the `src/api` folder, and use that to make a request to `'/fakeApi/posts'`.
 
 ```ts title="features/posts/postsSlice.ts"
-// highlight-next-line
-import { createSlice, nanoid, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
 // highlight-next-line
 import { client } from '@/api/client'
+
+import type { RootState } from '@/app/store'
+//highlight-next-line
+import { createAppAsyncThunk } from '@/app/withTypes'
 
 // omit other imports and types
 
 // highlight-start
-export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
+export const fetchPosts = createAppAsyncThunk('posts/fetchPosts', async () => {
   const response = await client.get<Post[]>('/fakeApi/posts')
   return response.data
 })
@@ -587,13 +439,15 @@ const initialState: PostsState = {
 
 The payload creator will usually make an HTTP request of some kind, and can either return the `Promise` from the HTTP request directly, or extract some data from the API response and return that. We typically write this using the JS `async/await` syntax, which lets us write functions that use promises while using standard `try/catch` logic instead of `somePromise.then()` chains.
 
-In this case, we pass in `'posts/fetchPosts'` as the action type prefix. Our payload creation callback waits for the API call to return a response. The response object looks like `{data: []}`, and we want our dispatched Redux action to have a payload that is _just_ the array of posts. So, we extract `response.data`, and return that from the callback.
+In this case, we pass in `'posts/fetchPosts'` as the action type prefix.
+
+In this case, the payload creation callback for `fetchPosts` doesn't need any arguments, and all it needs to do is wait for the API call to return a response. The response object looks like `{data: []}`, and we want our dispatched Redux action to have a payload that is _just_ the array of posts. So, we extract `response.data`, and return that from the callback.
 
 If we try calling `dispatch(fetchPosts())`, the `fetchPosts` thunk will first dispatch an action type of `'posts/fetchPosts/pending'`:
 
 ![`createAsyncThunk`: posts pending action](/img/tutorials/essentials/devtools-posts-pending.png)
 
-We can listen for this action in our reducer and mark the request status as `'loading'`.
+We can listen for this action in our reducer and mark the request status as `'pending'`.
 
 Once the `Promise` resolves, the `fetchPosts` thunk takes the `response.data` array we returned from the callback, and dispatches a `'posts/fetchPosts/fulfilled'` action containing the posts array as `action.payload`:
 
@@ -688,13 +542,13 @@ import { TimeAgo } from '@/components/TimeAgo'
 import { PostAuthor } from './PostAuthor'
 import { ReactionButtons } from './ReactionButtons'
 // highlight-next-line
-import { selectAllPosts, fetchPosts } from './postsSlice'
+import { fetchPosts, selectAllPosts, selectPostsStatus } from './postsSlice'
 
 export const PostsList = () => {
   const dispatch = useAppDispatch()
   // highlight-start
   const posts = useAppSelector(selectAllPosts)
-  const postStatus = useAppSelector(state => state.posts.status)
+  const postStatus = useAppSelector(selectPostsStatus)
 
   useEffect(() => {
     if (postStatus === 'idle') {
@@ -709,7 +563,7 @@ export const PostsList = () => {
 
 And with that, we should now see a fresh list of posts showing up after we log in to our app!
 
-**TODO Lorem ipsum screenshot here**
+**[TODO] Lorem ipsum screenshot here**
 
 #### Avoiding Duplicate Fetches
 
@@ -717,11 +571,11 @@ The good news is we've successfully fetched those post objects from our mock ser
 
 Unfortunately, we've got a problem. Right now our posts list is showing duplicates of each post:
 
-**TODO Duplicate post screenshot here**
+**[TODO] Duplicate post screenshot here**
 
 In fact, if we look at the Redux DevTools, we can see _two_ sets of `'pending'` and `'fulfilled'` actions were dispatched:
 
-**TODO Duplicate actions screenshot here**
+**[TODO] Duplicate actions screenshot here**
 
 Why is that? Didn't we just add a check for `postStatus === 'idle'`? Shouldn't that be enough to make sure we only dispatch the thunk once?
 
@@ -745,45 +599,29 @@ We could write some complicated logic with the `useRef` hook to track if this co
 
 The last option would be to use the actual `state.posts.status` value from the Redux state to check if there's already a request in progress, and have the thunk itself bail out if that's the case. Fortunately, `createAsyncThunk` gives us a way to do this.
 
-#### Typing `createAsyncThunk`
+#### Checking Async Thunk Conditions
 
 `createAsyncThunk` accepts an optional `condition` callback we can use to do that check. If provided, it runs at the start of the thunk call, and it will cancel the entire thunk if `condition` returns `false.`
 
-When we do this, we also need to pass some more TS types into the `createAsyncThunk` call. Our `fetchPosts` thunk currently takes no argument, and returns a `Post[]` list. We didn't declare that explicitly, but TypeScript inferred it because the return value of the payload callback was a `Post[]` value.
-
-In order to write this `condition` callback, we need to call `getState()` inside of the thunk. That means we also need to tell TypeScript what the right TS type is for the `state` value.
-
-`createAsyncThunk` accepts two primary and one optional generic arguments: `createAsyncThunk<ReturnType, ArgumentType, OptionalTypes>()`. In this case, we need to provide all three in order to pass in the specific `state` type:
-
-- The return type is `Post[]`
-- This thunk accepts no arguments, so the argument type is `void`
-- The only optional type we need to provide is `state: RootState`
-
-Then, we can provide the `condition` option, check the value of `state.posts.status`, and return `false` if it's not `'idle'`:
+In this case, we know that we want to avoid running the thunk if the `state.posts.status` field is `'idle'`. We already have a `selectPostsStatus` selector that we can use here, so we can add the `condition` option and check that value:
 
 ```ts title="features/posts/postsSlice.ts
-/// highlight-start
-export const fetchPosts = createAsyncThunk<
-  Post[],
-  void,
-  { state: RootState }
-  // highlight-end
->(
+export const fetchPosts = createAppAsyncThunk(
   'posts/fetchPosts',
   async () => {
     const response = await client.get<Post[]>('/fakeApi/posts')
     return response.data
   },
-  // highlight-start
+  /// highlight-start
   {
     condition(arg, thunkApi) {
-      const { posts } = thunkApi.getState()
-      if (posts.status !== 'idle') {
+      const postsStatus = selectPostsStatus(thunkApi.getState())
+      if (postsStatus !== 'idle') {
         return false
       }
     }
   }
-  // highlight-start
+  // highlight-end
 )
 ```
 
@@ -1259,14 +1097,12 @@ As a reminder, here's what we covered in this section:
 
 :::tip Summary
 
-- **You can write reusable "selector" functions to encapsulate reading values from the Redux state**
-  - Selectors are functions that get the Redux `state` as an argument, and return some data
 - **Redux uses plugins called "middleware" to enable async logic**
   - The standard async middleware is called `redux-thunk`, which is included in Redux Toolkit
   - Thunk functions receive `dispatch` and `getState` as arguments, and can use those as part of async logic
 - **You can dispatch additional actions to help track the loading status of an API call**
   - The typical pattern is dispatching a "pending" action before the call, then either a "success" containing the data or a "failure" action containing the error
-  - Loading state should usually be stored as an enum, like `'idle' | 'loading' | 'succeeded' | 'failed'`
+  - Loading state should usually be stored as an enum, like `'idle' | 'pending' | 'succeeded' | 'rejected'`
 - **Redux Toolkit has a `createAsyncThunk` API that dispatches these actions for you**
   - `createAsyncThunk` accepts a "payload creator" callback that should return a `Promise`, and generates `pending/fulfilled/rejected` action types automatically
   - Generated action creators like `fetchPosts` dispatch those actions based on the `Promise` you return
