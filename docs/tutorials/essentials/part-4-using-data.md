@@ -558,10 +558,11 @@ const postsSlice = createSlice({
   },
   // highlight-start
   selectors: {
-    // Note that `state` here is just the `PostsState`!
-    selectAllPosts: state => state,
-    selectPostById: (state, postId: string) => {
-      return state.find(user => post.id === postId)
+    // Note that these selectors are given just the `PostsState`
+    // as an argument, not the entire `RootState`
+    selectAllPosts: postsState => postsState,
+    selectPostById: (postsState, postId: string) => {
+      return postsState.find(user => post.id === postId)
     }
   }
   // highlight-end
