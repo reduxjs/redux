@@ -453,7 +453,7 @@ Here's how our code looks with all the slices converted:
 
 We've seen how we can [write thunks that dispatch "loading", "request succeeded", and "request failed" actions](./part-7-standard-patterns.md#loading-state-enum-values). We had to write action creators, action types, _and_ reducers to handle those cases.
 
-Because this pattern is so common, **Redux Toolkit has a `createAsyncThunk` API that will generate these thunks for us**. It also generates the action types and action creators for those different request status actions, and dispatches those actions automatically based on the resulting `Promise`.
+Because this pattern is so common, **Redux Toolkit has a `createAsyncThunk` API that will generate these thunks for us**. It also generates the action types and action creators for those different request status actions, and dispatches those actions automatically based on the resulting Promise.
 
 :::tip
 
@@ -470,7 +470,7 @@ Let's replace our `fetchTodos` thunk by generating a thunk with `createAsyncThun
 `createAsyncThunk` accepts two arguments:
 
 - A string that will be used as the prefix for the generated action types
-- A "payload creator" callback function that should return a `Promise`. This is often written using the `async/await` syntax, since `async` functions automatically return a promise.
+- A "payload creator" callback function that should return a Promise. This is often written using the `async/await` syntax, since `async` functions automatically return a promise.
 
 ```js title="src/features/todos/todosSlice.js"
 // highlight-next-line
@@ -579,7 +579,7 @@ While we won't cover `createAsyncThunk` in more detail here, a few other quick n
 
 - You can only pass one argument to the thunk when you dispatch it. If you need to pass multiple values, pass them in a single object
 - The payload creator will receive an object as its second argument, which contains `{getState, dispatch}`, and some other useful values
-- The thunk dispatches the `pending` action before running your payload creator, then dispatches either `fulfilled` or `rejected` based on whether the `Promise` you return succeeds or fails
+- The thunk dispatches the `pending` action before running your payload creator, then dispatches either `fulfilled` or `rejected` based on whether the Promise you return succeeds or fails
 
 ## Normalizing State
 

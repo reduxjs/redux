@@ -149,7 +149,7 @@ Thunks are typically written in ["slice" files](./part-2-app-structure.md#redux-
 
 ### Writing Async Thunks
 
-Thunks may have async logic inside of them, such as `setTimeout`, `Promise`s, and `async/await`. This makes them a good place to put HTTP calls to a server API.
+Thunks may have async logic inside of them, such as `setTimeout`, Promises, and `async/await`. This makes them a good place to put HTTP calls to a server API.
 
 Data fetching logic for Redux typically follows a predictable pattern:
 
@@ -264,9 +264,9 @@ const logAndAdd = (amount: number): AppThunk => {
 
 #### Typing `createAsyncThunk`
 
-For `createAsyncThunk` specifically: if your payload function accepts an argument, provide a type for that argument, like `async (userId: string)`.
+For `createAsyncThunk` specifically: if your payload function accepts an argument, **provide a type for that argument, like `async (userId: string)`**. You do not need to provide a return type by default - TS will infer the return type automatically.
 
-If you need to access `dispatch` or `getState` inside of `createAsyncThunk, RTK provides a way to define a "pre-typed" version that has the correct `dispatch`and`getState`types built in by calling`createAsyncThunk.withTypes()`, equivalent to how we defined pre-typed versions of `useSelector`and`useDispatch`. We'll create a new `src/app/withTypes` files, and export it from there:
+If you need to access `dispatch` or `getState` inside of `createAsyncThunk`, RTK provides a way to define a "pre-typed" version that has the correct `dispatch` and `getState`types built in by calling `createAsyncThunk.withTypes()`, equivalent to how we defined pre-typed versions of `useSelector` and `useDispatch`. We'll create a new `src/app/withTypes` files, and export it from there:
 
 ```ts title="app/withTypes.ts"
 import { createAsyncThunk } from '@reduxjs/toolkit'
@@ -435,9 +435,9 @@ const initialState: PostsState = {
 `createAsyncThunk` accepts two arguments:
 
 - A string that will be used as the prefix for the generated action types
-- A "payload creator" callback function that should return a `Promise` containing some data, or a rejected `Promise` with an error
+- A "payload creator" callback function that should return a Promise containing some data, or a rejected Promise with an error
 
-The payload creator will usually make an HTTP request of some kind, and can either return the `Promise` from the HTTP request directly, or extract some data from the API response and return that. We typically write this using the JS `async/await` syntax, which lets us write functions that use promises while using standard `try/catch` logic instead of `somePromise.then()` chains.
+The payload creator will usually make an HTTP request of some kind, and can either return the Promise from the HTTP request directly, or extract some data from the API response and return that. We typically write this using the JS `async/await` syntax, which lets us write functions that use promises while using standard `try/catch` logic instead of `somePromise.then()` chains.
 
 In this case, we pass in `'posts/fetchPosts'` as the action type prefix.
 
@@ -449,7 +449,7 @@ If we try calling `dispatch(fetchPosts())`, the `fetchPosts` thunk will first di
 
 We can listen for this action in our reducer and mark the request status as `'pending'`.
 
-Once the `Promise` resolves, the `fetchPosts` thunk takes the `response.data` array we returned from the callback, and dispatches a `'posts/fetchPosts/fulfilled'` action containing the posts array as `action.payload`:
+Once the Promise resolves, the `fetchPosts` thunk takes the `response.data` array we returned from the callback, and dispatches a `'posts/fetchPosts/fulfilled'` action containing the posts array as `action.payload`:
 
 ![`createAsyncThunk`: posts pending action](/img/tutorials/essentials/devtools-posts-fulfilled.png)
 
@@ -516,7 +516,7 @@ const postsSlice = createSlice({
 })
 ```
 
-We'll handle all three action types that could be dispatched by the thunk, based on the `Promise` we returned:
+We'll handle all three action types that could be dispatched by the thunk, based on the Promise we returned:
 
 - When the request starts, we'll set the `status` enum to `'pending'`
 - If the request succeeds, we mark the `status` as `'succeeded'`, and add the fetched posts to `state.posts`
@@ -612,7 +612,7 @@ export const fetchPosts = createAppAsyncThunk(
     const response = await client.get<Post[]>('/fakeApi/posts')
     return response.data
   },
-  /// highlight-start
+  // highlight-start
   {
     condition(arg, thunkApi) {
       const postsStatus = selectPostsStatus(thunkApi.getState())
@@ -806,7 +806,7 @@ export const createAppSlice = buildCreateSlice({
 
 That gives you a version of `createSlice` with the ability to write thunks inside.
 
-Finally, we can use that `createAppSlice` method to define our `postsSlice` with the `fetchPosts` thunk inside. When we do that, a couple other things changeg:
+Finally, we can use that `createAppSlice` method to define our `postsSlice` with the `fetchPosts` thunk inside. When we do that, a couple other things change:
 
 - We can't pass in the `RootState` generic directly, so we have to do `getState() as RootState` to cast it
 - We can pass in all of the reducers that handle the thunk actions as part of the options to `create.asyncThunk()`, and remove those from the `extraReducers` field:
@@ -846,7 +846,7 @@ const postsSlice = createAppSlice({
             state.posts.push(...action.payload)
           },
           rejected: (state, action) => {
-            state.status = 'failed'
+            state.status = 'rejected'
             state.error = action.error.message ?? 'Unknown Error'
           }
         }
@@ -1104,8 +1104,8 @@ As a reminder, here's what we covered in this section:
   - The typical pattern is dispatching a "pending" action before the call, then either a "success" containing the data or a "failure" action containing the error
   - Loading state should usually be stored as an enum, like `'idle' | 'pending' | 'succeeded' | 'rejected'`
 - **Redux Toolkit has a `createAsyncThunk` API that dispatches these actions for you**
-  - `createAsyncThunk` accepts a "payload creator" callback that should return a `Promise`, and generates `pending/fulfilled/rejected` action types automatically
-  - Generated action creators like `fetchPosts` dispatch those actions based on the `Promise` you return
+  - `createAsyncThunk` accepts a "payload creator" callback that should return a Promise, and generates `pending/fulfilled/rejected` action types automatically
+  - Generated action creators like `fetchPosts` dispatch those actions based on the Promise you return
   - You can listen for these action types in `createSlice` using the `extraReducers` field, and update the state in reducers based on those actions.
   - `createAsyncThunk` has a `condition` option that can be used to cancel a request based on the Redux state
   - Thunks can return promises. For `createAsyncThunk` specifically, you can `await dispatch(someThunk()).unwrap()` to handle the request success or failure at the component level.

@@ -639,7 +639,7 @@ Mutation hooks return an array with two values:
 
 We can replace the existing thunk dispatch and component loading state with the trigger function and `isLoading` flag from the `useAddNewPostMutation` hook, and the rest of the component stays the same.
 
-As with the previous thunk dispatch, we call `addNewPost` with the initial post object. This returns a special `Promise` with a `.unwrap()` method, and we can `await addNewPost().unwrap()` to handle any potential errors with a standard `try/catch` block.
+As with the previous thunk dispatch, we call `addNewPost` with the initial post object. This returns a special Promise with a `.unwrap()` method, and we can `await addNewPost().unwrap()` to handle any potential errors with a standard `try/catch` block.
 
 ## Refreshing Cached Data
 

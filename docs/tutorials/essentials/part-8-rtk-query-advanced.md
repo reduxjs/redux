@@ -880,7 +880,7 @@ export const apiSlice = createApi({
 })
 ```
 
-The `onQueryStarted` handler receives two parameters. The first is the cache key `arg` that was passed when the request started. The second is an object that contains some of the same fields as the `thunkApi` in `createAsyncThunk` ( `{dispatch, getState, extra, requestId}`), but also a `Promise` called `queryFulfilled`. This `Promise` will resolve when the request returns, and either fulfill or reject based on the request.
+The `onQueryStarted` handler receives two parameters. The first is the cache key `arg` that was passed when the request started. The second is an object that contains some of the same fields as the `thunkApi` in `createAsyncThunk` ( `{dispatch, getState, extra, requestId}`), but also a Promise called `queryFulfilled`. This Promise will resolve when the request returns, and either fulfill or reject based on the request.
 
 The API slice object includes a `updateQueryData` util function that lets us update cached values. It takes three arguments: the name of the endpoint to update, the same cache key value used to identify the specific cached data, and a callback that updates the cached data. **`updateQueryData` uses Immer, so you can "mutate" the drafted cache data the same way you would in `createSlice`**.
 
