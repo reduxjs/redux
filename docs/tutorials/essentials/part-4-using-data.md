@@ -1186,11 +1186,14 @@ import { PostsMainPage } from './features/posts/PostsMainPage'
 import { SinglePostPage } from './features/posts/SinglePostPage'
 import { EditPostForm } from './features/posts/EditPostForm'
 
+// highlight-next-line
+import { selectCurrentUsername } from './features/auth/authSlice'
+
 // highlight-start
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const user = useAppSelector(state => state.auth.username)
+  const username = useAppSelector(selectCurrentUsername)
 
-  if (!user) {
+  if (!username) {
     return <Navigate to="/" replace />
   }
 
@@ -1237,7 +1240,25 @@ We should now see both sides of the auth behavior working:
 
 Since we now know who is logged in while using the app, we can show the user's actual name in the navbar. We should also give them a way to log out as well, by adding a "Log Out" button.
 
-As with the other features we've built, we'll select the relevant state (the username and corresponding user object) from the store, display the values, and dispatch the `userLoggedOut()` action when they click the "Log Out" button:
+We need to get the current user object from the store so we can read `user.name` for display. We can do that by first getting the current username from the auth slice, then using that to look up the right user object. This seems like a thing we might want to do in a few places, so this is a good time to write it as a reusable `selectCurrentUser` selector. We can put that in `usersSlice.ts`, but have it import and rely on the `selectCurrentUsername` from `authSlice.ts`:
+
+```ts title="features/users/usersSlice.ts"
+// highlight-next-line
+import { selectCurrentUsername } from '@/features/auth/authSlice'
+
+// omit the rest of the slice and selectors
+
+// highlight-start
+export const selectCurrentUser = (state: RootState) => {
+  const currentUsername = selectCurrentUsername(state)
+  return selectUserById(state, currentUsername)
+}
+// highlight-end
+```
+
+It's often useful to compose selectors together and use one selector inside of another. In this case, we can use both `selectCurrentUsername` and `selectUserById` together.
+
+As with the other features we've built, we'll select the relevant state (the current user object) from the store, display the values, and dispatch the `userLoggedOut()` action when they click the "Log Out" button:
 
 ```tsx title="components/Navbar.tsx"
 import { Link } from 'react-router-dom'
@@ -1245,8 +1266,8 @@ import { Link } from 'react-router-dom'
 // highlight-start
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 
-import { selectCurrentUsername, userLoggedOut } from '@/features/auth/authSlice'
-import { selectUserById } from '@/features/users/usersSlice'
+import { userLoggedOut } from '@/features/auth/authSlice'
+import { selectCurrentUser } from '@/features/users/usersSlice'
 
 import { UserIcon } from './UserIcon'
 // highlight-end
@@ -1254,10 +1275,9 @@ import { UserIcon } from './UserIcon'
 export const Navbar = () => {
   // highlight-start
   const dispatch = useAppDispatch()
-  const username = useAppSelector(selectCurrentUsername)
-  const user = useAppSelector(state => selectUserById(state, username))
+  const user = useAppSelector(selectCurrentUser)
 
-  const isLoggedIn = !!username && !!user
+  const isLoggedIn = !!user
 
   let navContent: React.ReactNode = null
 
