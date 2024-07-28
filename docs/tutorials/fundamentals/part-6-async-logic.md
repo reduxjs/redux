@@ -251,7 +251,7 @@ For now, let's try putting this directly in `index.js`:
 
 ```js title="src/index.js"
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import './index.css'
 import App from './App'
@@ -265,13 +265,14 @@ import { fetchTodos } from './features/todos/todosSlice'
 store.dispatch(fetchTodos)
 // highlight-end
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('root'))
+
+root.render(
   <React.StrictMode>
     <Provider store={store}>
       <App />
     </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 )
 ```
 

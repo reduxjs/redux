@@ -68,7 +68,7 @@ The Redux template for CRA comes with Redux Toolkit and React-Redux already conf
 - Wrap your root React component with the `<Provider>` component from React-Redux, like:
 
 ```jsx
-ReactDOM.render(
+root.render(
   <Provider store={store}>
     <App />
   </Provider>,

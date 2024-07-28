@@ -961,13 +961,14 @@ async function start() {
   // highlight-next-line
   store.dispatch(fetchUsers())
 
-  ReactDOM.render(
+  const root = createRoot(document.getElementById('root')!)
+
+  root.render(
     <React.StrictMode>
       <Provider store={store}>
         <App />
       </Provider>
-    </React.StrictMode>,
-    document.getElementById('root')
+    </React.StrictMode>
   )
 }
 
