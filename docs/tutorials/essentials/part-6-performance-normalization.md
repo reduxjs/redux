@@ -1113,11 +1113,11 @@ export const {
   selectById: selectPostById,
   selectIds: selectPostIds
   // Pass in a selector that returns the posts slice of state
-} = postsAdapter.getSelectors(state => state.posts)
+} = postsAdapter.getSelectors((state: RootState) => state.posts)
 // highlight-end
 
 export const selectPostsByUser = createSelector(
-  [selectAllPosts, (state, userId) => userId],
+  [selectAllPosts, (state: RootState, userId: string) => userId],
   (posts, userId) => posts.filter(post => post.user === userId)
 )
 ```

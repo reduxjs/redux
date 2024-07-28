@@ -47,7 +47,7 @@ In this section, we'll look at how to use RTK Query, a data fetching and caching
 
 **RTK Query** is a powerful data fetching and caching tool. It is designed to simplify common cases for loading data in a web application, **eliminating the need to hand-write data fetching & caching logic yourself**.
 
-RTK Query is **an optional addon included in the Redux Toolkit package**, and its functionality is built on top of the other APIs in Redux Toolkit.
+RTK Query is **included in the Redux Toolkit package**, and its functionality is built on top of the other APIs in Redux Toolkit. **We recommend RTK Query as the default approach for data fetching in Redux apps**.
 
 ### Motivation
 
@@ -63,6 +63,8 @@ We've already seen how we can implement these behaviors using Redux Toolkit.
 However, originally Redux didn't include anything built in to help _completely_ solve these use cases. Even when we use `createAsyncThunk` together with `createSlice`, there's still a fair amount of manual work involved in making requests and managing loading state. We have to create the async thunk, make the actual request, pull relevant fields out of the response, add loading state fields, add handlers in `extraReducers` to handle the `pending/fulfilled/rejected` cases, and actually write the proper state updates.
 
 Over time, the React community has come to realize that **"data fetching and caching" is really a different set of concerns than "state management"**. While you can use a state management library like Redux to cache data, the use cases are different enough that it's worth using tools that are purpose-built for the data fetching use case.
+
+#### Server State Challenges
 
 It's worth quoting the great explanation from [the React Query "Motivation" docs page](https://tanstack.com/query/latest/docs/framework/react/overview):
 
@@ -84,10 +86,12 @@ It's worth quoting the great explanation from [the React Query "Motivation" docs
 > - Managing memory and garbage collection of server state
 > - Memoizing query results with structural sharing
 
+### RTK Query Differences
+
 RTK Query takes inspiration from other tools that have pioneered solutions for data fetching, like Apollo Client, React Query, Urql, and SWR, but adds a unique approach to its API design:
 
 - The data fetching and caching logic is built on top of Redux Toolkit's `createSlice` and `createAsyncThunk` APIs
-- Because Redux Toolkit is UI-agnostic, RTK Query's functionality can be used with any UI layer
+- Because Redux Toolkit is UI-agnostic, RTK Query's functionality can be used with any UI layer like Angular, Vue, or vanilla JS, not just with React
 - API endpoints are defined ahead of time, including how to generate query parameters from arguments and transform responses for caching
 - RTK Query can also generate React hooks that encapsulate the entire data fetching process, provide `data` and `isFetching` fields to components, and manage the lifetime of cached data as components mount and unmount
 - RTK Query provides "cache entry lifecycle" options that enable use cases like streaming cache updates via websocket messages after fetching the initial data
@@ -112,7 +116,7 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 RTK Query primarily consists of two APIs:
 
 - [`createApi()`](https://redux-toolkit.js.org/rtk-query/api/createApi): The core of RTK Query's functionality. It allows you to define a set of endpoints describe how to retrieve data from a series of endpoints, including configuration of how to fetch and transform that data. In most cases, you should use this once per app, with "one API slice per base URL" as a rule of thumb.
-- [`fetchBaseQuery()`](https://redux-toolkit.js.org/rtk-query/api/fetchBaseQuery): A small wrapper around [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) that aims to simplify requests. Intended as the recommended `baseQuery` to be used in `createApi` for the majority of users.
+- [`fetchBaseQuery()`](https://redux-toolkit.js.org/rtk-query/api/fetchBaseQuery): A small wrapper around [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) that aims to simplify HTTP requests. RTK Query can be used to cache the result of _any_ async request, but since HTTP requests are the most common use case, `fetchBaseQuery` provides HTTP support out of the box.
 
 #### Bundle Size
 
@@ -183,7 +187,7 @@ RTK Query's functionality is based on a single method, called [**`createApi`**](
 
 :::tip
 
-**Your application is expected to have only one `createApi` call in it**. This one API slice should contain _all_ endpoint definitions that talk to the same base URL. For example, endpoints `/api/posts` and `/api/users` are both fetching data from the same server, so they would go in the same API slice. If your app does fetch data from multiple servers, you can either specify full URLs in each endpoint, or if necessary create separate API slices for each server.
+**Your application is expected to have only one `createApi` call in it**. This one API slice should contain _all_ endpoint definitions that talk to the same base URL. For example, endpoints `/api/posts` and `/api/users` are both fetching data from the same server, so they would go in the same API slice. If your app does fetch data from multiple servers, you can either specify full URLs in each endpoint, or if absolutely necessary create separate API slices for each server.
 
 Endpoints are normally defined directly inside the `createApi` call. If you're looking to split up your endpoints between multiple files, see [the "Injecting Endpoints" section in Part 8](./part-8-rtk-query-advanced.md#injecting-endpoints) section of the docs!
 
@@ -193,7 +197,7 @@ Endpoints are normally defined directly inside the `createApi` call. If you're l
 
 When we call `createApi`, there are two fields that are required:
 
-- `baseQuery`: a function that knows how to fetch data from the server. RTK Query includes `fetchBaseQuery`, a small wrapper around the standard `fetch()` function that handles typical processing of requests and responses. When we create a `fetchBaseQuery` instance, we can pass in the base URL of all future requests, as well as override behavior such as modifying request headers.
+- `baseQuery`: a function that knows how to fetch data from the server. RTK Query includes `fetchBaseQuery`, a small wrapper around the standard `fetch()` function that handles typical processing of HTTP requests and responses. When we create a `fetchBaseQuery` instance, we can pass in the base URL of all future requests, as well as override behavior such as modifying request headers. You can [create custom base queries](https://redux-toolkit.js.org/rtk-query/usage/customizing-queries#customizing-queries-with-basequery) to customize behavior like error handling and auth.
 - `endpoints`: a set of operations that we've defined for interacting with this server. Endpoints can be **_queries_**, which return data for caching, or **_mutations_**, which send an update to the server. The endpoints are defined using a callback function that accepts a `builder` parameter and returns an object containing endpoint definitions created with `builder.query()` and `builder.mutation()`.
 
 `createApi` also accepts a `reducerPath` field, which defines the expected top-level state slice field for the generated reducer. For our other slices like `postsSlice`, there's no guarantee that it will be used to update `state.posts` - we _could_ have attached the reducer anywhere in the root state, like `someOtherField: postsReducer`. Here, `createApi` expects us to tell it where the cache state will exist when we add the cache reducer to the store. If you don't provide a `reducerPath` option, it defaults to `'api'`, so all your RTKQ cache data will be stored under `state.api`.
@@ -208,7 +212,7 @@ For our first step, we want to add an endpoint that will return the entire list 
 
 By default, query endpoints will use a `GET` HTTP request, but you can override that by returning an object like `{url: '/posts', method: 'POST', body: newPost}` instead of just the URL string itself. You can also define several other options for the request this way, such as setting headers.
 
-For TypeScript usage, the `builder.query()` and `builder.mutation()` endpoint definition functions accept two generic arguments: `<ReturnType, ArgumentType>`. For example, an endpoint to fetch a Pokemon by name might look like `getPokemonByName: builder.query<Pokemon, string>()`. If a given endpoint takes _no_ arguments, use the `void` type, like `getAllPokemon: builder.query<Pokemon[], void>()`.
+For TypeScript usage, **the `builder.query()` and `builder.mutation()` endpoint definition functions accept two generic arguments: `<ReturnType, ArgumentType>`**. For example, an endpoint to fetch a Pokemon by name might look like `getPokemonByName: builder.query<Pokemon, string>()`. **If a given endpoint takes _no_ arguments, use the `void` type, like `getAllPokemon: builder.query<Pokemon[], void>()`**.
 
 #### Exporting API Slices and Hooks
 
@@ -290,21 +294,23 @@ import { ReactionButtons } from './ReactionButtons'
 
 // highlight-start
 // Go back to passing a `post` object as a prop
-const PostExcerpt = ({ post }: { post: Post }) => {
+interface PostExcerptProps {
+  post: Post
+}
+
+function PostExcerpt({ post }: PostExcerptProps) {
   // highlight-end
   return (
     <article className="post-excerpt" key={post.id}>
-      <h3>{post.title}</h3>
+      <h3>
+        <Link to={`/posts/${post.id}`}>{post.title}</Link>
+      </h3>
       <div>
         <PostAuthor userId={post.user} />
         <TimeAgo timestamp={post.date} />
       </div>
       <p className="post-content">{post.content.substring(0, 100)}</p>
-
       <ReactionButtons post={post} />
-      <Link to={`/posts/${post.id}`} className="button muted-button">
-        View Post
-      </Link>
     </article>
   )
 }
@@ -345,16 +351,21 @@ export const PostsList = () => {
 
 Conceptually, `<PostsList>` is still doing all the same work it was before, but **we were able to replace the multiple `useSelector` calls and the `useEffect` dispatch with a single call to `useGetPostsQuery()`**.
 
+Previously, we were selecting a list of post IDs from the store, passing a post ID to each `<PostExcerpt>` component, and selecting each individual `Post` object from the store separately. Since the `posts` array already has all of the post objects, we've switched back to passing the post objects themselves down as props.
+
 :::tip
 
 You should normally use the query hooks to access cached data in components - you _shouldn't_ write your own `useSelector` calls to access fetched data or `useEffect` calls to trigger fetching!
 
 :::
 
+### Query Hook Result Objects
+
 Each generated query hook returns a "result" object containing several fields, including:
 
-- `data`: the actual response contents from the server. **This field will be `undefined` until the response is received**.
-- `isLoading`: a boolean indicating if this hook is currently making the _first_ request to the server. (Note that if the parameters change to request different data, `isLoading` will remain false.)
+- `data`: the actual response contents from the server for the most recent _successful_ cache entry data. **This field will be `undefined` until the response is received**.
+- `currentData`: The response contents for the _current_ query arguments. This can switch to `undefined` if the query arguments are changed and a request starts because there isn't an existing cache entry.
+- `isLoading`: a boolean indicating if this hook is currently making the _first_ request to the server because there isn't any data yet. (Note that if the parameters change to request different data, `isLoading` will remain false.)
 - `isFetching`: a boolean indicating if the hook is currently making _any_ request to the server
 - `isSuccess`: a boolean indicating if the hook has made a successful request and has cached data available (ie, `data` should be defined now)
 - `isError`: a boolean indicating if the last request had an error
@@ -362,7 +373,11 @@ Each generated query hook returns a "result" object containing several fields, i
 
 It's common to destructure fields from the result object, and possibly rename `data` to a more specific variable like `posts` to describe what it contains. We can then use the status booleans and the `data/error` fields to render the UI that we want. However, if you're using an older version of TypeScript, you may need to keep the original object as-is and refer to flags as `result.isSuccess` in your conditional checks, so that TS can correctly infer that `data` is valid.
 
-Previously, we were selecting a list of post IDs from the store, passing a post ID to each `<PostExcerpt>` component, and selecting each individual `Post` object from the store separately. Since the `posts` array already has all of the post objects, we've switched back to passing the post objects themselves down as props.
+#### Loading State Fields
+
+Note that [`isLoading` and `isFetching` are different flags with different behavior](https://redux-toolkit.js.org/rtk-query/usage/queries#query-loading-state). You can decide which one to use based on when and how you need to show loading states in the UI. For example, you might want to check `isLoading` if you want to show a skeleton while loading a page for the first time, or you might choose to check `isFetching` to show a spinner or gray out existing results every time there's any request happening as the user selects different items.
+
+Similarly, `data` and `currentData` will change at different times. Most of the time, you should use the values in `data`, but `currentData` is available to give you more granularity for loading behavior. For example, if you wanted to show data in the UI as translucent to represent a re-fetching state, you can use `data` in combination with `isFetching` to achieve this, because `data` will stay the same until the new request has completed. However, if you also wish to only show values corresponding to the current arg (such as clearing out the UI until the new request is done), you can instead use `currentData` to achieve this.
 
 ### Sorting Posts
 
@@ -459,13 +474,13 @@ import { selectCurrentUsername } from '@/features/auth/authSlice'
 export const SinglePostPage = () => {
   const { postId } = useParams()
 
-  const username = useAppSelector(selectCurrentUsername)
+  const currentUsername = useAppSelector(selectCurrentUsername)
   // highlight-next-line
   const { data: post, isFetching, isSuccess } = useGetPostQuery(postId!)
 
   let content: React.ReactNode
 
-  const canEdit = username === post?.user
+  const canEdit = currentUsername === post?.user
 
   // highlight-start
   if (isFetching) {
@@ -518,6 +533,8 @@ Notice that the names of the actions in the left-hand list are much more generic
 
 The Redux DevTools have an "RTK Query" tab that specifically shows RTK Query data in a more usable format. This includes info on each endpoint and cache result, stats on query timing, and much more:
 
+**[TODO] RTKQ devtools screenshots**
+
 - [Redux DevTools #750: Add RTK Query-Inspector monitor](https://github.com/reduxjs/redux-devtools/pull/750)
 - [RTK Query Monitor preview demo](https://rtk-query-monitor-demo.netlify.app/)
 
@@ -533,7 +550,15 @@ RTK Query lets us define **mutation endpoints** that update data on the server. 
 
 Adding a mutation endpoint is very similar to adding a query endpoint. The biggest difference is that we define the endpoint using `builder.mutation()` instead of `builder.query()`. Also, we now need to change the HTTP method to be a `'POST'` request, and we have to provide the body of the request as well.
 
+We'll export the existing `NewPost` TS type from `postsSlice.ts`, then use it as the argument type in this mutation, since it's what our component needs to pass in.
+
 ```ts title="features/api/apiSlice.ts"
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+
+// highlight-next-line
+import type { Post, NewPost } from '@/features/posts/postsSlice'
+export type { Post }
+
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: '/fakeApi' }),
@@ -547,7 +572,9 @@ export const apiSlice = createApi({
     // highlight-start
     addNewPost: builder.mutation<Post, NewPost>({
       query: initialPost => ({
+        // The HTTP URL will be '/fakeApi/posts'
         url: '/posts',
+        // This is an HTTP POST request, sending an update
         method: 'POST',
         // Include the entire post object as the body of the request
         body: initialPost
@@ -639,19 +666,50 @@ Mutation hooks return an array with two values:
 
 We can replace the existing thunk dispatch and component loading state with the trigger function and `isLoading` flag from the `useAddNewPostMutation` hook, and the rest of the component stays the same.
 
-As with the previous thunk dispatch, we call `addNewPost` with the initial post object. This returns a special Promise with a `.unwrap()` method, and we can `await addNewPost().unwrap()` to handle any potential errors with a standard `try/catch` block.
+As with the previous thunk dispatch, we call `addNewPost` with the initial post object. This returns a special Promise with a `.unwrap()` method, and we can `await addNewPost().unwrap()` to handle any potential errors with a standard `try/catch` block. (This looks the same as [what we saw with `createAsyncThunk`](./part-5-async-logic.md#checking-thunk-results-in-components), because it _is_ the same - RTK Query uses `createAsyncThunk` internally)
 
 ## Refreshing Cached Data
 
-When we click "Save Post", we can view the Network tab in the browser DevTools and confirm that the HTTP `POST` request succeeded. But, the new post isn't showing up in our `<PostsList>` if we go back there. We still have the same cached data in memory.
+When we click "Save Post", we can view the Network tab in the browser DevTools and confirm that the HTTP `POST` request succeeded. But, the new post isn't showing up in our `<PostsList>` if we go back there. The Redux store state hasn't changed, and we still have the same cached data in memory.
 
 We need to tell RTK Query to refresh its cached list of posts so that we can see the new post we just added.
 
 ### Refetching Posts Manually
 
-The first option is to manually force RTK Query to refetch data for a given endpoint. Query hook result objects include a `refetch` function that we can call to force a refetch. We can temporarily add a "Refetch Posts" button to `<PostsList>` and click that after adding a new post.
+The first option is to manually force RTK Query to refetch data for a given endpoint. This isn't the approach you'd use in a real app, but we'll try it now as an intermediate step.
 
-Also, earlier we saw that query hooks have both an `isLoading` flag, which is `true` if this is the _first_ request for data, and an `isFetching` flag, which is `true` while _any_ request for data is in progress. We could look at the `isFetching` flag, and replace the entire list of posts with a loading spinner again while the refetch is in progress. But, that could be a bit annoying, and besides - we already have all these posts, why should we completely hide them?
+Query hook result objects include a `refetch` function that we can call to force a refetch. We can temporarily add a "Refetch Posts" button to `<PostsList>` and click that after adding a new post:
+
+```tsx title="features/posts/PostsList.tsx"
+export const PostsList = () => {
+  const {
+    data: posts = [],
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+    // highlight-next-line
+    refetch
+  } = useGetPostsQuery()
+
+  // omit content
+
+  return (
+    <section className="posts-list">
+      <h2>Posts</h2>
+      // highlight-next-line
+      <button onClick={refetch}>Refetch Posts</button>
+      {content}
+    </section>
+  )
+}
+```
+
+Now, if we add a new post, wait for that to complete, and click "Refetch Posts", we should see the new post showing up.
+
+Unfortunately, there's no real indicator that the refetch is happening. It would help if we showed _something_ to indicate that the refetch request is in progress.
+
+Earlier we saw that query hooks have both an `isLoading` flag, which is `true` if this is the _first_ request for data, and an `isFetching` flag, which is `true` while _any_ request for data is in progress. We could look at the `isFetching` flag, and replace the entire list of posts with a loading spinner again while the refetch is in progress. But, that could be a bit annoying, and besides - we already have all these posts, why should we completely hide them?
 
 Instead, we could make the existing list of posts partially transparent to indicate the data is stale, but keep them visible while the refetch is happening. As soon as the request completes, we can return to showing the posts list as normal.
 
@@ -672,7 +730,6 @@ export const PostsList = () => {
     isSuccess,
     isError,
     error,
-    // highlight-next-line
     refetch
   } = useGetPostsQuery()
 
@@ -702,14 +759,7 @@ export const PostsList = () => {
     content = <div>{error.toString()}</div>
   }
 
-  return (
-    <section className="posts-list">
-      <h2>Posts</h2>
-      // highlight-next-line
-      <button onClick={refetch}>Refetch Posts</button>
-      {content}
-    </section>
-  )
+  // omit return
 }
 ```
 
@@ -717,7 +767,7 @@ If we add a new post and then click "Refetch Posts", we should now see the posts
 
 ### Automatic Refreshing with Cache Invalidation
 
-Having users manually click to refetch data is occasionally necessary, but definitely not a good solution for normal usage.
+Manually forcing a refetch of data is occasionally necessary depending on user behavior, but definitely not a good solution for normal usage.
 
 We know that our "server" has a complete list of all posts, including the one we just added. Ideally, we want to have our app automatically refetch the updated list of posts as soon as the mutation request has completed. That way we know our client-side cached data is in sync with what the server has.
 
