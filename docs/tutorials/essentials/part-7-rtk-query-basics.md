@@ -351,6 +351,8 @@ export const PostsList = () => {
 
 Conceptually, `<PostsList>` is still doing all the same work it was before, but **we were able to replace the multiple `useSelector` calls and the `useEffect` dispatch with a single call to `useGetPostsQuery()`**.
 
+(Note that at this point, the application will have some mismatches between code that is still looking at the existing `state.posts` slice for data, vs the new code that is reading from RTK Query. This is expected, and we'll fix these mismatches one at a time as we go forward.)
+
 Previously, we were selecting a list of post IDs from the store, passing a post ID to each `<PostExcerpt>` component, and selecting each individual `Post` object from the store separately. Since the `posts` array already has all of the post objects, we've switched back to passing the post objects themselves down as props.
 
 :::tip
