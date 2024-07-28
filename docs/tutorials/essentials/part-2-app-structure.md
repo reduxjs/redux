@@ -106,8 +106,6 @@ The DevTools have several more commands and options to help you debug your app. 
 
 This makes it easier to trace what part of the code dispatched a specific action.
 
-You can also use [Replay.io](https://replay.io) to make recordings of an app and use its built-in React and Redux DevTools support to investigate the application's behavior.
-
 ## Application Contents
 
 Now that you know what the app does, let's look at how it works.
