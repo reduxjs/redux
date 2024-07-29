@@ -829,11 +829,44 @@ Let's see this in action! Go to the main `<PostsList>`, and click one of the rea
 
 Uh-oh. The entire `<PostsList>` component was grayed out, because we just refetched the _entire_ list of posts in response to that one post being updated. This is deliberately more visible because our mock API server is set to have a 2-second delay before responding, but even if the response is faster, this still isn't a good user experience.
 
-### Implementing Optimistic Updates
+### Optimistic Updates for Reactions
 
 For a small update like adding a reaction, we probably don't need to re-fetch the entire list of posts. Instead, we could try just updating the already-cached data on the client to match what we expect to have happen on the server. Also, if we update the cache immediately, the user gets instant feedback when they click the button instead of having to wait for the response to come back. **This approach of updating client state right away is called an "optimistic update"**, and it's a common pattern in web apps.
 
-**RTK Query lets you implement optimistic updates by modifying the client-side cache based on "request lifecycle" handlers**. Endpoints can define an `onQueryStarted` function that will be called when a request starts, and we can run additional logic in that handler.
+RTK Query includes **utilities to update the client-side cache directly**. This can be combined with RTK Query's **"request lifecycle" methods** to implement optimistic updates.
+
+#### Cache Update Utilities
+
+API slices have some [additional methods attached, under `api.util`](https://redux-toolkit.js.org/rtk-query/api/created-api/api-slice-utils). This includes thunks for modifying the cache: `upsertQueryData` to add or replace a cache entry, and `updateQueryData` to modify a cache entry. Since these are thunks, they can be used anywhere you have access to `dispatch`.
+
+In particular, the `updateQueryData` util thunk takes three arguments: the name of the endpoint to update, the same cache key argument used to identify the specific cached entry we want to update, and a callback that updates the cached data. **`updateQueryData` uses Immer, so you can "mutate" the drafted cache data the same way you would in `createSlice`**:
+
+```ts title="updateQueryData example"
+dispatch(
+  apiSlice.util.updateQueryData(endpointName, queryArg, draft => {
+    // mutate `draft` here like you would in a reducer
+    draft.value = 123
+  })
+)
+```
+
+`updateQueryData` generates an action object with a patch diff of the changes we made. When we dispatch that action, the return value from `dispatch` is a `patchResult` object. If we call `patchResult.undo()`, it automatically dispatches an action that reverses the patch diff changes.
+
+#### The `onQueryStarted` Lifecycle
+
+The first lifecycle method we'll look at is [**`onQueryStarted`**](https://redux-toolkit.js.org/rtk-query/api/createApi#onquerystarted). This option is available for both queries and mutations.
+
+If provided, `onQueryStarted` will be called every time a new request goes out. This gives us a place to run additional logic in response to the request.
+
+Similar to async thunks and listener effects, the `onQueryStarted` callback receives the query `arg` value from the request as its first argument, and a `lifecycleApi` object as the second argument. `lifecycleApi` includes the same `{dispatch, getState, extra, requestId}` values as `createAsyncThunk`. It also has a couple additional fields that are unique to this lifecycle. The most important one is `lifecycleApi.queryFulfilled`, a Promise that will resolve when the request returns, and either fulfill or reject based on the request.
+
+#### Implementing Optimistic Updates
+
+We can use the update utilities inside of the `onQueryStarted` lifecycle to implement either "optimistic" updates (updating the cache _before_ the request is finished), or "pessimistic" updates (updating the cache _after_ the request is finished).
+
+We can implement the optimistic update by finding the specific `Post` entry in the `getPosts` cache, and "mutating" it to increment the reaction counter. We also may have a second copy of the same conceptual individual `Post` object in the `getPost` cache for that post ID also, so we need to update that cache entry if it exists as well.
+
+By default, we expect that the request will succeed. In case the request fails, we can `await lifecycleApi.queryFulfilled`, catch a failure, and undo the patch changes to revert the optimistic update.
 
 ```ts title="features/api/apiSlice.ts"
 export const apiSlice = createApi({
@@ -891,114 +924,297 @@ export const apiSlice = createApi({
 })
 ```
 
-The `onQueryStarted` handler receives two parameters. The first is the cache key `arg` that was passed when the request started. The second is a `lifecycleApi` object that contains some of the same fields as the `thunkApi` in `createAsyncThunk` ( `{dispatch, getState, extra, requestId}`), but also a Promise called `queryFulfilled`. This Promise will resolve when the request returns, and either fulfill or reject based on the request.
-
-The API slice object includes a `updateQueryData` thunk that lets us update cached values. It takes three arguments: the name of the endpoint to update, the same cache key argument used to identify the specific cached entry we want to update, and a callback that updates the cached data. **`updateQueryData` uses Immer, so you can "mutate" the drafted cache data the same way you would in `createSlice`**.
-
-We can implement the optimistic update by finding the specific `Post` entry in the `getPosts` cache, and "mutating" it to increment the reaction counter. We also may have a second copy of the same conceptual individual `Post` object in the `getPost` cache for that post ID also, so we need to update that cache entry if it exists as well.
-
-`updateQueryData` generates an action object with a patch diff of the changes we made. When we dispatch that action, the return value is a `patchResult` object. If we call `patchResult.undo()`, it automatically dispatches an action that reverses the patch diff changes.
-
-By default, we expect that the request will succeed. In case the request fails, we can `await queryFulfilled`, catch a failure, and undo the patch changes to revert the optimistic update.
-
 For this case, we've also removed the `invalidatesTags` line we'd just added, since we _don't_ want to refetch the posts when we click a reaction button.
 
 Now, if we click several times on a reaction button quickly, we should see the number increment in the UI each time. If we look at the Network tab, we'll also see each individual request go out to the server as well.
 
-### Streaming Cache Updates
+Sometimes mutation requests come back with meaningful data in the server response, such as a final item ID that should replace a temporary client-side ID, or other related data. If we did the `const res = await lifecycleApi.queryFulfilled` first, we could then use the data from the response after that to apply cache updates as a "pessimistic" update.
+
+### Streaming Updates for Notifications
 
 Our final feature is the notifications tab. When we originally built this feature in [Part 6](./part-6-performance-normalization.md#adding-notifications), we said that "in a real app, the server would push updates to our client every time something happens". We initially faked that feature by adding a "Refresh Notifications" button, and having it make an HTTP `GET` request for more notifications entries.
 
-It's common for apps to make an _initial_ request to fetch data from the server, and then open up a Websocket connection to receive additional updates over time. **RTK Query provides an `onCacheEntryAdded` endpoint lifecycle handler that lets us implement "streaming updates" to cached data**. We'll use that capability to implement a more realistic approach to managing notifications.
+It's common for apps to make an _initial_ request to fetch data from the server, and then open up a Websocket connection to receive additional updates over time. RTK Query's lifecycle methods give us room to implement that kind of "streaming updates" to cached data.
 
-Our `src/api/server.ts` file has a mock Websocket server already configured, similar to the mock HTTP server. We'll write a new `getNotifications` endpoint that fetches the initial list of notifications, and then establishes the Websocket connection to listen for future updates. We still need to manually tell the mock server _when_ to send new notifications, so we'll continue faking that by having a button we click to force the update.
+We've already seen the `onQueryStarted` lifecycle that let us implement optimistic (or pessimistic) updates. Additionally, **RTK Query provides an `onCacheEntryAdded` endpoint lifecycle handler, which is a good place to implement streaming updates**. We'll use that capability to implement a more realistic approach to managing notifications.
+
+#### The `onCacheEntryAdded` Lifecycle
+
+Like `onQueryStarted`, the [**`onCacheEntryAdded`**](https://redux-toolkit.js.org/rtk-query/api/createApi#oncacheentryadded) lifecycle method is available for both queries and mutations.
+
+`onCacheEntryAdded` will be called any time a new cache entry (endpoint + serialized query arg) is added to the cache. This means it will run less often than `onQueryStarted`, which runs whenever a request happens.
+
+Similar to `onQueryStarted`, `onCacheEntryAdded` receives two parameters. The first is the usual query `args` value. The second is a slightly different `lifecycleApi` that has `{dispatch, getState, extra, requestId}`, as well as an `updateCachedData` util, an alternate form of `api.util.updateCachedData` that already knows the right endpoint name and query args to use and does the dispatching for you.
+
+There's also two additional Promises that can be waited on:
+
+- `cacheDataLoaded`: resolves with the first cached value received, and is typically used to wait for an actual value to be in the cache before doing more logic
+- `cacheEntryRemoved `: resolves when this cache entry is removed (ie, there are no more subscribers and the cache entry has been garbage-collected)
+
+As long as 1+ subscribers for the data are still active, the cache entry is kept alive. When the number of subscribers goes to 0 and the cache lifetime timer expires, the cache entry will be removed, and `cacheEntryRemoved` will resolve. Typically, the usage pattern is:
+
+- `await cacheDataLoaded` right away
+- Create a server-side data subscription like a Websocket
+- When an update is received, use `updateCachedData` to "mutate" the cached values based on the update
+- `await cacheEntryRemoved` at the end
+- Clean up subscriptions afterwards
+
+This makes `onCacheEntryAdded` a good place to put longer-running logic that should keep going as long as the UI needs this particular piece of data. A good example might be a chat app that needs to fetch initial messages for a chat channel, uses a Websocket subscription to receive additional messages over time, and disconnects the Websocket when the user closes the channel.
+
+#### Fetching Notifications
+
+We'll need to break this work into a few steps.
+
+First, we'll set up a new endpoint for notifications, and add a replacement for the `fetchNotificationsWebsocket` thunk that will trigger our mock backend to send back notifications via a websocket instead of as an HTTP request.
 
 We'll inject the `getNotifications` endpoint in `notificationsSlice` like we did with `getUsers`, just to show it's possible.
 
-```ts title="features/notifications/notificationsSlice.ts"
-import {
-  createEntityAdapter,
-  createSelector,
-  createSlice
-} from '@reduxjs/toolkit'
+```ts title="features/notifications/notificationsSlices.ts"
+import { createEntityAdapter, createSlice } from '@reduxjs/toolkit'
 
 import { client } from '@/api/client'
 // highlight-next-line
 import { forceGenerateNotifications } from '@/api/server'
 
+// highlight-next-line
 import type { AppThunk, RootState } from '@/app/store'
+import { createAppAsyncThunk } from '@/app/withTypes'
 
 // highlight-next-line
 import { apiSlice } from '@/features/api/apiSlice'
 
-// omit notification types
+// omit types and `fetchNotifications` thunk
 
-export const extendedApi = apiSlice.injectEndpoints({
+// highlight-start
+export const apiSliceWithNotifications = apiSlice.injectEndpoints({
   endpoints: builder => ({
     getNotifications: builder.query<ServerNotification[], void>({
-      query: () => '/notifications',
-      transformResponse: (res: { notifications: ServerNotification[] }) =>
-        res.notifications,
-      // highlight-start
-      async onCacheEntryAdded(
-        arg,
-        { updateCachedData, cacheDataLoaded, cacheEntryRemoved }
-      ) {
-        // create a websocket connection when the cache subscription starts
-        const ws = new WebSocket('ws://localhost')
-        try {
-          // wait for the initial query to resolve before proceeding
-          await cacheDataLoaded
-
-          // when data is received from the socket connection to the server,
-          // update our query result with the received message
-          const listener = (event: any) => {
-            const message: {
-              type: 'notifications'
-              payload: ServerNotification[]
-            } = JSON.parse(event.data)
-            switch (message.type) {
-              case 'notifications': {
-                updateCachedData(draft => {
-                  // Insert all received notifications from the websocket
-                  // into the existing RTKQ cache array
-                  draft.push(...message.payload)
-                  draft.sort((a, b) => b.date.localeCompare(a.date))
-                })
-                break
-              }
-              default:
-                break
-            }
-          }
-
-          ws.addEventListener('message', listener)
-        } catch {
-          // no-op in case `cacheEntryRemoved` resolves before `cacheDataLoaded`,
-          // in which case `cacheDataLoaded` will throw
-        }
-        // cacheEntryRemoved will resolve when the cache subscription is no longer active
-        await cacheEntryRemoved
-        // perform cleanup steps once the `cacheEntryRemoved` promise resolves
-        ws.close()
-      }
-      // highlight-end
+      query: () => '/notifications'
     })
   })
 })
 
-export const { useGetNotificationsQuery } = extendedApi
+export const { useGetNotificationsQuery } = apiSliceWithNotifications
+// highlight-end
+```
 
-const emptyNotifications: ServerNotification[] = []
+`getNotifications` is a standard query endpoint that will store the `ServerNotification` objects we received from the server.
 
-export const selectNotificationsResult =
-  extendedApi.endpoints.getNotifications.select()
+Then, in `<Navbar>`, we can use the new query hook to automatically fetch some notifications. When we do that, we're only getting back `ServerNotification` objects, not the `ClientNotification` objects with the additional `{read, isNew}` fields we've been adding, so we'll have to temporarily disable the check for `notification.new`:
 
-const selectNotificationsData = createSelector(
-  selectNotificationsResult,
-  notificationsResult => notificationsResult.data ?? emptyNotifications
+```tsx title="features/notifications/NotificationsList.tsx"
+// omit other imports
+
+// highlight-next-line
+import { allNotificationsRead, useGetNotificationsQuery } from './notificationsSlice'
+
+export const NotificationsList = () => {
+  const dispatch = useAppDispatch()
+  // highlight-next-line
+  const { data: notifications = [] } = useGetNotificationsQuery()
+
+  useLayoutEffect(() => {
+    dispatch(allNotificationsRead())
+  })
+
+  const renderedNotifications = notifications.map((notification) => {
+    const notificationClassname = classnames('notification', {
+      // highlight-next-line
+      // new: notification.isNew,
+    })
+  }
+
+  // omit rendering
+}
+```
+
+If we go into the "Notifications" tab, we should see a few entries show up, but none of them will be colored to indicate they're new. Meanwhile, if we click the "Refresh Notifications" button, we'll see the "unread notifications" counter keep increasing. That's because of two things. The button is still triggering the original `fetchNotifications` thunk that stores entries in the `state.notifications` slice. Also, the `<NotificationsList>` component isn't even re-rendering (it relies on the cached data from the `useGetNotificationsQuery` hook, not the `state.notifications` slice), and so the `useLayoutEffect` isn't running or dispatching `allNotificationsRead`.
+
+#### Tracking Client-Side State
+
+The next step is to rethink how we track "read" status for notifications.
+
+Previously, we were taking the `ServerNotification` objects we fetched from the `fetchNotifications` thunk, adding the `{read, isNew}` fields in the reducer, and saving those objects. Now, we're saving the `ServerNotification` objects in the RTK Query cache.
+
+We _could_ do more manual cache updates. We could use `transformResponse` to add the additional fields, then do some work to modify the cache itself as the user views the notifications.
+
+Instead, we're going to try a different form of what we were already doing: keeping track of the read status inside of the `notificationsSlice`.
+
+Conceptually, what we really want to do is track the `{read, isNew}` status of each notification item. We could do that in the slice and keep a corresponding "metadata" entry for each notification we've received, _if_ we had a way to know when the query hook has fetched notifications and had access to the notification IDs.
+
+Fortunately, we can do that! Because RTK Query is built out of standard Redux Toolkit pieces like `createAsyncThunk`, it's dispatching a `fulfilled` action with the results each time a request finishes. We just need a way to listen to that in the `notificationsSlice`, and we know that `createSlice.extraReducers` is where we'd need to handle that action.
+
+But what are we listening for? Because this is an RTKQ endpoint, we don't have access to the `asyncThunk.fulfilled/pending` action creators, so we can't just pass those to `builder.addCase()`.
+
+RTK Query endpoints expose a **`matchFulfilled` matcher function**, which we can use inside of `extraReducers` to listen to the `fulfilled` actions for that endpoint. (Note that we need to change from `builder.addCase()` to `builder.addMatcher()`).
+
+So, we're going to change `ClientNotification` to be a new `NotificationMetadata` type, listen for the `getNotifications` query actions, and store the "just metadata" objects in the slice instead of the entire notifications.
+
+As part of that, we're going to rename `notificationsAdapter` to `metadataAdapter`, and replace all mentions of `notification` variables with `metadata` for clarity. This may look like a lot of changes, but it's mostly just renaming variables.
+
+We'll also export the entity adapter `selectEntities` selector as `selectMetadataEntities`. We're going to need to look up these metadata objects by ID in the UI, and it will be easier to do that if we have the lookup table available in the component.
+
+```ts title="features/notifications/notificationsSlice.ts"
+// omit imports and thunks
+
+// highlight-start
+// Replaces `ClientNotification`, since we just need these fields
+export interface NotificationMetadata {
+  // Add an `id` field, since this is now a standalone object
+  id: string
+  // highlight-end
+  read: boolean
+  isNew: boolean
+}
+
+export const fetchNotifications = createAppAsyncThunk(
+  'notifications/fetchNotifications',
+  async (_unused, thunkApi) => {
+    // highlight-next-line
+    // Deleted timestamp lookups - we're about to remove this thunk anyway
+    const response = await client.get<ServerNotification[]>(
+      `/fakeApi/notifications`
+    )
+    return response.data
+  }
 )
 
+// highlight-start
+// Renamed from `notificationsAdapter`, and we don't need sorting
+const metadataAdapter = createEntityAdapter<NotificationMetadata>()
+
+const initialState = metadataAdapter.getInitialState()
+// highlight-end
+
+const notificationsSlice = createSlice({
+  name: 'notifications',
+  initialState,
+  reducers: {
+    allNotificationsRead(state) {
+      // highlight-start
+      // Rename to `metadata`
+      Object.values(state.entities).forEach(metadata => {
+        metadata.read = true
+      })
+      // highlight-end
+    }
+  },
+  extraReducers(builder) {
+    // highlight-start
+    // Listen for the endpoint `matchFulfilled` action with `addMatcher`
+    builder.addMatcher(
+      apiSliceWithNotifications.endpoints.getNotifications.matchFulfilled,
+      (state, action) => {
+        // Add client-side metadata for tracking new notifications
+        const notificationsMetadata: NotificationMetadata[] =
+          action.payload.map(notification => ({
+            // Give the metadata object the same ID as the notification
+            id: notification.id,
+            read: false,
+            isNew: true
+          }))
+
+        // Rename to `metadata`
+        Object.values(state.entities).forEach(metadata => {
+          // Any notifications we've read are no longer new
+          metadata.isNew = !metadata.read
+        })
+
+        metadataAdapter.upsertMany(state, notificationsMetadata)
+      }
+    )
+    // highlight-end
+  }
+})
+
+export const { allNotificationsRead } = notificationsSlice.actions
+
+export default notificationsSlice.reducer
+
+// highlight-start
+// Rename the selector
+export const {
+  selectAll: selectAllNotificationsMetadata,
+  selectEntities: selectMetadataEntities
+} = metadataAdapter.getSelectors(
+  // highlight-end
+  (state: RootState) => state.notifications
+)
+
+export const selectUnreadNotificationsCount = (state: RootState) => {
+  // highlight-next-line
+  const allMetadata = selectAllNotificationsMetadata(state)
+  const unreadNotifications = allMetadata.filter(metadata => !metadata.read)
+  return unreadNotifications.length
+}
+```
+
+Then we can read that metadata lookup table into `<NotificationsList>`, and look up the right metadata object for each notification that we're rendering, and re-enable the `isNew` check to show the right styling:
+
+```ts title="features/notifications/NotificationsList.tsx"
+// highlight-next-line
+import { allNotificationsRead, useGetNotificationsQuery, selectMetadataEntities } from './notificationsSlice'
+
+export const NotificationsList = () => {
+  const dispatch = useAppDispatch()
+  const { data: notifications = [] } = useGetNotificationsQuery()
+  // highlight-next-line
+  const notificationsMetadata = useAppSelector(selectMetadataEntities)
+
+  useLayoutEffect(() => {
+    dispatch(allNotificationsRead())
+  })
+
+  const renderedNotifications = notifications.map((notification) => {
+
+      // highlight-start
+      // Get the metadata object matching this notification
+    const metadata = notificationsMetadata[notification.id]
+    const notificationClassname = classnames('notification', {
+      // re-enable the `isNew` check for styling
+      new: metadata.isNew,
+    })
+    // highlight-end
+  }
+}
+```
+
+Now if we look at the "Notifications" tab, the new notifications are styled correctly... but we still don't get any _more_ notifications, nor do these get marked as read.
+
+#### Pushing Notifications Via Websocket
+
+We've got a couple more steps to do to finish switching over to getting more notifications via server push.
+
+The next step is to switch our "Refresh Notifications" button from dispatching an async thunk to fetch via HTTP request, to forcing the mock backend to send notifications via a websocket.
+
+Our `src/api/server.ts` file has a mock Websocket server already configured, similar to the mock HTTP server. Since we don't have a real backend (or other users!), we still need to manually tell the mock server _when_ to send new notifications, so we'll continue faking that by having a button we click to force the update. To do this, `server.ts` exports a function called `forceGenerateNotifications`, which will force the backend to push out some notification entries via that websocket.
+
+We're going to replace the `fetchNotifications` async thunk with a `fetchNotificationsWebsocket` thunk. `fetchNotificationsWebsocket` is doing the same kind of work as the existing `fetchNotifications` async thunk. However, in this case we're not making an actual HTTP request, so there's no `await` call and no payload to return. We're just calling a function that `server.ts` exported specifically to let us fake server-side push notifications.
+
+Because of that, `fetchNotificationsWebsocket` doesn't even need to use `createAsyncThunk`. It's just a normal handwritten thunk, so we can use the `AppThunk` type to describe the type of the thunk function and have correct types for `(dispatch, getState)`.
+
+In order to implement the "latest timestamp" check, we do need to add selectors that let us read from the notifications cache entry as well. We'll use the same pattern we saw with the users slice.
+
+```ts title="features/notifications/notificationsSlice.ts"
+import {
+  createEntityAdapter,
+  createSlice,
+  // highlight-next-line
+  createSelector
+} from '@reduxjs/toolkit'
+
+// highlight-start
+import { forceGenerateNotifications } from '@/api/server'
+import type { AppThunk, RootState } from '@/app/store'
+// highlight-end
+
+import { apiSlice } from '@/features/api/apiSlice'
+
+// omit types and API slice setup
+
+export const { useGetNotificationsQuery } = apiSliceWithNotifications
+
+// highlight-start
 export const fetchNotificationsWebsocket =
   (): AppThunk => (dispatch, getState) => {
     const allNotifications = selectNotificationsData(getState())
@@ -1008,233 +1224,34 @@ export const fetchNotificationsWebsocket =
     forceGenerateNotifications(latestTimestamp)
   }
 
-// omit existing slice code
-```
+const emptyNotifications: ServerNotification[] = []
 
-Like with `onQueryStarted`, the `onCacheEntryAdded` lifecycle handler receives the `arg` cache key as its first parameter, and an options object with the `thunkApi` values as the second parameter. The options object also contains an `updateCachedData` util function, and two lifecycle promises - `cacheDataLoaded` and `cacheEntryRemoved`. `cacheDataLoaded` resolves when the _initial_ data for this subscription is added to the store. This happens when the first subscription for this endpoint + cache key is added. As long as 1+ subscribers for the data are still active, the cache entry is kept alive. When the number of subscribers goes to 0 and the cache lifetime timer expires, the cache entry will be removed, and `cacheEntryRemoved` will resolve. Typically, the usage pattern is:
+export const selectNotificationsResult =
+  apiSliceWithNotifications.endpoints.getNotifications.select()
 
-- `await cacheDataLoaded` right away
-- Create a server-side data subscription like a Websocket
-- When an update is received, use `updateCachedData` to "mutate" the cached values based on the update
-- `await cacheEntryRemoved` at the end
-- Clean up subscriptions afterwards
-
-Our mock Websocket server file exposes a `forceGenerateNotifications` method to mimic pushing data out to the client. That depends on knowing the most recent notification timestamp, so we need to call `getState()` to read the latest timestamp from the cache state. To do that, we still need a thunk (since they have access to `getState`), but it no longer needs to be an _async_ thunk (there's no `await` or promises involved) and we don't need `createAsyncThunk` (there's no other actions being dispatched). That means we can switch from using `createAppAsyncThunk` to a handwritten thunk that just calls `getState()` and triggers the websocket push update with newer notifications from the mock server.
-
-Inside of `onCacheEntryAdded`, we create a real `Websocket` connection to `localhost`. In a real app, this could be any kind of external subscription or polling connection you need to receive ongoing updates. Whenever the mock server sends us an update, we push all of the received notifications into the cache and re-sort it.
-
-When the cache entry is removed, we clean up the Websocket subscription. In this app, the notifications cache entry will never be removed because we never unsubscribe from the data, but it's important to see how the cleanup would work for a real app.
-
-### Tracking Client-Side State
-
-We need to make one final set of updates. Our `<Navbar>` component has to initiate the fetching of notifications, and `<NotificationsList>` needs to show the notification entries with the correct read/unread status. However, we were previously adding the read/unread fields on the client side in our `notificationsSlice` reducer when we received the entries, and now the notification entries are being kept in the RTK Query cache.
-
-We can rewrite `notificationsSlice` so that it listens for any received notifications, and tracks some additional state on the client side for each notification entry.
-
-There's two cases when new notification entries are received: when we fetch the initial list over HTTP, and when we receive an update pushed over the Websocket connection. Ideally, we want to use the same logic in response to both cases. We can use RTK's ["matching utilities"](https://redux-toolkit.js.org/api/matching-utilities) to write one case reducer that runs in response to multiple action types.
-
-Let' see what `notificationsSlice` looks like after we add this logic.
-
-```ts title="features/notifications/notificationsSlice.ts"
-import {
-  // highlight-next-line
-  createAction,
-  createEntityAdapter,
-  createSelector,
-  createSlice,
-  // highlight-next-line
-  isAnyOf
-} from '@reduxjs/toolkit'
-
-import type { AppThunk, RootState } from '@/app/store'
-
-import { forceGenerateNotifications } from '@/api/server'
-
-import { apiSlice } from '@/features/api/apiSlice'
-
-export interface ServerNotification {
-  id: string
-  date: string
-  message: string
-  user: string
-}
-
-// highlight-start
-// Replaces `ClientNotification`, since we just need these fields
-export interface NotificationMetadata {
-  id: string
-  read: boolean
-  isNew: boolean
-}
-// highlight-end
-
-const notificationsReceived = createAction<ServerNotification[]>(
-  'notifications/notificationsReceived'
-)
-
-export const extendedApi = apiSlice.injectEndpoints({
-  endpoints: builder => ({
-    getNotifications: builder.query<ServerNotification[], void>({
-      query: () => '/notifications',
-      async onCacheEntryAdded(
-        arg,
-        // highlight-next-line
-        { updateCachedData, cacheDataLoaded, cacheEntryRemoved, dispatch }
-      ) {
-        // create a websocket connection when the cache subscription starts
-        const ws = new WebSocket('ws://localhost')
-        try {
-          // wait for the initial query to resolve before proceeding
-          await cacheDataLoaded
-
-          // when data is received from the socket connection to the server,
-          // update our query result with the received message
-          const listener = (event: any) => {
-            const message: {
-              type: 'notifications'
-              payload: ServerNotification[]
-            } = JSON.parse(event.data)
-            switch (message.type) {
-              case 'notifications': {
-                updateCachedData(draft => {
-                  // Insert all received notifications from the websocket
-                  // into the existing RTKQ cache array
-                  draft.push(...message.payload)
-                  draft.sort((a, b) => b.date.localeCompare(a.date))
-                })
-
-                // highlight-start
-                // Dispatch an additional action so we can track "read" state
-                dispatch(notificationsReceived(message.payload))
-                // highlight-end
-                break
-              }
-              default:
-                break
-            }
-          }
-
-          ws.addEventListener('message', listener)
-        } catch {
-          // no-op in case `cacheEntryRemoved` resolves before `cacheDataLoaded`,
-          // in which case `cacheDataLoaded` will throw
-        }
-        // cacheEntryRemoved will resolve when the cache subscription is no longer active
-        await cacheEntryRemoved
-        // perform cleanup steps once the `cacheEntryRemoved` promise resolves
-        ws.close()
-      }
-    })
-  })
-})
-
-export const { useGetNotificationsQuery } = extendedApi
-
-// omit notifications selectors and websocket thunk
-
-const notificationsAdapter = createEntityAdapter<NotificationMetadata>()
-
-const initialState = notificationsAdapter.getInitialState()
-
-// highlight-start
-const matchNotificationsReceived = isAnyOf(
-  notificationsReceived,
-  extendedApi.endpoints.getNotifications.matchFulfilled
+const selectNotificationsData = createSelector(
+  selectNotificationsResult,
+  notificationsResult => notificationsResult.data ?? emptyNotifications
 )
 // highlight-end
 
-const notificationsSlice = createSlice({
-  name: 'notifications',
-  initialState,
-  reducers: {
-    allNotificationsRead(state) {
-      // highlight-start
-      Object.values(state.entities).forEach(metadata => {
-        metadata.read = true
-      })
-      // highlight-end
-    }
-  },
-  extraReducers(builder) {
-    builder.addMatcher(matchNotificationsReceived, (state, action) => {
-      // Add client-side metadata for tracking new notifications
-      const notificationMetadata: NotificationMetadata[] = action.payload.map(
-        notification => ({
-          id: notification.id,
-          read: false,
-          isNew: true
-        })
-      )
-
-      Object.values(state.entities).forEach(metadata => {
-        // Any notifications we've read are no longer new
-        metadata.isNew = !metadata.read
-      })
-
-      notificationsAdapter.upsertMany(state, notificationMetadata)
-    })
-  }
-})
-
-export const { allNotificationsRead } = notificationsSlice.actions
-
-export default notificationsSlice.reducer
-
-export const {
-  // highlight-start
-  selectAll: selectNotificationsMetadata,
-  selectEntities: selectMetadataEntities
-  // highlight-end
-} = notificationsAdapter.getSelectors((state: RootState) => state.notifications)
+// omit slice and selectors
 ```
 
-There's a lot going on, but let's break down the changes one at a time.
+Then we can swap `<Navbar>` to dispatch `fetchNotificationsWebsocket` instead:
 
-There isn't currently a good way for the `notificationsSlice` reducer to know when we've received an updated list of new notifications via the Websocket. We're dispatching the `updateCacheData` thunk, but that doesn't really correlate to a specific endpoint or anything "notifications"-specific. So, we'll import `createAction`, define a new action type specifically for the "received some notifications" case, and dispatch that action after updating the cache state.
-
-We want to run the same "add read/new metadata" logic for _both_ the "fulfilled `getNotifications`" action _and_ the "received from Websocket" action. We can create a new "matcher" function by calling `isAnyOf()` and passing in each of those action creators. The `matchNotificationsReceived` matcher function will return true if the current action matches either of those types.
-
-Previously, we had a normalized lookup table for all of our notifications, and the UI selected those as a single sorted array. We're going to repurpose this slice to instead store "metadata" objects that describe the read/unread status.
-
-We can use the `builder.addMatcher()` API inside of `extraReducers` to add a case reducer that runs whenever we match one of those two action types. Inside of there, we add a new "read/isNew" metadata entry that corresponds to each notification by ID, and store that inside of `notificationsSlice`.
-
-Finally, we need change the selectors we're exporting from this slice. Instead of exporting `selectAll` as `selectAllNotifications`, we're going to export it as `selectNotificationsMetadata`. It still returns an array of the values from the normalized state, but we're changing the name since the items themselves have changed. We're also going to export the `selectEntities` selector, which returns the lookup table object itself, as `selectMetadataEntities`. That will be useful when we try to use this data in the UI.
-
-With those changes in place, we can update our UI components to fetch and display notifications.
-
-```tsx title="app/Navbar.tsx"
-import { Link } from 'react-router-dom'
-
-import { useAppDispatch, useAppSelector } from '@/app/hooks'
-
-import { selectCurrentUsername, logout } from '@/features/auth/authSlice'
+```tsx title="components/Navbar.tsx"
 import {
-   // highlight-start
+  // highlight-next-line
   fetchNotificationsWebsocket,
-  selectNotificationsMetadata,
-  useGetNotificationsQuery,
-  // highlight-end
+  selectUnreadNotificationsCount,
 } from '@/features/notifications/notificationsSlice'
 import { selectCurrentUser } from '@/features/users/usersSlice'
 
 import { UserIcon } from './UserIcon'
 
 export const Navbar = () => {
-  const dispatch = useAppDispatch()
-  const username = useAppSelector(selectCurrentUsername)
-  const user = useAppSelector(selectCurrentUser)
-
-  // highlight-start
-  // Trigger initial fetch of notifications and keep the websocket open to receive updates
-  useGetNotificationsQuery()
-
-  const notificationsMetadata = useAppSelector(selectNotificationsMetadata)
-  const numUnreadNotifications = notificationsMetadata.filter((n) => !n.read).length
-  // highlight-end
-
-  const isLoggedIn = !!username && !!user
-
-  let navContent: React.ReactNode = null
+  // omit hooks
 
   if (isLoggedIn) {
     const onLogoutClicked = () => {
@@ -1245,64 +1262,153 @@ export const Navbar = () => {
       // highlight-next-line
       dispatch(fetchNotificationsWebsocket())
     }
-
-  // omit rendering logic
-}
 ```
 
-In `<NavBar>`, we trigger the initial notifications fetch with `useGetNotificationsQuery()`, and switch to reading the metadata objects from `state.notificationsSlice`. Clicking the "Refresh" button now triggers the mock Websocket server to push out another set of notifications.
+Almost there! We're fetching initial notifications via RTK Query, tracking read status on the client side, and we've got the infrastructure set up to force new notifications via a websocket.
 
-Our `<NotificationsList>` similarly switches over to reading the cached data and metadata.
+Now we can implement the actual streaming updates logic.
 
-```tsx title="features/notifications/NotificationsList.tsx"
-import React, { useLayoutEffect } from 'react'
-import { formatDistanceToNow, parseISO } from 'date-fns'
-import classnames from 'classnames'
+#### Implementing Streaming Updates
 
-import { useAppDispatch, useAppSelector } from '@/app/hooks'
-import { selectAllUsers } from '@/features/users/usersSlice'
+For this app, conceptually we want to check for notifications as soon as the user logs in, and immediately start listening for all future incoming notifications updates. If the user logs out, we should stop listening.
 
-// highlight-next-line
-import { allNotificationsRead, useGetNotificationsQuery, selectMetadataEntities } from './notificationsSlice'
+We know that the `<Navbar>` is only rendered after the user logs in, and it stays rendered the whole time. So, that would be a good place to keep the cache subscription alive. We can do that by rendering the `useGetNotificationsQuery()` hook in that component.
 
-const UNKNOWN_USER = {
-  name: 'Unknown User',
-}
+```ts title="components/Navbar.tsx"
+// omit other imports
+import {
+  fetchNotificationsWebsocket,
+  selectUnreadNotificationsCount,
+  // highlight-next-line
+  useGetNotificationsQuery
+} from '@/features/notifications/notificationsSlice'
 
-export const NotificationsList = () => {
+export const Navbar = () => {
   const dispatch = useAppDispatch()
+  const user = useAppSelector(selectCurrentUser)
 
   // highlight-start
-  const { data: notifications = [] } = useGetNotificationsQuery()
-  const notificationsMetadata = useAppSelector(selectMetadataEntities)
+  // Trigger initial fetch of notifications and keep the websocket open to receive updates
+  useGetNotificationsQuery()
   // highlight-end
-  const users = useAppSelector(selectAllUsers)
 
-  useLayoutEffect(() => {
-    dispatch(allNotificationsRead())
-  })
-
-  const renderedNotifications = notifications.map((notification) => {
-    const date = parseISO(notification.date)
-    const timeAgo = formatDistanceToNow(date)
-    const user = users.find((user) => user.id === notification.user) ?? UNKNOWN_USER
-
-    // highlight-next-line
-    const metadata = notificationsMetadata[notification.id]
-
-    const notificationClassname = classnames('notification', {
-      // highlight-next-line
-      new: metadata.isNew,
-    })
-
-  }
-  // omit rendering logic
+  // omit rest of the component
 }
 ```
 
-We read the list of notifications from cache and the new metadata entries from the notificationsSlice, and continue displaying them the same way as before.
+The last step is to actually add the `onCacheEntryAdded` lifecycle handler to our `getNotifications` endpoint, and add the logic for working with the websocket.
 
-As a final step, we can do some additional cleanup. The actual `createSlice` call in `postsSlice.ts` is no longer being used, so we can delete the slice object and its associated selectors + types, then remove `postsReducer` from the Redux store.
+In this case, we're going to create a new websocket, subscribe to incoming messages from the socket, read the notifications from those messages, and update the RTKQ cache entry with the additional data. This is similar conceptually to what we did with the optimistic updates in `onQueryStarted`.
+
+There's one other issue we'll run into here. If we're receiving incoming notifications via websocket, there isn't an explicit "request succeeded" action being dispatched, yet we still need to create new notification metadata entries for all of the incoming notifications.
+
+We'll address this by creating a specific new Redux action type that will be used just to signal that "we've received more notifications", and dispatch that from within the websocket handler. Then we can update the `notificationsSlice` to listen for _both_ the endpoint action and this other action using the `isAnyOf` matcher utility, and do the same metadata logic in both cases.
+
+```ts title="features/notifications/notificationsSlice.ts"
+import {
+  createEntityAdapter,
+  createSlice,
+  createSelector,
+  // highlight-start
+  createAction,
+  isAnyOf
+  // highlight-end
+} from '@reduxjs/toolkit'
+// omit imports and other code
+
+const notificationsReceived = createAction<ServerNotification[]>('notifications/notificationsReceived')
+
+export const apiSliceWithNotifications = apiSlice.injectEndpoints({
+  endpoints: builder => ({
+    getNotifications: builder.query<ServerNotification[], void>({
+      query: () => '/notifications',
+      // highlight-start
+      async onCacheEntryAdded(arg, lifecycleApi) {
+        // create a websocket connection when the cache subscription starts
+        const ws = new WebSocket('ws://localhost')
+        try {
+          // wait for the initial query to resolve before proceeding
+          await lifecycleApi.cacheDataLoaded
+
+          // when data is received from the socket connection to the server,
+          // update our query result with the received message
+          const listener = (event: MessageEvent<string>) => {
+            const message: {
+              type: 'notifications'
+              payload: ServerNotification[]
+            } = JSON.parse(event.data)
+            switch (message.type) {
+              case 'notifications': {
+                lifecycleApi.updateCachedData(draft => {
+                  // Insert all received notifications from the websocket
+                  // into the existing RTKQ cache array
+                  draft.push(...message.payload)
+                  draft.sort((a, b) => b.date.localeCompare(a.date))
+                })
+                break
+              }
+              default:
+                break
+            }
+          }
+
+          ws.addEventListener('message', listener)
+        } catch {
+          // no-op in case `cacheEntryRemoved` resolves before `cacheDataLoaded`,
+          // in which case `cacheDataLoaded` will throw
+        }
+        // cacheEntryRemoved will resolve when the cache subscription is no longer active
+        await lifecycleApi.cacheEntryRemoved
+        // perform cleanup steps once the `cacheEntryRemoved` promise resolves
+        ws.close()
+      }
+    })
+    // highlight-end
+  })
+})
+
+export const { useGetNotificationsQuery } = apiSliceWithNotifications
+
+// highlight-start
+const matchNotificationsReceived = isAnyOf(
+  notificationsReceived,
+  apiSliceWithNotifications.endpoints.getNotifications.matchFulfilled,
+)
+// highlight-end
+
+// omit other code
+
+const notificationsSlice = createSlice({
+  name: 'notifications',
+  initialState,
+  reducers: { /* omit reducers */  },
+  extraReducers(builder) {
+    // highlight-next-line
+    builder.addMatcher(matchNotificationsReceived, (state, action) => {
+     // omit logic
+    }
+  },
+})
+
+```
+
+When the cache entry is added, we create a new `WebSocket` instance that will connect to the mock server backend.
+
+We wait for the `lifecycleApi.cacheDataLoaded` Promise to resolve, at which point we know that the request has completed and we have actual data available.
+
+We need to subscribe to incoming messages from the websocket. Our callback will receive a websocket `MessageEvent`, and we know that `event.data` will be a string containing the JSON-serialized notifications data from the backend.
+
+When we receive that message, we parse the contents, and confirm that the parsed object matches the message type that we're looking for. If so, we call `lifecycleApi.updateCachedData()`, add all the new notifications to the existing cache entry, and re-sort it to make sure they're in the correct order.
+
+Finally, we can also wait for the `lifecycleApi.cacheEntryRemoved` promise to know when we need to close the websocket and clean up.
+
+Note that it's not _required_ that we create the websocket here in the lifecycle method. Depending on the app structure, you might have created it earlier in the app setup process, and it might be living in another module file or in its own Redux middleware. What actually matters here is that we're using the `onCacheEntryAdded` lifecycle to know when to start listening for incoming data, inserting the results into the cache entry, and cleaning up when the cache entry goes away.
+
+And that's it! Now when we click "Refresh Notifications", we should see the unread notifications count increase, and clicking over to the "Notifications" tab should highlight read and unread notifications appropriately.
+
+### Cleanup
+
+As a final step, we can do some additional cleanup. The actual `createSlice` call in `postsSlice.ts` is no longer being used, so we can delete the slice object and its associated selectors + types, then remove `postsReducer` from the Redux store. We'll leave the `addPostsListeners` function and the types there, since that's a reasonable place for that code.
 
 ## What You've Learned
 
