@@ -19,13 +19,13 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 Welcome to the Redux Essentials tutorial! **This tutorial will introduce you to Redux and teach you how to use it the right way, using our latest recommended tools and best practices**. By the time you finish, you should be able to start building your own Redux applications using the tools and patterns you've learned here.
 
-In Part 1 of this tutorial, we'll cover the key concepts and terms you need to know to use Redux, and in [Part 2: Redux App Structure](./part-2-app-structure.md) we'll examine a basic React + Redux app to see how the pieces fit together.
+In Part 1 of this tutorial, we'll cover the key concepts and terms you need to know to use Redux, and in [Part 2: Redux App Structure](./part-2-app-structure.md) we'll examine a typical React + Redux app to see how the pieces fit together.
 
 Starting in [Part 3: Basic Redux Data Flow](./part-3-data-flow.md), we'll use that knowledge to build a small social media feed app with some real-world features, see how those pieces actually work in practice, and talk about some important patterns and guidelines for using Redux.
 
 ### How to Read This Tutorial
 
-This page will focus on showing you _how_ to use Redux the right way, and explain just enough of the concepts so that you can understand how to build Redux apps correctly.
+This tutorial focuses on showing you _how_ to use Redux the right way, and explains concepts along the way so that you can understand how to build Redux apps correctly.
 
 We've tried to keep these explanations beginner-friendly, but we do need to make some assumptions about what you know already:
 
@@ -35,6 +35,7 @@ We've tried to keep these explanations beginner-friendly, but we do need to make
 - Familiarity with [ES2015 syntax and features](https://www.taniarascia.com/es6-syntax-and-feature-overview/)
 - Knowledge of React terminology: [JSX](https://react.dev/learn/writing-markup-with-jsx), [Function Components](https://react.dev/learn/your-first-component), [Props](https://react.dev/learn/passing-props-to-a-component), [State](https://react.dev/learn/state-a-components-memory), and [Hooks](https://react.dev/reference/react)
 - Knowledge of [asynchronous JavaScript](https://javascript.info/promise-basics) and [making HTTP requests](https://javascript.info/fetch)
+- Basic understanding of [TypeScript syntax and usage](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
 
 :::
 

@@ -190,7 +190,7 @@ export const store = configureStore({
 })
 ```
 
-In that example, `state.users`, `state.posts`, and `state.comments` are each a separate "slice" of the Redux state. Since `usersReducer` is responsible for updating the `state.users` slice, we refer to it as a "slice reducer" function.
+In that example, `state.users`, `state.posts`, and `state.comments` are each a separate "slice" of the Redux state. Since `usersReducer` is responsible for updating the `state.users` slice, we refer to it as a **"slice reducer" function**.
 
 <DetailedExplanation title="Detailed Explanation: Reducers and State Structure">
 
@@ -415,7 +415,7 @@ But, here's something _very_ important to remember:
 
 :::warning
 
-**You can _only_ write "mutating" logic in Redux Toolkit's `createSlice` and `createReducer` because they use Immer inside! If you write mutating logic in reducers without Immer, it _will_ mutate the state and cause bugs!**
+**You can _only_ write "mutating" logic in Redux Toolkit's `createSlice` and `createReducer` because they use Immer inside! If you write mutating logic in your code without Immer, it _will_ mutate the state and cause bugs!**
 
 :::
 
@@ -488,7 +488,7 @@ Note that you **don't have to create separate selector functions for every field
 
 :::info More Info on Selectors
 
-**[TODO]** We'll learn more about selector functions in [Part 4: Using Redux Data](./part-4-using-data.md), and look at how they can be optimized in [Part 6: Performance](./part-6-performance-normalization.md)
+We'll learn more about selector functions in [Part 4: Using Redux Data](./part-4-using-data.md#reading-data-with-selectors), and look at how they can be optimized in [Part 6: Performance](./part-6-performance-normalization.md#memoizing-selector-functions)
 
 See [Deriving Data with Selectors](../../usage/deriving-data-selectors.md) for a longer look at why and how to use selector functions.
 
@@ -500,8 +500,8 @@ So far, all the logic in our application has been synchronous. Actions are dispa
 
 A **thunk** is a specific kind of Redux function that can contain asynchronous logic. Thunks are written using two functions:
 
-- An inside thunk function, which gets `dispatch` and `getState` as arguments
-- The outside creator function, which creates and returns the thunk function
+- An inner thunk function, which gets `dispatch` and `getState` as arguments
+- The outer creator function, which creates and returns the thunk function
 
 The next function that's exported from `counterSlice` is an example of a thunk action creator:
 
@@ -599,6 +599,8 @@ export const counterSlice = createSlice({
   }
 })
 ```
+
+If you're curious _why_ we use thunks for async logic, see this deeper explanation:
 
 <DetailedExplanation title="Detailed Explanation: Thunks and Async Logic">
 

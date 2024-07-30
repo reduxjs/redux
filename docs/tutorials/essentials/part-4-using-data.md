@@ -441,7 +441,7 @@ const handleSubmit = (e: React.FormEvent<AddPostFormElements>) => {
 }
 ```
 
-## Writing Selectors for Slices
+## Reading Data With Selectors
 
 We now have a couple different components that are looking up a post by ID, and repeating the `state.posts.find()` call. This is duplicate code, and it's always worth _considering_ if we should de-duplicate things. It's also fragile - as we'll see in later sections, we are eventually going to start changing the posts slice state structure. When we do that, we'll have to find each place that we reference `state.posts` and update the logic accordingly. TypeScript will help catch broken code that no longer matches the expected state type by throwing errors at compile time, but it would be nice if we didn't have to keep rewriting our components every time we made a change to the data format in our reducers, and didn't have to repeat logic in the components.
 
