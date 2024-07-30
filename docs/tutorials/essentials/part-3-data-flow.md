@@ -45,21 +45,21 @@ To get started, you can open and fork this CodeSandbox:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/master/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/433b1132560f07c5911432182b6a4047610c25e9/?&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-essentials-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
-You can also [clone the same project from this Github repo](https://github.com/reduxjs/redux-essentials-example-app). After cloning the repo, you can install the tools for the project with `npm install`, and start it with `npm start`.
+You can also [clone the same project from this Github repo](https://github.com/reduxjs/redux-essentials-example-app). The project is configured to use [Yarn 4](https://yarnpkg.com/) as the package manager, but you can use any package manager ([NPM](https://docs.npmjs.com/cli/v10), [PNPM](https://pnpm.io/), or [Bun](https://bun.sh/docs/cli/install)) as you prefer. After installing packages, you can start the local dev server with the `yarn dev` command.
 
-If you'd like to see the final version of what we're going to build, you can check out [the **`tutorial-steps` branch**](https://github.com/reduxjs/redux-essentials-example-app/tree/tutorial-steps), or [look at the final version in this CodeSandbox](https://codesandbox.io/s/github/reduxjs/redux-essentials-example-app/tree/tutorial-steps).
+If you'd like to see the final version of what we're going to build, you can check out [the **`tutorial-steps-ts` branch**](https://github.com/reduxjs/redux-essentials-example-app/tree/tutorial-steps-ts), or [look at the final version in this CodeSandbox](https://codesandbox.io/s/github/reduxjs/redux-essentials-example-app/tree/tutorial-steps-ts).
 
 > We'd like to thank [Tania Rascia](https://www.taniarascia.com/), whose [Using Redux with React](https://www.taniarascia.com/redux-react-guide/) tutorial helped inspire the example in this page. It also uses her [Primitive UI CSS starter](https://taniarascia.github.io/primitive/) for styling.
 
 #### Creating a New Redux + React Project
 
-Once you've finished this tutorial, you'll probably want to try working on your own projects. **We recommend using the [Redux template for Vite](../../introduction/Installation.md#create-a-react-redux-app) as the fastest way to create a new Redux + React project**. It comes with Redux Toolkit and React-Redux already configured, using [the same "counter" app example you saw in Part 1](./part-1-overview-concepts.md). This lets you jump right into writing your actual application code without having to add the Redux packages and set up the store.
+Once you've finished this tutorial, you'll probably want to try working on your own projects. **We recommend using the [Redux templates for Vite and Next.js](../../introduction/Installation.md#create-a-react-redux-app) as the fastest way to create a new Redux + React project**. The templates come with Redux Toolkit and React-Redux already configured, using [the same "counter" app example you saw in Part 1](./part-1-overview-concepts.md). This lets you jump right into writing your actual application code without having to add the Redux packages and set up the store.
 
 #### Exploring the Initial Project
 
@@ -77,8 +77,6 @@ Let's take a quick look at what the initial project contains:
     - `Navbar.tsx`: renders the top header and nav content
 
 If you load the app now, you should see the header and a welcome message, but no functionality.
-
-The project is configured to use [Yarn 4](https://yarnpkg.com/) as the package manager, but you can use any package manager ([NPM](https://docs.npmjs.com/cli/v10), [PNPM](https://pnpm.io/), or [Bun](https://bun.sh/docs/cli/install)) as you prefer.
 
 With that, let's get started!
 
@@ -189,8 +187,6 @@ Now that we have a store, we can use the Redux DevTools extension to view the cu
 
 If you open up your browser's DevTools view (such as by right-clicking anywhere in the page and choosing "Inspect"), you can click on the "Redux" tab. This will show the history of dispatched actions and the current state value:
 
-**[TODO] Update screenshot**
-
 ![Redux DevTools: initial app state](/img/tutorials/essentials/devtools-initial.png)
 
 The current state value should be an object that looks like this:
@@ -198,7 +194,7 @@ The current state value should be an object that looks like this:
 ```ts
 {
   counter: {
-    value: 123
+    value: 0
   }
 }
 ```
@@ -468,6 +464,7 @@ In this example we're using ["uncontrolled" inputs](https://react.dev/reference/
 Import that component into `App.tsx`, and add it right above the `<PostsList />` component:
 
 ```tsx title="App.tsx"
+// omit outer `<App>` definition
 <Route
   path="/"
   element={
@@ -670,8 +667,11 @@ Let's recap what you've learned in this section:
 Here's what the app looks like so far:
 
 <iframe
-class="codesandbox"
-  src="https://stackblitz.com/github/reduxjs/redux-essentials-example-app/tree/ts-checkpoint-1/?ctl=1&embed=1&file=src%2Ffeatures%2Fposts%2FpostsSlice.ts&terminalHeight=0"
+  class="codesandbox"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/7f33de00afef79792250f314aa0da2d695ce2e8d?fontsize=14&hidenavigation=1&module=%2fsrc%2Ffeatures%2Fposts%2FpostsSlice.ts&theme=dark&runonclick=1"
+  title="redux-essentials-example"
+  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
 
 ## What's Next?
