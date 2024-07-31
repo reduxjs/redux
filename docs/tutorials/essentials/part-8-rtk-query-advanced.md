@@ -1266,9 +1266,9 @@ export const Navbar = () => {
     }
 ```
 
-Almost there! We're fetching initial notifications via RTK Query, tracking read status on the client side, and we've got the infrastructure set up to force new notifications via a websocket.
+Almost there! We're fetching initial notifications via RTK Query, tracking read status on the client side, and we've got the infrastructure set up to force new notifications via a websocket. But, **if we click "Refresh Notifications" now, it will throw an error - we don't have the websocket handling implemented yet!**
 
-Now we can implement the actual streaming updates logic.
+So, let's implement the actual streaming updates logic.
 
 #### Implementing Streaming Updates
 
