@@ -533,11 +533,12 @@ Notice that the names of the actions in the left-hand list are much more generic
 
 :::tip
 
-The Redux DevTools have an "RTK Query" tab that specifically shows RTK Query data in a more usable format. This includes info on each endpoint and cache result, stats on query timing, and much more:
+The Redux DevTools have an "RTK Query" tab that specifically shows RTK Query data in a more usable format that focuses on cache entries, rather than the raw Redux state structure. This includes info on each endpoint and cache result, stats on query timing, and much more:
 
-**[TODO] RTKQ devtools screenshots**
+![RTK Query data cached in the store state](/img/tutorials/essentials/devtools-rtkq-tab.png)
 
-- [Redux DevTools #750: Add RTK Query-Inspector monitor](https://github.com/reduxjs/redux-devtools/pull/750)
+You can also see this live demo of the RTK Query devtools
+
 - [RTK Query Monitor preview demo](https://rtk-query-monitor-demo.netlify.app/)
 
 :::
@@ -821,8 +822,8 @@ With RTK Query, the actual details of how to manage data fetching, caching, and 
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/checkpoint-5-createApi/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
-  title="redux-essentials-example-app"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/ee4f86a206761f347e076086fc08524faac324b2?fontsize=14&hidenavigation=1&module=%2fsrc%2Ffeatures%2Fposts%2FpostsSlice.ts&theme=dark&runonclick=1"
+  title="redux-essentials-example"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
 ></iframe>
