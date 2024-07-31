@@ -1316,6 +1316,7 @@ import {
 } from '@reduxjs/toolkit'
 // omit imports and other code
 
+// highlight-next-line
 const notificationsReceived = createAction<ServerNotification[]>('notifications/notificationsReceived')
 
 export const apiSliceWithNotifications = apiSlice.injectEndpoints({
@@ -1345,6 +1346,9 @@ export const apiSliceWithNotifications = apiSlice.injectEndpoints({
                   draft.push(...message.payload)
                   draft.sort((a, b) => b.date.localeCompare(a.date))
                 })
+
+                // Dispatch an additional action so we can track "read" state
+                lifecycleApi.dispatch(notificationsReceived(message.payload))
                 break
               }
               default:
@@ -1420,7 +1424,7 @@ Let's take one last look at the whole application in action:
 
 <iframe
   class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/checkpoint-6-rtkqConversion/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/feature/tutorial-steps-ts-post-review/?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
   title="redux-essentials-example-app"
   allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
   sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
