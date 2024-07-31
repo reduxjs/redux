@@ -1175,6 +1175,8 @@ export const NotificationsList = () => {
       new: metadata.isNew,
     })
     // highlight-end
+
+    // omit rendering
   }
 }
 ```
