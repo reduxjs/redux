@@ -643,6 +643,16 @@ Remember, **the Redux store should only contain data that's considered "global" 
 
 ## What You've Learned
 
+We've set up the basics of a Redux app - store, slice with reducers, and UI to dispatch actions. Here's what the app looks like so far:
+
+<iframe
+  class="codesandbox"
+  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/ts-checkpoint-1-postAdded?fontsize=14&hidenavigation=1&module=%2fsrc%2Ffeatures%2Fposts%2FpostsSlice.ts&theme=dark&runonclick=1"
+  title="redux-essentials-example"
+  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+></iframe>
+
 Let's recap what you've learned in this section:
 
 :::tip Summary
@@ -663,16 +673,6 @@ Let's recap what you've learned in this section:
 - **If you're using TypeScript, the initial app setup should define TS types for `RootState` and `AppDispatch` based on the store, and export pre-typed versions of the React-Redux `useSelector` and `useDispatch` hooks**
 
 :::
-
-Here's what the app looks like so far:
-
-<iframe
-  class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/7f33de00afef79792250f314aa0da2d695ce2e8d?fontsize=14&hidenavigation=1&module=%2fsrc%2Ffeatures%2Fposts%2FpostsSlice.ts&theme=dark&runonclick=1"
-  title="redux-essentials-example"
-  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-></iframe>
 
 ## What's Next?
 
