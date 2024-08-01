@@ -62,7 +62,7 @@ Once the store is created, we can make it available to our React components by p
 
 ```js title="index.js"
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App'
 // highlight-start
@@ -70,12 +70,15 @@ import store from './app/store'
 import { Provider } from 'react-redux'
 // highlight-end
 
-ReactDOM.render(
-  // highlight-next-line
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  document.getElementById('root')
+const root = createRoot(document.getElementById('root')!)
+
+root.render(
+  <React.StrictMode>
+    // highlight-next-line
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </React.StrictMode>,
 )
 ```
 

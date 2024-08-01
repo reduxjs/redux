@@ -286,14 +286,16 @@ Let's add that to our main `index.js` file:
 
 ```jsx title="src/index.js"
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 // highlight-next-line
 import { Provider } from 'react-redux'
 
 import App from './App'
 import store from './store'
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('root'))
+
+root.render(
   // highlight-start
   // Render a `<Provider>` around the entire `<App>`,
   // and pass the Redux store to it as a prop
@@ -301,9 +303,8 @@ ReactDOM.render(
     <Provider store={store}>
       <App />
     </Provider>
-  </React.StrictMode>,
+  </React.StrictMode>
   // highlight-end
-  document.getElementById('root')
 )
 ```
 
@@ -579,4 +580,4 @@ Let's see how the app looks now, including the components and sections we skippe
 
 ## What's Next?
 
-Now that our UI is working, it's time to see how to make our Redux app talk to a server. In [Part 6: Async Logic](./part-6-async-logic.md), we'll talk about how asynchronous logic like timeouts and AJAX calls fit into the Redux data flow.
+Now that our UI is working, it's time to see how to make our Redux app talk to a server. In [Part 6: Async Logic](./part-6-async-logic.md), we'll talk about how asynchronous logic like timeouts and HTTP requests fit into the Redux data flow.
