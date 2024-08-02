@@ -88,6 +88,7 @@ export const mangleErrorsPlugin = (
   let changeInArray = false
 
   return {
+    name: 'mangle-errors-plugin',
     pre: () => {
       changeInArray = false
     },
