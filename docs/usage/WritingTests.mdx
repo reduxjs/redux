@@ -478,6 +478,9 @@ export function renderWithProviders(
 The actual test files should use the custom `render` function to actually render our Redux-connected components. If the code that we're testing involves making network requests, we should also configure MSW to mock the expected requests with appropriate test data.
 
 ```tsx title="features/users/tests/UserDisplay.test.tsx"
+// file: jest-setup.ts noEmit
+import '@testing-library/jest-dom'
+
 // file: features/users/userSlice.ts noEmit
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import type { RootState } from '../../app/store'
