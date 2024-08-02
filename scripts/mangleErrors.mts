@@ -118,6 +118,8 @@ export const mangleErrorsPlugin = (
             return
           }
 
+          const errorName = path.node.argument.callee.name
+
           const errorMsgLiteral = evalToString(path.node.argument.arguments[0])
 
           if (errorMsgLiteral.includes('Super expression')) {
@@ -150,13 +152,13 @@ export const mangleErrorsPlugin = (
           if (minify) {
             path.replaceWith(
               t.throwStatement(
-                t.newExpression(t.identifier('Error'), [prodMessage])
+                t.newExpression(t.identifier(errorName), [prodMessage])
               )
             )
           } else {
             path.replaceWith(
               t.throwStatement(
-                t.newExpression(t.identifier('Error'), [
+                t.newExpression(t.identifier(errorName), [
                   t.conditionalExpression(
                     t.binaryExpression(
                       '===',
