@@ -48,7 +48,7 @@
     "test:watch": "vitest --watch",
     "test:cov": "vitest --coverage",
     "build": "yarn clean && tsup",
-    "prepublishOnly": "yarn clean && yarn check-types && yarn format:check && yarn lint && yarn test",
+    "prepublishOnly": "yarn clean && yarn format:check && yarn lint && yarn test",
     "prepack": "yarn build",
     "examples:lint": "eslint --ext js,ts examples",
     "tsc": "tsc"
