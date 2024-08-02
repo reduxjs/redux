@@ -181,3 +181,5 @@ export const mangleErrorsPlugin = (
     }
   }
 }
+
+export default mangleErrorsPlugin
