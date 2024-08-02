@@ -1,13 +1,12 @@
-import { combineReducers, createStore } from 'redux'
 import type {
-  Store,
-  Reducer,
   Action,
+  Observer,
+  Reducer,
+  Store,
   StoreEnhancer,
-  Unsubscribe,
-  Observer
+  Unsubscribe
 } from 'redux'
-import 'symbol-observable'
+import { combineReducers, createStore } from 'redux'
 
 type BrandedString = string & { _brand: 'type' }
 const brandedString = 'a string' as BrandedString
