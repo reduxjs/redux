@@ -19,10 +19,10 @@ export interface MangleErrorsPluginOptions {
 }
 
 /**
- * Converts an AST type into a javascript string so that it can be added to the error message lookup.
+ * Converts an AST type into a JavaScript string so that it can be added to the error message lookup.
  *
  * Adapted from React (https://github.com/facebook/react/blob/master/scripts/shared/evalToString.js) with some
- * adjustments
+ * adjustments.
  */
 const evalToString = (
   ast: Node | { type: 'Literal'; value: string }
@@ -50,14 +50,14 @@ const evalToString = (
 }
 
 /**
- * Takes a `throw new error` statement and transforms it depending on the minify argument. Either option results in a
- * smaller bundle size in production for consumers.
+ * Transforms a `throw new Error` statement based on the `minify` argument, resulting in a smaller bundle size
+ * for consumers in production.
  *
- * If minify is enabled, we'll replace the error message with just an index that maps to an arrow object lookup.
+ * If `minify` is enabled, the error message will be replaced with an index that maps to an object lookup.
  *
- * If minify is disabled, we'll add in a conditional statement to check the process.env.NODE_ENV which will output a
- * an error number index in production or the actual error message in development. This allows consumers using webpack
- * or another build tool to have these messages in development but have just the error index in production.
+ * If `minify` is disabled, a conditional statement will be added to check `process.env.NODE_ENV`, which will output
+ * an error number index in production or the actual error message in development. This allows consumers using Webpack
+ * or another build tool to have these messages in development but only the error index in production.
  *
  * E.g.
  *  Before:
@@ -68,9 +68,9 @@ const evalToString = (
  *    throw new Error(0);
  *    throw new Error(1);
  *
- *  After: (without minify):
- *    throw new Error(node.process.NODE_ENV === 'production' ? 0 : "This is my error message.");
- *    throw new Error(node.process.NODE_ENV === 'production' ? 1 : "This is a second error message.");
+ *  After (without minify):
+ *    throw new Error(process.env.NODE_ENV === 'production' ? 0 : "This is my error message.");
+ *    throw new Error(process.env.NODE_ENV === 'production' ? 1 : "This is a second error message.");
  */
 export const mangleErrorsPlugin = (
   babel: Babel,
