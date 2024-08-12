@@ -1525,7 +1525,7 @@ export const selectPostsStatus = (state: RootState) => state.posts.status
 export const selectPostsError = (state: RootState) => state.posts.error
 
 // highlight-start
-export const addPostsListeners = (startListening: AppStartListening) => {
+export const addPostsListeners = (startAppListening: AppStartListening) => {
   startAppListening({
     actionCreator: addNewPost.fulfilled,
     effect: async (action, listenerApi) => {
