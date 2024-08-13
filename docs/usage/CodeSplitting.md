@@ -26,6 +26,8 @@ store.replaceReducer(newRootReducer)
 
 ## Reducer Injection Approaches
 
+This section will cover some handwritten recipes used to inject reducers.
+
 ### Defining an `injectReducer` function
 
 We will likely want to call `store.replaceReducer()` from anywhere in the application. Because of that, it's helpful
@@ -154,8 +156,383 @@ To add a new reducer, one can now call `store.reducerManager.add("asyncState", a
 
 To remove a reducer, one can now call `store.reducerManager.remove("asyncState")`
 
-## Libraries and Frameworks
+## Redux Toolkit
 
-There are a few good libraries out there that can help you add the above functionality automatically:
+Redux Toolkit 2.0 includes some utilities designed to simplify code splitting with reducers and middleware, including solid Typescript support (a common challenge with lazy loaded reducers and middleware).
+
+### `combineSlices`
+
+The [`combineSlices`](https://redux-toolkit.js.org/api/combineSlices) utility is designed to allow for easy reducer injection. It also supercedes `combineReducers`, in that it can be used to combine multiple slices and reducers into one root reducer.
+
+At setup it accepts a set of slices and reducer maps, and returns a reducer instance with attached methods for injection.
+
+:::note
+
+A "slice" for `combineSlices` is typically created with `createSlice`, but can be any "slice-like" object with `reducerPath` and `reducer` properties (meaning RTK Query API instances are also compatible).
+
+```ts
+const withUserReducer = rootReducer.inject({
+  reducerPath: 'user',
+  reducer: userReducer
+})
+
+const withApiReducer = rootReducer.inject(fooApi)
+```
+
+For simplicity, this `{ reducerPath, reducer }` shape will be described in these docs as a "slice".
+
+:::
+
+Slices will be mounted at their `reducerPath`, and items from reducer map objects will be mounted under their respective key.
+
+```ts
+const rootReducer = combineSlices(counterSlice, baseApi, {
+  user: userSlice.reducer,
+  auth: authSlice.reducer
+})
+// is like
+const rootReducer = combineReducers({
+  [counterSlice.reducerPath]: counterSlice.reducer,
+  [baseApi.reducerPath]: baseApi.reducer,
+  user: userSlice.reducer,
+  auth: authSlice.reducer
+})
+```
+
+:::caution
+
+Be careful to avoid naming collision - later keys will overwrite earlier ones, but Typescript won't be able to account for this.
+
+:::
+
+#### Slice injection
+
+To inject a slice, you should call `rootReducer.inject(slice)` on the reducer instance returned from `combineSlices`. This will inject the slice under its `reducerPath` into the set of reducers, and return an instance of the combined reducer typed to know that the slice has been injected.
+
+Alternatively, you can call `slice.injectInto(rootReducer)`, which returns an instance of the slice which is aware it's been injected. You may even want to do both, as each call returns something useful, and `combineSlices` allows injection of the same reducer instance at the same `reducerPath` without issue.
+
+```ts
+const withCounterSlice = rootReducer.inject(counterSlice)
+const injectedCounterSlice = counterSlice.injectInto(rootReducer)
+```
+
+One key difference between typical reducer injection and `combineSlice`'s "meta-reducer" approach is that `replaceReducer` is never called for `combineSlice`. The reducer instance passed to the store doesn't change.
+
+A consequence of this is that no action is dispatched when a slice is injected, and therefore the injected slice's state doesn't show in state immediately. The state will only show in the store's state when an action is dispatched.
+
+However, to avoid selectors having to account for possibly `undefined` state, `combineSlices` includes some useful [selector utilities](#selector-utilities).
+
+#### Declaring lazy loaded slices
+
+In order for lazy loaded slices to show up in the inferred state type, a `withLazyLoadedSlices` helper is provided. This allows you to declare slices you intend to later inject, so they can show up as optional in the state type.
+
+To completely avoid importing the lazy slice into the combined reducer's file, module augmentation can be used.
+
+```ts
+// file: reducer.ts
+import { combineSlices } from '@reduxjs/toolkit'
+import { staticSlice } from './staticSlice'
+
+export interface LazyLoadedSlices {}
+
+export const rootReducer =
+  combineSlices(staticSlice).withLazyLoadedSlices<LazyLoadedSlices>()
+
+// file: counterSlice.ts
+import type { WithSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
+import { rootReducer } from './reducer'
+
+interface CounterState {
+  value: number
+}
+
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState: { value: 0 } as CounterState,
+  reducers: {
+    increment: state => void state.value++
+  },
+  selectors: {
+    selectValue: state => state.value
+  }
+})
+
+declare module './reducer' {
+  // WithSlice utility assumes reducer is under slice.reducerPath
+  export interface LazyLoadedSlices extends WithSlice<typeof counterSlice> {}
+
+  // if it's not, just use a normal key
+  export interface LazyLoadedSlices {
+    aCounter: CounterState
+  }
+}
+
+const injectedCounterSlice = counterSlice.injectInto(rootReducer)
+const injectedACounterSlice = counterSlice.injectInto(rootReducer, {
+  reducerPath: 'aCounter'
+})
+```
+
+#### Selector utilities
+
+As well as `inject`, the combined reducer instance has a `.selector` method which can be used to wrap selectors. It wraps the state object in a `Proxy`, and provides an initial state for any reducers which have been injected but haven't appeared in state yet.
+
+The result of calling `inject` is typed to know that the injected slice will always be defined when the selector is called.
+
+```ts
+const selectCounterValue = (state: RootState) => state.counter?.value // number | undefined
+
+const withCounterSlice = rootReducer.inject(counterSlice)
+const selectCounterValue = withCounterSlice.selector(
+  state => state.counter.value // number - initial state used if not in store
+)
+```
+
+An "injected" instance of a slice will do the same thing for slice selectors - initial state will be provided if not present in the state passed.
+
+```ts
+const injectedCounterSlice = counterSlice.injectInto(rootReducer)
+
+console.log(counterSlice.selectors.selectValue({})) // runtime error
+console.log(injectedCounterSlice.selectors.selectValue({})) // 0
+```
+
+#### Typical usage
+
+`combineSlices` is designed so that the slice is injected as soon as it's needed (i.e. a selector or action is imported from a component that's been loaded in).
+
+This means that the typical usage will look something along the lines of the below.
+
+```ts
+// file: reducer.ts
+import { combineSlices } from '@reduxjs/toolkit'
+import { staticSlice } from './staticSlice'
+
+export interface LazyLoadedSlices {}
+
+export const rootReducer =
+  combineSlices(staticSlice).withLazyLoadedSlices<LazyLoadedSlices>()
+
+// file: store.ts
+import { configureStore } from '@reduxjs/toolkit'
+import { rootReducer } from './reducer'
+
+export const store = configureStore({ reducer: rootReducer })
+
+// file: counterSlice.ts
+import type { WithSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
+import { rootReducer } from './reducer'
+
+const counterSlice = createSlice({
+  name: 'counter',
+  initialState: { value: 0 },
+  reducers: {
+    increment: state => void state.value++
+  },
+  selectors: {
+    selectValue: state => state.value
+  }
+})
+
+export const { increment } = counterSlice.actions
+
+declare module './reducer' {
+  export interface LazyLoadedSlices extends WithSlice<typeof counterSlice> {}
+}
+
+const injectedCounterSlice = counterSlice.injectInto(rootReducer)
+
+export const { selectValue } = injectedCounterSlice.selectors
+
+// file: Counter.tsx
+// by importing from counterSlice we guarantee
+// the injection happens before this component is defined
+import { increment, selectValue } from './counterSlice'
+import { useAppDispatch, useAppSelector } from './hooks'
+
+export default function Counter() {
+  const dispatch = usAppDispatch()
+  const value = useAppSelector(selectValue)
+  return (
+    <>
+      <p>{value}</p>
+      <button onClick={() => dispatch(increment())}>Increment</button>
+    </>
+  )
+}
+
+// file: App.tsx
+import { Provider } from 'react-redux'
+import { store } from './store'
+
+// lazily importing the component means that the code
+// doesn't actually get pulled in and executed until the component is rendered.
+// this means that the inject call only happens once Counter renders
+const Counter = React.lazy(() => import('./Counter'))
+
+function App() {
+  return (
+    <Provider store={store}>
+      <Counter />
+    </Provider>
+  )
+}
+```
+
+### `createDynamicMiddleware`
+
+The `createDynamicMiddleware` utility creates a "meta-middleware" which allows for injection of middleware after store initialisation.
+
+```ts
+import { createDynamicMiddleware, configureStore } from '@reduxjs/toolkit'
+import logger from 'redux-logger'
+import reducer from './reducer'
+
+const dynamicMiddleware = createDynamicMiddleware()
+
+const store = configureStore({
+  reducer,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware().concat(dynamicMiddleware.middleware)
+})
+
+dynamicMiddleware.addMiddleware(logger)
+```
+
+#### `addMiddleware`
+
+`addMiddleware` appends the middleware instance to the chain of middlewares handled by the dynamic middleware instance. Middleware is applied in injection order, and stored by function reference (so the same middleware is only applied once regardless of how many times it's injected).
+
+:::note
+
+It's important to remember that all middlewares injected will be contained _within_ the original dynamic middleware instance.
+
+```ts
+import { createDynamicMiddleware, configureStore } from '@reduxjs/toolkit'
+import logger from 'redux-logger'
+import reducer from './reducer'
+
+const dynamicMiddleware = createDynamicMiddleware()
+
+const store = configureStore({
+  reducer,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware().concat(dynamicMiddleware.middleware)
+})
+
+dynamicMiddleware.addMiddleware(logger)
+
+// middleware chain is now [thunk, logger]
+```
+
+If it's desired to have more control over the order, multiple instances can be used.
+
+```ts
+import { createDynamicMiddleware, configureStore } from '@reduxjs/toolkit'
+import logger from 'redux-logger'
+import reducer from './reducer'
+
+const beforeMiddleware = createDynamicMiddleware()
+const afterMiddleware = createDynamicMiddleware()
+
+const store = configureStore({
+  reducer,
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware()
+      .prepend(beforeMiddleware.middleware)
+      .concat(afterMiddleware.middleware)
+})
+
+beforeMiddleware.addMiddleware(logger)
+afterMiddleware.addMiddleware(logger)
+
+// middleware chain is now [logger, thunk, logger]
+```
+
+:::
+
+#### `withMiddleware`
+
+`withMiddleware` is an action creator which, when dispatched, causes the middleware to add any middlewares included and returns a pre-typed version of `dispatch` with any added extensions.
+
+```ts
+const listenerDispatch = store.dispatch(
+  withMiddleware(listenerMiddleware.middleware)
+)
+
+const unsubscribe = listenerDispatch(addListener({ actionCreator, effect }))
+//    ^? () => void
+```
+
+This is mainly useful in a non-React context. With React it's more useful to use the [react integration](#react-integration).
+
+#### React integration
+
+When imported from the `@reduxjs/toolkit/react` entry point, the instance of dynamic middleware will have a couple of additional methods attached.
+
+##### `createDispatchWithMiddlewareHook`
+
+This method calls `addMiddleware` and returns a version of `useDispatch` typed to know about the injected middleware.
+
+```ts
+import { createDynamicMiddleware } from '@reduxjs/toolkit/react'
+
+const dynamicMiddleware = createDynamicMiddleware()
+
+const useListenerDispatch = dynamicMiddleware.createDispatchWithMiddlewareHook(
+  listenerMiddleware.middleware
+)
+
+function Component() {
+  const dispatch = useListenerDispatch()
+
+  useEffect(() => {
+    const unsubscribe = dispatch(addListener({ actionCreator, effect }))
+    return unsubscribe
+  }, [dispatch])
+}
+```
+
+:::caution
+
+Middleware is injected when `createDispatchWithMiddlewareHook` is called, _not_ when the `useDispatch` hook is called.
+
+:::
+
+##### `createDispatchWithMiddlewareHookFactory`
+
+This method take a React context instance and creates an instance of `createDispatchWithMiddlewareHook` which uses that context. (see [Providing custom context](https://react-redux.js.org/using-react-redux/accessing-store#providing-custom-context))
+
+```ts
+import { createContext } from 'react'
+import { createDynamicMiddleware } from '@reduxjs/toolkit/react'
+import type { ReactReduxContextValue } from 'react-redux'
+
+const context = createContext<ReactReduxContextValue | null>(null)
+
+const dynamicMiddleware = createDynamicMiddleware()
+
+const createDispatchWithMiddlewareHook =
+  dynamicMiddleware.createDispatchWithMiddlewareHookFactory(context)
+
+const useListenerDispatch = createDispatchWithMiddlewareHook(
+  listenerMiddleware.middleware
+)
+
+function Component() {
+  const dispatch = useListenerDispatch()
+
+  useEffect(() => {
+    const unsubscribe = dispatch(addListener({ actionCreator, effect }))
+    return unsubscribe
+  }, [dispatch])
+}
+```
+
+## Third-party Libraries and Frameworks
+
+There are a few good external libraries out there that can help you add the above functionality automatically:
 
 - [Redux Ecosystem Links: Reducers - Dynamic Reducer Injection](https://github.com/markerikson/redux-ecosystem-links/blob/master/reducers.md#dynamic-reducer-injection)
