@@ -545,8 +545,8 @@ import { ReactionButtons } from './ReactionButtons'
 import { fetchPosts, selectAllPosts, selectPostsStatus } from './postsSlice'
 
 export const PostsList = () => {
-  const dispatch = useAppDispatch()
   // highlight-start
+  const dispatch = useAppDispatch()
   const posts = useAppSelector(selectAllPosts)
   const postStatus = useAppSelector(selectPostsStatus)
 
