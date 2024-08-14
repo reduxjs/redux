@@ -83,7 +83,7 @@ export const selectPostsStatus = (state: RootState) => state.posts.status
 export const selectPostsError = (state: RootState) => state.posts.error
 ```
 
-```tsx title="features/users/UserPage.ts"
+```tsx title="features/users/UserPage.tsx"
 import { Link, useParams } from 'react-router-dom'
 
 import { useAppSelector } from '@/app/hooks'
