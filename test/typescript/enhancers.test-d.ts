@@ -40,9 +40,7 @@ describe('type tests', () => {
     // do not work in this scenario.
     store.dispatch({ type: 'INCREMENT' })
 
-    expectTypeOf(store.dispatch)
-      .parameter(0)
-      .toEqualTypeOf(Promise.resolve({ type: 'INCREMENT' }))
+    store.dispatch(Promise.resolve({ type: 'INCREMENT' }))
 
     expectTypeOf(store.dispatch).parameter(0).not.toMatchTypeOf('not-an-action')
 

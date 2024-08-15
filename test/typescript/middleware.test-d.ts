@@ -138,9 +138,7 @@ describe('type tests', () => {
       // do not work in this scenario.
       storeWithPromise.dispatch({ type: 'INCREMENT' })
 
-      expectTypeOf(storeWithPromise.dispatch)
-        .parameter(0)
-        .toMatchTypeOf(Promise.resolve({ type: 'INCREMENT' }))
+      storeWithPromise.dispatch(Promise.resolve({ type: 'INCREMENT' }))
 
       expectTypeOf(storeWithPromise.dispatch)
         .parameter(0)
@@ -162,9 +160,7 @@ describe('type tests', () => {
       // do not work in this scenario.
       storeWithPromiseAndLogger.dispatch({ type: 'INCREMENT' })
 
-      expectTypeOf(storeWithPromiseAndLogger.dispatch)
-        .parameter(0)
-        .toMatchTypeOf(Promise.resolve({ type: 'INCREMENT' }))
+      storeWithPromiseAndLogger.dispatch(Promise.resolve({ type: 'INCREMENT' }))
 
       expectTypeOf(storeWithPromiseAndLogger.dispatch)
         .parameter(0)
