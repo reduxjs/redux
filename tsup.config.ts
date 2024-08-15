@@ -1,4 +1,4 @@
-import babel from '@babel/core'
+import * as babel from '@babel/core'
 import type { Plugin } from 'esbuild'
 import { getBuildExtensions } from 'esbuild-extra'
 import type { Options } from 'tsup'

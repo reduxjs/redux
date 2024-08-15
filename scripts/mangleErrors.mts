@@ -1,6 +1,6 @@
 import type { Node, PluginObj, PluginPass } from '@babel/core'
-import helperModuleImports from '@babel/helper-module-imports'
-import fs from 'node:fs'
+import * as helperModuleImports from '@babel/helper-module-imports'
+import * as fs from 'node:fs'
 
 type Babel = typeof import('@babel/core')
 
