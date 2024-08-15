@@ -2,10 +2,8 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "declaration": true,
-    "downlevelIteration": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "importHelpers": true,
     "isolatedModules": true,
     "jsx": "react",
     "lib": ["DOM", "ESNext"],
