@@ -14,8 +14,6 @@ import ActionTypes from './utils/actionTypes'
 import isPlainObject from './utils/isPlainObject'
 import { kindOf } from './utils/kindOf'
 
-type NoInfer<T> = [T][T extends any ? 0 : never]
-
 /**
  * Prevents TypeScript from inferring a generic type parameter.
  *
