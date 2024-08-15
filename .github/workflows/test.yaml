@@ -19,6 +19,7 @@ jobs:
               - 'test/**'
               - '.github/**/*.yaml'
               - 'tsup.config.ts'
+              - 'yarn.lock'
 
   build:
     needs: changes
