@@ -48,6 +48,9 @@ jobs:
       - name: Lint
         run: yarn lint
 
+      - name: Run test suite
+        run: yarn test
+
       - name: Build
         run: yarn build
 
@@ -90,9 +93,12 @@ jobs:
       - name: Install build artifact
         run: yarn  add ./package.tgz
 
-      - run: sed -i -e /@remap-prod-remove-line/d ./tsconfig.json ./vitest.config.mts ./test/tsconfig.json ./test/typescript/tsconfig.json
+      - name: Erase path aliases
+        run: sed -i -e /@remap-prod-remove-line/d tsconfig.base.json
 
       - name: Run tests, against dist
+        env:
+          TEST_DIST: true
         run: yarn test
 
   test-types:
@@ -129,12 +135,15 @@ jobs:
       - name: Install build artifact
         run: yarn add ./package.tgz
 
+      - name: Erase path aliases
+        run: sed -i -e /@remap-prod-remove-line/d tsconfig.base.json
+
       - name: Test types
+        env:
+          TEST_DIST: true
         run: |
           yarn tsc --version
-          yarn check-types
-          yarn test:typecheck
-          yarn test:types
+          yarn type-tests
 
   are-the-types-wrong:
     name: Check package config with are-the-types-wrong

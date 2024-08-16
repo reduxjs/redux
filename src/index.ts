@@ -10,7 +10,7 @@ import __DO_NOT_USE__ActionTypes from './utils/actionTypes'
 
 // types
 // store
-export {
+export type {
   Dispatch,
   Unsubscribe,
   Observable,
@@ -21,7 +21,7 @@ export {
   StoreEnhancerStoreCreator
 } from './types/store'
 // reducers
-export {
+export type {
   Reducer,
   ReducersMapObject,
   StateFromReducersMapObject,
@@ -31,11 +31,11 @@ export {
   PreloadedStateShapeFromReducersMapObject
 } from './types/reducers'
 // action creators
-export { ActionCreator, ActionCreatorsMapObject } from './types/actions'
+export type { ActionCreator, ActionCreatorsMapObject } from './types/actions'
 // middleware
-export { MiddlewareAPI, Middleware } from './types/middleware'
+export type { MiddlewareAPI, Middleware } from './types/middleware'
 // actions
-export { Action, UnknownAction, AnyAction } from './types/actions'
+export type { Action, UnknownAction, AnyAction } from './types/actions'
 
 export {
   createStore,
