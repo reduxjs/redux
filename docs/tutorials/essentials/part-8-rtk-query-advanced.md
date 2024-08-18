@@ -249,7 +249,7 @@ RTK Query has many other options for controlling when and how to refetch data, i
 
 ### Updating Toast Display
 
-When we switched from dispatching thunks for adding posts to using an RTK Query mutation, we accidentally broke the "New post added" toast message behavior, because the the `addNewPost.fulfilled` action is no longer getting dispatched.
+When we switched from dispatching thunks for adding posts to using an RTK Query mutation, we accidentally broke the "New post added" toast message behavior, because the `addNewPost.fulfilled` action is no longer getting dispatched.
 
 Fortunately, this is simple to fix. RTK Query actually uses `createAsyncThunk` internally, and we've already seen that it dispatches Redux actions as the requests are made. We can update the toast listener to watch for RTKQ's internal actions being dispatched, and show the toast message when that happens.
 
