@@ -131,7 +131,7 @@ function Counter() {
 
 It is a self-contained app with the following parts:
 
-- The **state**, the source of truth that drives our app;
+- The **state**, the source of truth that drives our app
 - The **view**, a declarative description of the UI based on the current state
 - The **actions**, the events that occur in the app based on user input, and trigger updates in the state
 
