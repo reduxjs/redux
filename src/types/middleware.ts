@@ -2,7 +2,7 @@ import type { Dispatch } from './store'
 
 export interface MiddlewareAPI<D extends Dispatch = Dispatch, S = any> {
   dispatch: D
-  getState(this: void): S
+  getState: () => S
 }
 
 /**
