@@ -89,6 +89,18 @@ describe('type tests', () => {
     }
   })
 
+  test('middleware has unbound getState function.', () => {
+    type State = { field: 'string' }
+
+    const customMiddleware: Middleware<{}, State> = api => next => action => {
+      const { getState } = api
+
+      expectTypeOf(getState).thisParameter.toEqualTypeOf()
+
+      return next(action)
+    }
+  })
+
   test('middleware that expects custom dispatch.', () => {
     type MyAction = { type: 'INCREMENT' } | { type: 'DECREMENT' }
 
