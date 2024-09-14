@@ -307,7 +307,7 @@ We _could_ track that information using some booleans, like `isLoading: true`, b
 ```ts
 {
   // Multiple possible status enum values
-  status: 'idle' | 'pending' | 'succeeded' | 'rejected',
+  status: 'idle' | 'pending' | 'succeeded' | 'failed',
   error: string | null
 }
 ```
@@ -688,7 +688,6 @@ function PostExcerpt({ post }: PostExcerptProps) {
 
 export const PostsList = () => {
   const dispatch = useAppDispatch()
-  const posts = useAppSelector(selectAllPosts)
   const posts = useAppSelector(selectAllPosts)
   const postStatus = useAppSelector(selectPostsStatus)
   // highlight-next-line
