@@ -568,7 +568,7 @@ const postsSlice = createSlice({
   // highlight-end
 })
 
-export const { postAdded, postUpdated } = postsSlice.selectors
+export const { selectAllPosts, selectPostById } = postsSlice.selectors
 
 export default postsSlice.reducer
 
