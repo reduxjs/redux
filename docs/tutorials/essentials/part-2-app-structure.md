@@ -606,7 +606,7 @@ If you're curious _why_ we use thunks for async logic, see this deeper explanati
 
 We know that we're not allowed to put any kind of async logic in reducers. But, that logic has to live somewhere.
 
-If we have access to the Redux store, we could write some async code and call `store.dispatch()` when we're done:
+If we had access to the Redux store, we could write some async code and call `store.dispatch()` when we're done:
 
 ```js
 const store = configureStore({ reducer: counterReducer })
