@@ -216,8 +216,7 @@ const store = configureStore({
   reducer,
   enhancers: existingEnhancersArray => [
     reduxBatch,
-    ...existingEnhancersArray,
-    reduxBatch
+    ...existingEnhancersArray
   ]
 })
 store.dispatch([{ type: 'INCREMENT' }, { type: 'INCREMENT' }])
