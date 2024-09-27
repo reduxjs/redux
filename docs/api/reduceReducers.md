@@ -34,7 +34,7 @@ const rootReducer = reduceReducers(
 
 1. `initialState` (_any_): The initial state. This can also be the preloaded state for the reducer. This can also be omitted, and the first reducer's initial state will be used instead.
 
-2. `...reducers` (_Function_): An set of reducer functions that need to be composed into one.
+2. `...reducers` (_Function_): A set of reducer functions that need to be composed into one.
 
 ## Returns
 
