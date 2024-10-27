@@ -562,13 +562,15 @@ const postsSlice = createSlice({
     // as an argument, not the entire `RootState`
     selectAllPosts: postsState => postsState,
     selectPostById: (postsState, postId: string) => {
-      return postsState.find(user => post.id === postId)
+      return postsState.find(post => post.id === postId)
     }
   }
   // highlight-end
 })
 
+// highlight-start
 export const { selectAllPosts, selectPostById } = postsSlice.selectors
+// highlight-end
 
 export default postsSlice.reducer
 
