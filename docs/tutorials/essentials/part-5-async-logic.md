@@ -307,7 +307,7 @@ We _could_ track that information using some booleans, like `isLoading: true`, b
 ```ts
 {
   // Multiple possible status enum values
-  status: 'idle' | 'pending' | 'succeeded' | 'failed',
+  status: 'idle' | 'pending' | 'succeeded' | 'rejected',
   error: string | null
 }
 ```
@@ -508,7 +508,7 @@ const postsSlice = createSlice({
         state.posts.push(...action.payload)
       })
       .addCase(fetchPosts.rejected, (state, action) => {
-        state.status = 'failed'
+        state.status = 'rejected'
         state.error = action.error.message ?? 'Unknown Error'
       })
     // highlight-end
@@ -520,7 +520,7 @@ We'll handle all three action types that could be dispatched by the thunk, based
 
 - When the request starts, we'll set the `status` enum to `'pending'`
 - If the request succeeds, we mark the `status` as `'succeeded'`, and add the fetched posts to `state.posts`
-- If the request fails, we'll mark the `status` as `'failed'`, and save any error message into the state so we can display it
+- If the request fails, we'll mark the `status` as `'rejected'`, and save any error message into the state so we can display it
 
 ### Dispatching Thunks from Components
 
@@ -1026,6 +1026,12 @@ const postsSlice = createSlice({
     // highlight-end
   }
 })
+
+// highlight-start
+// Remove `postAdded`
+export const { postUpdated, reactionAdded } = postsSlice.actions
+// highlight-end
+
 ```
 
 ### Checking Thunk Results in Components
@@ -1052,10 +1058,11 @@ import { addNewPost } from './postsSlice'
 // omit field types
 
 export const AddPostForm = () => {
-  // highlight-next-line
+  // highlight-start
   const [addRequestStatus, setAddRequestStatus] = useState<'idle' | 'pending'>(
     'idle'
   )
+  // highlight-end
 
   const dispatch = useAppDispatch()
   const userId = useAppSelector(selectCurrentUsername)!
