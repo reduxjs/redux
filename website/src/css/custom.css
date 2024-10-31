@@ -280,3 +280,9 @@ details.detailed-explanation p {
   fill: black;
   stroke: black;
 }
+
+/* course callout on home page */
+.course-callout.home-mid {
+  max-width: 900px;
+  margin: 1rem auto 2rem;
+}
