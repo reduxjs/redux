@@ -326,7 +326,7 @@ import { createSlice, nanoid } from '@reduxjs/toolkit'
 // highlight-start
 interface PostsState {
   posts: Post[]
-  status: 'idle' | 'pending' | 'succeeded' | 'rejected'
+  status: 'idle' | 'pending' | 'succeeded' | 'failed'
   error: string | null
 }
 
@@ -1026,6 +1026,12 @@ const postsSlice = createSlice({
     // highlight-end
   }
 })
+
+// highlight-start
+// Remove `postAdded`
+export const { postUpdated, reactionAdded } = postsSlice.actions
+// highlight-end
+
 ```
 
 ### Checking Thunk Results in Components
@@ -1052,10 +1058,11 @@ import { addNewPost } from './postsSlice'
 // omit field types
 
 export const AddPostForm = () => {
-  // highlight-next-line
+  // highlight-start
   const [addRequestStatus, setAddRequestStatus] = useState<'idle' | 'pending'>(
     'idle'
   )
+  // highlight-end
 
   const dispatch = useAppDispatch()
   const userId = useAppSelector(selectCurrentUsername)!
