@@ -180,6 +180,11 @@ function Home() {
             </div>
           </section>
         )}
+        <section className="course-callout home-mid">
+          <a href="https://redux.dev">
+            <img src="/img/course-callout-mid.svg" alt="Redux.dev - a new course by Mark Erikson + ui.dev - Learn more" />
+          </a>
+        </section>
         {otherLibraries && otherLibraries.length && (
           <section className={styles.features}>
             <div className="container">
