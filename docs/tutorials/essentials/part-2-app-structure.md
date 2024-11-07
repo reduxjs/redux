@@ -161,7 +161,7 @@ The Redux store is created using the `configureStore` function from Redux Toolki
 
 Our application might be made up of many different features, and each of those features might have its own reducer function. When we call `configureStore`, we can pass in all of the different reducers in an object. The key names in the object will define the keys in our final state value.
 
-We have a file named `features/counter/counterSlice.ts` that exports a reducer function for the counter logic. We can import that `counterReducer` function here, and include it when we create the store.
+We have a file named `features/counter/counterSlice.ts` that exports a reducer function for the counter logic as the ESM "default" export. We can import that function into this file. Since it's a default export, we can give that variable any name we want when we import it into this file. In this case, we call it `counterReducer` here, and include it when we create the store. (Note that [the import/export behavior here is standard ES Module syntax](https://javascript.info/import-export#export-default), and not specific to Redux.)
 
 When we pass in an object like `{counter: counterReducer}`, that says that we want to have a `state.counter` section of our Redux state object, and that we want the `counterReducer` function to be in charge of deciding if and how to update the `state.counter` section whenever an action is dispatched.
 
