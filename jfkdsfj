@@ -1,0 +1,539 @@
+[33mcommit e841f800572c5c01491d8746168e574bc08b97ed[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: 56aaa383 345bdfe4
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Wed Nov 6 19:35:07 2024 -0500
+
+    Merge pull request #4752 from reduxjs/docs/course-banners
+    
+    Add top Redux.dev banner
+
+[33mcommit 345bdfe486ae3ed444df58c973baf944a7e796c3[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Wed Nov 6 19:28:05 2024 -0500
+
+    Clarify import/export syntax usage
+
+[33mcommit 38932ff6140c38a04baa823762d68894acc8be1c[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Wed Nov 6 19:27:50 2024 -0500
+
+    Add top Redux.dev banner
+
+[33mcommit 56aaa3832bdc55b945af54093079dfdc2b311df7[m
+Merge: b10703ec b7ce6589
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Wed Nov 6 19:00:30 2024 -0500
+
+    Merge pull request #4748 from lynnandtonic/master
+    
+    Add redux.dev course callouts
+
+[33mcommit b10703ec3710e5e1f103a09006dcaf92b5066587[m
+Author: Yohann <lesueur.yohann@hotmail.fr>
+Date:   Sat Nov 2 21:03:01 2024 +0100
+
+    Docs: Update part-6-performance-normalization.md (#4750)
+
+[33mcommit 2526cfc5e28eeef5b6584e103136861d4e653ce3[m
+Author: Matthias Nagel <github@nagel.digital>
+Date:   Sat Nov 2 17:59:40 2024 +0100
+
+    Update part-5-async-logic.md (#4747)
+
+[33mcommit b7ce658933a0df3f391f0b8c6871f61e1ac7090d[m
+Author: Lynn Fisher <lynnfishe@gmail.com>
+Date:   Thu Oct 31 15:36:11 2024 -0700
+
+    add redux.dev course callouts
+
+[33mcommit 025adaac74b2834cbd05ba9b693e42bc6ea947a0[m
+Author: Matthias Nagel <github@nagel.digital>
+Date:   Sun Oct 27 20:01:30 2024 +0100
+
+    Update part-4-using-data.md (#4746)
+    
+    Fixed a typo and changed highlighting
+
+[33mcommit 05ba9d169eea062f700e1468e3beef0545ab535b[m
+Author: Marcin Kulbicki <marcin.kulbicki@gmail.com>
+Date:   Thu Sep 19 19:01:25 2024 +0200
+
+    fix(docs): correct grammar in part-2-app-structure tutorial regarding… (#4742)
+
+[33mcommit d6e1bc36153e704d7c5dd1c38dbec42567991175[m
+Merge: 1099ceca bcae8017
+Author: Ben Durrant <ben.j.durrant@gmail.com>
+Date:   Wed Sep 18 21:14:58 2024 +0100
+
+    Merge pull request #4741 from GeorgeKazanchev/master
+    
+    docs: fix typo
+
+[33mcommit bcae8017b07f19a1bef7db9b990a5faba5824b63[m
+Author: George Kazanchev <127313091+GeorgeKazanchev@users.noreply.github.com>
+Date:   Wed Sep 18 21:55:21 2024 +0300
+
+    docs: fix typo
+    
+    We get "selectAllPosts" and "selectPostById" as a result of destructuring "postsSlice.selectors" field.
+
+[33mcommit 1099ceca7422da00708bd94acea2c7059e3595f2[m
+Merge: 0035dba4 06588d05
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Fri Sep 13 22:52:06 2024 -0400
+
+    Merge pull request #4740 from yutax77/patch-1
+
+[33mcommit 06588d058302f83719c1e4c749f4f8afeece4a41[m
+Author: yutax77 <yutax77@gmail.com>
+Date:   Sat Sep 14 10:53:03 2024 +0900
+
+    Update part-5-async-logic.md
+    
+    fix duplicated line and wrong status.
+
+[33mcommit 0035dba46ecaf1dca060fa4b3f0f38d63d3c6562[m
+Merge: 4d94ae9b 3b03b9eb
+Author: Ben Durrant <ben.j.durrant@gmail.com>
+Date:   Thu Sep 12 13:03:06 2024 +0100
+
+    Merge pull request #4739 from aryaemami59/upgrade-to-yarn-4.4.1
+    
+    Update to Yarn 4.4.1
+
+[33mcommit 3b03b9eb2f310c21a826ae750b6951f54a226e95[m
+Author: Arya Emami <aryaemami59@yahoo.com>
+Date:   Thu Sep 12 06:12:23 2024 -0500
+
+    Update to Yarn 4.4.1
+
+[33mcommit 4d94ae9b48b53b6d8f7ef54ad1de1331416ca5d0[m
+Author: Janek Lasocki-Biczysko <janek.lb@gmail.com>
+Date:   Wed Sep 11 22:25:34 2024 +0100
+
+    fix(types): getState is not bound to MiddlewareAPI (#4737)
+    
+    Co-authored-by: Ben Durrant <ben.j.durrant@gmail.com>
+    Co-authored-by: Tim Dorr <timdorr@users.noreply.github.com>
+
+[33mcommit a3d153f384f5cd0057b6cbae0d81da05a40b0432[m
+Merge: a92a9537 3a8eb9bd
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Thu Aug 29 11:47:32 2024 -0400
+
+    Merge pull request #4736 from Seung-wan/fix-typo
+
+[33mcommit 3a8eb9bde8138bc1c572764c74b32ab5ad853fd5[m
+Author: Seung-wan <tmddhks0104@gmail.com>
+Date:   Fri Aug 30 00:37:19 2024 +0900
+
+    docs: fix typo
+
+[33mcommit a92a953735f15f9d3a3b958a293017b792b3f25c[m
+Merge: b59da78a 5a171c1d
+Author: Ben Durrant <ben.j.durrant@gmail.com>
+Date:   Sun Aug 18 16:13:18 2024 +0100
+
+    Merge pull request #4734 from abdullahhussein1/patch-1
+    
+    docs: remove extra word
+
+[33mcommit 5a171c1db8943aec6f5797c79887a7ed05787e11[m
+Author: Abdullah Hussein <78323851+abdullahhussein1@users.noreply.github.com>
+Date:   Sun Aug 18 17:43:05 2024 +0300
+
+    docs: remove extra word
+
+[33mcommit b59da78adc107ba75b06a32f6148feab23fcee50[m
+Author: Arya Emami <aryaemami59@yahoo.com>
+Date:   Fri Aug 16 13:29:21 2024 -0500
+
+    Migrate type tests to Vitest (#4731)
+    
+    Co-authored-by: Tim Dorr <timdorr@users.noreply.github.com>
+
+[33mcommit d63640faf3d010b996555384c70a9b69852617b8[m
+Author: Arya Emami <aryaemami59@yahoo.com>
+Date:   Fri Aug 16 08:52:58 2024 -0500
+
+    Run CI jobs if `yarn.lock` changes (#4732)
+
+[33mcommit d098a1d6f4862caa25abd538d48675a552787368[m
+Author: Arya Emami <aryaemami59@yahoo.com>
+Date:   Fri Aug 16 08:52:39 2024 -0500
+
+    Bump TypeScript to 5.5 (#4730)
+
+[33mcommit c08cb2b2707c0664eb674829d523ae8b236a5343[m
+Author: Tim Dorr <git@timdorr.com>
+Date:   Tue Aug 13 22:11:23 2024 -0400
+
+    exact prop isn't needed in React Router v6
+    
+    Fixes #4728
+
+[33mcommit a89f1a6f5365b2d02ae64cde7a881e58a9740816[m
+Author: Tim Dorr <git@timdorr.com>
+Date:   Tue Aug 13 22:10:32 2024 -0400
+
+    Make this file a TSX file
+    
+    Fixes #4727
+
+[33mcommit 75befccf6338529d77a9722343bb67a72b59be1a[m
+Author: Tim Dorr <git@timdorr.com>
+Date:   Tue Aug 13 22:09:34 2024 -0400
+
+    Highlight useAppDispatch as well
+    
+    Fixes #4726
+
+[33mcommit 0e62b3eb6a856aa302d4ff05c581cb1793da5566[m
+Author: Tim Dorr <git@timdorr.com>
+Date:   Tue Aug 13 21:33:26 2024 -0400
+
+    Add selectCurrentUsername selector
+    
+    Fixes #4724
+
+[33mcommit 71242ae6f8680cf57ba0c7c51ceb19a375b56b35[m
+Merge: 6fcaab4f f88c75b2
+Author: Ben Durrant <ben.j.durrant@gmail.com>
+Date:   Mon Aug 12 12:08:45 2024 +0100
+
+    Merge pull request #4725 from robertgr991/patch-1
+    
+    docs: fix code example typo in essentials/part-6-performance-normaliz…
+
+[33mcommit f88c75b2fd4641ae18a1601210d3df03461d0348[m
+Author: robertgr991 <robertgr991@yahoo.ro>
+Date:   Mon Aug 12 12:34:38 2024 +0300
+
+    docs: fix code example typo in essentials/part-6-performance-normalization.md
+
+[33mcommit 6fcaab4f2e57beb2112832980152d357a886211a[m
+Merge: bd0250db 1d687e0a
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sun Aug 11 11:31:12 2024 -0400
+
+    Merge pull request #4665 from reduxjs/combineslices-docs
+
+[33mcommit bd0250db512df7ed4f6905e6d452ef8296dd4df6[m
+Merge: 8a9ca01f f58e04d4
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sun Aug 11 11:29:39 2024 -0400
+
+    Merge pull request #4714 from StankaKopalova/better-dark-theme
+
+[33mcommit 8a9ca01f32d7f20e52fad4b6fe7f0413b931ecea[m
+Merge: 42cc13b2 5e1eaef3
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sun Aug 11 11:25:40 2024 -0400
+
+    Merge pull request #4717 from reduxjs/ts5.5
+
+[33mcommit 42cc13b2bc76fe567cc7729b466eb0525c2b8a7c[m
+Merge: 8ea9d529 41e746be
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Thu Aug 1 14:55:38 2024 -0400
+
+    Merge pull request #4706 from reduxjs/docs/essentials-revamp-ts
+
+[33mcommit 41e746beaa85980a614a26f135a4b084a87a21db[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Thu Aug 1 14:47:21 2024 -0400
+
+    Final sandbox updates
+
+[33mcommit dd8d6ff4ce73c9788990c5b252729b715517b994[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Wed Jul 31 16:48:49 2024 -0400
+
+    Part 8 screenshots
+
+[33mcommit 2d1a07c24ccb0db74db41df3fc4ef0cc5f419331[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Wed Jul 31 16:25:08 2024 -0400
+
+    Part 7 screenshots and sandbox
+
+[33mcommit e4864ca4f5780ad413d1927716bdd885844056f2[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Wed Jul 31 16:16:02 2024 -0400
+
+    Part 6 screenshots and sandbox
+
+[33mcommit 945f98a55193e69984703ff7992dcb1e81599c0b[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Wed Jul 31 15:47:38 2024 -0400
+
+    Add missing code snippets for Part 8
+
+[33mcommit 90b3352218696312d54a3290fcef3e94e6cb322f[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Wed Jul 31 15:47:24 2024 -0400
+
+    Screenshots and sandboxes for Parts 4 and 5
+
+[33mcommit 6ad07fe226b6e4e15e54d32fd75305a26ac15507[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Tue Jul 30 16:11:57 2024 -0400
+
+    Part 3 sandbox and images
+
+[33mcommit c2f038921b00bf9627d405fc8ba74258bc88624d[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Tue Jul 30 15:38:57 2024 -0400
+
+    Part 1-2 edits
+
+[33mcommit a3358f3733ae2fce3862921ae15cf75d1f63861b[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Tue Jul 30 15:38:40 2024 -0400
+
+    Update Part 2 sandbox and images
+
+[33mcommit b16f3a2d212573d9d94297f8de36e22c20f86b6e[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Mon Jul 29 19:03:12 2024 -0400
+
+    Rewrite "Optimist/Streaming Updates" sections
+
+[33mcommit ede759c6a7ccb7bd061d2d652ef2fe56c2062623[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sun Jul 28 15:11:26 2024 -0400
+
+    Update most of Part 8
+
+[33mcommit 0adf680449b83be93085b2e324c8732eb4ac4dca[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sun Jul 28 13:51:59 2024 -0400
+
+    Update createRoot examples
+
+[33mcommit e1ece0554d5923fbc98168477fe40ea1a5e7e6b2[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sun Jul 28 13:17:05 2024 -0400
+
+    Update Part 7
+
+[33mcommit 13ccf687ed1c999ea24c8b9eb3c4616e5938f396[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sun Jul 28 11:43:03 2024 -0400
+
+    Remove Replay mentions
+
+[33mcommit fed5eddff8b62fd3850167774aefcf57f550cd6f[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sat Jul 27 18:25:58 2024 -0400
+
+    Update Part 6
+
+[33mcommit b11ffcaa5277907d3f24ca2cd2f7eb4cdd487955[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sat Jul 27 14:58:49 2024 -0400
+
+    Finish part 5
+
+[33mcommit 7b21b84cc9dbb3e9d5285b1761e948d311ea841f[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sat Jul 27 14:57:27 2024 -0400
+
+    Stop using backticks with Promise
+
+[33mcommit 696c01d68b2f7ab10bb9861b8ce00e5077304725[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sat Jul 20 18:50:25 2024 -0400
+
+    Revamp parts 3, 4, and half of 5 based on review feedback
+
+[33mcommit 8ea9d52957c5661259b89d8bc91d4561aaee41ec[m
+Author: muyangren918 <65386952+muyangren918@users.noreply.github.com>
+Date:   Fri Jul 19 00:08:35 2024 +0800
+
+    Update why-rtk-is-redux-today.md (#4719)
+
+[33mcommit 5e1eaef30c183c2b5ceb67da53bab4cca3f800b8[m
+Author: Ben Durrant <ben.durrant@marketdojo.com>
+Date:   Tue Jul 9 11:53:42 2024 +0100
+
+    add NoInfer to Ext return
+
+[33mcommit 642a756c9af412708c993f34692af8e6737df5d3[m
+Author: Ben Durrant <ben.durrant@marketdojo.com>
+Date:   Mon Jul 8 15:26:41 2024 +0100
+
+    add TS 5.5 to test matrix
+
+[33mcommit cec44b90f181e8e99be8a8fa45037268e7914cd0[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sun Jul 7 17:18:25 2024 -0400
+
+    Revamp Part 2
+
+[33mcommit ac3a0a288c5fd15274a51639c484bf70b81f375a[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sun Jun 30 15:57:43 2024 -0400
+
+    Add brief links to Replay for debugging
+
+[33mcommit 8f9261ac12d71966b3ae31231988e20b09265177[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sun Jun 30 15:34:18 2024 -0400
+
+    Tweak tutorial intro pages
+
+[33mcommit 1e0e65e516ad142277e663f89a9701d936b5584f[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sun Jun 30 14:41:53 2024 -0400
+
+    Replace "AJAX" with "HTTP"
+
+[33mcommit 1650a33c5a5381b86e4c3667c580e7cd1912d0b8[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sat Jun 29 16:28:07 2024 -0400
+
+    Finish revamping Part 8
+
+[33mcommit c0cb8250383311c3e644d8d2a3f13c77a28455fa[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sat Jun 29 16:27:54 2024 -0400
+
+    Add `AppThunk` description
+
+[33mcommit f58e04d4710da2e3b6947abb081238cafd3f1773[m
+Author: stanislava.kopalova <stankakopalova@gmail.com>
+Date:   Fri Jun 28 07:23:07 2024 +0200
+
+    fix light theme
+
+[33mcommit c1d59b437624e405c8ece390a21127460b900feb[m
+Author: stanislava.kopalova <stankakopalova@gmail.com>
+Date:   Fri Jun 28 00:06:45 2024 +0200
+
+    adding better dark theme
+
+[33mcommit d0d0e43a9f864112f74c4e082b5f6ff24fc1184d[m
+Merge: 005feda1 d2c81bd7
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Mon Jun 24 12:49:39 2024 -0400
+
+    Merge pull request #4712 from ereshidov/patch-1
+
+[33mcommit d2c81bd7b64c991c006ae4a24f45d7bcf67a1e35[m
+Author: Edem <84226976+ereshidov@users.noreply.github.com>
+Date:   Mon Jun 24 21:33:24 2024 +0500
+
+    fix: react renderToString docs link
+
+[33mcommit b4737f589513fcdc77dbd16e3687bc451005357a[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sun Jun 23 16:16:33 2024 -0400
+
+    Revamp most of Part 8
+
+[33mcommit 883ee548c8cf227582fedae5d732774653e808ee[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Wed Jun 19 19:57:23 2024 -0400
+
+    Fill out Part 7
+
+[33mcommit db1c510d3362b11130aa45128cf95d6da2357da1[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sun Jun 16 18:31:29 2024 +0200
+
+    Add listener middleware section
+
+[33mcommit 92acadc53bdcb2a5f3755797edcc1910324b8040[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sun Jun 16 18:31:18 2024 +0200
+
+    Mention "pure" and "side effects"
+
+[33mcommit 1ba613279fc6bc4b3429bacd804eea81d1ea9c7a[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sun Jun 16 17:06:42 2024 +0200
+
+    Update existing Part 6 content
+
+[33mcommit 532166b4d17b2dcb5015cb41ba21860ba4f35ac2[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Tue Jun 11 22:33:11 2024 -0400
+
+    Cover thunk dispatches and thunks in slices
+
+[33mcommit 8bd4f9b781a4626fdeb871f3f3bd8cba59e44221[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sun Jun 9 15:46:37 2024 -0400
+
+    Add selectors section
+
+[33mcommit 72ed3d480b7ebb870b2d02184f623fdc1cb024c8[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sun Jun 9 14:35:47 2024 -0400
+
+    Flesh out thunk explanations
+
+[33mcommit f9256707177e33be55c2c0e20ecfb73f711e459e[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Sun Jun 9 14:35:32 2024 -0400
+
+    Fix assorted typos
+
+[33mcommit 005feda1aec5ccf1efd865f61822e3f599dae3e2[m
+Merge: 364c1cc0 92aa3b95
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Tue Jun 4 10:07:22 2024 -0400
+
+    Merge pull request #4709 from reduxjs/adapter-ts-docs
+
+[33mcommit 92aa3b95fcdb5ed3d4dff25a320daf0cdae86456[m
+Author: Ben Durrant <ben.durrant@marketdojo.com>
+Date:   Tue Jun 4 15:03:29 2024 +0100
+
+    add comment back
+
+[33mcommit 6dc93633fc4fe93f86781ed74986fe728ec126c4[m
+Author: Ben Durrant <ben.durrant@marketdojo.com>
+Date:   Tue Jun 4 15:02:34 2024 +0100
+
+    copy over adapter TS section from RTK docs
+
+[33mcommit 8aa89946631fcf6684d341c2adbaa0f6980115ac[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Mon Jun 3 22:40:04 2024 -0400
+
+    Add auth and `extraReducers` section
+
+[33mcommit 364c1cc0c80738d8d0df45e8013360f5d5974335[m
+Merge: ef57856c 419d1d3e
+Author: Ben Durrant <ben.j.durrant@gmail.com>
+Date:   Wed May 29 11:43:52 2024 +0100
+
+    Merge pull request #4708 from Zain-Bin-Arshad/master
+    
+    chore: updated docs to remove extra heading tag
+
+[33mcommit 419d1d3e6d87dd5f0b3f079c6f0b90b8246ca486[m
+Author: zain-bin-arshad <ch.zainbinarshad@gmail.com>
+Date:   Wed May 29 14:42:40 2024 +0500
+
+    chore: updated docs to remove extra heading tag
+
+[33mcommit 36dfbeb9d79fabb779f8caaa4115d5e119efaefb[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Fri May 17 14:01:21 2024 -0700
+
+    Update reaction buttons
+
+[33mcommit 226526cf1bafb3df32aa204716703d9a0a261727[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Fri May 17 13:17:59 2024 -0700
+
+    Update author handling
+
+[33mcommit a792bec32884195be5156cd18a0c219d319077cf[m
+Author: Mark Erikson <mark@isquaredsoftware.com>
+Date:   Tue May 14 20:23:13 2024 -0400
+
+    Update post editing and payload creators
