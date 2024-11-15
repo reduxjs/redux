@@ -957,7 +957,7 @@ const initialReactions: Reactions = {
 }
 // highlight-end
 
-const initialState: Posts[] = [
+const initialState: Post[] = [
   // omit initial state
 ]
 
