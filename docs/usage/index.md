@@ -39,3 +39,4 @@ This section provides information about typical Redux patterns and approaches fo
 - [Reducing Boilerplate](ReducingBoilerplate.md)
 - [Deriving Data with Selectors](../usage/deriving-data-selectors.md)
 - [Implementing Undo History](ImplementingUndoHistory.md)
+- [Debugging Redux](DebuggingRedux.md)

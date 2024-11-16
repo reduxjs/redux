@@ -105,7 +105,8 @@ module.exports = {
           'usage/writing-logic-thunks',
           'usage/side-effects-approaches',
           'usage/writing-custom-middleware',
-          'usage/implementing-undo-history'
+          'usage/implementing-undo-history',
+          'usage/debugging-redux'
         ]
       }
     ],
