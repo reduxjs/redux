@@ -484,7 +484,7 @@ Selector functions are normally called with the entire Redux root state object a
 
 Since we're using TypeScript, we also need to use the `RootState` type that was exported from `store.ts` to define the type of the `state` argument in each selector.
 
-Note that you **don't have to create separate selector functions for every field in every slice!** (This particular example did, to show off the idea of writing selectors, but we only had two fields in `counterSlice.ts` anyway) Instead, [find a balance in how many selectors you write](../../usage/deriving-data-selectors.md#balance-selector-usage)
+Note that you **don't have to create separate selector functions for every field in every slice!** (This particular example did, to show off the idea of writing selectors, but we only had two fields in `counterSlice.ts` anyway) Instead, [find a balance in how many selectors you write](../../usage/deriving-data-selectors.md#balance-selector-usage).
 
 :::info More Info on Selectors
 
