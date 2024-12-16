@@ -137,7 +137,7 @@ a.contents__link.contents__link--active {
   font-weight: 600;
 }
 
-a:visited {
+a:visited:not(.menu__link, .table-of-contents__link) {
   color: var(--ifm-color-primary);
 }
 
