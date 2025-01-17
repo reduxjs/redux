@@ -20,6 +20,7 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
+    "exactOptionalPropertyTypes": true,
     "target": "ESnext",
     "types": ["vitest/globals", "vitest/importMeta"]
   },

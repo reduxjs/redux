@@ -1,4 +1,10 @@
-import type { Action, AnyAction, Reducer, ReducersMapObject } from 'redux'
+import type {
+  Action,
+  AnyAction,
+  PreloadedStateShapeFromReducersMapObject,
+  Reducer,
+  ReducersMapObject
+} from 'redux'
 import { combineReducers } from 'redux'
 
 describe('type tests', () => {
@@ -264,5 +270,31 @@ describe('type tests', () => {
         [undefined, 'not-an-action']
       >()
     }
+  })
+
+  test('`PreloadedStateShapeFromReducersMapObject` has correct type when given a custom action', () => {
+    type MyAction = { type: 'foo' }
+
+    // TODO: not sure how to write this test??
+    // Expect this to match type `{ nested: string | undefined; }`
+    type P = PreloadedStateShapeFromReducersMapObject<{
+      nested: Reducer<string, MyAction>
+    }>
+  })
+
+  test('`combineReducer` has correct return type when given a custom action', () => {
+    type MyAction = { type: 'foo' }
+
+    type State = string
+    const nested: Reducer<State, MyAction> = (state = 'foo') => state
+
+    type Combined = { nested: State }
+
+    // Expect no error
+    const combined: Reducer<
+      Combined,
+      MyAction,
+      Partial<Combined>
+    > = combineReducers({ nested })
   })
 })
