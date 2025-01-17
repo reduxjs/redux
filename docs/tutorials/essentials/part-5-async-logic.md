@@ -603,7 +603,7 @@ The last option would be to use the actual `state.posts.status` value from the R
 
 `createAsyncThunk` accepts an optional `condition` callback we can use to do that check. If provided, it runs at the start of the thunk call, and it will cancel the entire thunk if `condition` returns `false.`
 
-In this case, we know that we want to avoid running the thunk if the `state.posts.status` field is `'idle'`. We already have a `selectPostsStatus` selector that we can use here, so we can add the `condition` option and check that value:
+In this case, we know that we want to avoid running the thunk if the `state.posts.status` field is not `'idle'`. We already have a `selectPostsStatus` selector that we can use here, so we can add the `condition` option and check that value:
 
 ```ts title="features/posts/postsSlice.ts
 export const fetchPosts = createAppAsyncThunk(
