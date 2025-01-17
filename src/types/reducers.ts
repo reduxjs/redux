@@ -106,7 +106,7 @@ export type PreloadedStateShapeFromReducersMapObject<M> = M[keyof M] extends
   ? {
       [P in keyof M]: M[P] extends (
         inputState: infer InputState,
-        action: UnknownAction
+        action: ActionFromReducersMapObject<M>
       ) => any
         ? InputState
         : never
