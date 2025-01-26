@@ -577,7 +577,7 @@ Make sure that `index.js` is still dispatching an action after importing the sto
 
 ![Redux DevTools Extension: action tab](/img/tutorials/fundamentals/devtools-action-tab.png)
 
-There's a list of dispatched actions on the left. If we click one of them, the right pane shows several tabs:
+There's a list of dispatched actions on the left. If we click one of them, the right panel shows several tabs:
 
 - The contents of that action object
 - The entire Redux state as it looked after the reducer ran
