@@ -656,7 +656,7 @@ Every post in our app was written by one of our users, and every time we add a n
 
 First, we need to update the existing `Post` data type to include a `user: string` field that contains the user ID that created the post. We'll also update the existing post entries in `initialState` to have a `post.user` field with one of the example user IDs.
 
-Then, we need to update our existing reducers accordingly The `postAdded` prepare callback needs to accept a user ID as an argument, and include that in the action. Also, we _don't_ want to include the `user` field when we update a post - the only things we need are the `id` of the post that changed, and the new `title` and `content` fields for the updated text. We'll define a `PostUpdate` type that contains just those three fields from `Post`, and use that as the payload for `postUpdated` instead.
+Then, we need to update our existing reducers accordingly. The `postAdded` prepare callback needs to accept a user ID as an argument, and include that in the action. Also, we _don't_ want to include the `user` field when we update a post - the only things we need are the `id` of the post that changed, and the new `title` and `content` fields for the updated text. We'll define a `PostUpdate` type that contains just those three fields from `Post`, and use that as the payload for `postUpdated` instead.
 
 ```ts title="features/posts/postsSlice.ts"
 export interface Post {
