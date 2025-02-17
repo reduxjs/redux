@@ -1149,7 +1149,7 @@ First, we import `createEntityAdapter`, and call it to create our `postsAdapter`
 
 Now that our posts are being kept as a lookup table in `state.entities`, we can change our `reactionAdded` and `postUpdated` reducers to directly look up the right posts by their IDs via `state.entities[postId]`, instead of having to loop over the old `posts` array.
 
-When we receive the `fetchPosts.fulfilled` action, we can use the `postsAdapter.setAll` function as the to add all of the incoming posts to the state, by passing in the draft `state` and the array of posts in `action.payload`. This is an example of using the adapter methods as "mutating" helper functions inside of a `createSlice` reducer.
+When we receive the `fetchPosts.fulfilled` action, we can use the `postsAdapter.setAll` function to add all of the incoming posts to the state, by passing in the draft `state` and the array of posts in `action.payload`. This is an example of using the adapter methods as "mutating" helper functions inside of a `createSlice` reducer.
 
 When we receive the `addNewPost.fulfilled` action, we know we need to add that one new post object to our state. We can use the adapter functions as reducers directly, so we'll pass `postsAdapter.addOne` as the reducer function to handle that action. In this case, we use the adapter method _as_ the actual reducer for this action.
 
