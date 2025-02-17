@@ -117,7 +117,9 @@ export const EditPostForm = () => {
     )
   }
 
+  // highlight-start
   const onSavePostClicked = async (
+  // highlight-end
     e: React.FormEvent<EditPostFormElements>
   ) => {
     // Prevent server submission
