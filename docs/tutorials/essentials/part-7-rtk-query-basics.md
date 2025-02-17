@@ -747,11 +747,11 @@ export const PostsList = () => {
   if (isLoading) {
     content = <Spinner text="Loading..." />
   } else if (isSuccess) {
-    //highlight-start
+    // highlight-start
     const renderedPosts = sortedPosts.map(post => (
       <PostExcerpt key={post.id} post={post} />
     ))
-    //highlight-end
+    // highlight-end
 
     // highlight-start
     const containerClassname = classnames('posts-container', {

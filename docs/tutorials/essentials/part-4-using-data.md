@@ -476,7 +476,7 @@ export const selectAllPosts = (state: RootState) => state.posts
 
 export const selectPostById = (state: RootState, postId: string) =>
   state.posts.find(post => post.id === postId)
-//highlight-end
+// highlight-end
 ```
 
 Note that the `state` parameter for these selector functions is the root Redux state object, as it was for the inlined anonymous selectors we wrote directly inside of `useAppSelector`.
@@ -497,7 +497,7 @@ export const PostsList = () => {
 
 ```tsx title="features/posts/SinglePostPage.tsx"
 // omit imports
-//highlight-next-line
+// highlight-next-line
 import { selectPostById } from './postsSlice'
 
 export const SinglePostPage = () => {
@@ -511,7 +511,7 @@ export const SinglePostPage = () => {
 
 ```ts title="features/posts/EditPostForm.tsx"
 // omit imports
-//highlight-next-line
+// highlight-next-line
 import { postUpdated, selectPostById } from './postsSlice'
 
 export const EditPostForm = () => {
@@ -894,11 +894,11 @@ Since `array.sort()` mutates the existing array, we need to make a copy of `stat
 
 ```tsx title="features/posts/PostsList.tsx"
 // Sort posts in reverse chronological order by datetime string
-//highlight-start
+// highlight-start
 const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
 
 const renderedPosts = orderedPosts.map(post => {
-  //highlight-end
+  // highlight-end
   return (
     // omit rendering logic
   )
