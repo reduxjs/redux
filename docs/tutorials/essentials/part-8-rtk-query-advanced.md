@@ -117,7 +117,9 @@ export const EditPostForm = () => {
     )
   }
 
+  // highlight-start
   const onSavePostClicked = async (
+  // highlight-end
     e: React.FormEvent<EditPostFormElements>
   ) => {
     // Prevent server submission
@@ -410,7 +412,7 @@ export interface User {
   name: string
 }
 
-// omit `fetchSlice` and `usersSlice`
+// omit `fetchUsers` and `usersSlice`
 
 // highlight-start
 const emptyUsers: User[] = []
@@ -646,9 +648,9 @@ The last component that is reading from the old `postsSlice` is `<UserPage>`, wh
 
 The `useQuery` hooks always take the cache key argument as the first parameter, and if you need to provide hook options, that must always be the second parameter, like `useSomeQuery(cacheKey, options)`. In this case, the `getUsers` endpoint doesn't have any actual cache key argument. Semantically, this is the same as a cache key of `undefined`. So, in order to provide options to the hook, we have to call `useGetUsersQuery(undefined, options)`.
 
-We can use `selectFromResult` to have `<UserPage>` read just a filtered list of posts from the cache. However, in order for `selectFromResult` to avoid unnecessary re-renders, we need to ensure that whatever data we extract is memoized correctly. To do this, we should create a new selector instance that the `<UsersPage>` component can reuse every time it renders, so that the selector memoizes the result based on its inputs.
+We can use `selectFromResult` to have `<UserPage>` read just a filtered list of posts from the cache. However, in order for `selectFromResult` to avoid unnecessary re-renders, we need to ensure that whatever data we extract is memoized correctly. To do this, we should create a new selector instance that the `<UserPage>` component can reuse every time it renders, so that the selector memoizes the result based on its inputs.
 
-```tsx title="features/users/UsersPage.tsx"
+```tsx title="features/users/UserPage.tsx"
 import { Link, useParams } from 'react-router-dom'
 // highlight-start
 import { createSelector } from '@reduxjs/toolkit'

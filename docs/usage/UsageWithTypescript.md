@@ -300,10 +300,10 @@ type RootState = ReturnType<typeof rootReducer>;
 Switching the type definition of `RootState` with Redux Toolkit example:
 
 ```ts
-//instead of defining the reducers in the reducer field of configureStore, combine them here:
+// instead of defining the reducers in the reducer field of configureStore, combine them here:
 const rootReducer = combineReducers({ counter: counterReducer })
 
-//then set rootReducer as the reducer object of configureStore
+// then set rootReducer as the reducer object of configureStore
 const store = configureStore({
   reducer: rootReducer,
   middleware: getDefaultMiddleware =>
@@ -608,7 +608,7 @@ If you need to modify the types of the `thunkApi` parameter, such as supplying t
 
 ```ts
 const fetchUserById = createAsyncThunk<
-  //highlight-start
+  // highlight-start
   // Return type of the payload creator
   MyData,
   // First argument to the payload creator

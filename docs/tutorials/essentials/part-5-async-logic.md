@@ -335,7 +335,7 @@ const initialState: PostsState = {
   status: 'idle',
   error: null
 }
-//highlight-end
+// highlight-end
 
 const postsSlice = createSlice({
   name: 'posts',
@@ -413,7 +413,7 @@ import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
 import { client } from '@/api/client'
 
 import type { RootState } from '@/app/store'
-//highlight-next-line
+// highlight-next-line
 import { createAppAsyncThunk } from '@/app/withTypes'
 
 // omit other imports and types

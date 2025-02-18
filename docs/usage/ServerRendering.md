@@ -55,7 +55,7 @@ import App from './containers/App'
 const app = Express()
 const port = 3000
 
-//Serve static files
+// Serve static files
 app.use('/static', Express.static('static'))
 
 // This is fired every time the server side receives a request

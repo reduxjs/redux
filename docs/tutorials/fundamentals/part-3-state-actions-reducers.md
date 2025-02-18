@@ -581,7 +581,7 @@ export default function todosReducer(state = initialState, action) {
         }
       })
     }
-    //highlight-end
+    // highlight-end
     default:
       return state
   }
