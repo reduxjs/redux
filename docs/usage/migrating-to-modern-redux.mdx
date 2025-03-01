@@ -65,7 +65,7 @@ Here's what those steps might look like in an existing application:
 
 ```js title="src/app/store.js"
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
-import thunk from 'redux-thunk'
+import { thunk } from 'redux-thunk'
 
 import postsReducer from '../reducers/postsReducer'
 import usersReducer from '../reducers/usersReducer'

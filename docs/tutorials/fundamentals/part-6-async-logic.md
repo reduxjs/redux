@@ -203,12 +203,12 @@ Once it's installed, we can update the Redux store in our todo app to use that m
 ```js title="src/store.js"
 import { createStore, applyMiddleware } from 'redux'
 // highlight-next-line
-import thunkMiddleware from 'redux-thunk'
+import { thunk } from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import rootReducer from './reducer'
 
 // highlight-next-line
-const composedEnhancer = composeWithDevTools(applyMiddleware(thunkMiddleware))
+const composedEnhancer = composeWithDevTools(applyMiddleware(thunk))
 
 // The store now has the ability to accept thunk functions in `dispatch`
 const store = createStore(rootReducer, composedEnhancer)
