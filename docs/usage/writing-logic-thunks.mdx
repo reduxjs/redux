@@ -163,11 +163,11 @@ In other words:
 The thunk middleware does have one customization option. You can create a custom instance of the thunk middleware at setup time, and inject an "extra argument" into the middleware. The middleware will then inject that extra value as the third argument of every thunk function. This is most commonly used for injecting an API service layer into thunk functions, so that they don't have hardcoded dependencies on the API methods:
 
 ```js title="Thunk setup with an extra argument"
-import thunkMiddleware from 'redux-thunk'
+import { withExtraArgument } from 'redux-thunk'
 
 const serviceApi = createServiceApi('/some/url')
 
-const thunkMiddlewareWithArg = thunkMiddleware.withExtraArgument({ serviceApi })
+const thunkMiddlewareWithArg = withExtraArgument({ serviceApi })
 ```
 
 Redux Toolkit's `configureStore` supports [this as part of its middleware customization in `getDefaultMiddleware`](https://redux-toolkit.js.org/api/getDefaultMiddleware):
