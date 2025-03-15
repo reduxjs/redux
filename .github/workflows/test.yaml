@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: ['20.x']
+        node: ['22.x']
 
     steps:
       - name: Checkout repo
@@ -69,7 +69,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['20.x']
+        node: ['22.x']
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -109,7 +109,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['20.x']
+        node: ['22.x']
         ts: ['5.0', '5.1', '5.2', '5.3', '5.4', '5.5', '5.6', '5.7', '5.8']
     steps:
       - name: Checkout repo
@@ -153,10 +153,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['20.x']
+        node: ['22.x']
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+
+      - name: Use node ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'yarn'
 
       - uses: actions/download-artifact@v4
         with:
@@ -175,7 +181,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['20.x']
+        node: ['22.x']
         example:
           [
             'cra4',
