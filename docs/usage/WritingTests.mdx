@@ -608,7 +608,8 @@ test('fetches & receives a user after clicking the fetch user button', async () 
 
   // after clicking the 'Fetch user' button, it should now show that it is fetching the user
   fireEvent.click(screen.getByRole('button', { name: /Fetch user/i }))
-  expect(screen.getByText(/no user/i)).toBeInTheDocument()
+  expect(screen.queryByText(/no user/i)).not.toBeInTheDocument()
+  expect(screen.getByText(/Fetching user\.\.\./i)).toBeInTheDocument()
 
   // after some time, the user should be received
   expect(await screen.findByText(/John Smith/i)).toBeInTheDocument()
