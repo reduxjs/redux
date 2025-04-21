@@ -1,10 +1,10 @@
-const { resolve } = require('path')
-const {
-  linkDocblocks,
-  transpileCodeblocks
-} = require('remark-typescript-tools')
+import { resolve } from 'path'
+import { linkDocblocks, transpileCodeblocks } from 'remark-typescript-tools'
+import type { Options, ThemeConfig } from '@docusaurus/preset-classic'
+import type { Config } from '@docusaurus/types'
+import type { Options as UmamiOptions } from '@dipakparmar/docusaurus-plugin-umami'
 
-module.exports = {
+const config: Config = {
   title: 'Redux',
   tagline:
     'A JS library for predictable and maintainable global state management',
@@ -162,10 +162,9 @@ module.exports = {
     algolia: {
       appId: 'YUQHC5OCW0',
       apiKey: 'ef8f3e604a1e7ed3afa4dbaeeecfa5f2',
-      indexName: 'redux',
-      algoliaOptions: {}
+      indexName: 'redux'
     }
-  },
+  } satisfies ThemeConfig,
   presets: [
     [
       '@docusaurus/preset-classic',
@@ -197,7 +196,7 @@ module.exports = {
                 compilerSettings: {
                   tsconfig: resolve(__dirname, './tsconfig.json'),
                   externalResolutions: {},
-                  transformVirtualFilepath: path =>
+                  transformVirtualFilepath: (path: string) =>
                     path.replace('/docs/', '/website/')
                 }
               }
@@ -207,21 +206,22 @@ module.exports = {
         theme: {
           customCss: require.resolve('./src/css/custom.css')
         }
-      }
+      } satisfies Options
     ]
   ],
   plugins: [
     [
       '@dipakparmar/docusaurus-plugin-umami',
-      /** @type {import('@dipakparmar/docusaurus-plugin-umami').Options} */
-      ({
+      {
         websiteID: '4bb3bf09-7460-453f-857d-874d8a361cb6',
         analyticsDomain: 'redux-docs-umami.up.railway.app',
         scriptName: 'script.js',
         dataAutoTrack: true,
         dataDoNotTrack: true,
         dataCache: true
-      })
+      } satisfies UmamiOptions
     ]
   ]
 }
+
+export default config
