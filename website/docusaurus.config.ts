@@ -13,6 +13,7 @@ const config: Config = {
   favicon: 'img/favicon/favicon.ico',
   organizationName: 'reduxjs',
   projectName: 'redux',
+  themes: [require.resolve('@getcanary/docusaurus-theme-search-pagefind')],
   themeConfig: {
     tableOfContents: {
       minHeadingLevel: 2,
@@ -159,11 +160,11 @@ const config: Config = {
       },
       copyright: `Copyright © 2015–${new Date().getFullYear()} Dan Abramov and the Redux documentation authors.`
     },
-    algolia: {
-      appId: 'YUQHC5OCW0',
-      apiKey: 'ef8f3e604a1e7ed3afa4dbaeeecfa5f2',
-      indexName: 'redux'
-    }
+    // algolia: {
+    //   appId: 'YUQHC5OCW0',
+    //   apiKey: 'ef8f3e604a1e7ed3afa4dbaeeecfa5f2',
+    //   indexName: 'redux'
+    // }
   } satisfies ThemeConfig,
   presets: [
     [
