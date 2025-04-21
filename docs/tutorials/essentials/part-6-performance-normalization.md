@@ -803,7 +803,7 @@ Our application is looking useful, but we've actually got a couple flaws in when
 
 We can use the React DevTools Profiler to view some graphs of what components re-render when state is updated. Try clicking over to the `<UserPage>` for a single user. Open up your browser's DevTools, and in the React "Profiler" tab, click the circle "Record" button in the upper-left. Then, click the "Refresh Notifications" button in our app, and stop the recording in the React DevTools Profiler. You should see a chart that looks like this:
 
-![React DevTools Profiler render capture - <UserPage>](/img/tutorials/essentials/userpage-rerender.png)
+![React DevTools Profiler render capture - `<UserPage>`](/img/tutorials/essentials/userpage-rerender.png)
 
 We can see that the `<Navbar>` re-rendered, which makes sense because it had to show the updated "unread notifications" badge in the tab. But, why did our `<UserPage>` re-render?
 
@@ -913,7 +913,7 @@ selectPostsByUser(state3, 'user2')
 
 Now that we've memoized `selectPostsByUser`, we can try repeating the React profiler with `<UserPage>` open while fetching notifications. This time we should see that `<UserPage>` doesn't re-render:
 
-![React DevTools Profiler optimized render capture - <UserPage>](/img/tutorials/essentials/userpage-optimized.png)
+![React DevTools Profiler optimized render capture - `<UserPage>`](/img/tutorials/essentials/userpage-optimized.png)
 
 ### Balancing Selector Usage
 
@@ -949,7 +949,7 @@ For more details on why we use selector functions and how to write memoized sele
 
 If we go back to our `<PostsList>` and try clicking a reaction button on one of the posts while capturing a React profiler trace, we'll see that not only did the `<PostsList>` and the updated `<PostExcerpt>` instance render, _all_ of the `<PostExcerpt>` components rendered:
 
-![React DevTools Profiler render capture - <PostsList>](/img/tutorials/essentials/postslist-rerender.png)
+![React DevTools Profiler render capture - `<PostsList>`](/img/tutorials/essentials/postslist-rerender.png)
 
 Why is that? None of the other posts changed, so why would they need to re-render?
 
@@ -1237,7 +1237,7 @@ export const PostsList = () => {
 
 Now, if we try clicking a reaction button on one of the posts while capturing a React component performance profile, we should see that _only_ that one component re-rendered:
 
-![React DevTools Profiler render capture - optimized <PostsList>](/img/tutorials/essentials/postslist-optimized.png)
+![React DevTools Profiler render capture - optimized `<PostsList>`](/img/tutorials/essentials/postslist-optimized.png)
 
 ### Normalizing the Users Slice
 

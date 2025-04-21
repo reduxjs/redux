@@ -39,7 +39,7 @@ See the [**Migrating to Modern Redux** page](../usage/migrating-to-modern-redux.
 ## Store API
 
 - [Store](Store.md)
-  - [getState()](Store.md#getState)
+  - [getState()](Store.md#getstate)
   - [dispatch(action)](Store.md#dispatchaction)
   - [subscribe(listener)](Store.md#subscribelistener)
   - [replaceReducer(nextReducer)](Store.md#replacereducernextreducer)
