@@ -7,8 +7,8 @@
   },
   "dependencies": {
     "@dipakparmar/docusaurus-plugin-umami": "^2.0.6",
-    "@docusaurus/core": "2.2.0",
-    "@docusaurus/preset-classic": "2.2.0",
+    "@docusaurus/core": "3.6.3",
+    "@docusaurus/preset-classic": "3.6.3",
     "classnames": "^2.2.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
