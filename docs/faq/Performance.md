@@ -4,27 +4,7 @@ title: Performance
 sidebar_label: Performance
 ---
 
-# Redux FAQ: Performance
-
-## Table of Contents
-
-- [Redux FAQ: Performance](#redux-faq-performance)
-  - [Table of Contents](#table-of-contents)
-  - [Performance](#performance)
-    - [How well does Redux “scale” in terms of performance and architecture?](#how-well-does-redux-scale-in-terms-of-performance-and-architecture)
-      - [Further information](#further-information)
-    - [Won't calling “all my reducers” for each action be slow?](#wont-calling-all-my-reducers-for-each-action-be-slow)
-      - [Further information](#further-information-1)
-    - [Do I have to deep-clone my state in a reducer? Isn't copying my state going to be slow?](#do-i-have-to-deep-clone-my-state-in-a-reducer-isnt-copying-my-state-going-to-be-slow)
-      - [Further information](#further-information-2)
-    - [How can I reduce the number of store update events?](#how-can-i-reduce-the-number-of-store-update-events)
-      - [Further information](#further-information-3)
-    - [Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?](#will-having-one-state-tree-cause-memory-problems-will-dispatching-many-actions-take-up-memory)
-      - [Further information](#further-information-4)
-    - [Will caching remote data cause memory problems?](#will-caching-remote-data-cause-memory-problems)
-      - [Further information](#further-information-5)
-
-## Performance
+## Redux FAQ: Performance
 
 ### How well does Redux “scale” in terms of performance and architecture?
 

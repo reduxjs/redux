@@ -4,19 +4,7 @@ title: Reducers
 sidebar_label: Reducers
 ---
 
-# Redux FAQ: Reducers
-
-## Table of Contents
-
-- [Redux FAQ: Reducers](#redux-faq-reducers)
-  - [Table of Contents](#table-of-contents)
-  - [Reducers](#reducers)
-    - [How do I share state between two reducers? Do I have to use `combineReducers`?](#how-do-i-share-state-between-two-reducers-do-i-have-to-use-combinereducers)
-      - [Further information](#further-information)
-    - [Do I have to use the `switch` statement to handle actions?](#do-i-have-to-use-the-switch-statement-to-handle-actions)
-      - [Further information](#further-information-1)
-
-## Reducers
+## Redux FAQ: Reducers
 
 ### How do I share state between two reducers? Do I have to use `combineReducers`?
 
