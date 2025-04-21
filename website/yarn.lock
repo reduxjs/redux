@@ -4384,6 +4384,66 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@floating-ui/core@npm:^1.6.0":
+  version: 1.6.9
+  resolution: "@floating-ui/core@npm:1.6.9"
+  dependencies:
+    "@floating-ui/utils": "npm:^0.2.9"
+  checksum: 10/656fcd383da17fffca2efa0635cbe3c0b835c3312949e30bd19d05bf42479f2ac22aaf336a6a31cb160621fc6f35cfc9e115e76c5cf48ba96e33474d123ced22
+  languageName: node
+  linkType: hard
+
+"@floating-ui/dom@npm:^1.6.8":
+  version: 1.6.13
+  resolution: "@floating-ui/dom@npm:1.6.13"
+  dependencies:
+    "@floating-ui/core": "npm:^1.6.0"
+    "@floating-ui/utils": "npm:^0.2.9"
+  checksum: 10/4bb732baf3270007741bcdc91be1de767b2bb5d8b891eb838e5f1e7c4cccad998643dbdd4e8b8cec4c5d12c9898f80febc68e9793dd6e26a445283c4fb1b6a78
+  languageName: node
+  linkType: hard
+
+"@floating-ui/utils@npm:^0.2.9":
+  version: 0.2.9
+  resolution: "@floating-ui/utils@npm:0.2.9"
+  checksum: 10/0ca786347db3dd8d9034b86d1449fabb96642788e5900cc5f2aee433cd7b243efbcd7a165bead50b004ee3f20a90ddebb6a35296fc41d43cfd361b6f01b69ffb
+  languageName: node
+  linkType: hard
+
+"@getcanary/docusaurus-theme-search-pagefind@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@getcanary/docusaurus-theme-search-pagefind@npm:1.0.2"
+  dependencies:
+    "@getcanary/web": "npm:^1.0.0"
+    cli-progress: "npm:^3.12.0"
+    micromatch: "npm:^4.0.7"
+    pagefind: "npm:^1.1.0"
+  peerDependencies:
+    "@docusaurus/core": ^2.0.0 || ^3.0.0
+    "@getcanary/web": ^1.0.0
+    react: ^17 || ^18
+    react-dom: ^17 || ^18
+  checksum: 10/63b28722cdf3d2cafdc52d737b838e55be5d8f149350f60d3190c544825b55c2dde1445ef01933ad345a5821e4526db5f18cd924288f387d72796f4d191b10df
+  languageName: node
+  linkType: hard
+
+"@getcanary/web@npm:^1.0.0, @getcanary/web@npm:^1.0.12":
+  version: 1.0.12
+  resolution: "@getcanary/web@npm:1.0.12"
+  dependencies:
+    "@floating-ui/dom": "npm:^1.6.8"
+    "@lit-labs/observers": "npm:^2.0.2"
+    "@lit/context": "npm:^1.1.2"
+    "@lit/task": "npm:^1.0.1"
+    "@xstate/store": "npm:^2.5.0"
+    best-effort-json-parser: "npm:^1.1.2"
+    lit: "npm:^3.1.4"
+    marked: "npm:^14.0.0"
+    picomatch: "npm:^4.0.2"
+  checksum: 10/7d2cddabf7f409070d47238408485ee0e8fc48de3d82eec71381ca71392f9afbd993ea23305602e64cf3100cd5ce14016b8386709b630777a83d204771b2e603
+  languageName: node
+  linkType: hard
+
 "@hapi/hoek@npm:^9.0.0, @hapi/hoek@npm:^9.3.0":
   version: 9.3.0
   resolution: "@hapi/hoek@npm:9.3.0"
@@ -4770,6 +4830,50 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lit-labs/observers@npm:^2.0.2":
+  version: 2.0.5
+  resolution: "@lit-labs/observers@npm:2.0.5"
+  dependencies:
+    "@lit/reactive-element": "npm:^1.0.0 || ^2.0.0"
+    lit-html: "npm:^3.2.0"
+  checksum: 10/4de55e32072f5825ca288c0b32b40e6805c09cd6101c345c44dfceb6bfd03cadf652dbfcd023252ebc2f7519f036d7e0f2f8fa1e58915abbc18733ed11218086
+  languageName: node
+  linkType: hard
+
+"@lit-labs/ssr-dom-shim@npm:^1.2.0":
+  version: 1.3.0
+  resolution: "@lit-labs/ssr-dom-shim@npm:1.3.0"
+  checksum: 10/a15c5d145a20f367a392cff91f2091ffe54457119ac26569670bbbe32760f86d1e250f865dc1bd0604641106376776c4862a8fff9adb44f9881b510747c08680
+  languageName: node
+  linkType: hard
+
+"@lit/context@npm:^1.1.2":
+  version: 1.1.5
+  resolution: "@lit/context@npm:1.1.5"
+  dependencies:
+    "@lit/reactive-element": "npm:^1.6.2 || ^2.1.0"
+  checksum: 10/2e1d7558358ac5e3a4e39f8d97e3b495f9441b62dbff4e9ba955596fc2d382a8414ae9dde5041f51822ea6a62628c102a131e5b28aa11a9186a43393d3e3e3e6
+  languageName: node
+  linkType: hard
+
+"@lit/reactive-element@npm:^1.0.0 || ^2.0.0, @lit/reactive-element@npm:^1.6.2 || ^2.1.0, @lit/reactive-element@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "@lit/reactive-element@npm:2.1.0"
+  dependencies:
+    "@lit-labs/ssr-dom-shim": "npm:^1.2.0"
+  checksum: 10/c13dbc370550b8f3cbdfff3524c4bf58fbda6e91689951ca376104d95c80df96182e0b1c9480786740711f67493f50166d261c79b020eb7a4a10b6794921c790
+  languageName: node
+  linkType: hard
+
+"@lit/task@npm:^1.0.1":
+  version: 1.0.2
+  resolution: "@lit/task@npm:1.0.2"
+  dependencies:
+    "@lit/reactive-element": "npm:^1.0.0 || ^2.0.0"
+  checksum: 10/cf834761ee5b51b76cd175eb631e2fbbe054e072ccb46b4e09de33c56fb416d87ad3565b80ba9828a196eabb96ff093b91d6642d92887adfc26c49d01c392e89
+  languageName: node
+  linkType: hard
+
 "@mdx-js/mdx@npm:^3.0.0":
   version: 3.0.1
   resolution: "@mdx-js/mdx@npm:3.0.1"
@@ -4904,6 +5008,41 @@ __metadata:
   version: 2.1.0
   resolution: "@open-draft/until@npm:2.1.0"
   checksum: 10/622be42950afc8e89715d0fd6d56cbdcd13e36625e23b174bd3d9f06f80e25f9adf75d6698af93bca1e1bf465b9ce00ec05214a12189b671fb9da0f58215b6f4
+  languageName: node
+  linkType: hard
+
+"@pagefind/darwin-arm64@npm:1.3.0":
+  version: 1.3.0
+  resolution: "@pagefind/darwin-arm64@npm:1.3.0"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@pagefind/darwin-x64@npm:1.3.0":
+  version: 1.3.0
+  resolution: "@pagefind/darwin-x64@npm:1.3.0"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@pagefind/linux-arm64@npm:1.3.0":
+  version: 1.3.0
+  resolution: "@pagefind/linux-arm64@npm:1.3.0"
+  conditions: os=linux & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@pagefind/linux-x64@npm:1.3.0":
+  version: 1.3.0
+  resolution: "@pagefind/linux-x64@npm:1.3.0"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@pagefind/windows-x64@npm:1.3.0":
+  version: 1.3.0
+  resolution: "@pagefind/windows-x64@npm:1.3.0"
+  conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
@@ -5784,6 +5923,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/trusted-types@npm:^2.0.2":
+  version: 2.0.7
+  resolution: "@types/trusted-types@npm:2.0.7"
+  checksum: 10/8e4202766a65877efcf5d5a41b7dd458480b36195e580a3b1085ad21e948bc417d55d6f8af1fd2a7ad008015d4117d5fdfe432731157da3c68678487174e4ba3
+  languageName: node
+  linkType: hard
+
 "@types/unist@npm:*, @types/unist@npm:^3.0.0":
   version: 3.0.3
   resolution: "@types/unist@npm:3.0.3"
@@ -6143,6 +6289,21 @@ __metadata:
     "@webassemblyjs/ast": "npm:1.14.1"
     "@xtuc/long": "npm:4.2.2"
   checksum: 10/cef09aad2fcd291bfcf9efdae2ea1e961a1ba0f925d1d9dcdd8c746d32fbaf431b6d26a0241699c0e39f82139018aa720b4ceb84ac6f4c78f13072747480db69
+  languageName: node
+  linkType: hard
+
+"@xstate/store@npm:^2.5.0":
+  version: 2.6.2
+  resolution: "@xstate/store@npm:2.6.2"
+  peerDependencies:
+    react: ^18.2.0 || ^19.0.0-0
+    solid-js: ^1.7.6
+  peerDependenciesMeta:
+    react:
+      optional: true
+    solid-js:
+      optional: true
+  checksum: 10/158a593e6dae0a9b9b4f593e851e8580ef6710a65ab98d8d98d5f8bba7fdbe77291e90aa18e22df8b57c9434b04095f1b14a3f2aa69668e0f26a8b8a78f590dc
   languageName: node
   linkType: hard
 
@@ -6753,6 +6914,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"best-effort-json-parser@npm:^1.1.2":
+  version: 1.1.3
+  resolution: "best-effort-json-parser@npm:1.1.3"
+  checksum: 10/311ed25c95c480b44e082bfee7aaeb246e462e9504a7fcec9793e000b4661a7cf93d150e863dd816dd0567585846712571b04e6a4ce67695690c89f70ebe9dbd
+  languageName: node
+  linkType: hard
+
 "big.js@npm:^5.2.2":
   version: 5.2.2
   resolution: "big.js@npm:5.2.2"
@@ -7224,6 +7392,15 @@ __metadata:
   version: 3.0.0
   resolution: "cli-boxes@npm:3.0.0"
   checksum: 10/637d84419d293a9eac40a1c8c96a2859e7d98b24a1a317788e13c8f441be052fc899480c6acab3acc82eaf1bccda6b7542d7cdcf5c9c3cc39227175dc098d5b2
+  languageName: node
+  linkType: hard
+
+"cli-progress@npm:^3.12.0":
+  version: 3.12.0
+  resolution: "cli-progress@npm:3.12.0"
+  dependencies:
+    string-width: "npm:^4.2.3"
+  checksum: 10/a6a549919a7461f5e798b18a4a19f83154bab145d3ec73d7f3463a8db8e311388c545ace1105557760a058cc4999b7f28c9d8d24d9783ee2912befb32544d4b8
   languageName: node
   linkType: hard
 
@@ -11286,6 +11463,37 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lit-element@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "lit-element@npm:4.2.0"
+  dependencies:
+    "@lit-labs/ssr-dom-shim": "npm:^1.2.0"
+    "@lit/reactive-element": "npm:^2.1.0"
+    lit-html: "npm:^3.3.0"
+  checksum: 10/0760140f9cf7eb71e327f04d51a41e3ae4c3fca2ddccca05fa3458d67124a2008044ef3d3812d021e2297ba8b3af7c06fa56b03860877bc09567c334b9d390ad
+  languageName: node
+  linkType: hard
+
+"lit-html@npm:^3.2.0, lit-html@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "lit-html@npm:3.3.0"
+  dependencies:
+    "@types/trusted-types": "npm:^2.0.2"
+  checksum: 10/667992d927e841d9e74cf615e3556edcdc71392953d3eaf963187b4f0159e52ec7826331a650456f1c573a461f71e6c41da36b8efacef1dffc6cce07e548d8b0
+  languageName: node
+  linkType: hard
+
+"lit@npm:^3.1.4":
+  version: 3.3.0
+  resolution: "lit@npm:3.3.0"
+  dependencies:
+    "@lit/reactive-element": "npm:^2.1.0"
+    lit-element: "npm:^4.2.0"
+    lit-html: "npm:^3.3.0"
+  checksum: 10/442b8eabd5d1b4aee0ab34db0b67d5c07a988f30d345f4a68263275acf826816ba30937bb8d5d331dc260c2127cd8953f332dcc45edbf080d61c21291cb06330
+  languageName: node
+  linkType: hard
+
 "loader-runner@npm:^4.2.0":
   version: 4.3.0
   resolution: "loader-runner@npm:4.3.0"
@@ -11493,6 +11701,15 @@ __metadata:
   version: 3.0.3
   resolution: "markdown-table@npm:3.0.3"
   checksum: 10/ee6e661935c85734620d2fd10e237a60ae2992ef861713b71aa66135a5d5ae957cf06ce5e15fedf3ed1fce839dd7af1f9e87c5729186490f69fa9469e8e5c3e8
+  languageName: node
+  linkType: hard
+
+"marked@npm:^14.0.0":
+  version: 14.1.4
+  resolution: "marked@npm:14.1.4"
+  bin:
+    marked: bin/marked.js
+  checksum: 10/e3526e7907aa1c13481d205b667a178bd372c01318439e4cd8a3d4b55e3983bccef8c17489129c6a0e31dbecb0b417deff6c27f9f16083faa4eea16a22784a86
   languageName: node
   linkType: hard
 
@@ -12306,7 +12523,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"micromatch@npm:^4.0.2, micromatch@npm:^4.0.4, micromatch@npm:^4.0.5":
+"micromatch@npm:^4.0.2, micromatch@npm:^4.0.4, micromatch@npm:^4.0.5, micromatch@npm:^4.0.7":
   version: 4.0.8
   resolution: "micromatch@npm:4.0.8"
   dependencies:
@@ -13024,6 +13241,32 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pagefind@npm:^1.1.0":
+  version: 1.3.0
+  resolution: "pagefind@npm:1.3.0"
+  dependencies:
+    "@pagefind/darwin-arm64": "npm:1.3.0"
+    "@pagefind/darwin-x64": "npm:1.3.0"
+    "@pagefind/linux-arm64": "npm:1.3.0"
+    "@pagefind/linux-x64": "npm:1.3.0"
+    "@pagefind/windows-x64": "npm:1.3.0"
+  dependenciesMeta:
+    "@pagefind/darwin-arm64":
+      optional: true
+    "@pagefind/darwin-x64":
+      optional: true
+    "@pagefind/linux-arm64":
+      optional: true
+    "@pagefind/linux-x64":
+      optional: true
+    "@pagefind/windows-x64":
+      optional: true
+  bin:
+    pagefind: lib/runner/bin.cjs
+  checksum: 10/ccf4acbdb1ca23a11094ea5ccccaa67b2b13bf5f1243d6fe6f227318fa8875509d69ee34899dcc053acb2269cb3cce4cb6904b7cb0fee271ffeddde52d9a5fe5
+  languageName: node
+  linkType: hard
+
 "param-case@npm:^3.0.4":
   version: 3.0.4
   resolution: "param-case@npm:3.0.4"
@@ -13246,6 +13489,13 @@ __metadata:
   version: 2.3.1
   resolution: "picomatch@npm:2.3.1"
   checksum: 10/60c2595003b05e4535394d1da94850f5372c9427ca4413b71210f437f7b2ca091dbd611c45e8b37d10036fa8eade25c1b8951654f9d3973bfa66a2ff4d3b08bc
+  languageName: node
+  linkType: hard
+
+"picomatch@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "picomatch@npm:4.0.2"
+  checksum: 10/ce617b8da36797d09c0baacb96ca8a44460452c89362d7cb8f70ca46b4158ba8bc3606912de7c818eb4a939f7f9015cef3c766ec8a0c6bfc725fdc078e39c717
   languageName: node
   linkType: hard
 
@@ -15109,6 +15359,8 @@ __metadata:
     "@dipakparmar/docusaurus-plugin-umami": "npm:^2.0.6"
     "@docusaurus/core": "npm:3.6.3"
     "@docusaurus/preset-classic": "npm:3.6.3"
+    "@getcanary/docusaurus-theme-search-pagefind": "npm:^1.0.2"
+    "@getcanary/web": "npm:^1.0.12"
     "@reduxjs/toolkit": "npm:^2.0.1"
     "@testing-library/jest-dom": "npm:^6.2.0"
     "@testing-library/react": "npm:^14.1.2"
