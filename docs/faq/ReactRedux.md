@@ -4,29 +4,7 @@ title: React Redux
 sidebar_label: React Redux
 ---
 
-# Redux FAQ: React Redux
-
-## Table of Contents
-
-- [Redux FAQ: React Redux](#redux-faq-react-redux)
-  - [Table of Contents](#table-of-contents)
-  - [React Redux](#react-redux)
-    - [Why should I use React-Redux?](#why-should-i-use-react-redux)
-      - [Further Information](#further-information)
-    - [Why isn't my component re-rendering, or my mapStateToProps running?](#why-isnt-my-component-re-rendering-or-my-mapstatetoprops-running)
-      - [Further information](#further-information-1)
-    - [Why is my component re-rendering too often?](#why-is-my-component-re-rendering-too-often)
-      - [Further information](#further-information-2)
-    - [How can I speed up my `mapStateToProps`?](#how-can-i-speed-up-my-mapstatetoprops)
-      - [Further information](#further-information-3)
-    - [Why don't I have `this.props.dispatch` available in my connected component?](#why-dont-i-have-thispropsdispatch-available-in-my-connected-component)
-      - [Further information](#further-information-4)
-    - [Should I only connect my top component, or can I connect multiple components in my tree?](#should-i-only-connect-my-top-component-or-can-i-connect-multiple-components-in-my-tree)
-      - [Further information](#further-information-5)
-    - [How does Redux compare to the React Context API?](#how-does-redux-compare-to-the-react-context-api)
-      - [Further information](#further-information-6)
-
-## React Redux
+## Redux FAQ: React Redux
 
 ### Why should I use React-Redux?
 

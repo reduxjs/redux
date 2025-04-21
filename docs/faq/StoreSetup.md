@@ -4,21 +4,7 @@ title: Store Setup
 sidebar_label: Store Setup
 ---
 
-# Redux FAQ: Store Setup
-
-## Table of Contents
-
-- [Redux FAQ: Store Setup](#redux-faq-store-setup)
-  - [Table of Contents](#table-of-contents)
-  - [Store Setup](#store-setup)
-    - [Can or should I create multiple stores? Can I import my store directly, and use it in components myself?](#can-or-should-i-create-multiple-stores-can-i-import-my-store-directly-and-use-it-in-components-myself)
-      - [Further information](#further-information)
-    - [Is it OK to have more than one middleware chain in my store enhancer? What is the difference between `next` and `dispatch` in a middleware function?](#is-it-ok-to-have-more-than-one-middleware-chain-in-my-store-enhancer-what-is-the-difference-between-next-and-dispatch-in-a-middleware-function)
-      - [Further information](#further-information-1)
-    - [How do I subscribe to only a portion of the state? Can I get the dispatched action as part of the subscription?](#how-do-i-subscribe-to-only-a-portion-of-the-state-can-i-get-the-dispatched-action-as-part-of-the-subscription)
-      - [Further information](#further-information-2)
-
-## Store Setup
+## Redux FAQ: Store Setup
 
 ### Can or should I create multiple stores? Can I import my store directly, and use it in components myself?
 

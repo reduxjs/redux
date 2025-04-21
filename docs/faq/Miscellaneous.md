@@ -4,14 +4,7 @@ title: Miscellaneous
 sidebar_label: Miscellaneous
 ---
 
-# Redux FAQ: Miscellaneous
-
-## Table of Contents
-
-- [Are there any larger, “real” Redux projects?](#are-there-any-larger-real-redux-projects)
-- [How can I implement authentication in Redux?](#how-can-i-implement-authentication-in-redux)
-
-## Miscellaneous
+## Redux FAQ: Miscellaneous
 
 ### Are there any larger, “real” Redux projects?
 

@@ -6,15 +6,7 @@ sidebar_label: Code Structure
 
 import { DetailedExplanation } from '../components/DetailedExplanation'
 
-# Redux FAQ: Code Structure
-
-## Table of Contents
-
-- [What should my file structure look like? How should I group my action creators and reducers in my project? Where should my selectors go?](#what-should-my-file-structure-look-like-how-should-i-group-my-action-creators-and-reducers-in-my-project-where-should-my-selectors-go)
-- [How should I split my logic between reducers and action creators? Where should my “business logic” go?](#how-should-i-split-my-logic-between-reducers-and-action-creators-where-should-my-business-logic-go)
-- [Why should I use action creators?](#why-should-i-use-action-creators)
-- [Where should websockets and other persistent connections live?](#where-should-websockets-and-other-persistent-connections-live)
-- [How can I use the Redux store in non-component files?](#how-can-i-use-the-redux-store-in-non-component-files)
+## Redux FAQ: Code Structure
 
 ## What should my file structure look like? How should I group my action creators and reducers in my project? Where should my selectors go?
 

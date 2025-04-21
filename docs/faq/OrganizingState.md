@@ -4,23 +4,7 @@ title: Organizing State
 sidebar_label: Organizing State
 ---
 
-# Redux FAQ: Organizing State
-
-## Table of Contents
-
-- [Redux FAQ: Organizing State](#redux-faq-organizing-state)
-  - [Table of Contents](#table-of-contents)
-  - [Organizing State](#organizing-state)
-    - [Do I have to put all my state into Redux? Should I ever use React's `useState` or `useReducer`?](#do-i-have-to-put-all-my-state-into-redux-should-i-ever-use-reacts-usestate-or-usereducer)
-      - [Further information](#further-information)
-    - [Can I put functions, promises, or other non-serializable items in my store state?](#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)
-      - [Further information](#further-information-1)
-    - [How do I organize nested or duplicate data in my state?](#how-do-i-organize-nested-or-duplicate-data-in-my-state)
-      - [Further information](#further-information-2)
-    - [Should I put form state or other UI state in my store?](#should-i-put-form-state-or-other-ui-state-in-my-store)
-      - [Further Information](#further-information-3)
-
-## Organizing State
+## Redux FAQ: Organizing State
 
 ### Do I have to put all my state into Redux? Should I ever use React's `useState` or `useReducer`?
 

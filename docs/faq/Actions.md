@@ -4,24 +4,7 @@ title: Actions
 sidebar_label: Actions
 ---
 
-# Redux FAQ: Actions
-
-## Table of Contents
-
-- [Redux FAQ: Actions](#redux-faq-actions)
-  - [Table of Contents](#table-of-contents)
-  - [Actions](#actions)
-    - [Why should `type` be a string, or at least serializable? Why should my action types be constants?](#why-should-type-be-a-string-or-at-least-serializable-why-should-my-action-types-be-constants)
-      - [Further information](#further-information)
-    - [Is there always a one-to-one mapping between reducers and actions?](#is-there-always-a-one-to-one-mapping-between-reducers-and-actions)
-      - [Further information](#further-information-1)
-    - [How can I represent “side effects” such as AJAX calls? Why do we need things like “action creators”, “thunks”, and “middleware” to do async behavior?](#how-can-i-represent-side-effects-such-as-ajax-calls-why-do-we-need-things-like-action-creators-thunks-and-middleware-to-do-async-behavior)
-      - [Further information](#further-information-2)
-    - [What async middleware should I use? How do you decide between thunks, sagas, observables, or something else?](#what-async-middleware-should-i-use-how-do-you-decide-between-thunks-sagas-observables-or-something-else)
-    - [Should I dispatch multiple actions in a row from one action creator?](#should-i-dispatch-multiple-actions-in-a-row-from-one-action-creator)
-      - [Further information](#further-information-3)
-
-## Actions
+## Redux FAQ: Actions
 
 ### Why should `type` be a string? Why should my action types be constants?
 
@@ -145,7 +128,7 @@ Try to avoid dispatching several times synchronously in a row in the places wher
 
 **Documentation**
 
-- [FAQ: Performance - Reducing Update Events](./Performance.md#performance-update-events)
+- [FAQ: Performance - Reducing Update Events](./Performance.md#how-can-i-reduce-the-number-of-store-update-events)
 
 **Articles**
 
