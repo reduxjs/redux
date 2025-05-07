@@ -51,7 +51,7 @@ Also, the mock server has been set up to reuse the same random seed each time th
 
 :::info
 
-As a reminder, the code examples focus on the key concepts and changes for each section. See the CodeSandbox projects and the [`tutorial-steps` branch in the project repo](https://github.com/reduxjs/redux-essentials-example-app/tree/tutorial-steps) for the complete changes in the application.
+As a reminder, the code examples focus on the key concepts and changes for each section. See the CodeSandbox projects and the [`tutorial-steps-ts` branch in the project repo](https://github.com/reduxjs/redux-essentials-example-app/tree/tutorial-steps-ts) for the complete changes in the application.
 
 :::
 
@@ -1031,7 +1031,6 @@ const postsSlice = createSlice({
 // Remove `postAdded`
 export const { postUpdated, reactionAdded } = postsSlice.actions
 // highlight-end
-
 ```
 
 ### Checking Thunk Results in Components
