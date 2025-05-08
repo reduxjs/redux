@@ -50,6 +50,11 @@ const config: Config = {
       },
       items: [
         {
+          label: 'React Redux',
+          to: '/react-redux/introduction/getting-started',
+          position: 'left'
+        },
+        {
           label: 'Getting Started',
           to: 'introduction/getting-started',
           position: 'right'
@@ -159,7 +164,7 @@ const config: Config = {
         href: 'https://redux.js.org/'
       },
       copyright: `Copyright © 2015–${new Date().getFullYear()} Dan Abramov and the Redux documentation authors.`
-    },
+    }
     // algolia: {
     //   appId: 'YUQHC5OCW0',
     //   apiKey: 'ef8f3e604a1e7ed3afa4dbaeeecfa5f2',
@@ -221,6 +226,16 @@ const config: Config = {
         dataDoNotTrack: true,
         dataCache: true
       } satisfies UmamiOptions
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'react-redux',
+        path: 'react-redux/docs',
+        routeBasePath: 'react-redux',
+        sidebarPath: './react-redux.sidebars.ts',
+        include: ['{api,introduction,using-react-redux,tutorials}/*.{md,mdx}']
+      }
     ]
   ]
 }
