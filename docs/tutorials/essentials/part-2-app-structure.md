@@ -655,7 +655,7 @@ See [the Redux Thunk docs](../../usage/writing-logic-thunks.mdx), the post [What
 
 Earlier, we saw what a standalone React `<Counter>` component looks like. Our React+Redux app has a similar `<Counter>` component, but it does a few things differently.
 
-We'll start by looking at the `Counter.js` component file:
+We'll start by looking at the `Counter.tsx` component file:
 
 ```tsx title="features/counter/Counter.tsx"
 import { useState } from 'react'
@@ -852,7 +852,7 @@ If you're not sure where to put something, here are some common rules of thumb f
 
 This is also a good example of how to think about forms in Redux in general. **Most form state probably shouldn't be kept in Redux.** Instead, keep the data in your form components as you're editing it, and then dispatch Redux actions to update the store when the user is done.
 
-One other thing to note before we move on: remember that `incrementAsync` thunk from `counterSlice.js`? We're using it here in this component. Notice that we use it the same way we dispatch the other normal action creators. This component doesn't care whether we're dispatching a normal action or starting some async logic. It only knows that when you click that button, it dispatches something.
+One other thing to note before we move on: remember that `incrementAsync` thunk from `counterSlice.ts`? We're using it here in this component. Notice that we use it the same way we dispatch the other normal action creators. This component doesn't care whether we're dispatching a normal action or starting some async logic. It only knows that when you click that button, it dispatches something.
 
 ## Providing the Store
 
@@ -887,7 +887,7 @@ root.render(
 
 We always have to call `root.render(<App />)` to tell React to start rendering our root `<App>` component. In order for our hooks like `useSelector` to work right, we need to use a component called `<Provider>` to pass down the Redux store behind the scenes so they can access it.
 
-We already created our store in `app/store.js`, so we can import it here. Then, we put our `<Provider>` component around the whole `<App>`, and pass in the store: `<Provider store={store}>`.
+We already created our store in `app/store.ts`, so we can import it here. Then, we put our `<Provider>` component around the whole `<App>`, and pass in the store: `<Provider store={store}>`.
 
 Now, any React components that call `useSelector` or `useDispatch` will be talking to the Redux store we gave to the `<Provider>`.
 
