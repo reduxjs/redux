@@ -146,7 +146,7 @@ function TodoList() {
   // highlight-start
   // ❌ WARNING: this _always_ returns a new reference, so it will _always_ re-render!
   const completedTodos = useSelector(state =>
-    state.todos.map(todo => todo.completed)
+    state.todos.filter(todo => todo.completed)
   )
   // highlight-end
 }
