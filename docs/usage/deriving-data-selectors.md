@@ -228,7 +228,7 @@ const brokenSelector = createSelector(
 Similarly, a memoized selector should _never_ use `state => state` as an input! That will force the selector to always recalculate.
 :::
 
-In typical Reselect usage, you write your top-level "input selectors" as plain functions, and use `createSelector` to create memoized selectors that look up nested values:
+In typical Reselect usage, you write your top-level "input selectors" as plain functions, and use `createSelector` to create memoized selectors that calculate derived values:
 
 ```js
 const state = {
@@ -238,10 +238,8 @@ const state = {
   b: 10
 }
 
-const selectA = state => state.a
+const selectA1 = state => state.a.first
 const selectB = state => state.b
-
-const selectA1 = createSelector([selectA], a => a.first)
 
 const selectResult = createSelector([selectA1, selectB], (a1, b) => {
   console.log('Output selector running')
