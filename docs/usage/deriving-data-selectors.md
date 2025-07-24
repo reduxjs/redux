@@ -228,36 +228,31 @@ const brokenSelector = createSelector(
 Similarly, a memoized selector should _never_ use `state => state` as an input! That will force the selector to always recalculate.
 :::
 
-In typical Reselect usage, you write your top-level "input selectors" as plain functions, and use `createSelector` to create memoized selectors that calculate derived values:
+In typical Reselect usage, you write your top-level "input selectors" as simple functions that just return values nested somewhere inside the state object. Then, you use `createSelector` to create memoized selectors that take one or more of these values as input and produce new derived values:
 
 ```js
-const state = {
-  a: {
-    first: 5
-  },
-  b: 10
-}
+const selectTodos = state => state.todos.items
+const selectCurrentUser = state => state.users.currentUser
 
-const selectA1 = state => state.a.first
-const selectB = state => state.b
+const selectTodosForCurrentUser = createSelector(
+  [selectTodos, selectCurrentUser],
+  (todos, currentUser) => {
+    console.log('Output selector running')
+    return todos.filter(todo => todo.ownerId === currentUser.userId)
+  }
+)
 
-const selectResult = createSelector([selectA1, selectB], (a1, b) => {
-  console.log('Output selector running')
-  return a1 + b
-})
-
-const result = selectResult(state)
+const todosForCurrentUser1 = selectTodosForCurrentUser(state)
 // Log: "Output selector running"
-console.log(result)
-// 15
 
-const secondResult = selectResult(state)
+const todosForCurrentUser2 = selectTodosForCurrentUser(state)
 // No log output
-console.log(secondResult)
-// 15
+
+console.log(todosForCurrentUser1 === todosForCurrentUser2)
+// true
 ```
 
-Note that the second time we called `selectResult`, the "output selector" didn't execute. Because the results of `selectA1` and `selectB` were the same as the first call, `selectResult` was able to return the memoized result from the first call.
+Note that the second time we called `selectTodosForCurrentUser`, the "output selector" didn't execute. Because the results of `selectTodos` and `selectCurrentUser` were the same as the first call, `selectTodosForCurrentUser` was able to return the memoized result from the first call.
 
 ### `createSelector` Behavior
 
