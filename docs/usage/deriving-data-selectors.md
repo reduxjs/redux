@@ -265,6 +265,8 @@ const c = someSelector(state, 2) // different inputs, not memoized
 const d = someSelector(state, 1) // different inputs from last time, not memoized
 ```
 
+To address this, you can create [unique selector instances](https://redux.js.org/usage/deriving-data-selectors#creating-unique-selector-instances).
+
 Also, you can pass multiple arguments into a selector. Reselect will call all of the input selectors with those exact inputs:
 
 ```js
