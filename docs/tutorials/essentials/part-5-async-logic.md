@@ -1128,7 +1128,7 @@ As a reminder, here's what we covered in this section:
   - Thunk functions receive `dispatch` and `getState` as arguments, and can use those as part of async logic
 - **You can dispatch additional actions to help track the loading status of an API call**
   - The typical pattern is dispatching a "pending" action before the call, then either a "success" containing the data or a "failure" action containing the error
-  - Loading state should usually be stored as an enum, like `'idle' | 'pending' | 'succeeded' | 'rejected'`
+  - Loading state should usually be stored as a union of string literals, like `'idle' | 'pending' | 'succeeded' | 'rejected'`
 - **Redux Toolkit has a `createAsyncThunk` API that dispatches these actions for you**
   - `createAsyncThunk` accepts a "payload creator" callback that should return a Promise, and generates `pending/fulfilled/rejected` action types automatically
   - Generated action creators like `fetchPosts` dispatch those actions based on the Promise you return
