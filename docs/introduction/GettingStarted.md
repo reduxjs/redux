@@ -41,26 +41,26 @@ yarn add @reduxjs/toolkit
 
 The recommended way to start new apps with Redux is to use one of our [official templates](https://github.com/reduxjs/redux-templates). These templates come pre-configured with Redux Toolkit, and include a small example app to get you started.
 
-To create a new project, you can use a tool like `degit` to clone and extract the template.
+To create a new project, you can use a tool like `tiged` to clone and extract the template.
 
 ```bash
 # Vite + TypeScript
-npx degit reduxjs/redux-templates/packages/vite-template-redux my-app
+npx tiged reduxjs/redux-templates/packages/vite-template-redux my-app
 
 # Create React App + TypeScript
-npx degit reduxjs/redux-templates/packages/cra-template-redux-typescript my-app
+npx tiged reduxjs/redux-templates/packages/cra-template-redux-typescript my-app
 
 # Create React App + JavaScript
-npx degit reduxjs/redux-templates/packages/cra-template-redux my-app
+npx tiged reduxjs/redux-templates/packages/cra-template-redux my-app
 
 # Expo + TypeScript
-npx degit reduxjs/redux-templates/packages/expo-template-redux-typescript my-app
+npx tiged reduxjs/redux-templates/packages/expo-template-redux-typescript my-app
 
 # React Native + TypeScript
-npx degit reduxjs/redux-templates/packages/react-native-template-redux-typescript my-app
+npx tiged reduxjs/redux-templates/packages/react-native-template-redux-typescript my-app
 
 # Standalone Redux Toolkit App Structure Example
-npx degit reduxjs/redux-templates/packages/rtk-app-structure-example my-app
+npx tiged reduxjs/redux-templates/packages/rtk-app-structure-example my-app
 ```
 
 In addition to our official templates, the community has created other templates, such as the [Next.js `with-redux` template](https://github.com/vercel/next.js/tree/canary/examples/with-redux).
