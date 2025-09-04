@@ -27,21 +27,6 @@ const config: Config = {
     colorMode: {
       disableSwitch: false
     },
-    announcementBar: {
-      id: 'redux-dev-course',
-      content: `      
-      <a href="https://redux.dev">
-        <img
-          src="/img/course-callout-wide.svg"
-          alt="Redux.dev - a new course by Mark Erikson + ui.dev - Learn more"
-          style="margin-top: 5px;"
-        />
-      </a>
-      `,
-      backgroundColor: '#fafbfc',
-      textColor: '#091E42',
-      isCloseable: false
-    },
     navbar: {
       title: 'Redux',
       logo: {
