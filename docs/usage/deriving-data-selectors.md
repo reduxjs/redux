@@ -569,7 +569,7 @@ That way, if we happen to make an update to the structure of the todos slice sta
 
 It's possible to add _too many_ selectors to an application. **Adding a separate selector function for every single field is not a good idea!** That ends up turning Redux into something resembling a Java class with getter/setter functions for every field. It's not going to _improve_ the code, and it's probably going to make the code _worse_ - maintaining all those extra selectors is a lot of additional effort, and it will be harder to trace what values are being used where.
 
-Similarly, **don't make every single selector memoized!**. Memoization is only needed if you are truly _deriving_ results, _and_ if the derived results would likely create new references every time. **A selector function that does a direct lookup and return of a value should be a plain function, not memoized**.
+Similarly, **don't make every single selector memoized!**. Memoization is only needed if the selector returns a new reference every time it runs, or if the calculation logic it executes is expensive. **A selector function that does a direct lookup and return of a value should be a plain function, not memoized**.
 
 Some examples of when and when not to memoize:
 
@@ -579,7 +579,9 @@ const selectTodos = state => state.todos
 const selectNestedValue = state => state.some.deeply.nested.field
 const selectTodoById = (state, todoId) => state.todos[todoId]
 
-// ❌ DO NOT memoize: deriving data, but will return a consistent result
+// 🤔 MAYBE memoize: deriving data, but will return a consistent result.
+//    Memoization might be useful if the selector is used in many places
+//    or the list being iterated over is long.
 const selectItemsTotal = state => {
   return state.items.reduce((result, item) => {
     return result + item.total
