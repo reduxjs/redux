@@ -1215,7 +1215,7 @@ function PostExcerpt({ postId }: PostExcerptProps) {
 export const PostsList = () => {
   const dispatch = useDispatch()
   // highlight-next-line
-  const orderedPostIds = useSelector(selectPostIds)
+  const orderedPostIds = useAppSelector(selectPostIds)
 
   // omit other selections and effects
 
