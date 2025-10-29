@@ -57,7 +57,7 @@ See these resources for typical test runner configuration instructions:
 
 ### UI and Network Testing Tools
 
-**The Redux team recommends using [React Testing Library (RTL)](https://testing-library.com/docs/react-testing-library/intro) to test React components that connect to Redux**. React Testing Library is a simple and complete React DOM testing utility that encourages good testing practices. It uses ReactDOM's `render` function and `act` from react-dom/tests-utils. (The Testing Library family of tools also includes [adapters for many other popular frameworks as well](https://testing-library.com/docs/dom-testing-library/intro).)
+**The Redux team recommends using [React Testing Library (RTL)](https://testing-library.com/docs/react-testing-library/intro) to test React components that connect to Redux without a browser**. React Testing Library is a simple and complete React DOM testing utility that encourages good testing practices. It uses ReactDOM's `render` function and `act` from react-dom/tests-utils. (The Testing Library family of tools also includes [adapters for many other popular frameworks as well](https://testing-library.com/docs/dom-testing-library/intro).)
 
 We also **recommend using [Mock Service Worker (MSW)](https://mswjs.io/) to mock network requests**, as this means your application logic does not need to be changed or mocked when writing tests.
 
@@ -146,16 +146,17 @@ export default userSlice.reducer
 // file: app/store.ts
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import userReducer from '../features/users/userSlice'
-// Create the root reducer independently to obtain the RootState type
+// Create the root reducer independently to obtain the RootState and PreloadedState type
 const rootReducer = combineReducers({
   user: userReducer
 })
-export function setupStore(preloadedState?: Partial<RootState>) {
+export function setupStore(preloadedState?: PreloadedState) {
   return configureStore({
     reducer: rootReducer,
     preloadedState
   })
 }
+export type PreloadedState = Parameters<typeof rootReducer>[0]
 export type RootState = ReturnType<typeof rootReducer>
 export type AppStore = ReturnType<typeof setupStore>
 export type AppDispatch = AppStore['dispatch']
@@ -179,12 +180,13 @@ import userReducer from '../features/users/userSlice'
 const rootReducer = combineReducers({
   user: userReducer
 })
-export function setupStore(preloadedState?: Partial<RootState>) {
+export function setupStore(preloadedState?: PreloadedState) {
   return configureStore({
     reducer: rootReducer,
     preloadedState
   })
 }
+export type PreloadedState = Parameters<typeof rootReducer>[0]
 export type RootState = ReturnType<typeof rootReducer>
 export type AppStore = ReturnType<typeof setupStore>
 export type AppDispatch = AppStore['dispatch']
@@ -210,12 +212,13 @@ import userReducer from '../features/users/userSlice'
 const rootReducer = combineReducers({
   user: userReducer
 })
-export function setupStore(preloadedState?: Partial<RootState>) {
+export function setupStore(preloadedState?: PreloadedState) {
   return configureStore({
     reducer: rootReducer,
     preloadedState
   })
 }
+export type PreloadedState = Parameters<typeof rootReducer>[0]
 export type RootState = ReturnType<typeof rootReducer>
 export type AppStore = ReturnType<typeof setupStore>
 export type AppDispatch = AppStore['dispatch']
@@ -324,12 +327,13 @@ import userReducer from '../features/users/userSlice'
 const rootReducer = combineReducers({
   user: userReducer
 })
-export function setupStore(preloadedState?: Partial<RootState>) {
+export function setupStore(preloadedState?: PreloadedState) {
   return configureStore({
     reducer: rootReducer,
     preloadedState
   })
 }
+export type PreloadedState = Parameters<typeof rootReducer>[0]
 export type RootState = ReturnType<typeof rootReducer>
 export type AppStore = ReturnType<typeof setupStore>
 // file: utils/test-utils.tsx
@@ -337,16 +341,15 @@ import React, { PropsWithChildren } from 'react'
 import { render } from '@testing-library/react'
 import type { RenderOptions } from '@testing-library/react'
 import { userEvent } from '@testing-library/user-event'
-import { configureStore } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
 
-import type { AppStore, RootState } from '../app/store'
+import type { AppStore, RootState, PreloadedState } from '../app/store'
 import { setupStore } from '../app/store'
 
 // This type interface extends the default options for render from RTL, as well
 // as allows the user to specify other things such as initialState, store.
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
-  preloadedState?: Partial<RootState>
+  preloadedState?: PreloadedState
   store?: AppStore
 }
 
@@ -406,13 +409,14 @@ const rootReducer = combineReducers({
   user: userReducer
 })
 
-export const setupStore = (preloadedState?: Partial<RootState>) => {
+export const setupStore = (preloadedState?: PreloadedState) => {
   return configureStore({
     reducer: rootReducer,
     preloadedState
   })
 }
 
+export type PreloadedState = Parameters<typeof rootReducer>[0]
 export type RootState = ReturnType<typeof rootReducer>
 export type AppStore = ReturnType<typeof setupStore>
 export type AppDispatch = AppStore['dispatch']
@@ -424,10 +428,10 @@ import { userEvent } from '@testing-library/user-event'
 import { Provider } from 'react-redux'
 
 import { setupStore } from '../app/store'
-import type { AppStore, RootState } from '../app/store'
+import type { AppStore, RootState, PreloadedState } from '../app/store'
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
-  preloadedState?: Partial<RootState>
+  preloadedState?: PreloadedState
   store?: AppStore
 }
 
@@ -566,7 +570,7 @@ While we recommend using integration tests by default, since they exercise all t
 
 Reducers are pure functions that return the new state after applying the action to the previous state. In the majority of cases, the reducer is an implementation detail that does not need explicit tests. However, if your reducer contains particularly complex logic that you would like the confidence of having unit tests for, reducers can be easily tested.
 
-Because reducers are pure functions, so testing them should be straightforward. Call the reducer with a specific input `state` and `action`, and assert that the result state matches expectations.
+Because reducers are pure functions, testing them should be straightforward. Call the reducer with a specific input `state` and `action`, and assert that the result state matches expectations.
 
 #### Example
 
