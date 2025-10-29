@@ -40,20 +40,20 @@ For background on why we recommend integration-style tests, see:
 
 ### Test Runners
 
-**Redux can be tested with any test runner**, since it's just plain JavaScript. One common option is [Jest](https://jestjs.io/), a widely used test runner that comes with Create-React-App, and is used by the Redux library repos. If you're using [Vite](https://vitejs.dev/) to build your project, you may be using [Vitest](https://vitest.dev/) as your test runner.
+**Redux can be tested with any test runner**, since it's just plain JavaScript. An increasingly common choice is [Vitest](https://vitest.dev/) (used by the Redux library repos), though [Jest](https://jestjs.io/) is still used widely.
 
-Typically, your test runner needs to be configured to compile JavaScript/TypeScript syntax. If you're going to be testing UI components, you will likely need to configure the test runner to use [JSDOM](https://github.com/jsdom/jsdom) to provide a mock DOM environment.
+Typically, your test runner needs to be configured to compile JavaScript/TypeScript syntax. If you're going to be testing UI components **without a browser**, you will likely need to configure the test runner to use [JSDOM](https://github.com/jsdom/jsdom) to provide a mock DOM environment.
 
-The examples in this page will assume you're using Jest, but the same patterns apply no matter what test runner you're using.
+The examples in this page will assume you're using Vitest, but the same patterns apply no matter what test runner you're using.
 
 See these resources for typical test runner configuration instructions:
 
-- **Jest**:
-  - [Jest: Getting Started](https://jestjs.io/docs/getting-started)
-  - [Jest: Configuration - Test Environment](https://jestjs.io/docs/configuration#testenvironment-string)
 - **Vitest**
   - [Vitest: Getting Started](https://vitest.dev/guide/)
   - [Vitest: Configuration - Test Environment](https://vitest.dev/config/#environment)
+- **Jest**:
+  - [Jest: Getting Started](https://jestjs.io/docs/getting-started)
+  - [Jest: Configuration - Test Environment](https://jestjs.io/docs/configuration#testenvironment-string)
 
 ### UI and Network Testing Tools
 
@@ -339,8 +339,6 @@ import { Provider } from 'react-redux'
 
 import type { AppStore, RootState } from '../app/store'
 import { setupStore } from '../app/store'
-// As a basic setup, import your same slice reducers
-import userReducer from '../features/users/userSlice'
 
 // This type interface extends the default options for render from RTL, as well
 // as allows the user to specify other things such as initialState, store.
@@ -372,113 +370,12 @@ export function renderWithProviders(
 }
 ```
 
-In this example, we're directly importing the same slice reducers that the real app uses to create the store. It may be helpful to create a reusable `setupStore` function that does the actual store creation with the right options and configuration, and use that in the custom render function instead.
-
-```ts title="app/store.ts"
-// file: features/users/userSlice.ts noEmit
-import { createSlice } from '@reduxjs/toolkit'
-const userSlice = createSlice({
-  name: 'user',
-  initialState: {
-    name: 'No user',
-    status: 'idle'
-  },
-  reducers: {}
-})
-export default userSlice.reducer
-// file: app/store.ts
-import { combineReducers, configureStore } from '@reduxjs/toolkit'
-
-import userReducer from '../features/users/userSlice'
-
-// Create the root reducer separately so we can extract the RootState type
-const rootReducer = combineReducers({
-  user: userReducer
-})
-
-export const setupStore = (preloadedState?: Partial<RootState>) => {
-  return configureStore({
-    reducer: rootReducer,
-    preloadedState
-  })
-}
-
-export type RootState = ReturnType<typeof rootReducer>
-export type AppStore = ReturnType<typeof setupStore>
-export type AppDispatch = AppStore['dispatch']
-```
-
-Then, use `setupStore` in the test utils file instead of calling `configureStore` again:
-
-```tsx
-// file: features/users/userSlice.ts noEmit
-import { createSlice } from '@reduxjs/toolkit'
-const userSlice = createSlice({
-  name: 'user',
-  initialState: {
-    name: 'No user',
-    status: 'idle'
-  },
-  reducers: {}
-})
-export default userSlice.reducer
-// file: app/store.ts noEmit
-import { combineReducers, configureStore } from '@reduxjs/toolkit'
-
-import userReducer from '../features/users/userSlice'
-
-const rootReducer = combineReducers({
-  user: userReducer
-})
-
-export const setupStore = (preloadedState?: Partial<RootState>) => {
-  return configureStore({
-    reducer: rootReducer,
-    preloadedState
-  })
-}
-
-export type RootState = ReturnType<typeof rootReducer>
-export type AppStore = ReturnType<typeof setupStore>
-export type AppDispatch = AppStore['dispatch']
-// file: utils/test-utils.tsx
-import React, { PropsWithChildren } from 'react'
-import { render } from '@testing-library/react'
-import type { RenderOptions } from '@testing-library/react'
-import { Provider } from 'react-redux'
-
-import { setupStore } from '../app/store'
-import type { AppStore, RootState } from '../app/store'
-
-// This type interface extends the default options for render from RTL, as well
-// as allows the user to specify other things such as initialState, store.
-interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
-  preloadedState?: Partial<RootState>
-  store?: AppStore
-}
-
-export function renderWithProviders(
-  ui: React.ReactElement,
-  {
-    preloadedState = {},
-    // Automatically create a store instance if no store was passed in
-    store = setupStore(preloadedState),
-    ...renderOptions
-  }: ExtendedRenderOptions = {}
-) {
-  function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
-    return <Provider store={store}>{children}</Provider>
-  }
-  return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) }
-}
-```
-
 ### Writing Integration Tests With Components
 
 The actual test files should use the custom `render` function to actually render our Redux-connected components. If the code that we're testing involves making network requests, we should also configure MSW to mock the expected requests with appropriate test data.
 
 ```tsx title="features/users/tests/UserDisplay.test.tsx"
-// file: jest-setup.ts noEmit
+// file: setup.ts noEmit
 import '@testing-library/jest-dom'
 
 // file: features/users/userSlice.ts noEmit
@@ -571,6 +468,7 @@ export default function UserDisplay() {
 }
 // file: features/users/tests/UserDisplay.test.tsx
 import React from 'react'
+import { beforeAll, afterEach, afterAll, test, expect } from 'vitest'
 import { http, HttpResponse, delay } from 'msw'
 import { setupServer } from 'msw/node'
 import { fireEvent, screen } from '@testing-library/react'
@@ -727,7 +625,7 @@ export const { todoAdded } = todosSlice.actions
 export default todosSlice.reducer
 
 // file: todosSlice.test.ts
-
+import { test, expect } from 'vitest'
 import reducer, { todoAdded, Todo } from './todosSlice'
 
 test('should return the initial state', () => {
