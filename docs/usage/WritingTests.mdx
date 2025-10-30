@@ -624,7 +624,7 @@ interface ExtendedRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   store?: AppStore
 }
 
-export function renderWithProviders(
+export async function renderWithProviders(
   ui: React.ReactElement,
   extendedRenderOptions: ExtendedRenderOptions = {}
 ) {
@@ -642,7 +642,7 @@ export function renderWithProviders(
   // Return an object with the store, and the result of rendering
   return {
     store,
-    ...render(ui, { wrapper: Wrapper, ...renderOptions })
+    ...(await render(ui, { wrapper: Wrapper, ...renderOptions }))
   }
 }
 ```
