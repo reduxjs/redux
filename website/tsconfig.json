@@ -2,7 +2,7 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "moduleResolution": "nodenext",
+    "moduleResolution": "Bundler",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "allowUnusedLabels": true,
@@ -11,7 +11,7 @@
     "jsx": "preserve",
     "strict": true,
     "removeComments": false,
-    "module": "nodenext",
+    "module": "ESNext",
     "target": "ESNext",
     "allowJs": true,
     "checkJs": false,
