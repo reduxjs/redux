@@ -50,6 +50,7 @@ See these resources for typical test runner configuration instructions:
 
 - **Vitest**
   - [Vitest: Getting Started](https://vitest.dev/guide/)
+  - [Vitest: Browser Mode](https://vitest.dev/guide/browser)
   - [Vitest: Configuration - Test Environment](https://vitest.dev/config/#environment)
 - **Jest**:
   - [Jest: Getting Started](https://jestjs.io/docs/getting-started)
@@ -57,10 +58,16 @@ See these resources for typical test runner configuration instructions:
 
 ### UI and Network Testing Tools
 
-**The Redux team recommends using [React Testing Library (RTL)](https://testing-library.com/docs/react-testing-library/intro) to test React components that connect to Redux without a browser**. React Testing Library is a simple and complete React DOM testing utility that encourages good testing practices. It uses ReactDOM's `render` function and `act` from react-dom/tests-utils. (The Testing Library family of tools also includes [adapters for many other popular frameworks as well](https://testing-library.com/docs/dom-testing-library/intro).)
+**The Redux team recommends using either [Vitest Browser Mode](https://vitest.dev/guide/browser/) or [React Testing Library (RTL)](https://testing-library.com/docs/react-testing-library/intro) to test React components that connect to Redux**.
+
+React Testing Library is a simple and complete React DOM testing utility that encourages good testing practices. It uses ReactDOM's `render` function and `act` from react-dom/tests-utils. (The Testing Library family of tools also includes [adapters for many other popular frameworks as well](https://testing-library.com/docs/dom-testing-library/intro).)
+
+Vitest Browser Mode runs integration tests in a real browser, removing the need for a "mock" DOM environment (and allowing for visual feedback and regression testing). When using React, you'll also need `vitest-browser-react`, which includes a `render` utility similar to RTL's.
 
 We also **recommend using [Mock Service Worker (MSW)](https://mswjs.io/) to mock network requests**, as this means your application logic does not need to be changed or mocked when writing tests.
 
+- **Vitest Browser Mode**
+  - [Vitest: Browser Mode Setup](https://vitest.dev/guide/browser)
 - **DOM/React Testing Library**
   - [DOM Testing Library: Setup](https://testing-library.com/docs/dom-testing-library/setup)
   - [React Testing Library: Setup](https://testing-library.com/docs/react-testing-library/setup)
@@ -348,8 +355,9 @@ import type { AppStore, RootState, PreloadedState } from '../app/store'
 import { setupStore } from '../app/store'
 
 // This type interface extends the default options for render from RTL, as well
-// as allows the user to specify other things such as initialState, store.
-interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
+// as allows the user to specify other things such as preloadedState, store.
+interface ExtendedRenderOptions
+  extends Omit<RenderOptions, 'queries' | 'wrapper'> {
   preloadedState?: PreloadedState
   store?: AppStore
 }
@@ -431,7 +439,8 @@ import { Provider } from 'react-redux'
 import { setupStore } from '../app/store'
 import type { AppStore, RootState, PreloadedState } from '../app/store'
 
-interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
+interface ExtendedRenderOptions
+  extends Omit<RenderOptions, 'queries' | 'wrapper'> {
   preloadedState?: PreloadedState
   store?: AppStore
 }
@@ -562,6 +571,306 @@ test('Sets up initial state state with actions', () => {
 ```
 
 You can also extract `store` from the object returned by the custom render function, and dispatch more actions later as part of the test.
+
+### Vitest Browser Mode
+
+#### Setting Up a Reusable Test Render Function
+
+Similar to RTL, Vitest Browser Mode provides a `render` function that can be used to render a component in a real browser. However, since we're testing a React-Redux app, we need to ensure that the `<Provider>` is included in the rendered tree.
+
+We can create a custom render function that wraps the component in a `<Provider>` and sets up a Redux store, similar to the RTL custom render function shown above.
+
+```tsx title="utils/test-utils.tsx"
+// file: features/users/userSlice.ts noEmit
+import { createSlice } from '@reduxjs/toolkit'
+const userSlice = createSlice({
+  name: 'user',
+  initialState: {
+    name: 'No user',
+    status: 'idle'
+  },
+  reducers: {}
+})
+export default userSlice.reducer
+// file: app/store.ts noEmit
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import userReducer from '../features/users/userSlice'
+const rootReducer = combineReducers({
+  user: userReducer
+})
+export function setupStore(preloadedState?: PreloadedState) {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState
+  })
+}
+export type PreloadedState = Parameters<typeof rootReducer>[0]
+export type RootState = ReturnType<typeof rootReducer>
+export type AppStore = ReturnType<typeof setupStore>
+// file: utils/test-utils.tsx
+import React, { PropsWithChildren } from 'react'
+import { render } from 'vitest-browser-react'
+import type { RenderOptions } from 'vitest-browser-react'
+import { Provider } from 'react-redux'
+
+import type { AppStore, RootState, PreloadedState } from '../app/store'
+import { setupStore } from '../app/store'
+
+// This type interface extends the default options for render from vitest-browser-react, as well
+// as allows the user to specify other things such as preloadedState, store.
+interface ExtendedRenderOptions extends Omit<RenderOptions, 'wrapper'> {
+  preloadedState?: PreloadedState
+  store?: AppStore
+}
+
+export function renderWithProviders(
+  ui: React.ReactElement,
+  extendedRenderOptions: ExtendedRenderOptions = {}
+) {
+  const {
+    preloadedState = {},
+    // Automatically create a store instance if no store was passed in
+    store = setupStore(preloadedState),
+    ...renderOptions
+  } = extendedRenderOptions
+
+  const Wrapper = ({ children }: PropsWithChildren) => (
+    <Provider store={store}>{children}</Provider>
+  )
+
+  // Return an object with the store, and the result of rendering
+  return {
+    store,
+    ...render(ui, { wrapper: Wrapper, ...renderOptions })
+  }
+}
+```
+
+For convenience, we can also attach this to `page` in our setup file:
+
+```ts title="setup.ts"
+// file: vitest.config.ts noEmit
+import {} from "@vitest/browser-playwright"
+// file: features/users/userSlice.ts noEmit
+import { createSlice } from '@reduxjs/toolkit'
+const userSlice = createSlice({
+  name: 'user',
+  initialState: {
+    name: 'No user',
+    status: 'idle'
+  },
+  reducers: {}
+})
+export default userSlice.reducer
+// file: app/store.ts noEmit
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import userReducer from '../features/users/userSlice'
+const rootReducer = combineReducers({
+  user: userReducer
+})
+export function setupStore(preloadedState?: PreloadedState) {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState
+  })
+}
+export type PreloadedState = Parameters<typeof rootReducer>[0]
+export type RootState = ReturnType<typeof rootReducer>
+export type AppStore = ReturnType<typeof setupStore>
+// file: utils/test-utils.tsx noEmit
+import React, { PropsWithChildren } from 'react'
+import { render } from 'vitest-browser-react'
+import type { RenderOptions } from 'vitest-browser-react'
+import { Provider } from 'react-redux'
+
+import type { AppStore, RootState, PreloadedState } from '../app/store'
+import { setupStore } from '../app/store'
+
+// This type interface extends the default options for render from vitest-browser-react, as well
+// as allows the user to specify other things such as preloadedState, store.
+interface ExtendedRenderOptions extends Omit<RenderOptions, 'wrapper'> {
+  preloadedState?: PreloadedState
+  store?: AppStore
+}
+
+export async function renderWithProviders(
+  ui: React.ReactElement,
+  extendedRenderOptions: ExtendedRenderOptions = {}
+) {
+  const {
+    preloadedState = {},
+    // Automatically create a store instance if no store was passed in
+    store = setupStore(preloadedState),
+    ...renderOptions
+  } = extendedRenderOptions
+
+  const Wrapper = ({ children }: PropsWithChildren) => (
+    <Provider store={store}>{children}</Provider>
+  )
+
+  // Return an object with the store, and the result of rendering
+  return {
+    store,
+    ...(await render(ui, { wrapper: Wrapper, ...renderOptions }))
+  }
+}
+// file: setup.ts
+import { renderWithProviders } from './utils/test-utils'
+import { page } from 'vitest/browser'
+
+page.extend({ renderWithProviders })
+
+declare module 'vitest/browser' {
+  interface BrowserPage {
+    renderWithProviders: typeof renderWithProviders
+  }
+}
+```
+
+Then we can use it in our tests, similarly to RTL:
+
+```tsx title="features/users/tests/UserDisplay.test.tsx"
+// file: vitest.config.ts noEmit
+import {} from '@vitest/browser-playwright'
+// file: setup.ts noEmit
+import { renderWithProviders } from './utils/test-utils'
+import { page } from 'vitest/browser'
+
+page.extend({ renderWithProviders })
+
+declare module 'vitest/browser' {
+  interface BrowserPage {
+    renderWithProviders: typeof renderWithProviders
+  }
+}
+
+// file: features/users/userSlice.ts noEmit
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import type { RootState } from '../../app/store'
+export const fetchUser = createAsyncThunk('user/fetchUser', async () => {})
+const userSlice = createSlice({
+  name: 'user',
+  initialState: {
+    name: 'No user',
+    status: 'idle'
+  },
+  reducers: {}
+})
+export const selectUserName = (state: RootState) => state.user.name
+export const selectUserFetchStatus = (state: RootState) => state.user.status
+export default userSlice.reducer
+// file: app/store.ts noEmit
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
+
+import userReducer from '../features/users/userSlice'
+
+const rootReducer = combineReducers({
+  user: userReducer
+})
+
+export const setupStore = (preloadedState?: PreloadedState) => {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState
+  })
+}
+
+export type PreloadedState = Parameters<typeof rootReducer>[0]
+export type RootState = ReturnType<typeof rootReducer>
+export type AppStore = ReturnType<typeof setupStore>
+export type AppDispatch = AppStore['dispatch']
+// file: utils/test-utils.tsx noEmit
+import React, { PropsWithChildren } from 'react'
+import { render } from 'vitest-browser-react'
+import type { RenderOptions } from 'vitest-browser-react'
+import { Provider } from 'react-redux'
+
+import type { AppStore, RootState, PreloadedState } from '../app/store'
+import { setupStore } from '../app/store'
+
+// This type interface extends the default options for render from vitest-browser-react, as well
+// as allows the user to specify other things such as preloadedState, store.
+interface ExtendedRenderOptions extends Omit<RenderOptions, 'wrapper'> {
+  preloadedState?: PreloadedState
+  store?: AppStore
+}
+
+export async function renderWithProviders(
+  ui: React.ReactElement,
+  extendedRenderOptions: ExtendedRenderOptions = {}
+) {
+  const {
+    preloadedState = {},
+    // Automatically create a store instance if no store was passed in
+    store = setupStore(preloadedState),
+    ...renderOptions
+  } = extendedRenderOptions
+
+  const Wrapper = ({ children }: PropsWithChildren) => (
+    <Provider store={store}>{children}</Provider>
+  )
+
+  // Return an object with the store, and the result of rendering
+  return {
+    store,
+    ...(await render(ui, { wrapper: Wrapper, ...renderOptions }))
+  }
+}
+// file: app/hooks.tsx noEmit
+import { useDispatch, useSelector } from 'react-redux'
+import type { AppDispatch, RootState } from './store'
+// Use throughout your app instead of plain `useDispatch` and `useSelector`
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
+export const useAppSelector = useSelector.withTypes<RootState>()
+// file: features/users/UserDisplay.tsx noEmit
+import React from 'react'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { fetchUser, selectUserName, selectUserFetchStatus } from './userSlice'
+
+export default function UserDisplay() {
+  const dispatch = useAppDispatch()
+  const userName = useAppSelector(selectUserName)
+  const userFetchStatus = useAppSelector(selectUserFetchStatus)
+
+  return (
+    <div>
+      {/* Display the current user name */}
+      <div>{userName}</div>
+      {/* On button click, dispatch a thunk action to fetch a user */}
+      <button onClick={() => dispatch(fetchUser())}>Fetch user</button>
+      {/* At any point if we're fetching a user, display that on the UI */}
+      {userFetchStatus === 'loading' && <div>Fetching user...</div>}
+    </div>
+  )
+}
+// file: features/users/tests/UserDisplay.test.tsx
+import React from 'react'
+import { test, expect } from 'vitest'
+import { page } from 'vitest/browser'
+import UserDisplay from '../UserDisplay'
+
+test('fetches & receives a user after clicking the fetch user button', async () => {
+  const { store, ...screen } = await page.renderWithProviders(<UserDisplay />)
+
+  const noUserText = screen.getByText(/no user/i)
+  const fetchingUserText = screen.getByText(/Fetching user\.\.\./i)
+  const userNameText = screen.getByText(/John Smith/i)
+
+  // should show no user initially, and not be fetching a user
+  await expect.element(noUserText).toBeInTheDocument()
+  await expect.element(fetchingUserText).not.toBeInTheDocument()
+
+  // after clicking the 'Fetch user' button, it should now show that it is fetching the user
+  await screen.getByRole('button', { name: /fetch user/i }).click()
+  await expect.element(noUserText).not.toBeInTheDocument()
+  await expect.element(fetchingUserText).toBeInTheDocument()
+
+  // after some time, the user should be received
+  await expect.element(userNameText).toBeInTheDocument()
+  await expect.element(noUserText).not.toBeInTheDocument()
+  await expect.element(fetchingUserText).not.toBeInTheDocument()
+})
+```
 
 ## Unit Testing Individual Functions
 
