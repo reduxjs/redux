@@ -639,10 +639,11 @@ export async function renderWithProviders(
     <Provider store={store}>{children}</Provider>
   )
 
+  const screen = await render(ui, { wrapper: Wrapper, ...renderOptions })
   // Return an object with the store, and the result of rendering
   return {
     store,
-    ...(await render(ui, { wrapper: Wrapper, ...renderOptions }))
+    ...screen
   }
 }
 ```
@@ -687,8 +688,6 @@ import { Provider } from 'react-redux'
 import type { AppStore, RootState, PreloadedState } from '../app/store'
 import { setupStore } from '../app/store'
 
-// This type interface extends the default options for render from vitest-browser-react, as well
-// as allows the user to specify other things such as preloadedState, store.
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   preloadedState?: PreloadedState
   store?: AppStore
@@ -700,7 +699,6 @@ export async function renderWithProviders(
 ) {
   const {
     preloadedState = {},
-    // Automatically create a store instance if no store was passed in
     store = setupStore(preloadedState),
     ...renderOptions
   } = extendedRenderOptions
@@ -709,7 +707,6 @@ export async function renderWithProviders(
     <Provider store={store}>{children}</Provider>
   )
 
-  // Return an object with the store, and the result of rendering
   return {
     store,
     ...(await render(ui, { wrapper: Wrapper, ...renderOptions }))
@@ -789,8 +786,6 @@ import { Provider } from 'react-redux'
 import type { AppStore, RootState, PreloadedState } from '../app/store'
 import { setupStore } from '../app/store'
 
-// This type interface extends the default options for render from vitest-browser-react, as well
-// as allows the user to specify other things such as preloadedState, store.
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'wrapper'> {
   preloadedState?: PreloadedState
   store?: AppStore
@@ -802,7 +797,6 @@ export async function renderWithProviders(
 ) {
   const {
     preloadedState = {},
-    // Automatically create a store instance if no store was passed in
     store = setupStore(preloadedState),
     ...renderOptions
   } = extendedRenderOptions
@@ -811,7 +805,6 @@ export async function renderWithProviders(
     <Provider store={store}>{children}</Provider>
   )
 
-  // Return an object with the store, and the result of rendering
   return {
     store,
     ...(await render(ui, { wrapper: Wrapper, ...renderOptions }))
