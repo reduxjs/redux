@@ -899,7 +899,7 @@ selectPostsByUser(state1, 'user1')
 // Output selector runs, because `userId` changed
 selectPostsByUser(state1, 'user2')
 
-dispatch(reactionAdded())
+dispatch(fetchUsers())
 const state2 = getState()
 // Output selector does not run, because `posts` and `userId` are the same
 selectPostsByUser(state2, 'user2')
