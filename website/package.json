@@ -1,9 +1,15 @@
 {
-  "scripts": {
-    "start": "docusaurus start",
-    "build": "docusaurus build",
-    "swizzle": "docusaurus swizzle",
-    "deploy": "docusaurus deploy"
+  "browserslist": {
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ]
   },
   "dependencies": {
     "@dipakparmar/docusaurus-plugin-umami": "^2.0.6",
@@ -23,24 +29,19 @@
     "@testing-library/jest-dom": "^6.2.0",
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.5.2",
-    "@types/jest": "^29.5.11",
     "@types/node": "^20.11.0",
     "@types/react": "^18.2.47",
-    "jest": "^29.7.0",
+    "@vitest/browser-playwright": "^4.0.5",
     "msw": "^2.0.0",
     "netlify-plugin-cache": "^1.0.3",
-    "react-redux": "^9.1.0"
+    "react-redux": "^9.1.0",
+    "vitest": "^4.0.5",
+    "vitest-browser-react": "^2.0.2"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "scripts": {
+    "build": "docusaurus build",
+    "deploy": "docusaurus deploy",
+    "start": "docusaurus start",
+    "swizzle": "docusaurus swizzle"
   }
 }
