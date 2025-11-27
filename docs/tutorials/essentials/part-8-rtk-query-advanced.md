@@ -946,7 +946,7 @@ Like `onQueryStarted`, the [**`onCacheEntryAdded`**](https://redux-toolkit.js.or
 
 `onCacheEntryAdded` will be called any time a new cache entry (endpoint + serialized query arg) is added to the cache. This means it will run less often than `onQueryStarted`, which runs whenever a request happens.
 
-Similar to `onQueryStarted`, `onCacheEntryAdded` receives two parameters. The first is the usual query `args` value. The second is a slightly different `lifecycleApi` that has `{dispatch, getState, extra, requestId}`, as well as an `updateCachedData` util, an alternate form of `api.util.updateCachedData` that already knows the right endpoint name and query args to use and does the dispatching for you.
+Similar to `onQueryStarted`, `onCacheEntryAdded` receives two parameters. The first is the usual query `args` value. The second is a slightly different `lifecycleApi` that has `{dispatch, getState, extra, requestId}`, as well as an `updateCachedData` util, an alternate form of `api.util.updateQueryData` that already knows the right endpoint name and query args to use and does the dispatching for you.
 
 There's also two additional Promises that can be waited on:
 
