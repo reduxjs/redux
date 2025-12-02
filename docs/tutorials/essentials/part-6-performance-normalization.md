@@ -1592,7 +1592,7 @@ Now when we add a new post, we should see a small green toast pop up in the lowe
 
 ## What You've Learned
 
-We've built a lot of new behavior in this section. Let's see what how the app looks with all those changes:
+We've built a lot of new behavior in this section. Let's see how the app looks with all those changes:
 
 <iframe
   class="codesandbox"
