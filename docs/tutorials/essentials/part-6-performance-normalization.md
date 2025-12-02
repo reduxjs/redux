@@ -1213,7 +1213,7 @@ function PostExcerpt({ postId }: PostExcerptProps) {
 }
 
 export const PostsList = () => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   // highlight-next-line
   const orderedPostIds = useAppSelector(selectPostIds)
 
