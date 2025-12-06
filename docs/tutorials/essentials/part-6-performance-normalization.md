@@ -532,7 +532,7 @@ export const Navbar = () => {
 }
 ```
 
-Lastly, we need to update `App.ts` with the "Notifications" route so we can navigate to it:
+Lastly, we need to update `App.tsx` with the "Notifications" route so we can navigate to it:
 
 ```tsx title="App.tsx"
 // omit imports
