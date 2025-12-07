@@ -919,7 +919,7 @@ Then, we can define a new reducer that will handle updating the reaction count f
 
 Like with editing posts, we need to know the ID of the post, and which reaction button the user clicked on. We'll have our `action.payload` be an object that looks like `{id, reaction}`. The reducer can then find the right post object, and update the correct reactions field.
 
-```ts
+```ts title="features/posts/postsSlice.ts"
 import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
 import { sub } from 'date-fns'
 
