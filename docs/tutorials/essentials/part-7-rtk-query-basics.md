@@ -479,17 +479,19 @@ export const SinglePostPage = () => {
   const currentUsername = useAppSelector(selectCurrentUsername)
   // highlight-next-line
   const { data: post, isFetching, isSuccess } = useGetPostQuery(postId!)
-
+  
+  // highlight-next-line
   let content: React.ReactNode
 
+  // highlight-next-line
   const canEdit = currentUsername === post?.user
 
   // highlight-start
   if (isFetching) {
     content = <Spinner text="Loading..." />
   } else if (isSuccess) {
-    // highlight-end
     content = (
+      // highlight-end
       <article className="post">
         <h2>{post.title}</h2>
         <div>
@@ -506,7 +508,8 @@ export const SinglePostPage = () => {
       </article>
     )
   }
-
+  
+  // highlight-next-line
   return <section>{content}</section>
 }
 ```
