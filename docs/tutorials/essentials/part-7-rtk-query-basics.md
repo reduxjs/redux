@@ -216,7 +216,7 @@ For TypeScript usage, **the `builder.query()` and `builder.mutation()` endpoint 
 
 #### Exporting API Slices and Hooks
 
-In our earlier slice files, we just exported the action creators and the slice reducers, because those are all that's needed in other files. With RTK Query, we typically export the entire "API slice" object itself, because it has several fields that may be useful.
+From our earlier `createSlice` functions, we only needed to export just the action creators and the slice reducers, because those are the only part of the slice functions that are needed in other files. With RTK Query, we typically export the entire "API slice" object itself, because it has several fields that may be useful.
 
 Finally, look carefully at the last line of this file. Where's this `useGetPostsQuery` value coming from?
 
