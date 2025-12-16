@@ -35,7 +35,7 @@ When in doubt, use the original logos.
 
 ## Credits
 
-The Redux logo was designed by [Matthew Johnston](https://thedeskofmatthew.com/).  
+The Redux logo was designed by [Matthew Johnston](https://deskofm.com/).  
 Thanks to [Jay Phelps](https://github.com/jayphelps) and [the community](https://github.com/reduxjs/redux/issues/151) for contributing earlier proposals.
 
 ## License
