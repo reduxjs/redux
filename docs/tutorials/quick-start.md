@@ -54,7 +54,7 @@ export default configureStore({
 })
 ```
 
-This creates a Redux store, and also automatically configure the Redux DevTools extension so that you can inspect the store while developing.
+This creates a Redux store, and also automatically configures the Redux DevTools extension so that you can inspect the store while developing.
 
 ### Provide the Redux Store to React
 
