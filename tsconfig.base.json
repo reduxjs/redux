@@ -22,7 +22,7 @@
     "strict": true,
     "exactOptionalPropertyTypes": true,
     "target": "ESnext",
-    "types": ["vitest/globals", "vitest/importMeta"]
+    "types": ["vitest/globals", "vitest/importMeta", "node"]
   },
   "exclude": ["dist", "website", "docs", "examples"]
 }
