@@ -207,7 +207,7 @@ jobs:
         run: git clone https://github.com/reduxjs/redux-toolkit.git ./redux-toolkit
 
       - name: Cache example deps
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}/node_modules
           key: test-published-artifact-${{ matrix.example }}-node_modules
