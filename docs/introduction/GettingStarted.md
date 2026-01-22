@@ -37,25 +37,38 @@ npm install @reduxjs/toolkit
 yarn add @reduxjs/toolkit
 ```
 
-### Create a React Redux App
+### Creating a New Redux Project
 
-The recommended way to start new apps with React and Redux is by using [our official Redux+TS template for Vite](https://github.com/reduxjs/redux-templates), or by creating a new Next.js project using [Next's `with-redux` template](https://github.com/vercel/next.js/tree/canary/examples/with-redux).
+The recommended way to start new apps with Redux is to use one of our [official templates](https://github.com/reduxjs/redux-templates). These templates come pre-configured with Redux Toolkit, and include a small example app to get you started.
 
-Both of these already have Redux Toolkit and React-Redux configured appropriately for that build tool, and come with a small example app that demonstrates how to use several of Redux Toolkit's features.
+To create a new project, you can use a tool like `tiged` to clone and extract the template.
 
 ```bash
-# Vite with our Redux+TS template
-# (using the `degit` tool to clone and extract the template)
-npx degit reduxjs/redux-templates/packages/vite-template-redux my-app
+# Vite + TypeScript
+npx tiged reduxjs/redux-templates/packages/vite-template-redux my-app
 
-# Next.js using the `with-redux` template
-npx create-next-app --example with-redux my-app
+# Create React App + TypeScript
+npx tiged reduxjs/redux-templates/packages/cra-template-redux-typescript my-app
+
+# Create React App + JavaScript
+npx tiged reduxjs/redux-templates/packages/cra-template-redux my-app
+
+# Expo + TypeScript
+npx tiged reduxjs/redux-templates/packages/expo-template-redux-typescript my-app
+
+# React Native + TypeScript
+npx tiged reduxjs/redux-templates/packages/react-native-template-redux-typescript my-app
+
+# Standalone Redux Toolkit App Structure Example
+npx tiged reduxjs/redux-templates/packages/rtk-app-structure-example my-app
 ```
 
-We do not currently have official React Native templates, but recommend these templates for standard React Native and for Expo:
+In addition to our official templates, the community has created other templates, such as the [Next.js `with-redux` template](https://github.com/vercel/next.js/tree/canary/examples/with-redux).
 
-- https://github.com/rahsheen/react-native-template-redux-typescript
-- https://github.com/rahsheen/expo-template-redux-typescript
+```bash
+# Next.js + Redux
+npx create-next-app --example with-redux my-app
+```
 
 ### Redux Core
 
