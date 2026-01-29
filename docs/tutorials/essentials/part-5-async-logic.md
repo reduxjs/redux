@@ -302,11 +302,11 @@ When we make an API call, we can view its progress as a small state machine that
 - The request succeeded, and we now have the data we need
 - The request failed, and there's probably an error message
 
-We _could_ track that information using some booleans, like `isLoading: true`, but it's better to track these states as a single enum value. A good pattern for this is to have a state section that looks like this (using TypeScript type notation):
+We _could_ track that information using some booleans, like `isLoading: true`, but it's better to track these states as a single union value. A good pattern for this is to have a state section that looks like this (using TypeScript string union type notation):
 
 ```ts
 {
-  // Multiple possible status enum values
+  // Multiple possible status string union values
   status: 'idle' | 'pending' | 'succeeded' | 'failed',
   error: string | null
 }
@@ -518,7 +518,7 @@ const postsSlice = createSlice({
 
 We'll handle all three action types that could be dispatched by the thunk, based on the Promise we returned:
 
-- When the request starts, we'll set the `status` enum to `'pending'`
+- When the request starts, we'll set the `status` to `'pending'`
 - If the request succeeds, we mark the `status` as `'succeeded'`, and add the fetched posts to `state.posts`
 - If the request fails, we'll mark the `status` as `'failed'`, and save any error message into the state so we can display it
 
@@ -528,7 +528,7 @@ Now that we have the `fetchPosts` thunk written and the slice updated to handle 
 
 We'll import the `fetchPosts` thunk into the component. Like all of our other action creators, we have to dispatch it, so we'll also need to add the `useAppDispatch` hook. Since we want to fetch this data when `<PostsList>` mounts, we need to import the React `useEffect` hook, and dispatch the action.
 
-It's important that we only try to fetch the list of posts once. If we do it every time the `<PostsList>` component renders, or is re-created because we've switched between views, we might end up fetching the posts several times. We can use the `posts.status` enum to help decide if we need to actually start fetching, by selecting that into the component and only starting the fetch if the status is `'idle'`, meaning it hasn't started yet.
+It's important that we only try to fetch the list of posts once. If we do it every time the `<PostsList>` component renders, or is re-created because we've switched between views, we might end up fetching the posts several times. We can use the `posts.status` value to help decide if we need to actually start fetching, by selecting that into the component and only starting the fetch if the status is `'idle'`, meaning it hasn't started yet.
 
 ```ts title="features/posts/PostsList.tsx"
 // highlight-next-line
@@ -641,7 +641,7 @@ Our `<PostsList>` component is already checking for any updates to the posts tha
 
 A real API call will probably take some time to return a response, so it's usually a good idea to show some kind of "loading..." indicator in the UI so the user knows we're waiting for data.
 
-We can update our `<PostsList>` to show a different bit of UI based on the `state.posts.status` enum: a spinner if we're loading, an error message if it failed, or the actual posts list if we have the data.
+We can update our `<PostsList>` to show a different bit of UI based on the `state.posts.status` value: a spinner if we're loading, an error message if it failed, or the actual posts list if we have the data.
 
 While we're at it, this is probably a good time to extract a `<PostExcerpt>` component to encapsulate the rendering for one item in the list as well.
 
@@ -1037,7 +1037,7 @@ export const { postUpdated, reactionAdded } = postsSlice.actions
 
 Finally, we'll update `<AddPostForm>` to dispatch the `addNewPost` thunk instead of the old `postAdded` action. Since this is another API call to the server, it will take some time and _could_ fail. The `addNewPost()` thunk will automatically dispatch its `pending/fulfilled/rejected` actions to the Redux store, which we're already handling.
 
-We _could_ track the request status in `postsSlice` using a second loading enum if we wanted to. But, for this example let's keep the loading state tracking limited to the component, to show what else is possible.
+We _could_ track the request status in `postsSlice` using a second loading union type if we wanted to. But, for this example let's keep the loading state tracking limited to the component, to show what else is possible.
 
 It would be good if we can at least disable the "Save Post" button while we're waiting for the request, so the user can't accidentally try to save a post twice. If the request fails, we might also want to show an error message here in the form, or perhaps just log it to the console.
 
@@ -1095,7 +1095,7 @@ export const AddPostForm = () => {
 }
 ```
 
-We can add a loading status enum field as a React `useState` hook, similar to how we're tracking loading state in `postsSlice` for fetching posts. In this case, we just want to know if the request is in progress or not.
+We can add a loading status as a React `useState` hook, similar to how we're tracking loading state in `postsSlice` for fetching posts. In this case, we just want to know if the request is in progress or not.
 
 When we call `dispatch(addNewPost())`, the async thunk returns a Promise from `dispatch`. We can `await` that promise here to know when the thunk has finished its request. But, we don't yet know if that request succeeded or failed.
 
