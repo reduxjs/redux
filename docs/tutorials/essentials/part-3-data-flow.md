@@ -442,7 +442,13 @@ export const AddPostForm = () => {
       <h2>Add a New Post</h2>
       <form onSubmit={handleSubmit}>
         <label htmlFor="postTitle">Post Title:</label>
-        <input type="text" id="postTitle" defaultValue="" required />
+        <input 
+          type="text" 
+          id="postTitle" 
+          name="postTitle"
+          defaultValue="" 
+          required 
+        />
         <label htmlFor="postContent">Content:</label>
         <textarea
           id="postContent"
@@ -604,7 +610,13 @@ export const AddPostForm = () => {
       <h2>Add a New Post</h2>
       <form onSubmit={handleSubmit}>
         <label htmlFor="postTitle">Post Title:</label>
-        <input type="text" id="postTitle" defaultValue="" required />
+        <input
+          type="text"
+          id="postTitle"
+          name="postTitle"
+          defaultValue=""
+          required
+        />
         <label htmlFor="postContent">Content:</label>
         <textarea
           id="postContent"
