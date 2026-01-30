@@ -463,7 +463,7 @@ Since the `usersSlice` state is no longer even being used at all, we can go ahea
 
 ### Splitting and Injecting Endpoints
 
-We said that **RTK Query normally has a single "API slice" per application**, and so far we've defined all of our endpoints directly in `apiSlice.ts`. But, it's common for larger applications to "code-split" features into separate bundles, and then "lazy load" them on demand as the feature is used for the first time. . What happens if we want to code-split some of our endpoint definitions, or move them into another file to keep the API slice file from getting too big?
+We said that **RTK Query normally has a single "API slice" per application**, and so far we've defined all of our endpoints directly in `apiSlice.ts`. But it's common for larger applications to "code-split" features into separate bundles and then "lazy load" them on demand as the feature is used for the first time. What happens if we want to code-split some of our endpoint definitions, or move them into another file to keep the API slice file from getting too big?
 
 **RTK Query supports splitting out endpoint definitions with `apiSlice.injectEndpoints()`**. That way, we can still have a single API slice instance, with a single middleware and cache reducer, but we can move the definition of some endpoints to other files. This enables code-splitting scenarios, as well as co-locating some endpoints alongside feature folders if desired.
 
