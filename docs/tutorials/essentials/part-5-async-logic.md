@@ -589,7 +589,7 @@ In this case, what happened is:
 - The `useEffect` hook ran for the first time. The `postStatus` value is `'idle'`, so it dispatches the `fetchPosts` thunk.
 - `fetchPosts` immediately dispatches its `fetchPosts.pending` action, so the Redux store _did_ update the status to `'pending'` right away...
 - **but React runs the `useEffect` _again_ without re-rendering the component, so the effect still thinks that `postStatus` is `'idle'` and dispatches `fetchPosts` a second time**
-- Both thunks finish fetching their data, dispatch the `fetchPosts.fulfilled` action, and the `fulfilled` reducer runs twice, adding resulting in a duplicate set of posts being added to the state
+- Both thunks finish fetching their data and dispatch the `fetchPosts.fulfilled` action; consequently, the `fulfilled` reducer runs twice, resulting in a duplicate set of posts being added to the state
 
 So, how can we fix this?
 
