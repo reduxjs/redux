@@ -137,13 +137,14 @@ As we've seen before, we can take data from one `useSelector` call, or from prop
 As usual, we will add routes for these components in `<App>`:
 
 ```tsx title="App.tsx"
+        <Routes>
           <Route path="/posts/:postId" element={<SinglePostPage />} />
           <Route path="/editPost/:postId" element={<EditPostForm />} />
           // highlight-start
           <Route path="/users" element={<UsersList />} />
           <Route path="/users/:userId" element={<UserPage />} />
           // highlight-end
-          <Redirect to="/" />
+        </Routes>
 ```
 
 We'll also add another tab in `<Navbar>` that links to `/users` so that we can click and go to `<UsersList>`:
