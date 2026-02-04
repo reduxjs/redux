@@ -143,7 +143,6 @@ As usual, we will add routes for these components in `<App>`:
           <Route path="/users" element={<UsersList />} />
           <Route path="/users/:userId" element={<UserPage />} />
           // highlight-end
-          <Redirect to="/" />
 ```
 
 We'll also add another tab in `<Navbar>` that links to `/users` so that we can click and go to `<UsersList>`:
