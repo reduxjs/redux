@@ -951,7 +951,7 @@ Similar to `onQueryStarted`, `onCacheEntryAdded` receives two parameters. The fi
 There's also two additional Promises that can be waited on:
 
 - `cacheDataLoaded`: resolves with the first cached value received, and is typically used to wait for an actual value to be in the cache before doing more logic
-- `cacheEntryRemoved `: resolves when this cache entry is removed (ie, there are no more subscribers and the cache entry has been garbage-collected)
+- `cacheEntryRemoved `: resolves when this cache entry is removed (i.e, there are no more subscribers and the cache entry has been garbage-collected)
 
 As long as 1+ subscribers for the data are still active, the cache entry is kept alive. When the number of subscribers goes to 0 and the cache lifetime timer expires, the cache entry will be removed, and `cacheEntryRemoved` will resolve. Typically, the usage pattern is:
 
