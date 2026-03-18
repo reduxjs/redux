@@ -751,7 +751,13 @@ const AddPostForm = () => {
       <h2>Add a New Post</h2>
       <form onSubmit={handleSubmit}>
         <label htmlFor="postTitle">Post Title:</label>
-        <input type="text" id="postTitle" defaultValue="" required />
+        <input
+          type="text"
+          id="postTitle"
+          name="postTitle"
+          defaultValue=""
+          required
+        />
         // highlight-start
         <label htmlFor="postAuthor">Author:</label>
         <select id="postAuthor" name="postAuthor" required>
