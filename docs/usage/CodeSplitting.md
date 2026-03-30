@@ -162,7 +162,7 @@ Redux Toolkit 2.0 includes some utilities designed to simplify code splitting wi
 
 ### `combineSlices`
 
-The [`combineSlices`](https://redux-toolkit.js.org/api/combineSlices) utility is designed to allow for easy reducer injection. It also supercedes `combineReducers`, in that it can be used to combine multiple slices and reducers into one root reducer.
+The [`combineSlices`](https://redux-toolkit.js.org/api/combineSlices) utility is designed to allow for easy reducer injection. It also supersedes `combineReducers`, in that it can be used to combine multiple slices and reducers into one root reducer.
 
 At setup it accepts a set of slices and reducer maps, and returns a reducer instance with attached methods for injection.
 
