@@ -50,7 +50,7 @@ You can also create a new Next+Redux project with `npx create-next-app --example
 
 The primary new feature of the Next.js App Router is the addition of support for React Server Components (RSCs). RSCs are a special type of React component that only renders on the server, as opposed to "client" components that render on **both** the client and the server. RSCs can be defined as `async` functions and return promises during rendering as they make async requests for data to render.
 
-RSCs ability to block for data requests means that with the App Router you no longer have `getServerSideProps` to fetch data for rendering. Any component in the tree can make asynchronous requests for data. While this is very convenient it also means that's if you define global variables (like the Redux store) they will be shared across requests. This is a problem because the Redux store could be contaminated with data from other requests.
+RSCs ability to block for data requests means that with the App Router you no longer have `getServerSideProps` to fetch data for rendering. Any component in the tree can make asynchronous requests for data. While this is very convenient it also means that if you define global variables (like the Redux store) they will be shared across requests. This is a problem because the Redux store could be contaminated with data from other requests.
 
 Based on the architecture of the App Router we have these general recommendations for appropriate use of Redux:
 
