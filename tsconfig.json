@@ -8,5 +8,15 @@
     "checkJs": true,
     "rootDir": "."
   },
-  "include": ["."]
+  "include": [
+    "."
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "coverage",
+    "website",
+    "examples",
+    "docs"
+  ]
 }
