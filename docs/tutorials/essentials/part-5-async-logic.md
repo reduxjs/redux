@@ -225,7 +225,7 @@ It's also easy to make mistakes with error handling when writing thunk logic you
 
 #### Typing Handwritten Thunks
 
-If you're writing a thunk by hand, you can declare explicitly type the thunk arguments as `(dispatch: AppDispatch, getState: () => RootState)`. Since this is common, you can also define a reusable `AppThunk` type and use that instead:
+If you're writing a thunk by hand, you can explicitly type the thunk arguments as `(dispatch: AppDispatch, getState: () => RootState)`. Since this is common, you can also define a reusable `AppThunk` type and use that instead:
 
 ```ts title="app/store.ts"
 // highlight-next-line
