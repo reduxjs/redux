@@ -192,7 +192,7 @@ export interface StoreCreator {
   >(
     reducer: Reducer<S, A, PreloadedState>,
     preloadedState?: PreloadedState | undefined,
-    enhancer?: StoreEnhancer<Ext>
+    enhancer?: StoreEnhancer<Ext, StateExt>
   ): Store<S, A, UnknownIfNonSpecific<StateExt>> & Ext
 }
 
