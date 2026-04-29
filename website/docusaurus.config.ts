@@ -146,8 +146,8 @@ const config: Config = {
       copyright: `Copyright © 2015–${new Date().getFullYear()} Dan Abramov and the Redux documentation authors.`
     },
     // algolia: {
-    //   appId: 'YUQHC5OCW0',
-    //   apiKey: 'ef8f3e604a1e7ed3afa4dbaeeecfa5f2',
+    //   appId: process.env.ALGOLIA_APP_ID,
+    //   apiKey: process.env.ALGOLIA_API_KEY,
     //   indexName: 'redux'
     // }
   } satisfies ThemeConfig,
