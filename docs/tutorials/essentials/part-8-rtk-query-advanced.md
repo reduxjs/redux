@@ -667,11 +667,11 @@ import { selectUserById } from './usersSlice'
 // highlight-start
 // Create a TS type that represents "the result value passed
 // into the `selectFromResult` function for this hook"
-type GetPostSelectFromResultArg = TypedUseQueryStateResult<Post[], any, any>
+type GetPostsSelectFromResultArg = TypedUseQueryStateResult<Post[], any, any>
 
 const selectPostsForUser = createSelector(
-  (res: GetPostSelectFromResultArg) => res.data,
-  (res: GetPostSelectFromResultArg, userId: string) => userId,
+  (res: GetPostsSelectFromResultArg) => res.data,
+  (res: GetPostsSelectFromResultArg, userId: string) => userId,
   (data, userId) => data?.filter(post => post.user === userId)
 )
 // highlight-end
