@@ -2,15 +2,20 @@ name: Bundle Size
 
 on: [pull_request]
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   build:
     name: Check compressed size
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           fetch-depth: 1
-      - uses: preactjs/compressed-size-action@946a292cd35bd1088e0d7eb92b69d1a8d5b5d76a # preactjs/compressed-size-action@v2
+          persist-credentials: false
+      - uses: preactjs/compressed-size-action@946a292cd35bd1088e0d7eb92b69d1a8d5b5d76a # v2.8.0
         with:
           repo-token: '${{ secrets.GITHUB_TOKEN }}'
