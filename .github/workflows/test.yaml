@@ -182,9 +182,12 @@ jobs:
           name: package
           path: .
 
+      - name: Install dependencies
+        run: yarn install
+
       # Note: We currently expect "FalseESM" failures for Node16 + `moduleResolution: "node16"
       - name: Run are-the-types-wrong
-        run: npx @arethetypeswrong/cli@0.18.2 ./package.tgz --format table --ignore-rules false-esm
+        run: yarn attw ./package.tgz --format table --ignore-rules false-esm
 
   test-published-artifact:
     name: Test Published Artifact ${{ matrix.example }}
