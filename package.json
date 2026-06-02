@@ -54,6 +54,7 @@
     "tsc": "tsc"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.3",
     "@babel/core": "^7.24.3",
     "@types/babel__core": "^7.20.5",
     "@types/babel__helper-module-imports": "^7.18.3",
