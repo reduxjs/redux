@@ -3,7 +3,7 @@
   "version": "5.0.1",
   "description": "A JS library for predictable and maintainable global state management",
   "license": "MIT",
-  "homepage": "http://redux.js.org",
+  "homepage": "https://redux.js.org",
   "repository": "github:reduxjs/redux",
   "bugs": "https://github.com/reduxjs/redux/issues",
   "keywords": [
