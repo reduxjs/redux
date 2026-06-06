@@ -3,6 +3,7 @@ node_modules
 coverage
 
 dist
+build/
 lib
 es
 
@@ -32,5 +33,7 @@ website/node_modules
 website/i18n/*
 
 tsconfig.vitest-temp.json
+.vitest-dump/
+.vitest/
 
 .vscode
