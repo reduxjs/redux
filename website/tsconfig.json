@@ -15,9 +15,8 @@
     "target": "ESNext",
     "allowJs": true,
     "checkJs": false,
-    "alwaysStrict": false,
-    "baseUrl": "..",
-    "types": ["@testing-library/jest-dom"],
-    "paths": {}
+    "types": ["node"],
+    "paths": {},
+    "verbatimModuleSyntax": true
   }
 }

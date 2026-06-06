@@ -346,7 +346,8 @@ export type PreloadedState = Parameters<typeof rootReducer>[0]
 export type RootState = ReturnType<typeof rootReducer>
 export type AppStore = ReturnType<typeof setupStore>
 // file: utils/test-utils.tsx
-import React, { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
+import React from 'react'
 import { render } from '@testing-library/react'
 import type { RenderOptions } from '@testing-library/react'
 import { userEvent } from '@testing-library/user-event'
@@ -431,7 +432,8 @@ export type RootState = ReturnType<typeof rootReducer>
 export type AppStore = ReturnType<typeof setupStore>
 export type AppDispatch = AppStore['dispatch']
 // file: utils/test-utils.tsx noEmit
-import React, { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
+import React from 'react'
 import { render } from '@testing-library/react'
 import type { RenderOptions } from '@testing-library/react'
 import { userEvent } from '@testing-library/user-event'
@@ -609,7 +611,8 @@ export type PreloadedState = Parameters<typeof rootReducer>[0]
 export type RootState = ReturnType<typeof rootReducer>
 export type AppStore = ReturnType<typeof setupStore>
 // file: utils/test-utils.tsx
-import React, { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
+import React from 'react'
 import { render } from 'vitest-browser-react'
 import type { RenderOptions } from 'vitest-browser-react'
 import { Provider } from 'react-redux'
@@ -680,7 +683,8 @@ export type PreloadedState = Parameters<typeof rootReducer>[0]
 export type RootState = ReturnType<typeof rootReducer>
 export type AppStore = ReturnType<typeof setupStore>
 // file: utils/test-utils.tsx noEmit
-import React, { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
+import React from 'react'
 import { render } from 'vitest-browser-react'
 import type { RenderOptions } from 'vitest-browser-react'
 import { Provider } from 'react-redux'
@@ -778,12 +782,12 @@ export type RootState = ReturnType<typeof rootReducer>
 export type AppStore = ReturnType<typeof setupStore>
 export type AppDispatch = AppStore['dispatch']
 // file: utils/test-utils.tsx noEmit
-import React, { PropsWithChildren } from 'react'
-import { render } from 'vitest-browser-react'
-import type { RenderOptions } from 'vitest-browser-react'
+import type { PropsWithChildren } from 'react'
+import React from 'react'
 import { Provider } from 'react-redux'
-
-import type { AppStore, RootState, PreloadedState } from '../app/store'
+import type { RenderOptions } from 'vitest-browser-react'
+import { render } from 'vitest-browser-react'
+import type { AppStore, PreloadedState } from '../app/store'
 import { setupStore } from '../app/store'
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'wrapper'> {
@@ -879,7 +883,8 @@ Because reducers are pure functions, testing them should be straightforward. Cal
 #### Example
 
 ```ts
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 export type Todo = {
   id: number
@@ -912,7 +917,9 @@ can be tested like:
 
 ```ts
 // file: todosSlice.ts noEmit
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
+
 export type Todo = {
   id: number
   text: string
@@ -942,8 +949,9 @@ export const { todoAdded } = todosSlice.actions
 export default todosSlice.reducer
 
 // file: todosSlice.test.ts
-import { test, expect } from 'vitest'
-import reducer, { todoAdded, Todo } from './todosSlice'
+import { expect, test } from 'vitest'
+import type { Todo } from './todosSlice'
+import reducer, { todoAdded } from './todosSlice'
 
 test('should return the initial state', () => {
   expect(reducer(undefined, { type: 'unknown' })).toEqual([
