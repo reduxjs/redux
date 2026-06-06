@@ -1,7 +1,7 @@
-import { compose } from '../src'
+import { compose } from 'redux'
 
 describe('Utils', () => {
-  describe('compose', () => {
+  describe(compose, () => {
     it('composes from right to left', () => {
       const double = (x: number) => x * 2
       const square = (x: number) => x * x

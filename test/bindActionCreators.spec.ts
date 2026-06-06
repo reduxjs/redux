@@ -1,9 +1,9 @@
-import { bindActionCreators, createStore } from '../src'
-import type { ActionCreator, Store } from '../src'
-import { todos } from './helpers/reducers'
+import type { ActionCreator, Store } from 'redux'
+import { bindActionCreators, createStore } from 'redux'
 import * as actionCreators from './helpers/actionCreators'
+import { todos } from './helpers/reducers'
 
-describe('bindActionCreators', () => {
+describe(bindActionCreators, () => {
   let store: Store
   let actionCreatorFunctions: any
 
