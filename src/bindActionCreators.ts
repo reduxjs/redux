@@ -1,9 +1,9 @@
-import type { Dispatch } from './types/store'
 import type {
+  Action,
   ActionCreator,
-  ActionCreatorsMapObject,
-  Action
+  ActionCreatorsMapObject
 } from './types/actions'
+import type { Dispatch } from './types/store'
 import { kindOf } from './utils/kindOf'
 
 function bindActionCreator<A extends Action>(
@@ -36,26 +36,26 @@ function bindActionCreator<A extends Action>(
  * function as `actionCreators`, the return value will also be a single
  * function.
  */
-export default function bindActionCreators<A, C extends ActionCreator<A>>(
+export function bindActionCreators<A, C extends ActionCreator<A>>(
   actionCreator: C,
   dispatch: Dispatch
 ): C
 
-export default function bindActionCreators<
+export function bindActionCreators<
   A extends ActionCreator<any>,
   B extends ActionCreator<any>
 >(actionCreator: A, dispatch: Dispatch): B
 
-export default function bindActionCreators<
-  A,
-  M extends ActionCreatorsMapObject<A>
->(actionCreators: M, dispatch: Dispatch): M
-export default function bindActionCreators<
+export function bindActionCreators<A, M extends ActionCreatorsMapObject<A>>(
+  actionCreators: M,
+  dispatch: Dispatch
+): M
+export function bindActionCreators<
   M extends ActionCreatorsMapObject,
   N extends ActionCreatorsMapObject
 >(actionCreators: M, dispatch: Dispatch): N
 
-export default function bindActionCreators(
+export function bindActionCreators(
   actionCreators: ActionCreator<any> | ActionCreatorsMapObject,
   dispatch: Dispatch
 ) {

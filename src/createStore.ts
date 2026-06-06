@@ -8,10 +8,10 @@ import type {
   StoreEnhancer,
   UnknownIfNonSpecific
 } from './types/store'
-import ActionTypes from './utils/actionTypes'
-import isPlainObject from './utils/isPlainObject'
+import { ActionTypes } from './utils/actionTypes'
+import { isPlainObject } from './utils/isPlainObject'
 import { kindOf } from './utils/kindOf'
-import $$observable from './utils/symbol-observable'
+import { $$observable } from './utils/symbol-observable'
 
 /**
  * @deprecated
@@ -135,8 +135,7 @@ export function createStore<
 
   let currentReducer = reducer
   let currentState: S | PreloadedState | undefined = preloadedState as
-    | PreloadedState
-    | undefined
+    PreloadedState | undefined
   let currentListeners: Map<number, ListenerCallback> | null = new Map()
   let nextListeners = currentListeners
   let listenerIdCounter = 0

@@ -10,7 +10,7 @@ describe('type tests', () => {
 
     expectTypeOf(a).not.toHaveProperty('wrongProp')
 
-    expectTypeOf(dispatch).parameter(0).not.toMatchTypeOf('not-an-action')
+    expectTypeOf(dispatch).parameter(0).not.toBeString()
   })
 
   test('Dispatch accepts type argument that restricts allowed action types.', () => {
@@ -29,14 +29,14 @@ describe('type tests', () => {
 
     const dispatch: Dispatch<MyAction> = null as any
 
-    expectTypeOf(dispatch).parameter(0).toMatchTypeOf({ type: 'INCREMENT' })
+    expectTypeOf(dispatch).parameter(0).toExtend<{ type: string }>()
 
     expectTypeOf(dispatch).toBeCallableWith({ type: 'DECREMENT', count: 10 })
 
     // Known actions are strictly checked.
     expectTypeOf(dispatch)
       .parameter(0)
-      .not.toMatchTypeOf({ type: 'DECREMENT', count: '' })
+      .not.toMatchObjectType<{ type: string; count: string }>()
 
     // Unknown actions are rejected.
     expectTypeOf(dispatch)

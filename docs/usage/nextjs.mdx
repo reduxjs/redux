@@ -171,7 +171,8 @@ export type AppDispatch = AppStore['dispatch']
 import { useRef } from 'react'
 import { Provider } from 'react-redux'
 // highlight-start
-import { makeStore, AppStore } from '../lib/store'
+import type { AppStore } from '../lib/store'
+import { makeStore } from '../lib/store'
 // highlight-end
 
 export default function StoreProvider({
@@ -249,7 +250,8 @@ export type AppDispatch = AppStore['dispatch']
 'use client'
 import { useRef } from 'react'
 import { Provider } from 'react-redux'
-import { makeStore, AppStore } from '../lib/store'
+import type { AppStore } from '../lib/store'
+import { makeStore } from '../lib/store'
 // highlight-start
 import { initializeCount } from '../lib/features/counter/counterSlice'
 // highlight-end
@@ -343,10 +345,10 @@ export const useAppStore = useStore.withTypes<AppStore>()
 'use client'
 import { useRef } from 'react'
 import { useAppSelector, useAppDispatch, useAppStore } from '../lib/hooks'
+import type { Product } from '../lib/features/product/productSlice'
 import {
   initializeProduct,
   setProductName,
-  Product
 } from '../lib/features/product/productSlice'
 
 export default function ProductName({ product }: { product: Product }) {

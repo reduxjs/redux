@@ -23,7 +23,7 @@ jobs:
               - 'src/**'
               - 'test/**'
               - '.github/**/*.yaml'
-              - 'tsup.config.ts'
+              - 'tsdown.config.mts'
               - 'yarn.lock'
 
   build:
@@ -119,7 +119,7 @@ jobs:
       fail-fast: false
       matrix:
         node: ['24.x']
-        ts: ['5.5', '5.6', '5.7', '5.8']
+        ts: ['5.5', '5.6', '5.7', '5.8', '5.9', '6.0']
     steps:
       - name: Checkout repo
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
@@ -187,7 +187,7 @@ jobs:
 
       # Note: We currently expect "FalseESM" failures for Node16 + `moduleResolution: "node16"
       - name: Run are-the-types-wrong
-        run: yarn attw ./package.tgz --format table --ignore-rules false-esm
+        run: yarn attw ./package.tgz --format table
 
   test-published-artifact:
     name: Test Published Artifact ${{ matrix.example }}
