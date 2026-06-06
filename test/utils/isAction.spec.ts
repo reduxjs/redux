@@ -1,6 +1,6 @@
 import isAction from '@internal/utils/isAction'
 
-describe('isAction', () => {
+describe(isAction, () => {
   it('should only return true for plain objects with a string type property', () => {
     const actionCreator = () => ({ type: 'anAction' })
     class Action {

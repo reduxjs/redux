@@ -5,11 +5,10 @@ import type {
   Reducer,
   StateFromReducersMapObject
 } from './types/reducers'
-
 import ActionTypes from './utils/actionTypes'
 import isPlainObject from './utils/isPlainObject'
-import warning from './utils/warning'
 import { kindOf } from './utils/kindOf'
+import warning from './utils/warning'
 
 function getUnexpectedStateShapeWarningMessage(
   inputState: object,
@@ -57,6 +56,8 @@ function getUnexpectedStateShapeWarningMessage(
       `"${reducerKeys.join('", "')}". Unexpected keys will be ignored.`
     )
   }
+
+  return undefined
 }
 
 function assertReducerShape(reducers: {

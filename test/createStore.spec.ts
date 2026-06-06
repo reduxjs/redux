@@ -1,22 +1,21 @@
-import type { StoreEnhancer, Action, Store, Reducer } from 'redux'
-import { createStore, combineReducers } from 'redux'
-import { vi } from 'vitest'
+import type { Action, Reducer, Store, StoreEnhancer } from 'redux'
+import { combineReducers, createStore } from 'redux'
+import type { ObservableInput } from 'rxjs'
+import { from } from 'rxjs'
+import { map } from 'rxjs/operators'
+import $$observable from '../src/utils/symbol-observable'
 import {
   addTodo,
   dispatchInMiddle,
   getStateInMiddle,
   subscribeInMiddle,
-  unsubscribeInMiddle,
   throwError,
-  unknownAction
+  unknownAction,
+  unsubscribeInMiddle
 } from './helpers/actionCreators'
 import * as reducers from './helpers/reducers'
-import type { ObservableInput } from 'rxjs'
-import { from } from 'rxjs'
-import { map } from 'rxjs/operators'
-import $$observable from '../src/utils/symbol-observable'
 
-describe('createStore', () => {
+describe(createStore, () => {
   it('exposes the public API', () => {
     const store = createStore(combineReducers(reducers))
 
