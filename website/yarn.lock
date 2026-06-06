@@ -13463,36 +13463,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"root-workspace-0b6124@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "root-workspace-0b6124@workspace:."
-  dependencies:
-    "@dipakparmar/docusaurus-plugin-umami": "npm:^2.0.6"
-    "@docusaurus/core": "npm:3.6.3"
-    "@docusaurus/preset-classic": "npm:3.6.3"
-    "@getcanary/docusaurus-theme-search-pagefind": "npm:^1.0.2"
-    "@getcanary/web": "npm:^1.0.12"
-    "@reduxjs/toolkit": "npm:^2.0.1"
-    "@testing-library/jest-dom": "npm:^6.2.0"
-    "@testing-library/react": "npm:^14.1.2"
-    "@testing-library/user-event": "npm:^14.5.2"
-    "@types/node": "npm:^20.11.0"
-    "@types/react": "npm:^18.2.47"
-    "@vitest/browser-playwright": "npm:^4.0.5"
-    classnames: "npm:^2.2.6"
-    msw: "npm:^2.0.0"
-    netlify-plugin-cache: "npm:^1.0.3"
-    react: "npm:^19.0.0"
-    react-dom: "npm:^19.0.0"
-    react-lite-youtube-embed: "npm:^2.0.3"
-    react-redux: "npm:^9.1.0"
-    remark-typescript-tools: "npm:^2.0.0-alpha.1"
-    typescript: "npm:^5.8.3"
-    vitest: "npm:^4.0.5"
-    vitest-browser-react: "npm:^2.0.2"
-  languageName: unknown
-  linkType: soft
-
 "rtl-detect@npm:^1.0.4":
   version: 1.1.2
   resolution: "rtl-detect@npm:1.1.2"
@@ -15291,6 +15261,36 @@ __metadata:
   checksum: 10/9da47f8dcbc9173b19e41e3e1049fa451b0c02095ffa003e8c09c56aa2cc544334d1c6fff0797162a807b29090db9cf9a269cd5ec453196142543f9275cbbf70
   languageName: node
   linkType: hard
+
+"website@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "website@workspace:."
+  dependencies:
+    "@dipakparmar/docusaurus-plugin-umami": "npm:^2.0.6"
+    "@docusaurus/core": "npm:3.6.3"
+    "@docusaurus/preset-classic": "npm:3.6.3"
+    "@getcanary/docusaurus-theme-search-pagefind": "npm:^1.0.2"
+    "@getcanary/web": "npm:^1.0.12"
+    "@reduxjs/toolkit": "npm:^2.0.1"
+    "@testing-library/jest-dom": "npm:^6.2.0"
+    "@testing-library/react": "npm:^14.1.2"
+    "@testing-library/user-event": "npm:^14.5.2"
+    "@types/node": "npm:^20.11.0"
+    "@types/react": "npm:^18.2.47"
+    "@vitest/browser-playwright": "npm:^4.0.5"
+    classnames: "npm:^2.2.6"
+    msw: "npm:^2.0.0"
+    netlify-plugin-cache: "npm:^1.0.3"
+    react: "npm:^19.0.0"
+    react-dom: "npm:^19.0.0"
+    react-lite-youtube-embed: "npm:^2.0.3"
+    react-redux: "npm:^9.1.0"
+    remark-typescript-tools: "npm:^2.0.0-alpha.1"
+    typescript: "npm:^5.8.3"
+    vitest: "npm:^4.0.5"
+    vitest-browser-react: "npm:^2.0.2"
+  languageName: unknown
+  linkType: soft
 
 "websocket-driver@npm:>=0.5.1, websocket-driver@npm:^0.7.4":
   version: 0.7.4
