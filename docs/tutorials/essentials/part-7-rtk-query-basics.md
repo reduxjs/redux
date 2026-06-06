@@ -26,10 +26,10 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 If you prefer a video course, you can [watch this RTK Query video course by Lenz Weber-Tronic, the creator of RTK Query, for free at Egghead](https://egghead.io/courses/rtk-query-basics-query-endpoints-data-flow-and-typescript-57ea3c43?af=7pnhj6) or take a look at the first lesson right here:
 
 <div style={{position:"relative",paddingTop:"56.25%"}}>
-  <iframe 
-    src="https://app.egghead.io/lessons/redux-course-introduction-and-application-walk-through-for-rtk-query-basics/embed?af=7pnhj6" 
+  <iframe
+    src="https://app.egghead.io/lessons/redux-course-introduction-and-application-walk-through-for-rtk-query-basics/embed?af=7pnhj6"
     title="RTK Query Video course at Egghead: Course Introduction and Application Walk through for RTK Query Basics"
-    frameborder="0" 
+    frameborder="0"
     allowfullscreen
     style={{position:"absolute",top:0,left:0,width:"100%",height:"100%"}}
   ></iframe>
@@ -287,7 +287,8 @@ import { Spinner } from '@/components/Spinner'
 import { TimeAgo } from '@/components/TimeAgo'
 
 // highlight-next-line
-import { useGetPostsQuery, Post } from '@/features/api/apiSlice'
+import type { Post } from '@/features/api/apiSlice'
+import { useGetPostsQuery } from '@/features/api/apiSlice'
 
 import { PostAuthor } from './PostAuthor'
 import { ReactionButtons } from './ReactionButtons'
@@ -479,7 +480,7 @@ export const SinglePostPage = () => {
   const currentUsername = useAppSelector(selectCurrentUsername)
   // highlight-next-line
   const { data: post, isFetching, isSuccess } = useGetPostQuery(postId!)
-  
+
   // highlight-next-line
   let content: React.ReactNode
 
@@ -508,7 +509,7 @@ export const SinglePostPage = () => {
       </article>
     )
   }
-  
+
   // highlight-next-line
   return <section>{content}</section>
 }
@@ -729,7 +730,8 @@ Instead, we could make the existing list of posts partially transparent to indic
 // highlight-next-line
 import classnames from 'classnames'
 
-import { useGetPostsQuery, Post } from '@/features/api/apiSlice'
+import type { Post } from '@/features/api/apiSlice'
+import { useGetPostsQuery } from '@/features/api/apiSlice'
 
 // omit other imports and PostExcerpt
 

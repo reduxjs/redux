@@ -1,6 +1,6 @@
-import React from 'react'
+import type { FC, PropsWithChildren } from 'react'
 
-export const DetailedExplanation = ({
+export const DetailedExplanation: FC<PropsWithChildren<{ title?: string }>> = ({
   children,
   title = 'Detailed Explanation'
 }) => {

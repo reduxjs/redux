@@ -47,13 +47,13 @@ describe('Utils', () => {
 
       let isNotDefined: any
       combineReducers({ isNotDefined })
-      expect(spy.mock.calls[0][0]).toMatch(
+      expect(spy.mock.calls[0]?.[0]).toMatch(
         /No reducer provided for key "isNotDefined"/
       )
 
       spy.mockClear()
       combineReducers({ thing: undefined })
-      expect(spy.mock.calls[0][0]).toMatch(
+      expect(spy.mock.calls[0]?.[0]).toMatch(
         /No reducer provided for key "thing"/
       )
 
@@ -190,7 +190,7 @@ describe('Utils', () => {
       const reducer = combineReducers({})
       // @ts-ignore
       reducer(undefined, { type: '' })
-      expect(spy.mock.calls[0][0]).toMatch(
+      expect(spy.mock.calls[0]?.[0]).toMatch(
         /Store does not have a valid reducer/
       )
 
@@ -234,7 +234,7 @@ describe('Utils', () => {
       expect(spy.mock.calls.length).toBe(0)
 
       createStore(reducer, { bar: 2 } as unknown as ShapeState)
-      expect(spy.mock.calls[0][0]).toMatch(
+      expect(spy.mock.calls[0]?.[0]).toMatch(
         /Unexpected key "bar".*createStore.*instead: "foo", "baz"/
       )
 
@@ -243,27 +243,27 @@ describe('Utils', () => {
         qux: 4,
         thud: 5
       } as unknown as ShapeState)
-      expect(spy.mock.calls[1][0]).toMatch(
+      expect(spy.mock.calls[1]?.[0]).toMatch(
         /Unexpected keys "qux", "thud".*createStore.*instead: "foo", "baz"/
       )
 
       createStore(reducer, 1 as unknown as ShapeState)
-      expect(spy.mock.calls[2][0]).toMatch(
+      expect(spy.mock.calls[2]?.[0]).toMatch(
         /createStore has unexpected type of "number".*keys: "foo", "baz"/
       )
 
       reducer({ corge: 2 } as unknown as ShapeState, nullAction)
-      expect(spy.mock.calls[3][0]).toMatch(
+      expect(spy.mock.calls[3]?.[0]).toMatch(
         /Unexpected key "corge".*reducer.*instead: "foo", "baz"/
       )
 
       reducer({ fred: 2, grault: 4 } as unknown as ShapeState, nullAction)
-      expect(spy.mock.calls[4][0]).toMatch(
+      expect(spy.mock.calls[4]?.[0]).toMatch(
         /Unexpected keys "fred", "grault".*reducer.*instead: "foo", "baz"/
       )
 
       reducer(1 as unknown as ShapeState, nullAction)
-      expect(spy.mock.calls[5][0]).toMatch(
+      expect(spy.mock.calls[5]?.[0]).toMatch(
         /reducer has unexpected type of "number".*keys: "foo", "baz"/
       )
 

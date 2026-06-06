@@ -508,7 +508,8 @@ When we write the `postAdded` reducer function, `createSlice` will automatically
 ```ts title="features/posts/postsSlice.ts"
 // highlight-start
 // Import the `PayloadAction` TS type
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 // highlight-end
 
 // omit initial state
@@ -572,7 +573,8 @@ import { nanoid } from '@reduxjs/toolkit'
 
 import { useAppDispatch } from '@/app/hooks'
 
-import { type Post, postAdded } from './postsSlice'
+import type { Post } from './postsSlice'
+import { postAdded } from './postsSlice'
 // highlight-end
 
 // omit form types

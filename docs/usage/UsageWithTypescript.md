@@ -127,7 +127,8 @@ All generated actions should be defined using the `PayloadAction<T>` type from R
 You can safely import the `RootState` type from the store file here. It's a circular import, but the TypeScript compiler can correctly handle that for types. This may be needed for use cases like writing selector functions.
 
 ```ts title="features/counter/counterSlice.ts"
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import type { RootState } from '../../app/store'
 
 // highlight-start
@@ -233,7 +234,7 @@ You could add this to your ESLint config as an example:
 If you are using Redux Toolkit's `createSlice`, you should rarely need to specifically type a reducer separately. If you do actually write a standalone reducer, it's typically sufficient to declare the type of the `initialState` value, and type the `action` as `UnknownAction`:
 
 ```ts
-import { UnknownAction } from 'redux'
+import type { UnknownAction } from 'redux'
 
 interface CounterState {
   value: number
@@ -270,9 +271,9 @@ export interface Middleware<
 A custom middleware should use the `Middleware` type, and pass the generic args for `S` (state) and `D` (dispatch) if needed:
 
 ```ts
-import { Middleware } from 'redux'
+import type { Middleware } from 'redux'
 
-import { RootState } from '../store'
+import type { RootState } from '../store'
 
 export const exampleMiddleware: Middleware<
   {}, // Most middleware do not modify the dispatch return value
@@ -329,10 +330,10 @@ export type ThunkAction<
 You will typically want to provide the `R` (return type) and `S` (state) generic arguments. Unfortunately, TS does not allow only providing _some_ generic arguments, so the usual values for the other arguments are `unknown` for `E` and `UnknownAction` for `A`:
 
 ```ts
-import { UnknownAction } from 'redux'
+import type { UnknownAction } from 'redux'
+import type { ThunkAction } from 'redux-thunk'
+import type { RootState } from './store'
 import { sendMessage } from './store/chat/actions'
-import { RootState } from './store'
-import { ThunkAction } from 'redux-thunk'
 
 export const thunkSendMessage =
   (message: string): ThunkAction<void, RootState, unknown, UnknownAction> =>
@@ -422,7 +423,8 @@ However, prefer creating a pre-typed `useAppDispatch` hook with the correct type
 If you are still using `connect`, you should use the `ConnectedProps<T>` type exported by `@types/react-redux^7.1.2` to infer the types of the props from `connect` automatically. This requires splitting the `connect(mapState, mapDispatch)(MyComponent)` call into two parts:
 
 ```tsx
-import { connect, ConnectedProps } from 'react-redux'
+import type { ConnectedProps } from 'react-redux'
+import { connect } from 'react-redux'
 
 interface RootState {
   isOn: boolean
