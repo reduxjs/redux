@@ -1,27 +1,17 @@
-import $$observable from './utils/symbol-observable'
-
-import type {
-  Store,
-  StoreEnhancer,
-  Dispatch,
-  Observer,
-  ListenerCallback,
-  UnknownIfNonSpecific
-} from './types/store'
 import type { Action } from './types/actions'
 import type { Reducer } from './types/reducers'
+import type {
+  Dispatch,
+  ListenerCallback,
+  Observer,
+  Store,
+  StoreEnhancer,
+  UnknownIfNonSpecific
+} from './types/store'
 import ActionTypes from './utils/actionTypes'
 import isPlainObject from './utils/isPlainObject'
 import { kindOf } from './utils/kindOf'
-
-/**
- * Prevents TypeScript from inferring a generic type parameter.
- *
- * @template T - The type to prevent inference for.
- *
- * @internal
- */
-type NoInfer<T> = [T][T extends any ? 0 : never]
+import $$observable from './utils/symbol-observable'
 
 /**
  * @deprecated

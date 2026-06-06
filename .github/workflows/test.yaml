@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: ['22.x']
+        node: ['24.x']
 
     steps:
       - name: Checkout repo
@@ -76,7 +76,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['22.x']
+        node: ['24.x']
     steps:
       - name: Checkout repo
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
@@ -118,8 +118,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['22.x']
-        ts: ['5.0', '5.1', '5.2', '5.3', '5.4', '5.5', '5.6', '5.7', '5.8']
+        node: ['24.x']
+        ts: ['5.4', '5.5', '5.6', '5.7', '5.8']
     steps:
       - name: Checkout repo
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
@@ -164,7 +164,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['22.x']
+        node: ['24.x']
     steps:
       - name: Checkout repo
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
@@ -197,7 +197,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['22.x']
+        node: ['24.x']
         example:
           [
             'cra4',
@@ -224,7 +224,7 @@ jobs:
       - name: Clone RTK repo
         run: |
           git init ./redux-toolkit
-          git -C ./redux-toolkit fetch --depth 1 https://github.com/reduxjs/redux-toolkit.git 576a02f8056fbee2dcaddb4d2e4d2da3b7937c58
+          git -C ./redux-toolkit fetch --depth 1 https://github.com/reduxjs/redux-toolkit.git 7c49510ff5dc6aad7cda24a59ec6c38a1af053be
           git -C ./redux-toolkit checkout FETCH_HEAD
 
       - name: Cache example deps
@@ -265,6 +265,11 @@ jobs:
         env:
           NODE_OPTIONS: --openssl-legacy-provider
         run: yarn build
+
+      - name: playwright install
+        if: matrix.example == 'next' || matrix.example == 'vite' || matrix.example == 'cra4' || matrix.example == 'cra5'
+        working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
+        run: yarn exec playwright install --with-deps chromium
 
       - name: Run test step
         working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
