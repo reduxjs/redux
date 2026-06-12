@@ -1,0 +1,40 @@
+name: Release Commit
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  pull-requests: write
+
+jobs:
+  release:
+    name: Release Commit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+
+      - run: corepack enable
+
+      - name: Setup Node
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          cache: 'yarn'
+          check-latest: true
+          node-version: '24.x'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build
+        run: yarn run build
+
+      - name: Publish
+        id: publish
+        run: >
+          yarn dlx pkg-pr-new publish
+          .
+          --yarn --packageManager="npm,yarn,pnpm,bun" --commentWithDev
