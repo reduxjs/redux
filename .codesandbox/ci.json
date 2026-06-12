@@ -1,4 +1,0 @@
-{
-  "sandboxes": ["vanilla", "vanilla-ts"],
-  "node": "20"
-}
