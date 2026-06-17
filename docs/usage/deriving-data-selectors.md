@@ -258,6 +258,8 @@ Note that the second time we called `selectTodosForCurrentUser`, the "output sel
 
 It's important to note that by default, **`createSelector` only memoizes the most recent set of parameters**. That means that if you call a selector repeatedly with different inputs, it will still return a result, but it will have to keep re-running the output selector to produce the result:
 
+**Note:** As of Reselect 5.0.0, `createSelector` uses `weakMapMemoize` by default, which provides better memory management than the previous `lruMemoize` implementation. This means memoized values are automatically cleaned up when no longer referenced.
+
 ```js
 const a = someSelector(state, 1) // first call, not memoized
 const b = someSelector(state, 1) // same inputs, memoized
