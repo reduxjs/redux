@@ -606,6 +606,10 @@ describe('createStore', () => {
     )
     // @ts-expect-error
     expect(() => store.dispatch({ type: '' })).not.toThrow()
+    // @ts-expect-error
+    expect(() => store.dispatch({ type: Symbol('MY_ACTION') })).toThrow(
+      /the actual type was: 'symbol'.*Value was: 'Symbol\(MY_ACTION\)'/
+    )
   })
 
   it('accepts enhancer as the third argument', () => {
