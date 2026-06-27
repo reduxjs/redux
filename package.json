@@ -71,6 +71,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "glob": "^10.3.10",
     "netlify-plugin-cache": "^1.0.3",
+    "pkg-pr-new": "^0.0.75",
     "prettier": "^3.2.5",
     "rimraf": "^5.0.5",
     "rxjs": "^7.8.1",
