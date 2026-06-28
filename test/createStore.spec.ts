@@ -703,7 +703,12 @@ describe('createStore', () => {
 
     // @ts-expect-error
     expect(() => store.replaceReducer(undefined)).toThrow(
-      'Expected the nextReducer to be a function.'
+      "Expected the nextReducer to be a function. Instead, received: 'undefined'"
+    )
+
+    // @ts-expect-error
+    expect(() => store.replaceReducer(null)).toThrow(
+      "Expected the nextReducer to be a function. Instead, received: 'null'"
     )
 
     expect(() => store.replaceReducer(() => [])).not.toThrow()
