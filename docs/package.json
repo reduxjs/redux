@@ -1,7 +1,9 @@
 {
   "devDependencies": {
     "@reduxjs/toolkit": "^2.0.1",
+    "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^14.1.2",
+    "@testing-library/user-event": "^14.6.1",
     "@vitest/browser-playwright": "^4.0.5",
     "msw": "^2.0.0",
     "react": "^18.2.0",

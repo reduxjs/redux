@@ -44,8 +44,8 @@ Additionally, as we are using modern JS and JSX syntax, we will need to compile 
 ##### `server.js`
 
 ```js
-import path from 'path'
 import Express from 'express'
+import path from 'node:path'
 import React from 'react'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
