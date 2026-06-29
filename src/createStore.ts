@@ -322,7 +322,7 @@ export function createStore<
       throw new Error(
         `Expected the nextReducer to be a function. Instead, received: '${kindOf(
           nextReducer
-        )}`
+        )}'`
       )
     }
 
