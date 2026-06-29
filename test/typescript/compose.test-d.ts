@@ -21,7 +21,7 @@ describe('type tests', () => {
         (f: (a: string) => number) => (p: string) => 5,
         (f: (a: number) => string) => (p: string) => 4
       )(numberToString)
-    ).toMatchTypeOf<(a: string) => number>()
+    ).toExtend<(a: string) => number>()
 
     expectTypeOf(
       compose(stringToNumber, numberToString, numberToNumber)(5)

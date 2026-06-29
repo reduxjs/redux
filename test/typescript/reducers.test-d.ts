@@ -49,10 +49,9 @@ describe('type tests', () => {
     ).toEqualTypeOf(s)
 
     // State shape is strictly checked.
-    expectTypeOf(reducer).parameters.not.toMatchTypeOf([
-      'string',
-      { type: 'INCREMENT' }
-    ])
+    expectTypeOf(reducer).parameters.not.toExtend<
+      [state: string, action: { type: string }]
+    >()
 
     // Combined reducer also accepts any action.
     const combined = combineReducers({ sub: reducer })
@@ -64,10 +63,9 @@ describe('type tests', () => {
     )
 
     // Combined reducer's state is strictly checked.
-    expectTypeOf(combined).parameters.not.toMatchTypeOf([
-      { unknown: '' },
-      { type: 'INCREMENT' }
-    ])
+    expectTypeOf(combined).parameters.not.toExtend<
+      [state: { unknown: string }, action: { type: 'INCREMENT' }]
+    >()
   })
 
   test('reducer definition using discriminated unions.', () => {
@@ -151,19 +149,17 @@ describe('type tests', () => {
     expectTypeOf(reducer0(s, { type: 'INCREMENT', count: 10 })).toEqualTypeOf(s)
 
     // Known actions are strictly checked.
-    expectTypeOf(reducer0).parameters.not.toMatchTypeOf([
-      s,
-      { type: 'DECREMENT', coun: 10 }
-    ])
+    expectTypeOf(reducer0).parameters.not.toExtend<
+      [state: typeof s, action: { type: 'DECREMENT'; coun: number }]
+    >()
 
     // Unknown actions are rejected.
-    expectTypeOf(reducer0).parameters.not.toMatchTypeOf([
-      s,
-      { type: 'SOME_OTHER_TYPE' }
-    ])
+    expectTypeOf(reducer0).parameters.not.toExtend<
+      [state: typeof s, action: { type: 'SOME_OTHER_TYPE' }]
+    >()
 
-    expectTypeOf(reducer0).parameters.not.toMatchTypeOf<
-      [typeof s, { type: 'SOME_OTHER_TYPE'; someField: 'value' }]
+    expectTypeOf(reducer0).parameters.not.toExtend<
+      [state: typeof s, action: { type: 'SOME_OTHER_TYPE'; someField: 'value' }]
     >()
 
     // Combined reducer infers state and actions by default which maintains type
@@ -175,12 +171,12 @@ describe('type tests', () => {
 
     expectTypeOf(combined).toBeCallableWith(cs, { type: 'MULTIPLY' })
 
-    expectTypeOf(combined).parameters.not.toMatchTypeOf<
-      [typeof cs, { type: 'init' }]
+    expectTypeOf(combined).parameters.not.toExtend<
+      [state: typeof cs, action: { type: 'init' }]
     >()
 
-    expectTypeOf(combined).parameters.not.toMatchTypeOf<
-      [typeof cs, { type: 'SOME_OTHER_TYPE' }]
+    expectTypeOf(combined).parameters.not.toExtend<
+      [state: typeof cs, action: { type: 'SOME_OTHER_TYPE' }]
     >()
 
     // Combined reducer can be made to only accept known actions.
@@ -192,8 +188,8 @@ describe('type tests', () => {
 
     expectTypeOf(strictCombined).toBeCallableWith(scs, { type: 'DECREMENT' })
 
-    expectTypeOf(strictCombined).parameters.not.toMatchTypeOf<
-      [typeof scs, { type: 'SOME_OTHER_TYPE' }]
+    expectTypeOf(strictCombined).parameters.not.toExtend<
+      [state: typeof scs, action: { type: 'SOME_OTHER_TYPE' }]
     >()
   })
 
@@ -266,9 +262,7 @@ describe('type tests', () => {
     for (const key of Object.keys(obj)) {
       expectTypeOf(obj[key]).toBeCallableWith(undefined, { type: 'SOME_TYPE' })
 
-      expectTypeOf(obj[key]).parameters.not.toMatchTypeOf<
-        [undefined, 'not-an-action']
-      >()
+      expectTypeOf(obj[key]).parameters.not.toExtend<[undefined, string]>()
     }
   })
 

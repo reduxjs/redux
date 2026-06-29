@@ -36,17 +36,15 @@ describe('type tests', () => {
 
     const store = createStore(reducer, enhancer)
 
-    // `.toBeCallableWith or .parameter(0).toMatchTypeOf`
+    // `.toBeCallableWith or .parameter(0).toMatchObjectType`
     // do not work in this scenario.
     store.dispatch({ type: 'INCREMENT' })
 
     store.dispatch(Promise.resolve({ type: 'INCREMENT' }))
 
-    expectTypeOf(store.dispatch).parameter(0).not.toMatchTypeOf('not-an-action')
+    expectTypeOf(store.dispatch).parameter(0).not.toBeString()
 
-    expectTypeOf(store.dispatch)
-      .parameter(0)
-      .not.toMatchTypeOf(Promise.resolve('not-an-action'))
+    expectTypeOf(store.dispatch).parameter(0).resolves.not.toBeString()
   })
 
   test('Store enhancer that extends the type of the state.', () => {

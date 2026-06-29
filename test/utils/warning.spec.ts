@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
-import { vi } from 'vitest'
 import warning from '@internal/utils/warning'
 
 describe('Utils', () => {
-  describe('warning', () => {
+  describe(warning, () => {
     it('calls console.error when available', () => {
       const preSpy = console.error
       const spy = vi.fn()

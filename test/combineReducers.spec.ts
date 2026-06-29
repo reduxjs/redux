@@ -1,14 +1,13 @@
 /* eslint-disable no-console */
-import type { Reducer, Action } from 'redux'
+import type { Action, Reducer } from 'redux'
 import {
-  createStore,
+  __DO_NOT_USE__ActionTypes as ActionTypes,
   combineReducers,
-  __DO_NOT_USE__ActionTypes as ActionTypes
+  createStore
 } from 'redux'
-import { vi } from 'vitest'
 
 describe('Utils', () => {
-  describe('combineReducers', () => {
+  describe(combineReducers, () => {
     it('returns a composite reducer that maps the state keys to given reducers', () => {
       type IncrementAction = { type: 'increment' }
       type PushAction = { type: 'push'; value: unknown }
