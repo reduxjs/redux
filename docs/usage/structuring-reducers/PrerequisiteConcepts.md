@@ -88,7 +88,9 @@ Because of these rules, it's important that the following core concepts are full
 
 - [Database Normalization in Simple English](https://www.essentialsql.com/get-ready-to-learn-sql-database-normalization-explained-in-simple-english/)
 - [Idiomatic Redux: Normalizing the State Shape](https://egghead.io/lessons/javascript-redux-normalizing-the-state-shape)
-- [Normalizr Documentation](https://github.com/paularmstrong/normalizr)
+- [Redux Toolkit: `createEntityAdapter`](https://redux-toolkit.js.org/api/createEntityAdapter)
+- [Essentials: Performance and Normalizing Data](../../tutorials/essentials/part-6-performance-normalization.md)
+- [Normalizr Documentation](https://github.com/paularmstrong/normalizr) (stable, but no longer actively maintained)
 - [Redux Without Profanity: Normalizr](https://tonyhb.gitbooks.io/redux-without-profanity/content/normalizer.html)
 - [Querying a Redux Store](https://medium.com/@adamrackis/querying-a-redux-store-37db8c7f3b0f)
 - [Wikipedia: Associative Entity](https://en.wikipedia.org/wiki/Associative_entity)
