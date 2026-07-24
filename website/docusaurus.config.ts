@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { path } from 'path'
 import { linkDocblocks, transpileCodeblocks } from 'remark-typescript-tools'
 import type { Options, ThemeConfig } from '@docusaurus/preset-classic'
 import type { Config } from '@docusaurus/types'
