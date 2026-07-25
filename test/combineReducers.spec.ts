@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import type { Reducer, Action } from 'redux'
 import {
   createStore,
@@ -45,7 +44,7 @@ describe('Utils', () => {
       const spy = vi.fn()
       console.error = spy
 
-      let isNotDefined: any
+      const isNotDefined: any = undefined
       combineReducers({ isNotDefined })
       expect(spy.mock.calls[0][0]).toMatch(
         /No reducer provided for key "isNotDefined"/

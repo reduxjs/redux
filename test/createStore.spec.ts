@@ -207,7 +207,7 @@ describe('createStore', () => {
     const listenerA = vi.fn()
     const listenerB = vi.fn()
 
-    let unsubscribeA = store.subscribe(listenerA)
+    const unsubscribeA = store.subscribe(listenerA)
     // @ts-expect-error
     store.dispatch(unknownAction())
     expect(listenerA.mock.calls.length).toBe(1)
@@ -245,7 +245,7 @@ describe('createStore', () => {
     expect(listenerA.mock.calls.length).toBe(3)
     expect(listenerB.mock.calls.length).toBe(2)
 
-    unsubscribeA = store.subscribe(listenerA)
+    store.subscribe(listenerA)
     expect(listenerA.mock.calls.length).toBe(3)
     expect(listenerB.mock.calls.length).toBe(2)
 
@@ -426,7 +426,7 @@ describe('createStore', () => {
     const store = createStore(reducers.todos)
 
     let resolve: (value: unknown) => void = () => {}
-    let promise = new Promise(_resolve => {
+    const promise = new Promise(_resolve => {
       resolve = _resolve
     })
     store.subscribe(() => {
@@ -446,7 +446,7 @@ describe('createStore', () => {
   it('does not leak private listeners array', async () => {
     const store = createStore(reducers.todos)
     let resolve: (value: unknown) => void = () => {}
-    let promise = new Promise(_resolve => {
+    const promise = new Promise(_resolve => {
       resolve = _resolve
     })
 

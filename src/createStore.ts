@@ -104,6 +104,9 @@ export function createStore<
 
   if (
     (typeof preloadedState === 'function' && typeof enhancer === 'function') ||
+    // `arguments[3]` intentionally probes for a fourth positional argument that
+    // the signature does not name, to detect several enhancers being passed.
+    // eslint-disable-next-line prefer-rest-params
     (typeof enhancer === 'function' && typeof arguments[3] === 'function')
   ) {
     throw new Error(

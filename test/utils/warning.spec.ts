@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { vi } from 'vitest'
 import warning from '@internal/utils/warning'
 

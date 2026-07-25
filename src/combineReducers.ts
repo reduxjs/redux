@@ -40,7 +40,9 @@ function getUnexpectedStateShapeWarningMessage(
   }
 
   const unexpectedKeys = Object.keys(inputState).filter(
-    key => !reducers.hasOwnProperty(key) && !unexpectedKeyCache[key]
+    key =>
+      !Object.prototype.hasOwnProperty.call(reducers, key) &&
+      !unexpectedKeyCache[key]
   )
 
   unexpectedKeys.forEach(key => {
