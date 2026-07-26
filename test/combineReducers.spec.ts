@@ -45,6 +45,7 @@ describe('Utils', () => {
       const spy = vi.fn()
       console.error = spy
 
+      // oxlint-disable-next-line no-unassigned-vars -- intentionally left undefined to exercise the missing-reducer warning
       let isNotDefined: any
       combineReducers({ isNotDefined })
       expect(spy.mock.calls[0][0]).toMatch(

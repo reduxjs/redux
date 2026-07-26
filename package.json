@@ -42,7 +42,7 @@
     "clean": "rimraf dist/ coverage/",
     "format": "prettier --write \"{src,test}/**/*.{js,ts}\" \"**/*.md\"",
     "format:check": "prettier --list-different \"{src,test}/**/*.{js,ts}\" \"**/*.md\"",
-    "lint": "eslint --ext js,ts src test",
+    "lint": "oxlint src test",
     "test": "vitest --run --typecheck",
     "type-tests": "tsc -p tsconfig.test.json --noEmit",
     "test:watch": "vitest --watch",
@@ -50,7 +50,7 @@
     "build": "yarn clean && tsup",
     "prepublishOnly": "yarn clean && yarn format:check && yarn lint && yarn test",
     "prepack": "yarn build",
-    "examples:lint": "eslint --ext js,ts examples",
+    "examples:lint": "oxlint examples",
     "tsc": "tsc"
   },
   "devDependencies": {
@@ -59,18 +59,11 @@
     "@types/babel__core": "^7.20.5",
     "@types/babel__helper-module-imports": "^7.18.3",
     "@types/node": "^26.0.1",
-    "@typescript-eslint/eslint-plugin": "^7.3.1",
-    "@typescript-eslint/parser": "^7.3.1",
     "cross-env": "^7.0.3",
     "esbuild-extra": "^0.3.1",
-    "eslint": "^8.57.0",
-    "eslint-config-react-app": "^7.0.1",
-    "eslint-import-resolver-typescript": "^3.6.1",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-react": "^7.34.1",
-    "eslint-plugin-react-hooks": "^4.6.0",
     "glob": "^10.3.10",
     "netlify-plugin-cache": "^1.0.3",
+    "oxlint": "^1.75.0",
     "pkg-pr-new": "^0.0.75",
     "prettier": "^3.2.5",
     "rimraf": "^6.1.3",
@@ -78,10 +71,6 @@
     "tsup": "8.0.2",
     "typescript": "^5.8.2",
     "vitest": "^4.0.5"
-  },
-  "resolutions": {
-    "@typescript-eslint/eslint-plugin": "7.3.1",
-    "@typescript-eslint/parser": "7.3.1"
   },
   "sideEffects": false,
   "packageManager": "yarn@4.4.1"

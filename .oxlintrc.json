@@ -1,0 +1,63 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "react-hooks", "react-perf", "jsx-a11y"],
+  "categories": {
+    "correctness": "error"
+  },
+  "ignorePatterns": [
+    "**/dist/**",
+    "**/coverage/**",
+    "**/server.js",
+    "**/webpack.config*.js",
+    "examples/todos-flow/**",
+    "website/**",
+    "docs/**"
+  ],
+  "rules": {
+    "no-unused-vars": "off",
+    "typescript/no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "after-used",
+        "ignoreRestSiblings": true,
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
+    "typescript/consistent-type-imports": [
+      "error",
+      { "prefer": "type-imports", "disallowTypeAnnotations": false }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["test/**/*.test-d.ts", "test/typescript/**/*.ts"],
+      "rules": {
+        "typescript/no-unused-vars": "off",
+        "typescript/no-namespace": "off"
+      }
+    },
+    {
+      "files": ["examples/**/*.{js,jsx,mjs,cjs,ts,tsx}"],
+      "rules": {
+        "react/react-in-jsx-scope": "off",
+        "typescript/consistent-type-imports": "off",
+        "no-unused-vars": "warn",
+        "jsx-a11y/control-has-associated-label": "warn",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "no-case-declarations": "warn",
+        "no-prototype-builtins": "warn",
+        "no-irregular-whitespace": "warn",
+        "react/no-unescaped-entities": "warn",
+        "jsx-a11y/anchor-is-valid": "warn",
+        "jsx-a11y/click-events-have-key-events": "warn",
+        "jsx-a11y/no-static-element-interactions": "warn",
+        "jsx-a11y/no-noninteractive-element-interactions": "warn",
+        "jsx-a11y/label-has-associated-control": "warn",
+        "jsx-a11y/no-autofocus": "warn"
+      }
+    }
+  ]
+}
