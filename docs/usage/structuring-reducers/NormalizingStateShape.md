@@ -214,4 +214,8 @@ Operations like "Look up all books by this author", can then be accomplished eas
 
 ## Normalizing Nested Data
 
-Because APIs frequently send back data in a nested form, that data needs to be transformed into a normalized shape before it can be included in the state tree. The [Normalizr](https://github.com/paularmstrong/normalizr) library is usually used for this task. You can define schema types and relations, feed the schema and the response data to Normalizr, and it will output a normalized transformation of the response. That output can then be included in an action and used to update the store. See the Normalizr documentation for more details on its usage.
+Because APIs frequently send back data in a nested form, that data needs to be transformed into a normalized shape before it can be included in the state tree.
+
+For most applications, [Redux Toolkit's `createEntityAdapter`](https://redux-toolkit.js.org/api/createEntityAdapter) is the recommended way to store and update normalized entity collections in your slices. It provides a standard `{ ids, entities }` state shape along with generated reducers and selectors. See [Performance and Normalizing Data](../../tutorials/essentials/part-6-performance-normalization.md) for a walkthrough.
+
+If you need to transform deeply nested API responses with complex relational schemas into normalized data, the [Normalizr](https://github.com/paularmstrong/normalizr) library is still a common option. You can define schema types and relations, feed the schema and the response data to Normalizr, and it will output a normalized transformation of the response. That output can then be included in an action and used to update the store (including slices that use `createEntityAdapter`). Normalizr is stable and feature-rich for relational normalization, but it is [no longer actively maintained](https://github.com/paularmstrong/normalizr/discussions/493#discussioncomment-2395540).
