@@ -55,6 +55,9 @@ jobs:
       - name: Lint
         run: yarn lint
 
+      - name: Check formatting
+        run: yarn format:check
+
       - name: Run test suite
         run: yarn test
 
