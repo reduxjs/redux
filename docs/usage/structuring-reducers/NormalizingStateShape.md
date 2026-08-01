@@ -173,7 +173,39 @@ This could be expanded in a number of ways. For example, an application that doe
 
 ## Relationships and Tables
 
-Because we're treating a portion of our Redux store as a "database", many of the principles of database design also apply here as well. For example, if we have a many-to-many relationship, we can model that using an intermediate table that stores the IDs of the corresponding items (often known as a "join table" or an "associative table"). For consistency, we would probably also want to use the same `byId` and `allIds` approach that we used for the actual item tables, like this:
+Because we're treating a portion of our Redux store as a "database", many of the principles of database design also apply here as well. There is no single required way to store relationships. Choose the shape that makes the reads and updates your application needs straightforward.
+
+### Storing related IDs on an entity
+
+If you usually navigate a relationship in one direction and the relationship has no data of its own, an array of related IDs on the entity is often the simplest option. For example, an author record can store the IDs of that author's books:
+
+```js
+{
+    authors: {
+        byId: {
+            5: {
+                id: 5,
+                name: "Ada Lovelace",
+                bookIds: [22, 15]
+            }
+        },
+        allIds: [5]
+    },
+    books: {
+        byId: {
+            22: { id: 22, title: "Notes" },
+            15: { id: 15, title: "Sketches" }
+        },
+        allIds: [22, 15]
+    }
+}
+```
+
+Looking up an author's books is then a direct mapping from `bookIds` to the corresponding records in `books.byId`. This is a good fit for one-to-many relationships or when one direction is the main query your UI needs.
+
+### Using a join table
+
+For many-to-many relationships, or when the relationship itself has data that must be stored, use an intermediate table that stores the IDs of the corresponding items. This is often known as a "join table" or an "associative table". For example, an `authorBook` record can also describe the author's role for that specific book:
 
 ```js
 {
@@ -191,17 +223,20 @@ Because we're treating a portion of our Redux store as a "database", many of the
                 1: {
                     id: 1,
                     authorId: 5,
-                    bookId: 22
+                    bookId: 22,
+                    role: "author"
                 },
                 2: {
                     id: 2,
                     authorId: 5,
-                    bookId: 15
+                    bookId: 15,
+                    role: "editor"
                 },
                 3: {
                     id: 3,
                     authorId: 42,
-                    bookId: 12
+                    bookId: 12,
+                    role: "author"
                 }
             },
             allIds: [1, 2, 3]
@@ -210,7 +245,9 @@ Because we're treating a portion of our Redux store as a "database", many of the
 }
 ```
 
-Operations like "Look up all books by this author", can then be accomplished easily with a single loop over the join table. Given the typical amounts of data in a client application and the speed of Javascript engines, this kind of operation is likely to have sufficiently fast performance for most use cases.
+Operations like "look up all books by this author" can then be accomplished with a loop over the join table, filtering for the desired `authorId` and retrieving each matching `bookId`. Given the typical amounts of data in a client application and the speed of JavaScript engines, this is likely to be sufficiently fast for most use cases.
+
+If profiling shows that a particular relationship lookup is a bottleneck, you can maintain an additional index such as `bookIdsByAuthorId`. Keep that index derived from the same actions that update the relationship records so it cannot become inconsistent. Start with the simpler shape that matches your use case, and add indexes only when a measured read pattern needs them.
 
 ## Normalizing Nested Data
 
