@@ -4217,9 +4217,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild-extra@npm:^0.3.1":
-  version: 0.3.1
-  resolution: "esbuild-extra@npm:0.3.1"
+"esbuild-extra@npm:^0.4.2":
+  version: 0.4.2
+  resolution: "esbuild-extra@npm:0.4.2"
   dependencies:
     "@ampproject/remapping": "npm:^2.2.1"
     convert-source-map: "npm:^2.0.0"
@@ -4227,7 +4227,7 @@ __metadata:
     tsconfck: "npm:^2.1.1"
   peerDependencies:
     esbuild: ">=0.15"
-  checksum: 10/165f133a2d1331de149f389266589ccf1def1e6747a344eb40f13edc31ac0b4c84bc76c27545989058385c6f2ca7bbb393281e01e1bcca0ead8bbae251471a7a
+  checksum: 10/16300a42233fa30bbabdcae4e389c302b4a03461677a2639c6857dfb28ab6369c09a4dfcc0225e534616f26019ec9e5510e799c32923d141c4bb8ce5b7a290d2
   languageName: node
   linkType: hard
 
@@ -6770,7 +6770,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^7.3.1"
     "@typescript-eslint/parser": "npm:^7.3.1"
     cross-env: "npm:^7.0.3"
-    esbuild-extra: "npm:^0.3.1"
+    esbuild-extra: "npm:^0.4.2"
     eslint: "npm:^8.57.0"
     eslint-config-react-app: "npm:^7.0.1"
     eslint-import-resolver-typescript: "npm:^3.6.1"
