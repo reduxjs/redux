@@ -21,9 +21,9 @@ describe('type tests', () => {
 
           expectTypeOf(dispatch)
             .parameter(0)
-            .not.toMatchTypeOf(Promise.resolve({ type: 'INCREMENT' }))
+            .not.toExtend<Promise<{ type: string }>>()
 
-          expectTypeOf(dispatch).parameter(0).not.toMatchTypeOf('not-an-action')
+          expectTypeOf(dispatch).parameter(0).not.toBeString()
         }
       }
     })
@@ -56,15 +56,13 @@ describe('type tests', () => {
 
             expectTypeOf(dispatch)
               .parameter(0)
-              .not.toMatchTypeOf({ type: 'DECREMENT', count: '' })
+              .not.toMatchObjectType<{ type: string; count: string }>()
 
             expectTypeOf(dispatch)
               .parameter(0)
               .not.toEqualTypeOf({ type: 'SOME_OTHER_TYPE' })
 
-            expectTypeOf(dispatch)
-              .parameter(0)
-              .not.toMatchTypeOf('not-an-action')
+            expectTypeOf(dispatch).parameter(0).not.toBeString()
           }
         }
       }
@@ -79,7 +77,7 @@ describe('type tests', () => {
     const hoc: HOC<{ onClick(): void }> = connect((dispatch: MyDispatch) => {
       return {
         onClick() {
-          // `.toBeCallableWith or .parameter(0).toMatchTypeOf`
+          // `.toBeCallableWith or .parameter(0).toMatchObjectType`
           // do not work in this scenario.
           dispatch({ type: 'INCREMENT' })
 
@@ -87,7 +85,7 @@ describe('type tests', () => {
             Promise.resolve({ type: 'INCREMENT' })
           )
 
-          expectTypeOf(dispatch).parameter(0).not.toMatchTypeOf('not-an-action')
+          expectTypeOf(dispatch).parameter(0).not.toBeString()
         }
       }
     })

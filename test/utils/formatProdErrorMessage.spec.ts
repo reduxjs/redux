@@ -1,6 +1,6 @@
 import { formatProdErrorMessage } from '@internal/utils/formatProdErrorMessage'
 
-describe('formatProdErrorMessage', () => {
+describe(formatProdErrorMessage, () => {
   it('returns message with expected code references', () => {
     const code = 16
 

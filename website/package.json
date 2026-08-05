@@ -23,7 +23,7 @@
     "react-dom": "^19.0.0",
     "react-lite-youtube-embed": "^2.0.3",
     "remark-typescript-tools": "^2.0.0-alpha.1",
-    "typescript": "^5.8.3"
+    "typescript": "^6.0.3"
   },
   "devDependencies": {
     "@reduxjs/toolkit": "^2.0.1",

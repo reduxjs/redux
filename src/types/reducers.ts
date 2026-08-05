@@ -60,8 +60,7 @@ export type ReducersMapObject<
  * @template M Object map of reducers as provided to `combineReducers(map: M)`.
  */
 export type StateFromReducersMapObject<M> = M[keyof M] extends
-  | Reducer<any, any, any>
-  | undefined
+  Reducer<any, any, any> | undefined
   ? {
       [P in keyof M]: M[P] extends Reducer<infer S, any, any> ? S : never
     }
@@ -73,8 +72,7 @@ export type StateFromReducersMapObject<M> = M[keyof M] extends
  * @template M Object map of reducers as provided to `combineReducers(map: M)`.
  */
 export type ReducerFromReducersMapObject<M> = M[keyof M] extends
-  | Reducer<any, any, any>
-  | undefined
+  Reducer<any, any, any> | undefined
   ? M[keyof M]
   : never
 
@@ -101,8 +99,7 @@ export type ActionFromReducersMapObject<M> = ActionFromReducer<
  * @template M Object map of reducers as provided to `combineReducers(map: M)`.
  */
 export type PreloadedStateShapeFromReducersMapObject<M> = M[keyof M] extends
-  | Reducer<any, any, any>
-  | undefined
+  Reducer<any, any, any> | undefined
   ? {
       [P in keyof M]: M[P] extends (
         inputState: infer InputState,

@@ -1,50 +1,35 @@
-// functions
-import { createStore, legacy_createStore } from './createStore'
-import combineReducers from './combineReducers'
-import bindActionCreators from './bindActionCreators'
-import applyMiddleware from './applyMiddleware'
-import compose from './compose'
-import isAction from './utils/isAction'
-import isPlainObject from './utils/isPlainObject'
-import __DO_NOT_USE__ActionTypes from './utils/actionTypes'
-
-// types
-// store
+export { applyMiddleware } from './applyMiddleware'
+export { bindActionCreators } from './bindActionCreators'
+export { combineReducers } from './combineReducers'
+export { compose } from './compose'
+export { createStore, legacy_createStore } from './createStore'
+export type {
+  Action,
+  ActionCreator,
+  ActionCreatorsMapObject,
+  AnyAction,
+  UnknownAction
+} from './types/actions'
+export type { Middleware, MiddlewareAPI } from './types/middleware'
+export type {
+  ActionFromReducer,
+  ActionFromReducersMapObject,
+  PreloadedStateShapeFromReducersMapObject,
+  Reducer,
+  ReducerFromReducersMapObject,
+  ReducersMapObject,
+  StateFromReducersMapObject
+} from './types/reducers'
 export type {
   Dispatch,
-  Unsubscribe,
   Observable,
   Observer,
   Store,
   StoreCreator,
   StoreEnhancer,
-  StoreEnhancerStoreCreator
+  StoreEnhancerStoreCreator,
+  Unsubscribe
 } from './types/store'
-// reducers
-export type {
-  Reducer,
-  ReducersMapObject,
-  StateFromReducersMapObject,
-  ReducerFromReducersMapObject,
-  ActionFromReducer,
-  ActionFromReducersMapObject,
-  PreloadedStateShapeFromReducersMapObject
-} from './types/reducers'
-// action creators
-export type { ActionCreator, ActionCreatorsMapObject } from './types/actions'
-// middleware
-export type { MiddlewareAPI, Middleware } from './types/middleware'
-// actions
-export type { Action, UnknownAction, AnyAction } from './types/actions'
-
-export {
-  createStore,
-  legacy_createStore,
-  combineReducers,
-  bindActionCreators,
-  applyMiddleware,
-  compose,
-  isAction,
-  isPlainObject,
-  __DO_NOT_USE__ActionTypes
-}
+export { ActionTypes as __DO_NOT_USE__ActionTypes } from './utils/actionTypes'
+export { isAction } from './utils/isAction'
+export { isPlainObject } from './utils/isPlainObject'

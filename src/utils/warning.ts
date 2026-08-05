@@ -3,7 +3,7 @@
  *
  * @param message The warning message.
  */
-export default function warning(message: string): void {
+export function warning(message: string): void {
   /* eslint-disable no-console */
   if (typeof console !== 'undefined' && typeof console.error === 'function') {
     console.error(message)

@@ -5,11 +5,10 @@ import type {
   Reducer,
   StateFromReducersMapObject
 } from './types/reducers'
-
-import ActionTypes from './utils/actionTypes'
-import isPlainObject from './utils/isPlainObject'
-import warning from './utils/warning'
+import { ActionTypes } from './utils/actionTypes'
+import { isPlainObject } from './utils/isPlainObject'
 import { kindOf } from './utils/kindOf'
+import { warning } from './utils/warning'
 
 function getUnexpectedStateShapeWarningMessage(
   inputState: object,
@@ -57,6 +56,8 @@ function getUnexpectedStateShapeWarningMessage(
       `"${reducerKeys.join('", "')}". Unexpected keys will be ignored.`
     )
   }
+
+  return undefined
 }
 
 function assertReducerShape(reducers: {
@@ -64,7 +65,7 @@ function assertReducerShape(reducers: {
 }) {
   Object.keys(reducers).forEach(key => {
     const reducer = reducers[key]
-    const initialState = reducer(undefined, { type: ActionTypes.INIT })
+    const initialState = reducer?.(undefined, { type: ActionTypes.INIT })
 
     if (typeof initialState === 'undefined') {
       throw new Error(
@@ -77,7 +78,7 @@ function assertReducerShape(reducers: {
     }
 
     if (
-      typeof reducer(undefined, {
+      typeof reducer?.(undefined, {
         type: ActionTypes.PROBE_UNKNOWN_ACTION()
       }) === 'undefined'
     ) {
@@ -111,7 +112,7 @@ function assertReducerShape(reducers: {
  * @returns A reducer function that invokes every reducer inside the passed
  *   object, and builds a state object with the same shape.
  */
-export default function combineReducers<M>(
+export function combineReducers<M>(
   reducers: M
 ): M[keyof M] extends Reducer<any, any, any> | undefined
   ? Reducer<
@@ -120,18 +121,17 @@ export default function combineReducers<M>(
       Partial<PreloadedStateShapeFromReducersMapObject<M>>
     >
   : never
-export default function combineReducers(reducers: {
+export function combineReducers(reducers: {
   [key: string]: Reducer<any, any, any>
 }) {
   const reducerKeys = Object.keys(reducers)
   const finalReducers: { [key: string]: Reducer<any, any, any> } = {}
-  for (let i = 0; i < reducerKeys.length; i++) {
-    const key = reducerKeys[i]
-
-    if (process.env.NODE_ENV !== 'production') {
-      if (typeof reducers[key] === 'undefined') {
-        warning(`No reducer provided for key "${key}"`)
-      }
+  for (const key of reducerKeys) {
+    if (
+      process.env.NODE_ENV !== 'production' &&
+      typeof reducers[key] === 'undefined'
+    ) {
+      warning(`No reducer provided for key "${key}"`)
     }
 
     if (typeof reducers[key] === 'function') {
@@ -176,11 +176,10 @@ export default function combineReducers(reducers: {
 
     let hasChanged = false
     const nextState: StateFromReducersMapObject<typeof reducers> = {}
-    for (let i = 0; i < finalReducerKeys.length; i++) {
-      const key = finalReducerKeys[i]
+    for (const key of finalReducerKeys) {
       const reducer = finalReducers[key]
       const previousStateForKey = state[key]
-      const nextStateForKey = reducer(previousStateForKey, action)
+      const nextStateForKey = reducer?.(previousStateForKey, action)
       if (typeof nextStateForKey === 'undefined') {
         const actionType = action && action.type
         throw new Error(

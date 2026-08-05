@@ -1,6 +1,6 @@
-import compose from './compose'
+import { compose } from './compose'
 import type { Middleware, MiddlewareAPI } from './types/middleware'
-import type { StoreEnhancer, Dispatch } from './types/store'
+import type { Dispatch, StoreEnhancer } from './types/store'
 
 /**
  * Creates a store enhancer that applies middleware to the dispatch method
@@ -21,36 +21,36 @@ import type { StoreEnhancer, Dispatch } from './types/store'
  * @template Ext Dispatch signature added by a middleware.
  * @template S The type of the state supported by a middleware.
  */
-export default function applyMiddleware(): StoreEnhancer
-export default function applyMiddleware<Ext1, S>(
+export function applyMiddleware(): StoreEnhancer
+export function applyMiddleware<Ext1, S>(
   middleware1: Middleware<Ext1, S, any>
 ): StoreEnhancer<{ dispatch: Ext1 }>
-export default function applyMiddleware<Ext1, Ext2, S>(
+export function applyMiddleware<Ext1, Ext2, S>(
   middleware1: Middleware<Ext1, S, any>,
   middleware2: Middleware<Ext2, S, any>
 ): StoreEnhancer<{ dispatch: Ext1 & Ext2 }>
-export default function applyMiddleware<Ext1, Ext2, Ext3, S>(
+export function applyMiddleware<Ext1, Ext2, Ext3, S>(
   middleware1: Middleware<Ext1, S, any>,
   middleware2: Middleware<Ext2, S, any>,
   middleware3: Middleware<Ext3, S, any>
 ): StoreEnhancer<{ dispatch: Ext1 & Ext2 & Ext3 }>
-export default function applyMiddleware<Ext1, Ext2, Ext3, Ext4, S>(
+export function applyMiddleware<Ext1, Ext2, Ext3, Ext4, S>(
   middleware1: Middleware<Ext1, S, any>,
   middleware2: Middleware<Ext2, S, any>,
   middleware3: Middleware<Ext3, S, any>,
   middleware4: Middleware<Ext4, S, any>
 ): StoreEnhancer<{ dispatch: Ext1 & Ext2 & Ext3 & Ext4 }>
-export default function applyMiddleware<Ext1, Ext2, Ext3, Ext4, Ext5, S>(
+export function applyMiddleware<Ext1, Ext2, Ext3, Ext4, Ext5, S>(
   middleware1: Middleware<Ext1, S, any>,
   middleware2: Middleware<Ext2, S, any>,
   middleware3: Middleware<Ext3, S, any>,
   middleware4: Middleware<Ext4, S, any>,
   middleware5: Middleware<Ext5, S, any>
 ): StoreEnhancer<{ dispatch: Ext1 & Ext2 & Ext3 & Ext4 & Ext5 }>
-export default function applyMiddleware<Ext, S = any>(
+export function applyMiddleware<Ext, S = any>(
   ...middlewares: Middleware<any, S, any>[]
 ): StoreEnhancer<{ dispatch: Ext }>
-export default function applyMiddleware(
+export function applyMiddleware(
   ...middlewares: Middleware[]
 ): StoreEnhancer<any> {
   return createStore => (reducer, preloadedState) => {
