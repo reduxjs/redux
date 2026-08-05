@@ -2,11 +2,10 @@
   // For general development and intellisense.
   // Scans the entire source code against the current TS version
   // we are using during development.
-  "extends": "./tsconfig.test.json",
   "compilerOptions": {
     "allowJs": true,
-    "checkJs": true,
-    "rootDir": "."
+    "checkJs": true
   },
-  "include": ["."]
+  "extends": "./tsconfig.test.json",
+  "include": ["**/*.*"]
 }

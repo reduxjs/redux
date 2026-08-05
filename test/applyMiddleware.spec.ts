@@ -1,11 +1,10 @@
-import { createStore, applyMiddleware } from 'redux'
-import type { Middleware, MiddlewareAPI, Action, Store, Dispatch } from 'redux'
-import { vi } from 'vitest'
-import * as reducers from './helpers/reducers'
+import type { Action, Dispatch, Middleware, MiddlewareAPI, Store } from 'redux'
+import { applyMiddleware, createStore } from 'redux'
 import { addTodo, addTodoAsync, addTodoIfEmpty } from './helpers/actionCreators'
 import { thunk } from './helpers/middleware'
+import * as reducers from './helpers/reducers'
 
-describe('applyMiddleware', () => {
+describe(applyMiddleware, () => {
   it('warns when dispatching during middleware setup', () => {
     function dispatchingMiddleware(store: Store) {
       store.dispatch(addTodo("Don't dispatch in middleware setup"))
@@ -35,8 +34,8 @@ describe('applyMiddleware', () => {
 
     expect(spy.mock.calls.length).toEqual(1)
 
-    expect(spy.mock.calls[0][0]).toHaveProperty('getState')
-    expect(spy.mock.calls[0][0]).toHaveProperty('dispatch')
+    expect(spy.mock.calls[0]?.[0]).toHaveProperty('getState')
+    expect(spy.mock.calls[0]?.[0]).toHaveProperty('dispatch')
 
     expect(store.getState()).toEqual([
       { id: 1, text: 'Use Redux' },
