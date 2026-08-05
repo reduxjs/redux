@@ -35,8 +35,8 @@ describe('applyMiddleware', () => {
 
     expect(spy.mock.calls.length).toEqual(1)
 
-    expect(spy.mock.calls[0][0]).toHaveProperty('getState')
-    expect(spy.mock.calls[0][0]).toHaveProperty('dispatch')
+    expect(spy.mock.calls[0]?.[0]).toHaveProperty('getState')
+    expect(spy.mock.calls[0]?.[0]).toHaveProperty('dispatch')
 
     expect(store.getState()).toEqual([
       { id: 1, text: 'Use Redux' },

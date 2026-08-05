@@ -5,11 +5,10 @@ import type {
   Reducer,
   StateFromReducersMapObject
 } from './types/reducers'
-
 import ActionTypes from './utils/actionTypes'
 import isPlainObject from './utils/isPlainObject'
-import warning from './utils/warning'
 import { kindOf } from './utils/kindOf'
+import warning from './utils/warning'
 
 function getUnexpectedStateShapeWarningMessage(
   inputState: object,
@@ -57,6 +56,8 @@ function getUnexpectedStateShapeWarningMessage(
       `"${reducerKeys.join('", "')}". Unexpected keys will be ignored.`
     )
   }
+
+  return undefined
 }
 
 function assertReducerShape(reducers: {
@@ -64,7 +65,7 @@ function assertReducerShape(reducers: {
 }) {
   Object.keys(reducers).forEach(key => {
     const reducer = reducers[key]
-    const initialState = reducer(undefined, { type: ActionTypes.INIT })
+    const initialState = reducer?.(undefined, { type: ActionTypes.INIT })
 
     if (typeof initialState === 'undefined') {
       throw new Error(
@@ -77,7 +78,7 @@ function assertReducerShape(reducers: {
     }
 
     if (
-      typeof reducer(undefined, {
+      typeof reducer?.(undefined, {
         type: ActionTypes.PROBE_UNKNOWN_ACTION()
       }) === 'undefined'
     ) {
@@ -125,13 +126,12 @@ export default function combineReducers(reducers: {
 }) {
   const reducerKeys = Object.keys(reducers)
   const finalReducers: { [key: string]: Reducer<any, any, any> } = {}
-  for (let i = 0; i < reducerKeys.length; i++) {
-    const key = reducerKeys[i]
-
-    if (process.env.NODE_ENV !== 'production') {
-      if (typeof reducers[key] === 'undefined') {
-        warning(`No reducer provided for key "${key}"`)
-      }
+  for (const key of reducerKeys) {
+    if (
+      process.env.NODE_ENV !== 'production' &&
+      typeof reducers[key] === 'undefined'
+    ) {
+      warning(`No reducer provided for key "${key}"`)
     }
 
     if (typeof reducers[key] === 'function') {
@@ -176,11 +176,10 @@ export default function combineReducers(reducers: {
 
     let hasChanged = false
     const nextState: StateFromReducersMapObject<typeof reducers> = {}
-    for (let i = 0; i < finalReducerKeys.length; i++) {
-      const key = finalReducerKeys[i]
+    for (const key of finalReducerKeys) {
       const reducer = finalReducers[key]
       const previousStateForKey = state[key]
-      const nextStateForKey = reducer(previousStateForKey, action)
+      const nextStateForKey = reducer?.(previousStateForKey, action)
       if (typeof nextStateForKey === 'undefined') {
         const actionType = action && action.type
         throw new Error(

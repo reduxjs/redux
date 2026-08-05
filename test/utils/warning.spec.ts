@@ -10,7 +10,7 @@ describe('Utils', () => {
       console.error = spy
       try {
         warning('Test')
-        expect(spy.mock.calls[0][0]).toBe('Test')
+        expect(spy.mock.calls[0]?.[0]).toBe('Test')
       } finally {
         spy.mockClear()
         console.error = preSpy

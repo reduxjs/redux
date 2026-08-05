@@ -1,7 +1,7 @@
+import type { CounterState } from './counterSlice'
 import counterReducer, {
-  CounterState,
-  increment,
   decrement,
+  increment,
   incrementByAmount
 } from './counterSlice'
 

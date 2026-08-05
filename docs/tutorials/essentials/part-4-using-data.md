@@ -215,7 +215,8 @@ Given all those requirements, here's how our `postsSlice` definition should look
 
 ```ts title="features/posts/postsSlice.ts"
 // highlight-next-line
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 // omit state types
 
@@ -599,7 +600,8 @@ You can't have a "social media" app if there aren't any other people involved! L
 Since the concept of "users" is different than the concept of "posts", we want to keep the code and data for the users separated from the code and data for posts. We'll add a new `features/users` folder, and put a `usersSlice` file in there. Like with the posts slice, for now we'll add some initial entries so that we have data to work with.
 
 ```ts title="features/users/usersSlice.ts"
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 import type { RootState } from '@/app/store'
 
@@ -926,7 +928,8 @@ Then, we can define a new reducer that will handle updating the reaction count f
 Like with editing posts, we need to know the ID of the post, and which reaction button the user clicked on. We'll have our `action.payload` be an object that looks like `{id, reaction}`. The reducer can then find the right post object, and update the correct reactions field.
 
 ```ts title="features/posts/postsSlice.ts"
-import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, nanoid } from '@reduxjs/toolkit'
 import { sub } from 'date-fns'
 
 // highlight-start
@@ -1066,7 +1069,8 @@ The first step is to create the `authSlice` and add it to the store. This is the
 In this case, our auth state is really just the current logged-in username, and we'll reset it to `null` if they log out.
 
 ```ts title="features/auth/authSlice.ts"
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
 interface AuthState {
   username: string | null
@@ -1346,6 +1350,7 @@ export const AddPostForm = () => {
 
     e.currentTarget.reset()
   }
+}
 ```
 
 Finally, it also doesn't make sense to allow the current user to edit posts defined by _other_ users. We can update the `<SinglePostPage>` to only show an "Edit Post" button if the post author ID matches the current user ID:
@@ -1436,7 +1441,8 @@ You can chain these together, like `builder.addCase().addCase().addMatcher().add
 Given that, we can import the `userLoggedOut` action from `authSlice.ts` into `postsSlice.ts`, listen for that action inside of `postsSlice.extraReducers`, and return an empty posts array to reset the posts list on logout:
 
 ```ts title="features/posts/postsSlice.ts"
-import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, nanoid } from '@reduxjs/toolkit'
 import { sub } from 'date-fns'
 
 // highlight-next-line
