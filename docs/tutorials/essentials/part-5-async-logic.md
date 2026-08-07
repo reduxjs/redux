@@ -241,7 +241,7 @@ export type AppDispatch = typeof store.dispatch
 export type RootState = ReturnType<typeof store.getState>
 // highlight-start
 // Export a reusable type for handwritten thunks
-export type AppThunk = ThunkAction<void, RootState, unknown, Action>
+export type AppThunk = ThunkAction<void, RootState, undefined, Action>
 // highlight-end
 ```
 
