@@ -40,7 +40,9 @@ function getUnexpectedStateShapeWarningMessage(
   }
 
   const unexpectedKeys = Object.keys(inputState).filter(
-    key => !reducers.hasOwnProperty(key) && !unexpectedKeyCache[key]
+    key =>
+      !Object.prototype.hasOwnProperty.call(reducers, key) &&
+      !unexpectedKeyCache[key]
   )
 
   unexpectedKeys.forEach(key => {
@@ -144,7 +146,7 @@ export default function combineReducers(reducers: {
   // keys multiple times.
   let unexpectedKeyCache: { [key: string]: true }
   if (process.env.NODE_ENV !== 'production') {
-    unexpectedKeyCache = {}
+    unexpectedKeyCache = Object.create(null)
   }
 
   let shapeAssertionError: unknown
