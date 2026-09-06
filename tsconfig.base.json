@@ -8,7 +8,7 @@
     "jsx": "react",
     "lib": ["DOM", "ESNext"],
     "module": "ESnext",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "noErrorTruncation": true,
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": false,
