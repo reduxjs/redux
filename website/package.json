@@ -45,5 +45,6 @@
     "deploy": "docusaurus deploy",
     "start": "docusaurus start",
     "swizzle": "docusaurus swizzle"
-  }
+  },
+  "packageManager": "yarn@4.4.1"
 }
