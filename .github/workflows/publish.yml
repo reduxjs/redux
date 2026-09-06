@@ -17,11 +17,16 @@ jobs:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           persist-credentials: false
+      - uses: pnpm/setup@84cb39b217b10273981911c288cd62326dc7c6d2 # v2.0.2
+        with:
+          # This job installs below with --frozen-lockfile, after setup-node has
+          # configured the cache.
+          install: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '24.x'
           registry-url: 'https://registry.npmjs.org'
-          cache: 'yarn'
-      - run: yarn install --frozen-lockfile
-      - run: yarn test
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
       - run: npm publish --access public --provenance
