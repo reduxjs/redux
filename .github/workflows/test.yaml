@@ -23,7 +23,7 @@ jobs:
               - 'src/**'
               - 'test/**'
               - '.github/**/*.yaml'
-              - 'tsup.config.ts'
+              - 'tsdown.config.mts'
               - 'pnpm-lock.yaml'
 
   build:

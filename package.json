@@ -48,7 +48,7 @@
     "type-tests": "tsc -p tsconfig.test.json --noEmit",
     "test:watch": "vitest --watch",
     "test:cov": "vitest --coverage",
-    "build": "pnpm clean && tsup",
+    "build": "pnpm clean && tsdown && tsx scripts/stripSourcemapFileField.mts",
     "prepublishOnly": "pnpm clean && pnpm format:check && pnpm lint && pnpm test",
     "prepack": "pnpm build",
     "tsc": "tsc"
