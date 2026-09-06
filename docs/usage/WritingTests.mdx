@@ -431,7 +431,8 @@ export type RootState = ReturnType<typeof rootReducer>
 export type AppStore = ReturnType<typeof setupStore>
 export type AppDispatch = AppStore['dispatch']
 // file: utils/test-utils.tsx noEmit
-import React, { PropsWithChildren } from 'react'
+import React from 'react'
+import type { PropsWithChildren, JSX } from 'react'
 import { render } from '@testing-library/react'
 import type { RenderOptions } from '@testing-library/react'
 import { userEvent } from '@testing-library/user-event'
