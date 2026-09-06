@@ -84,5 +84,5 @@
     "@typescript-eslint/parser": "7.3.1"
   },
   "sideEffects": false,
-  "packageManager": "yarn@4.4.1"
+  "packageManager": "pnpm@11.23.0"
 }
