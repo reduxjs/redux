@@ -40,8 +40,8 @@
   ],
   "scripts": {
     "clean": "rimraf dist/ coverage/",
-    "format": "prettier --write \"{src,test}/**/*.{js,ts}\" \"**/*.md\"",
-    "format:check": "prettier --list-different \"{src,test}/**/*.{js,ts}\" \"**/*.md\"",
+    "format": "oxfmt \"{src,test}/**/*.{js,ts}\" \"docs/**/*.md\"",
+    "format:check": "oxfmt --check \"{src,test}/**/*.{js,ts}\" \"docs/**/*.md\"",
     "lint": "oxlint src test",
     "lint:fix": "oxlint --fix src test",
     "test": "vitest --run --typecheck",
