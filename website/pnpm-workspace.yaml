@@ -1,0 +1,23 @@
+# The docs site is an independent project, not part of the root pnpm project.
+#
+# pnpm finds a project's root by walking up until it finds a
+# pnpm-workspace.yaml. Without this file, pnpm run from here walks up to the
+# repo root and operates on the redux project instead of the site. This file
+# stops that walk. It replaces the way the site used to inherit the repo
+# root's `.yarnrc.yml` and its pinned `yarnPath` under Yarn.
+
+# Matches the flat layout the site had under Yarn's node-modules linker.
+nodeLinker: hoisted
+
+# Keep the content-addressable store inside the site directory so Netlify can
+# cache it between builds, the way `.yarn/cache` used to be cached.
+storeDir: .pnpm-store
+
+# pnpm blocks dependency install scripts by default and exits non-zero when it
+# skips any. Yarn ran them here, so these are listed to keep the site installing
+# the way it did before.
+allowBuilds:
+  '@swc/core': true
+  core-js: true
+  esbuild: true
+  msw: true

@@ -46,5 +46,5 @@
     "start": "docusaurus start",
     "swizzle": "docusaurus swizzle"
   },
-  "packageManager": "yarn@4.4.1"
+  "packageManager": "pnpm@11.23.0"
 }

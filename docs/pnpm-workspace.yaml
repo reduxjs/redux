@@ -1,0 +1,23 @@
+# `docs/` is an independent project, not part of the root pnpm project. Its
+# package.json only exists so the code blocks in these Markdown files type-check
+# against the libraries they import.
+#
+# pnpm finds a project's root by walking up until it finds a
+# pnpm-workspace.yaml. Without this file, pnpm run from here walks up to the
+# repo root and operates on the redux project instead. This file stops that
+# walk. It replaces the way this folder used to inherit the repo root's
+# `.yarnrc.yml` and its pinned `yarnPath` under Yarn.
+
+# Matches the flat layout this folder had under Yarn's node-modules linker.
+nodeLinker: hoisted
+
+# Keep the content-addressable store inside this folder so Netlify can cache it
+# between builds, the way `.yarn/cache` used to be cached.
+storeDir: .pnpm-store
+
+# pnpm blocks dependency install scripts by default and exits non-zero when it
+# skips any. Yarn ran them here, so these are listed to keep this folder
+# installing the way it did before.
+allowBuilds:
+  esbuild: true
+  msw: true
