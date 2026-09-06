@@ -15,8 +15,7 @@
     "target": "ESNext",
     "allowJs": true,
     "checkJs": false,
-    "alwaysStrict": false,
-    "baseUrl": "..",
+    "noUncheckedSideEffectImports": false,
     "types": ["@testing-library/jest-dom"],
     "paths": {}
   }

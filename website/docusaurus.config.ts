@@ -1,5 +1,8 @@
 import { resolve } from 'path'
-import { linkDocblocks, transpileCodeblocks } from 'remark-typescript-tools'
+import {
+  linkDocblocks,
+  transpileCodeblocks
+} from './plugins/remark-typescript-tools/index.js'
 import type { Options, ThemeConfig } from '@docusaurus/preset-classic'
 import type { Config } from '@docusaurus/types'
 import type { Options as UmamiOptions } from '@dipakparmar/docusaurus-plugin-umami'
