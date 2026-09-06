@@ -314,9 +314,7 @@ import { logout } from '@/features/auth/authSlice'
 const postsSlice = createSlice({
   name,
   initialState,
-  reducers: {
-    /* omitted */
-  },
+  reducers: {/* omitted */},
   extraReducers: builder => {
     builder
       // highlight-start
