@@ -64,6 +64,7 @@
     "esbuild-extra": "^0.3.1",
     "glob": "^10.3.10",
     "netlify-plugin-cache": "^1.0.3",
+    "oxfmt": "^0.63.0",
     "oxlint": "^1.81.0",
     "pkg-pr-new": "^0.0.75",
     "prettier": "^3.2.5",
