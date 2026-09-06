@@ -62,6 +62,7 @@
     "@typescript-eslint/eslint-plugin": "^7.3.1",
     "@typescript-eslint/parser": "^7.3.1",
     "cross-env": "^7.0.3",
+    "esbuild": "^0.19.12",
     "esbuild-extra": "^0.3.1",
     "eslint": "^8.57.0",
     "eslint-config-react-app": "^7.0.1",

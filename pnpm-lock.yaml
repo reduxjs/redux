@@ -36,6 +36,9 @@ importers:
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
+      esbuild:
+        specifier: ^0.19.12
+        version: 0.19.12
       esbuild-extra:
         specifier: ^0.3.1
         version: 0.3.1(esbuild@0.25.11)(typescript@5.8.2)
