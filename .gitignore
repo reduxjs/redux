@@ -9,9 +9,10 @@ es
 .cache
 *.tgz
 
-# `website/` and `docs/` are still Yarn projects.
-website/.yarn/
-docs/.yarn/
+# pnpm content-addressable stores kept inside the repo so Netlify can cache them.
+.pnpm-store/
+website/.pnpm-store/
+docs/.pnpm-store/
 
 # yalc
 .yalc
