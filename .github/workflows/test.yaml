@@ -229,9 +229,9 @@ jobs:
       matrix:
         node: ['24.x']
         example: ['next', 'vite', 'node', 'react-native', 'expo']
-    defaults:
-      run:
-        working-directory: ${{ runner.temp }}/redux-toolkit/examples/publish-ci/${{ matrix.example }}
+    # Each `run` step below sets `working-directory` itself. A job-level
+    # `defaults.run.working-directory` would be shorter, but the `runner`
+    # context is not available there, and the examples live under $RUNNER_TEMP.
     steps:
       - name: Checkout repo
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
@@ -241,9 +241,8 @@ jobs:
       - name: Install pnpm
         uses: pnpm/setup@84cb39b217b10273981911c288cd62326dc7c6d2 # v2.0.2
         with:
-          # The examples are cloned below, so there is nothing to install yet,
-          # and `defaults.run.working-directory` does not apply to `uses` steps
-          # anyway. Each example is installed explicitly once it exists.
+          # The examples are cloned below, so there is nothing to install yet.
+          # Each example is installed explicitly once it exists.
           install: false
 
       # No `cache:` here. setup-node's cache input runs the package manager at
@@ -267,9 +266,11 @@ jobs:
           git -C "$RUNNER_TEMP/redux-toolkit" checkout FETCH_HEAD
 
       - name: Check folder contents
+        working-directory: ${{ runner.temp }}/redux-toolkit/examples/publish-ci/${{ matrix.example }}
         run: ls -l .
 
       - name: Install example deps
+        working-directory: ${{ runner.temp }}/redux-toolkit/examples/publish-ci/${{ matrix.example }}
         run: pnpm install --frozen-lockfile
 
       # There is deliberately no "remove the existing redux" step.
@@ -283,12 +284,15 @@ jobs:
           path: ${{ runner.temp }}/redux-toolkit/examples/publish-ci/${{ matrix.example }}
 
       - name: Check folder contents
+        working-directory: ${{ runner.temp }}/redux-toolkit/examples/publish-ci/${{ matrix.example }}
         run: ls -l .
 
       - name: Install build artifact
+        working-directory: ${{ runner.temp }}/redux-toolkit/examples/publish-ci/${{ matrix.example }}
         run: pnpm add ./package.tgz
 
       - name: Show installed package versions
+        working-directory: ${{ runner.temp }}/redux-toolkit/examples/publish-ci/${{ matrix.example }}
         run: pnpm list redux && pnpm why redux
 
       # No `cache: 'gradle'` here: setup-java hashes gradle files under the
@@ -306,14 +310,17 @@ jobs:
           # The RTK examples are cloned at a pinned commit, so their
           # `caniuse-lite` is frozen and will always look stale here.
           BROWSERSLIST_IGNORE_OLD_DATA: true
+        working-directory: ${{ runner.temp }}/redux-toolkit/examples/publish-ci/${{ matrix.example }}
         run: pnpm build
 
       - name: Install Playwright browser
         if: matrix.example == 'next' || matrix.example == 'vite'
+        working-directory: ${{ runner.temp }}/redux-toolkit/examples/publish-ci/${{ matrix.example }}
         run: pnpm exec playwright install --with-deps chromium
 
       # Each example's `test` script first runs RTK's bundled-modules snapshot
       # check, which records which `redux/dist/*` file the bundler picked, so
       # this also verifies the package's `exports` map end to end.
       - name: Run test step
+        working-directory: ${{ runner.temp }}/redux-toolkit/examples/publish-ci/${{ matrix.example }}
         run: pnpm test
