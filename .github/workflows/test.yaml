@@ -24,7 +24,7 @@ jobs:
               - 'test/**'
               - '.github/**/*.yaml'
               - 'tsup.config.ts'
-              - 'yarn.lock'
+              - 'pnpm-lock.yaml'
 
   build:
     needs: changes
@@ -43,26 +43,35 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Install pnpm
+        uses: pnpm/setup@84cb39b217b10273981911c288cd62326dc7c6d2 # v2.0.2
+        with:
+          # Every job here runs its own install step, with the flags that job
+          # needs. pnpm/setup installs by default, which would install twice.
+          install: false
+
       - name: Use node ${{ matrix.node }}
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: ${{ matrix.node }}
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - name: Install deps
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Lint
-        run: yarn lint
+        run: pnpm lint
 
       - name: Run test suite
-        run: yarn test
+        run: pnpm test
 
       - name: Build
-        run: yarn build
+        run: pnpm build
 
+      # `pnpm pack` names the tarball `<name>-<version>.tgz`; `yarn pack`
+      # defaulted to `package.tgz`, which every downstream job expects.
       - name: Pack
-        run: yarn pack
+        run: pnpm pack --out package.tgz
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
@@ -83,14 +92,21 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Install pnpm
+        uses: pnpm/setup@84cb39b217b10273981911c288cd62326dc7c6d2 # v2.0.2
+        with:
+          # Every job here runs its own install step, with the flags that job
+          # needs. pnpm/setup installs by default, which would install twice.
+          install: false
+
       - name: Use node ${{ matrix.node }}
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: ${{ matrix.node }}
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - name: Install deps
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
@@ -100,7 +116,7 @@ jobs:
       - run: ls -lah
 
       - name: Install build artifact
-        run: yarn  add ./package.tgz
+        run: pnpm add ./package.tgz
 
       - name: Erase path aliases
         run: sed -i -e /@remap-prod-remove-line/d tsconfig.base.json
@@ -108,7 +124,7 @@ jobs:
       - name: Run tests, against dist
         env:
           TEST_DIST: true
-        run: yarn test
+        run: pnpm test
 
   test-types:
     name: Test Types with TypeScript ${{ matrix.ts }}
@@ -126,17 +142,24 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Install pnpm
+        uses: pnpm/setup@84cb39b217b10273981911c288cd62326dc7c6d2 # v2.0.2
+        with:
+          # Every job here runs its own install step, with the flags that job
+          # needs. pnpm/setup installs by default, which would install twice.
+          install: false
+
       - name: Use node ${{ matrix.node }}
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: ${{ matrix.node }}
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - name: Install deps
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Install TypeScript ${{ matrix.ts }}
-        run: yarn add typescript@${{ matrix.ts }}
+        run: pnpm add typescript@${{ matrix.ts }}
 
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
@@ -144,7 +167,7 @@ jobs:
           path: .
 
       - name: Install build artifact
-        run: yarn add ./package.tgz
+        run: pnpm add ./package.tgz
 
       - name: Erase path aliases
         run: sed -i -e /@remap-prod-remove-line/d tsconfig.base.json
@@ -153,8 +176,8 @@ jobs:
         env:
           TEST_DIST: true
         run: |
-          yarn tsc --version
-          yarn type-tests
+          pnpm exec tsc --version
+          pnpm type-tests
 
   are-the-types-wrong:
     name: Check package config with are-the-types-wrong
@@ -171,11 +194,18 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Install pnpm
+        uses: pnpm/setup@84cb39b217b10273981911c288cd62326dc7c6d2 # v2.0.2
+        with:
+          # Every job here runs its own install step, with the flags that job
+          # needs. pnpm/setup installs by default, which would install twice.
+          install: false
+
       - name: Use node ${{ matrix.node }}
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: ${{ matrix.node }}
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
@@ -183,11 +213,11 @@ jobs:
           path: .
 
       - name: Install dependencies
-        run: yarn install
+        run: pnpm install --frozen-lockfile
 
       # Note: We currently expect "FalseESM" failures for Node16 + `moduleResolution: "node16"
       - name: Run are-the-types-wrong
-        run: yarn attw ./package.tgz --format table --ignore-rules false-esm
+        run: pnpm exec attw ./package.tgz --format table --ignore-rules false-esm
 
   test-published-artifact:
     name: Test Published Artifact ${{ matrix.example }}
@@ -198,79 +228,99 @@ jobs:
       fail-fast: false
       matrix:
         node: ['24.x']
-        example:
-          [
-            'cra4',
-            'cra5',
-            'next',
-            'vite',
-            'node-standard',
-            'node-esm',
-            'react-native',
-            'expo'
-          ]
+        example: ['next', 'vite', 'node', 'react-native', 'expo']
+    # Each `run` step below sets `working-directory` itself. A job-level
+    # `defaults.run.working-directory` would be shorter, but the `runner`
+    # context is not available there, and the examples live under $RUNNER_TEMP.
     steps:
       - name: Checkout repo
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           persist-credentials: false
 
+      - name: Install pnpm
+        uses: pnpm/setup@84cb39b217b10273981911c288cd62326dc7c6d2 # v2.0.2
+        with:
+          # The examples are cloned below, so there is nothing to install yet.
+          # Each example is installed explicitly once it exists.
+          install: false
+
+      # No `cache:` here. setup-node's cache input runs the package manager at
+      # the repository root, and the projects this job installs live in a
+      # separate clone under $RUNNER_TEMP with their own lockfiles.
       - name: Use node ${{ matrix.node }}
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: ${{ matrix.node }}
-          cache: 'yarn'
 
-      - name: Clone RTK repo
+      # The examples are RTK's `examples/publish-ci/*` projects, cloned at a
+      # pinned commit so a change on RTK's side cannot break this job without
+      # someone bumping the pin. The clone lives outside the checkout so that
+      # nothing in this repo's tree can be picked up by config discovery
+      # walking up from the example directory.
+      - name: Clone RTK repo (pinned to known-good commit)
+        working-directory: ${{ runner.temp }}
         run: |
-          git init ./redux-toolkit
-          git -C ./redux-toolkit fetch --depth 1 https://github.com/reduxjs/redux-toolkit.git 7c49510ff5dc6aad7cda24a59ec6c38a1af053be
-          git -C ./redux-toolkit checkout FETCH_HEAD
-
-      - name: Cache example deps
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
-        with:
-          path: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}/node_modules
-          key: test-published-artifact-${{ matrix.example }}-node_modules
+          git init "$RUNNER_TEMP/redux-toolkit"
+          git -C "$RUNNER_TEMP/redux-toolkit" fetch --depth 1 https://github.com/reduxjs/redux-toolkit.git 5b4795b5d3e8a0ab19bf94d8d3413168804ade64
+          git -C "$RUNNER_TEMP/redux-toolkit" checkout FETCH_HEAD
 
       - name: Check folder contents
+        working-directory: ${{ runner.temp }}/redux-toolkit/examples/publish-ci/${{ matrix.example }}
         run: ls -l .
 
-      - name: Install deps
-        working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
-        env:
-          YARN_ENABLE_IMMUTABLE_INSTALLS: false
-          YARN_ENABLE_SCRIPTS: false
-        run: yarn install
+      - name: Install example deps
+        working-directory: ${{ runner.temp }}/redux-toolkit/examples/publish-ci/${{ matrix.example }}
+        run: pnpm install --frozen-lockfile
 
+      # There is deliberately no "remove the existing redux" step.
+      # `pnpm add ./package.tgz` replaces the dependency on its own, and a
+      # `pnpm remove` step has intermittently left a child process holding the
+      # step's stdout pipe open after the command finished, which Actions
+      # reports as a step that never ends.
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: package
-          path: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
+          path: ${{ runner.temp }}/redux-toolkit/examples/publish-ci/${{ matrix.example }}
 
       - name: Check folder contents
-        working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
+        working-directory: ${{ runner.temp }}/redux-toolkit/examples/publish-ci/${{ matrix.example }}
         run: ls -l .
 
       - name: Install build artifact
-        working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
-        run: yarn add ./package.tgz
+        working-directory: ${{ runner.temp }}/redux-toolkit/examples/publish-ci/${{ matrix.example }}
+        run: pnpm add ./package.tgz
 
       - name: Show installed package versions
-        working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
-        run: yarn info redux && yarn why redux
+        working-directory: ${{ runner.temp }}/redux-toolkit/examples/publish-ci/${{ matrix.example }}
+        run: pnpm list redux && pnpm why redux
+
+      # No `cache: 'gradle'` here: setup-java hashes gradle files under the
+      # checkout to build its cache key and fails when none match, and the
+      # example's `android/` directory is in the $RUNNER_TEMP clone.
+      - name: Set up JDK 21 for React Native build
+        if: matrix.example == 'react-native' || matrix.example == 'expo'
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          java-version: '21.x'
+          distribution: 'temurin'
 
       - name: Build example
-        working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
         env:
-          NODE_OPTIONS: --openssl-legacy-provider
-        run: yarn build
+          # The RTK examples are cloned at a pinned commit, so their
+          # `caniuse-lite` is frozen and will always look stale here.
+          BROWSERSLIST_IGNORE_OLD_DATA: true
+        working-directory: ${{ runner.temp }}/redux-toolkit/examples/publish-ci/${{ matrix.example }}
+        run: pnpm build
 
-      - name: playwright install
-        if: matrix.example == 'next' || matrix.example == 'vite' || matrix.example == 'cra4' || matrix.example == 'cra5'
-        working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
-        run: yarn exec playwright install --with-deps chromium
+      - name: Install Playwright browser
+        if: matrix.example == 'next' || matrix.example == 'vite'
+        working-directory: ${{ runner.temp }}/redux-toolkit/examples/publish-ci/${{ matrix.example }}
+        run: pnpm exec playwright install --with-deps chromium
 
+      # Each example's `test` script first runs RTK's bundled-modules snapshot
+      # check, which records which `redux/dist/*` file the bundler picked, so
+      # this also verifies the package's `exports` map end to end.
       - name: Run test step
-        working-directory: ./redux-toolkit/examples/publish-ci/${{ matrix.example }}
-        run: yarn test
+        working-directory: ${{ runner.temp }}/redux-toolkit/examples/publish-ci/${{ matrix.example }}
+        run: pnpm test

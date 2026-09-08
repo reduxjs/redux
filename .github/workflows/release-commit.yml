@@ -17,24 +17,33 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
-      - run: corepack enable
+      # No `corepack enable` here. pnpm/setup installs pnpm itself and reads the
+      # version from the packageManager field; running both means a Corepack
+      # shim and an action-installed binary competing on PATH.
+      - uses: pnpm/setup@84cb39b217b10273981911c288cd62326dc7c6d2 # v2.0.2
+        with:
+          # This job installs below, after setup-node has configured the cache.
+          install: false
 
       - name: Setup Node
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
-          cache: 'yarn'
+          cache: 'pnpm'
           check-latest: true
           node-version: '24.x'
 
       - name: Install dependencies
-        run: yarn install
+        run: pnpm install
 
       - name: Build
-        run: yarn run build
+        run: pnpm run build
 
+      # `--pnpm` tells pkg-pr-new to build the tarball with `pnpm pack` rather
+      # than `yarn pack`. The `--packageManager` list is unrelated: it controls
+      # which install commands the PR comment offers, and stays as-is.
       - name: Publish
         id: publish
         run: >
-          yarn run --binaries-only --top-level pkg-pr-new publish
+          pnpm exec pkg-pr-new publish
           .
-          --yarn --packageManager="npm,yarn,pnpm,bun" --commentWithDev --commentWithSha
+          --pnpm --packageManager="npm,yarn,pnpm,bun" --commentWithDev --commentWithSha

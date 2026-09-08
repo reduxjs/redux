@@ -1,6 +1,6 @@
 {
   "hooks": {
-    "after:bump": "yarn && git add -u"
+    "after:bump": "pnpm install && git add -u"
   },
   "git": {
     "tagName": "v${version}"

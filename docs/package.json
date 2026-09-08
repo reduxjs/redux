@@ -10,5 +10,6 @@
     "vitest": "^4.0.5",
     "vitest-browser-react": "^2.0.2"
   },
-  "name": "docs"
+  "name": "docs",
+  "packageManager": "yarn@4.4.1"
 }

@@ -6,19 +6,10 @@ dist
 lib
 es
 
-# Yarn
 .cache
-.yarnrc
-.yarn/cache/
-.yarn/*
-!.yarn/patches
-!.yarn/releases
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
-.pnp.*
 *.tgz
 
+# `website/` and `docs/` are still Yarn projects.
 website/.yarn/
 docs/.yarn/
 
