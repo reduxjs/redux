@@ -11,5 +11,5 @@
     "vitest-browser-react": "^2.0.2"
   },
   "name": "docs",
-  "packageManager": "yarn@4.4.1"
+  "packageManager": "pnpm@11.23.0"
 }
