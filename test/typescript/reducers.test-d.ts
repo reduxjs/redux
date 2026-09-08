@@ -49,10 +49,7 @@ describe('type tests', () => {
     ).toEqualTypeOf(s)
 
     // State shape is strictly checked.
-    expectTypeOf(reducer).parameters.not.toMatchTypeOf([
-      'string',
-      { type: 'INCREMENT' }
-    ])
+    expectTypeOf(reducer).parameters.not.toExtend<[string, { type: string }]>()
 
     // Combined reducer also accepts any action.
     const combined = combineReducers({ sub: reducer })
@@ -64,10 +61,9 @@ describe('type tests', () => {
     )
 
     // Combined reducer's state is strictly checked.
-    expectTypeOf(combined).parameters.not.toMatchTypeOf([
-      { unknown: '' },
-      { type: 'INCREMENT' }
-    ])
+    expectTypeOf(combined).parameters.not.toExtend<
+      [{ unknown: string }, { type: string }]
+    >()
   })
 
   test('reducer definition using discriminated unions.', () => {
@@ -151,18 +147,16 @@ describe('type tests', () => {
     expectTypeOf(reducer0(s, { type: 'INCREMENT', count: 10 })).toEqualTypeOf(s)
 
     // Known actions are strictly checked.
-    expectTypeOf(reducer0).parameters.not.toMatchTypeOf([
-      s,
-      { type: 'DECREMENT', coun: 10 }
-    ])
+    expectTypeOf(reducer0).parameters.not.toExtend<
+      [typeof s, { type: string; coun: number }]
+    >()
 
     // Unknown actions are rejected.
-    expectTypeOf(reducer0).parameters.not.toMatchTypeOf([
-      s,
-      { type: 'SOME_OTHER_TYPE' }
-    ])
+    expectTypeOf(reducer0).parameters.not.toExtend<
+      [typeof s, { type: string }]
+    >()
 
-    expectTypeOf(reducer0).parameters.not.toMatchTypeOf<
+    expectTypeOf(reducer0).parameters.not.toExtend<
       [typeof s, { type: 'SOME_OTHER_TYPE'; someField: 'value' }]
     >()
 
@@ -175,11 +169,11 @@ describe('type tests', () => {
 
     expectTypeOf(combined).toBeCallableWith(cs, { type: 'MULTIPLY' })
 
-    expectTypeOf(combined).parameters.not.toMatchTypeOf<
+    expectTypeOf(combined).parameters.not.toExtend<
       [typeof cs, { type: 'init' }]
     >()
 
-    expectTypeOf(combined).parameters.not.toMatchTypeOf<
+    expectTypeOf(combined).parameters.not.toExtend<
       [typeof cs, { type: 'SOME_OTHER_TYPE' }]
     >()
 
@@ -192,7 +186,7 @@ describe('type tests', () => {
 
     expectTypeOf(strictCombined).toBeCallableWith(scs, { type: 'DECREMENT' })
 
-    expectTypeOf(strictCombined).parameters.not.toMatchTypeOf<
+    expectTypeOf(strictCombined).parameters.not.toExtend<
       [typeof scs, { type: 'SOME_OTHER_TYPE' }]
     >()
   })
@@ -266,7 +260,7 @@ describe('type tests', () => {
     for (const key of Object.keys(obj)) {
       expectTypeOf(obj[key]).toBeCallableWith(undefined, { type: 'SOME_TYPE' })
 
-      expectTypeOf(obj[key]).parameters.not.toMatchTypeOf<
+      expectTypeOf(obj[key]).parameters.not.toExtend<
         [undefined, 'not-an-action']
       >()
     }

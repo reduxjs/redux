@@ -68,7 +68,7 @@ describe('type tests', () => {
     // ensure that an array-based state works
     const arrayReducer = (state: any[] = []) => state || []
 
-    expectTypeOf(createStore(arrayReducer)).toMatchTypeOf<Store<any[]>>()
+    expectTypeOf(createStore(arrayReducer)).toExtend<Store<any[]>>()
 
     expectTypeOf(
       createStore(reducer, { a: 'a', b: { c: 'c', d: 'd' }, e: brandedString })

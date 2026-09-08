@@ -101,7 +101,7 @@ describe('type tests', () => {
 
         expectTypeOf(api.dispatch).toBeCallableWith({ type: 'DECREMENT' })
 
-        // `.not.toMatchTypeOf` does not work in this scenario.
+        // `.not.toExtend` does not work in this scenario.
         expectTypeOf(api.dispatch)
           .parameter(0)
           .not.toEqualTypeOf({ type: 'UNKNOWN' })
@@ -123,30 +123,26 @@ describe('type tests', () => {
 
       expectTypeOf(storeWithLogger.dispatch)
         .parameter(0)
-        .not.toMatchTypeOf(Promise.resolve({ type: 'INCREMENT' }))
+        .not.toExtend<Promise<{ type: string }>>()
 
-      expectTypeOf(storeWithLogger.dispatch)
-        .parameter(0)
-        .not.toMatchTypeOf('not-an-action')
+      expectTypeOf(storeWithLogger.dispatch).parameter(0).not.toBeString()
     })
 
     test('promise', () => {
       const storeWithPromise = createStore(reducer, applyMiddleware(promise()))
 
       // can dispatch actions and promises
-      // `.toBeCallableWith or .parameter(0).toMatchTypeOf`
+      // `.toBeCallableWith or .parameter(0).toExtend`
       // do not work in this scenario.
       storeWithPromise.dispatch({ type: 'INCREMENT' })
 
       storeWithPromise.dispatch(Promise.resolve({ type: 'INCREMENT' }))
 
-      expectTypeOf(storeWithPromise.dispatch)
-        .parameter(0)
-        .not.toMatchTypeOf('not-an-action')
+      expectTypeOf(storeWithPromise.dispatch).parameter(0).not.toBeString()
 
       expectTypeOf(storeWithPromise.dispatch)
         .parameter(0)
-        .not.toMatchTypeOf(Promise.resolve('not-an-action'))
+        .not.toExtend<Promise<string>>()
     })
 
     test('promise + logger', () => {
@@ -156,7 +152,7 @@ describe('type tests', () => {
       )
 
       // can dispatch actions and promises
-      // `.toBeCallableWith or .parameter(0).toMatchTypeOf`
+      // `.toBeCallableWith or .parameter(0).toExtend`
       // do not work in this scenario.
       storeWithPromiseAndLogger.dispatch({ type: 'INCREMENT' })
 
@@ -164,11 +160,11 @@ describe('type tests', () => {
 
       expectTypeOf(storeWithPromiseAndLogger.dispatch)
         .parameter(0)
-        .not.toMatchTypeOf('not-an-action')
+        .not.toBeString()
 
       expectTypeOf(storeWithPromiseAndLogger.dispatch)
         .parameter(0)
-        .not.toMatchTypeOf(Promise.resolve('not-an-action'))
+        .not.toExtend<Promise<string>>()
     })
 
     test('promise + thunk', () => {
@@ -178,11 +174,11 @@ describe('type tests', () => {
       )
 
       // can dispatch actions, promises and thunks
-      // `.toBeCallableWith or .parameter(0).toMatchTypeOf`
+      // `.toBeCallableWith or .parameter(0).toExtend`
       // do not work in this scenario.
       storeWithPromiseAndThunk.dispatch({ type: 'INCREMENT' })
 
-      // `.toBeCallableWith or .parameter(0).toMatchTypeOf`
+      // `.toBeCallableWith or .parameter(0).toExtend`
       // do not work in this scenario.
       storeWithPromiseAndThunk.dispatch(Promise.resolve({ type: 'INCREMENT' }))
 
@@ -192,11 +188,11 @@ describe('type tests', () => {
         expectTypeOf(getState()).not.toHaveProperty('wrongField')
 
         // injected dispatch accepts actions, thunks and promises
-        // `.toBeCallableWith or .parameter(0).toMatchTypeOf`
+        // `.toBeCallableWith or .parameter(0).toExtend`
         // do not work in this scenario.
         dispatch({ type: 'INCREMENT' })
 
-        // `.toBeCallableWith or .parameter(0).toMatchTypeOf`
+        // `.toBeCallableWith or .parameter(0).toExtend`
         // do not work in this scenario.
         dispatch(dispatch => dispatch({ type: 'INCREMENT' }))
 
@@ -204,16 +200,16 @@ describe('type tests', () => {
           Promise.resolve({ type: 'INCREMENT' })
         )
 
-        expectTypeOf(dispatch).parameter(0).not.toMatchTypeOf('not-an-action')
+        expectTypeOf(dispatch).parameter(0).not.toBeString()
       })
 
       expectTypeOf(storeWithPromiseAndThunk.dispatch)
         .parameter(0)
-        .not.toMatchTypeOf('not-an-action')
+        .not.toBeString()
 
       expectTypeOf(storeWithPromiseAndThunk.dispatch)
         .parameter(0)
-        .not.toMatchTypeOf(Promise.resolve('not-an-action'))
+        .not.toExtend<Promise<string>>()
     })
 
     test('test variadic signature.', () => {
@@ -229,7 +225,7 @@ describe('type tests', () => {
         )
       )
 
-      // `.toBeCallableWith or .parameter(0).toMatchTypeOf`
+      // `.toBeCallableWith or .parameter(0).toExtend`
       // do not work in this scenario.
       storeWithLotsOfMiddleware.dispatch({ type: 'INCREMENT' })
 

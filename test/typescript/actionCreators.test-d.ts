@@ -33,7 +33,7 @@ describe('type tests', () => {
 
     const boundAddTodo = bindActionCreators(addTodo, dispatch)
 
-    expectTypeOf(boundAddTodo('test')).toMatchTypeOf<AddTodoAction>()
+    expectTypeOf(boundAddTodo('test')).toExtend<AddTodoAction>()
 
     const boundAddTodoViaThunk = bindActionCreators<
       ActionCreator<AddTodoThunk, [string]>,
@@ -44,9 +44,7 @@ describe('type tests', () => {
 
     const boundActionCreators = bindActionCreators({ addTodo }, dispatch)
 
-    expectTypeOf(
-      boundActionCreators.addTodo('test')
-    ).toMatchTypeOf<AddTodoAction>()
+    expectTypeOf(boundActionCreators.addTodo('test')).toExtend<AddTodoAction>()
 
     interface M extends ActionCreatorsMapObject {
       addTodoViaThunk: ActionCreator<AddTodoThunk, [string]>
