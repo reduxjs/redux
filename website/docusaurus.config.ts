@@ -38,6 +38,11 @@ const config: Config = {
       },
       items: [
         {
+          label: 'React Redux',
+          to: '/react-redux/introduction/getting-started',
+          position: 'left'
+        },
+        {
           label: 'Getting Started',
           to: 'introduction/getting-started',
           position: 'right'
@@ -209,6 +214,16 @@ const config: Config = {
         dataDoNotTrack: true,
         dataCache: true
       } satisfies UmamiOptions
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'react-redux',
+        path: 'react-redux/docs',
+        routeBasePath: 'react-redux',
+        sidebarPath: './react-redux.sidebars.ts',
+        include: ['{api,introduction,using-react-redux,tutorials}/*.{md,mdx}']
+      }
     ]
   ],
   future: {
