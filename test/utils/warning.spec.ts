@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* oxlint-disable no-console */
 import { vi } from 'vitest'
 import warning from '@internal/utils/warning'
 

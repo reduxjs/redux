@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* oxlint-disable no-console */
 import type { Reducer, Action } from 'redux'
 import {
   createStore,
@@ -45,6 +45,7 @@ describe('Utils', () => {
       const spy = vi.fn()
       console.error = spy
 
+      // oxlint-disable-next-line no-unassigned-vars
       let isNotDefined: any
       combineReducers({ isNotDefined })
       expect(spy.mock.calls[0][0]).toMatch(
