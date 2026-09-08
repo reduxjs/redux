@@ -32,7 +32,7 @@ Here's an example of how use of object literal shorthand with `combineReducers` 
 
 ```js
 // reducers.js
-export default theDefaultReducer = (state = 0, action) => state
+export default (theDefaultReducer = (state = 0, action) => state)
 
 export const firstNamedReducer = (state = 1, action) => state
 

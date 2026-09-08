@@ -553,9 +553,7 @@ Here's what it might look like to convert the posts slice selectors to be define
 const postsSlice = createSlice({
   name: 'posts',
   initialState,
-  reducers: {
-    /* omit reducer logic */
-  },
+  reducers: {/* omit reducer logic */},
   // highlight-start
   selectors: {
     // Note that these selectors are given just the `PostsState`

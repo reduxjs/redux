@@ -479,7 +479,7 @@ export const SinglePostPage = () => {
   const currentUsername = useAppSelector(selectCurrentUsername)
   // highlight-next-line
   const { data: post, isFetching, isSuccess } = useGetPostQuery(postId!)
-  
+
   // highlight-next-line
   let content: React.ReactNode
 
@@ -508,7 +508,7 @@ export const SinglePostPage = () => {
       </article>
     )
   }
-  
+
   // highlight-next-line
   return <section>{content}</section>
 }

@@ -187,9 +187,7 @@ createReducer(initialState, {
 createSlice({
   name,
   initialState,
-  reducers: {
-    /* case reducers here */
-  },
+  reducers: {/* case reducers here */},
   extraReducers: {
     [todoAdded]: (state, action) => {}
   }
@@ -206,9 +204,7 @@ createReducer(initialState, builder => {
 createSlice({
   name,
   initialState,
-  reducers: {
-    /* case reducers here */
-  },
+  reducers: {/* case reducers here */},
   extraReducers: builder => {
     builder.addCase(todoAdded, (state, action) => {})
   }
