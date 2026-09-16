@@ -114,6 +114,22 @@ function addTodosIfAllowed(todoText) {
 
 It's not typically possible to use selectors inside of reducers, because a slice reducer only has access to its own slice of the Redux state, and most selectors expect to be given the _entire_ Redux root state as an argument.
 
+### Reading State Once
+
+React components should normally use `useSelector`, because it subscribes to the store and updates the component when the selected value changes. Sometimes code outside React only has access to `dispatch` and needs a one-time read of the latest state without subscribing. In that case, you can dispatch a small thunk that calls the selector with `getState()` and returns its result:
+
+```ts
+const selectFromState = <Selected>(
+  selector: (state: RootState) => Selected
+): AppThunk<Selected> => {
+  return (_dispatch, getState) => selector(getState())
+}
+
+const users = dispatch(selectFromState(selectUsers))
+```
+
+This reads the state at the moment the thunk runs. The returned value does not stay updated, so use a subscription API such as `useSelector` when the caller needs to react to later state changes.
+
 ### Encapsulating State Shape with Selectors
 
 The first reason to use selector functions is for encapsulation and reusability when dealing with your Redux state shape.
