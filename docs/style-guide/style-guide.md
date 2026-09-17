@@ -193,18 +193,19 @@ Picture a "current user" reducer that looks like:
 
 ```js
 const initialState = {
-    firstName: null,
-    lastName: null,
-    age: null,
-};
+  firstName: null,
+  lastName: null,
+  age: null
+}
 
-export default usersReducer = (state = initialState, action) {
-    switch(action.type) {
-        case "users/userLoggedIn": {
-            return action.payload;
-        }
-        default: return state;
+export default function usersReducer(state = initialState, action) {
+  switch (action.type) {
+    case 'users/userLoggedIn': {
+      return action.payload
     }
+    default:
+      return state
+  }
 }
 ```
 

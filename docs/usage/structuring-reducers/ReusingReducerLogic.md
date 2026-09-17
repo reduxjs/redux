@@ -126,21 +126,27 @@ You could even go as far as to make a generic filtering higher-order reducer:
 
 ```js
 function createFilteredReducer(reducerFunction, reducerPredicate) {
-    return (state, action) => {
-        const isInitializationCall = state === undefined;
-        const shouldRunWrappedReducer = reducerPredicate(action) || isInitializationCall;
-        return shouldRunWrappedReducer ? reducerFunction(state, action) : state;
-    }
+  return (state, action) => {
+    const isInitializationCall = state === undefined
+    const shouldRunWrappedReducer =
+      reducerPredicate(action) || isInitializationCall
+    return shouldRunWrappedReducer ? reducerFunction(state, action) : state
+  }
 }
 
 const rootReducer = combineReducers({
-    // check for suffixed strings
-    counterA : createFilteredReducer(counter, action => action.type.endsWith('_A')),
-    // check for extra data in the action
-    counterB : createFilteredReducer(counter, action => action.name === 'B'),
-    // respond to all 'INCREMENT' actions, but never 'DECREMENT'
-    counterC : createFilteredReducer(counter, action => action.type === 'INCREMENT')
-};
+  // check for suffixed strings
+  counterA: createFilteredReducer(counter, action =>
+    action.type.endsWith('_A')
+  ),
+  // check for extra data in the action
+  counterB: createFilteredReducer(counter, action => action.name === 'B'),
+  // respond to all 'INCREMENT' actions, but never 'DECREMENT'
+  counterC: createFilteredReducer(
+    counter,
+    action => action.type === 'INCREMENT'
+  )
+})
 ```
 
 These basic patterns allow you to do things like having multiple instances of a smart connected component within the UI, or reuse common logic for generic capabilities such as pagination or sorting.
@@ -153,35 +159,39 @@ This pattern allows you to have multiple states and use a common reducer to upda
 
 ```js
 function counterReducer(state, action) {
-    switch(action.type) {
-        case "INCREMENT" : return state + 1;
-        case "DECREMENT" : return state - 1;
-    }
+  switch (action.type) {
+    case 'INCREMENT':
+      return state + 1
+    case 'DECREMENT':
+      return state - 1
+    default:
+      return state
+  }
 }
 
 function countersArrayReducer(state, action) {
-    switch(action.type) {
-        case "INCREMENT":
-        case "DECREMENT":
-            return state.map( (counter, index) => {
-                if(index !== action.index) return counter;
-                return counterReducer(counter, action);
-            });
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case 'INCREMENT':
+    case 'DECREMENT':
+      return state.map((counter, index) => {
+        if (index !== action.index) return counter
+        return counterReducer(counter, action)
+      })
+    default:
+      return state
+  }
 }
 
 function countersMapReducer(state, action) {
-    switch(action.type) {
-        case "INCREMENT":
-        case "DECREMENT":
-            return {
-                ...state,
-                state[action.name] : counterReducer(state[action.name], action)
-            };
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case 'INCREMENT':
+    case 'DECREMENT':
+      return {
+        ...state,
+        [action.name]: counterReducer(state[action.name], action)
+      }
+    default:
+      return state
+  }
 }
 ```

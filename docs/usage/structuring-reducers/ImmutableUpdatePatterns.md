@@ -190,10 +190,10 @@ const initialState = {
   }
 }
 
-const reducer = createReducer(initialState, {
-  UPDATE_ITEM: (state, action) => {
+const reducer = createReducer(initialState, builder => {
+  builder.addCase('UPDATE_ITEM', (state, action) => {
     state.first.second[action.someId].fourth = action.someValue
-  }
+  })
 })
 ```
 
