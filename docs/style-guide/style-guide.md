@@ -485,11 +485,13 @@ Also see the [React-Redux hooks API docs](https://react-redux.js.org/api/hooks) 
 
 Prefer having more UI components subscribed to the Redux store and reading data at a more granular level. This typically leads to better UI performance, as fewer components will need to render when a given piece of state changes.
 
-For example, rather than just connecting a `<UserList>` component and reading the entire array of users, have `<UserList>` retrieve a list of all user IDs, render list items as `<UserListItem userId={userId}>`, and have `<UserListItem>` be connected and extract its own user entry from the store.
+For example, rather than having a `<UserList>` component read the entire array of users, have `<UserList>` select a list of all user IDs, render list items as `<UserListItem userId={userId}>`, and have `<UserListItem>` call `useSelector` to extract its own user entry from the store.
 
-This applies for both the React-Redux `connect()` API and the `useSelector()` hook.
+This applies for both the `useSelector()` hook and the legacy `connect()` API.
 
 ### Use the Object Shorthand Form of `mapDispatch` with `connect`
+
+This rule only applies if you are still using the legacy `connect` API. Components written with hooks call `useDispatch` directly.
 
 The `mapDispatch` argument to `connect` can be defined as either a function that receives `dispatch` as an argument, or an object containing action creators. **We recommend always using [the "object shorthand" form of `mapDispatch`](https://react-redux.js.org/using-react-redux/connect-mapdispatch#defining-mapdispatchtoprops-as-an-object)**, as it simplifies the code considerably. There is almost never a real need to write `mapDispatch` as a function.
 

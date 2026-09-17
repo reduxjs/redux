@@ -8,7 +8,7 @@ sidebar_label: Design Decisions
 
 ### Why doesn't Redux pass the state and action to subscribers?
 
-Subscribers are intended to respond to the state value itself, not the action. Updates to the state are processed synchronously, but notifications to subscribers can be batched or debounced, meaning that subscribers are not always notified with every action. This is a common [performance optimization](./Performance.md#performance-update-events) to avoid repeated re-rendering.
+Subscribers are intended to respond to the state value itself, not the action. Updates to the state are processed synchronously, but notifications to subscribers can be batched or debounced, meaning that subscribers are not always notified with every action. This is a common [performance optimization](./Performance.md#how-can-i-reduce-the-number-of-store-update-events) to avoid repeated re-rendering.
 
 Batching or debouncing is possible by using enhancers to override `store.dispatch` to change the way that subscribers are notified. Also, there are libraries that change Redux to process actions in batches to optimize performance and avoid repeated re-rendering:
 
@@ -19,16 +19,16 @@ The intended guarantee is that Redux eventually calls all subscribers with the m
 
 A potential use-case for using the action inside a subscriber -- which is an unsupported feature -- is to ensure that a component only re-renders after certain kinds of actions. Instead, re-rendering should be controlled through:
 
-1. the [shouldComponentUpdate](https://react.dev/reference/react/Component#shouldcomponentupdate) lifecycle method
-2. the [virtual DOM equality check (vDOMEq)](https://legacy.reactjs.org/docs/optimizing-performance.html#avoid-reconciliation)
-3. [React.PureComponent](https://react.dev/reference/react/PureComponent)
-4. Using React-Redux: use [mapStateToProps](https://react-redux.js.org/api#connect) to subscribe components to only the parts of the store that they need.
+1. Using React-Redux: have each `useSelector` call return only the smallest piece of state the component needs, so the component re-renders only when that value changes.
+2. Wrapping the component in [`React.memo`](https://react.dev/reference/react/memo) so that a parent re-render does not force it to re-render as well.
+
+See [Why is my component re-rendering too often?](./ReactRedux.md#why-is-my-component-re-rendering-too-often) for details.
 
 #### Further Information
 
 **Articles**
 
-- [How can I reduce the number of store update events?](./Performance.md#performance-update-events)
+- [How can I reduce the number of store update events?](./Performance.md#how-can-i-reduce-the-number-of-store-update-events)
 
 **Discussions**
 
@@ -39,7 +39,7 @@ A potential use-case for using the action inside a subscriber -- which is an uns
 
 The pattern of using functions, called action creators, to return action objects may seem counterintuitive to programmers with a lot of Object Oriented Programming experience, who would see this is a strong use-case for Classes and instances. Class instances for action objects and reducers are not supported because class instances make serialization and deserialization tricky. Deserialization methods like `JSON.parse(string)` will return a plain old Javascript object rather than class instances.
 
-As described in the [Store FAQ](./OrganizingState.md#organizing-state-non-serializable), if you are okay with things like persistence and time-travel debugging not working as intended, you are welcome to put non-serializable items into your Redux store.
+As described in the [Store FAQ](./OrganizingState.md#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state), if you are okay with things like persistence and time-travel debugging not working as intended, you are welcome to put non-serializable items into your Redux store.
 
 Serialization enables the browser to store all actions that have been dispatched, as well as the previous store states, with much less memory. Rewinding and 'hot reloading' the store is central to the Redux developer experience and the function of Redux DevTools. This also enables deserialized actions to be stored on the server and re-serialized in the browser in the case of server-side rendering with Redux.
 
@@ -47,7 +47,7 @@ Serialization enables the browser to store all actions that have been dispatched
 
 **Articles**
 
-- [Can I put functions, promises, or other non-serializable items in my store state?](./OrganizingState.md#organizing-state-non-serializable)
+- [Can I put functions, promises, or other non-serializable items in my store state?](./OrganizingState.md#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)
 
 **Discussions**
 
@@ -99,6 +99,8 @@ If none of the published utilities solve your use case, you can always write a f
 - [#1768 Allow reducers to consult global state](https://github.com/reactjs/redux/pull/1768)
 
 ### Why doesn't `mapDispatchToProps` allow use of return values from `getState()` or `mapStateToProps()`?
+
+This question applies to React-Redux's legacy `connect` API. With hooks, a component can call `useSelector` and `useDispatch` and combine the results however it wants, so there is no equivalent limitation.
 
 There have been requests to use either the entire `state` or the return value of `mapState` inside of `mapDispatch`, so that when functions are declared inside of `mapDispatch`, they can close over the latest returned values from the store.
 

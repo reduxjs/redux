@@ -22,10 +22,10 @@ As described in ["Redux Fundamentals" Part 3: State, Actions, and Reducers](../.
 
 > ##### Note on immutability, side effects, and mutation
 >
-> Mutation is discouraged because it generally breaks time-travel debugging, and React Redux's `connect` function:
+> Mutation is discouraged because it generally breaks time-travel debugging, and React Redux's `useSelector` hook:
 >
 > - For time traveling, the Redux DevTools expect that replaying recorded actions would output a state value, but not change anything else. **Side effects like mutation or asynchronous behavior will cause time travel to alter behavior between steps, breaking the application**.
-> - For React Redux, `connect` checks to see if the props returned from a `mapStateToProps` function have changed in order to determine if a component needs to update. To improve performance, `connect` takes some shortcuts that rely on the state being immutable, and uses shallow reference equality checks to detect changes. This means that **changes made to objects and arrays by direct mutation will not be detected, and components will not re-render**.
+> - For React Redux, `useSelector` compares the value returned by your selector against the previous value by reference to decide whether a component needs to update. This means that **changes made to objects and arrays by direct mutation will not be detected, and components will not re-render**. See [Why isn't my component re-rendering?](../../faq/ReactRedux.md#why-isnt-my-component-re-rendering) in the FAQ.
 >
 > Other side effects like generating unique IDs or timestamps in a reducer also make the code unpredictable and harder to debug and test.
 

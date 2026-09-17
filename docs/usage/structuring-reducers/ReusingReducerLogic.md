@@ -154,7 +154,7 @@ const rootReducer = combineReducers({
 })
 ```
 
-These basic patterns allow you to do things like having multiple instances of a smart connected component within the UI, or reuse common logic for generic capabilities such as pagination or sorting.
+These basic patterns allow you to do things like having multiple instances of a store-connected component within the UI, or reuse common logic for generic capabilities such as pagination or sorting.
 
 In addition to generating reducers this way, you might also want to generate action creators using the same approach, and could generate them both at the same time with helper functions.
 

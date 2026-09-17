@@ -496,7 +496,7 @@ There are many cases where a selector function needs to be reused across multipl
 
 The standard approach here is to create a unique instance of a memoized selector in the component, and then use that with `useSelector`. That allows each component to consistently pass the same arguments to its own selector instance, and that selector can correctly memoize the results.
 
-For function components, this is normally done with `useMemo` or `useCallback`:
+This is normally done with `useMemo`:
 
 ```js
 import { makeSelectItemsByCategory } from './categoriesSlice'
@@ -511,29 +511,9 @@ function CategoryList({ category }) {
 }
 ```
 
-For class components with `connect`, this can be done with an advanced "factory function" syntax for `mapState`. If the `mapState` function returns a new function on its first call, that will be used as the real `mapState` function. This provides a closure where you can create a new selector instance:
+Reselect 5's default `weakMapMemoize` reduces the need for this pattern: a selector created with `createSelector` keeps a separate cache entry for each distinct set of arguments, so several components calling one shared selector with different `category` values no longer evict each other's results. Creating a per-component instance is still the right choice when the selector's inputs are complex, or when you want each component's cache to be released as soon as it unmounts.
 
-```js
-import { makeSelectItemsByCategory } from './categoriesSlice'
-
-const makeMapState = (state, ownProps) => {
-  // Closure - create a new unique selector instance here,
-  // and this will run once for every component instance
-  const selectItemsByCategory = makeSelectItemsByCategory()
-
-  const realMapState = (state, ownProps) => {
-    return {
-      itemsByCategory: selectItemsByCategory(state, ownProps.category)
-    }
-  }
-
-  // Returning a function here will tell `connect` to use it as
-  // `mapState` instead of the original one given to `connect`
-  return realMapState
-}
-
-export default connect(makeMapState)(CategoryList)
-```
+If you still use the legacy `connect` API, the equivalent is the ["factory function" form of `mapStateToProps`](https://react-redux.js.org/api/connect#factory-functions), where `mapState` returns a new `mapState` function on its first call.
 
 ## Using Selectors Effectively
 

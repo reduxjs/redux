@@ -73,9 +73,9 @@ If you actually are concerned about reducer performance, you can use a utility s
 
 Immutably updating state generally means making shallow copies, not deep copies. Shallow copies are much faster than deep copies, because fewer objects and fields have to be copied, and it effectively comes down to moving some pointers around.
 
-In addition, deep cloning state creates new references for every field. Since the React-Redux `connect` function relies on reference comparisons to determine if data has changed, this means that UI components will be forced to re-render unnecessarily even though the other data hasn't meaningfully changed.
+In addition, deep cloning state creates new references for every field. Since React-Redux's `useSelector` relies on reference comparisons to determine if data has changed, this means that UI components will be forced to re-render unnecessarily even though the other data hasn't meaningfully changed. See [Why is my component re-rendering too often?](./ReactRedux.md#why-is-my-component-re-rendering-too-often) for details.
 
-However, you _do_ need to create a copied and updated object for each level of nesting that is affected. Although that shouldn't be particularly expensive, it's another good reason why you should keep your state normalized and shallow if possible.
+However, you _do_ need to create a copied and updated object for each level of nesting that is affected. Although that shouldn't be particularly expensive, it's another good reason why you should keep your state normalized and shallow if possible. Reducers written with `createSlice` handle this for you: Immer copies only the objects along the path you changed and keeps every other reference the same.
 
 > Common Redux misconception: you need to deeply clone the state. Reality: if something inside doesn't change, keep its reference the same!
 

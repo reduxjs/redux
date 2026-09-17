@@ -25,7 +25,7 @@ In particular, immutability in the context of a Web app enables sophisticated ch
 
 - Both Redux and React-Redux employ [shallow equality checking](#how-do-shallow-and-deep-equality-checking-differ). In particular:
   - Redux's `combineReducers` utility [shallowly checks for reference changes](#how-does-redux-use-shallow-equality-checking) caused by the reducers that it calls.
-  - React-Redux's `connect` method generates components that [shallowly check reference changes to the root state](#how-does-react-redux-use-shallow-equality-checking), and the return values from the `mapStateToProps` function to see if the wrapped components actually need to re-render. Such [shallow checking requires immutability](#why-will-shallow-equality-checking-not-work-with-mutable-objects) to function correctly.
+  - React-Redux's `useSelector` hook [compares the value returned by your selector against the previous value by reference](#how-does-react-redux-use-shallow-equality-checking) to decide whether the component needs to re-render. Such [shallow checking requires immutability](#why-will-shallow-equality-checking-not-work-with-mutable-objects) to function correctly.
 - Immutable data management ultimately makes data handling safer.
 - Time-travel debugging requires that reducers be pure functions with no side effects, so that you can correctly jump between different states.
 
@@ -41,7 +41,7 @@ In particular, immutability in the context of a Web app enables sophisticated ch
 
 ## Why does Redux’s use of shallow equality checking require immutability?
 
-Redux's use of shallow equality checking requires immutability if any connected components are to be updated correctly. To see why, we need to understand the difference between shallow and deep equality checking in JavaScript.
+Redux's use of shallow equality checking requires immutability if any subscribed components are to be updated correctly. To see why, we need to understand the difference between shallow and deep equality checking in JavaScript.
 
 ### How do shallow and deep equality checking differ?
 
@@ -69,7 +69,7 @@ Redux uses shallow equality checking in its `combineReducers` function to return
 
 #### How does `combineReducers` use shallow equality checking?
 
-The [suggested structure](./Reducers.md#reducers-share-state) for a Redux store is to split the state object into multiple "slices" or "domains" by key, and provide a separate reducer function to manage each individual data slice.
+The [suggested structure](./Reducers.md#how-do-i-share-state-between-two-reducers-do-i-have-to-use-combinereducers) for a Redux store is to split the state object into multiple "slices" or "domains" by key, and provide a separate reducer function to manage each individual data slice.
 
 `combineReducers` makes working with this style of structure easier by taking a `reducers` argument that’s defined as a hash table comprising a set of key/value pairs, where each key is the name of a state slice, and the corresponding value is the reducer function that will act on it.
 
@@ -103,7 +103,7 @@ This is worth emphasizing: _If the reducers all return the same `state` object p
 **Documentation**
 
 - [API: combineReducers](../api/combineReducers.md)
-- [Redux FAQ - How do I share state between two reducers? do I have to use `combineReducers`?](./Reducers.md#reducers-share-state)
+- [Redux FAQ - How do I share state between two reducers? do I have to use `combineReducers`?](./Reducers.md#how-do-i-share-state-between-two-reducers-do-i-have-to-use-combinereducers)
 
 **Video**
 
@@ -111,106 +111,17 @@ This is worth emphasizing: _If the reducers all return the same `state` object p
 
 ### How does React-Redux use shallow equality checking?
 
-React-Redux uses shallow equality checking to determine whether the component it’s wrapping needs to be re-rendered.
+After every dispatched action, React-Redux runs the selector you passed to `useSelector` against the new root state, and compares the result to the previous result with `===`. If the two values are the same reference, the component does not re-render. If they are different, it does.
 
-To do this, it assumes that the wrapped component is pure; that is, that the component will produce the [same results given the same props and state](https://react-redux.js.org/troubleshooting#my-views-aren-t-updating-when-something-changes-outside-of-redux).
-
-By assuming the wrapped component is pure, it need only check whether the root state object or the values returned from `mapStateToProps` have changed. If they haven’t, the wrapped component does not need re-rendering.
-
-It detects a change by keeping a reference to the root state object, and a reference to _each value_ in the props object that's returned from the `mapStateToProps` function.
-
-It then runs a shallow equality check on its reference to the root state object and the state object passed to it, and a separate series of shallow checks on each reference to the props object’s values and those that are returned from running the `mapStateToProps` function again.
+That single comparison is why immutability matters on the React side. If a reducer mutates an existing object and returns it, the selector returns the same reference as before, the check passes, and the component does not update even though the data changed. If a selector builds a new object or array on every call (for example, with `array.filter()`), the check fails on every dispatch and the component re-renders even when nothing relevant changed. Both failure modes, and how to fix them, are covered in the React Redux FAQ.
 
 #### Further Information
 
 **Documentation**
 
-- [React-Redux Bindings](https://react-redux.js.org)
-
-**Articles**
-
-- [API: React-Redux’s connect function and `mapStateToProps`](https://react-redux.js.org/using-react-redux/connect-mapstate)
 - [Redux FAQ: Why isn't my component re-rendering?](./ReactRedux.md#why-isnt-my-component-re-rendering)
-
-### Why does React-Redux shallowly check each value within the props object returned from `mapStateToProp`?
-
-React-Redux performs a shallow equality check on each _value_ within the props object, not on the props object itself.
-
-It does so because the props object is actually a hash of prop names and their values (or selector functions that are used to retrieve or generate the values), such as in this example:
-
-```js
-function mapStateToProps(state) {
-  return {
-    todos: state.todos, // prop value
-    visibleTodos: getVisibleTodos(state) // selector
-  }
-}
-
-export default connect(mapStateToProps)(TodoApp)
-```
-
-As such, a shallow equality check of the props object returned from repeated calls to `mapStateToProps` would always fail, as a new object would be returned each time.
-
-React-Redux therefore maintains separate references to each _value_ in the returned props object.
-
-#### Further Information
-
-**Articles**
-
-- [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f#.gh07cm24f)
-
-### How does React-Redux use shallow equality checking to determine whether a component needs re-rendering?
-
-Each time React-Redux’s `connect` function is called, it will perform a shallow equality check on its stored reference to the root state object, and the current root state object passed to it from the store. If the check passes, the root state object has not been updated, and so there is no need to re-render the component, or even call `mapStateToProps`.
-
-If the check fails, however, the root state object _has_ been updated, and so `connect` will call `mapStateToProps`to see if the props for the wrapped component have been updated.
-
-It does this by performing a shallow equality check on each value within the object individually, and will only trigger a re-render if one of those checks fails.
-
-In the example below, if `state.todos` and the value returned from `getVisibleTodos()` do not change on successive calls to `connect`, then the component will not re-render .
-
-```js
-function mapStateToProps(state) {
-  return {
-    todos: state.todos, // prop value
-    visibleTodos: getVisibleTodos(state) // selector
-  }
-}
-
-export default connect(mapStateToProps)(TodoApp)
-```
-
-Conversely, in this next example (below), the component will _always_ re-render, as the value of `todos` is always a new object, regardless of whether or not its values change:
-
-```js
-// AVOID - will always cause a re-render
-function mapStateToProps(state) {
-  return {
-    // todos always references a newly-created object
-    todos: {
-      all: state.todos,
-      visibleTodos: getVisibleTodos(state)
-    }
-  }
-}
-
-export default connect(mapStateToProps)(TodoApp)
-```
-
-If the shallow equality check fails between the new values returned from `mapStateToProps` and the previous values that React-Redux kept a reference to, then a re-rendering of the component will be triggered.
-
-#### Further Information
-
-**Articles**
-
-- [Practical Redux, Part 6: Connected Lists, Forms, and Performance](https://blog.isquaredsoftware.com/2017/01/practical-redux-part-6-connected-lists-forms-and-performance/)
-- [React.js Pure Render Performance Anti-Pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f#.sb708slq6)
-- [High Performance Redux Apps](https://somebody32.github.io/high-performance-redux/)
-
-**Discussions**
-
-- [#1816: Component connected to state with `mapStateToProps`](https://github.com/reduxjs/redux/issues/1816)
-- [#300: Potential connect() optimization](https://github.com/reduxjs/react-redux/issues/300)
+- [Redux FAQ: Why is my component re-rendering too often?](./ReactRedux.md#why-is-my-component-re-rendering-too-often)
+- [React Redux: `useSelector`](https://react-redux.js.org/api/hooks#useselector)
 
 ### Why will shallow equality checking not work with mutable objects?
 
@@ -241,7 +152,7 @@ The shallow check of `param` and `returnValue` simply checks whether both variab
 
 ### Does shallow equality checking with a mutable object cause problems with Redux?
 
-Shallow equality checking with a mutable object will not cause problems with Redux, but [it will cause problems with libraries that depend on the store, such as React-Redux](#shallow-checking-problems-with-react-redux).
+Shallow equality checking with a mutable object will not cause problems with Redux, but [it will cause problems with libraries that depend on the store, such as React-Redux](./ReactRedux.md#why-isnt-my-component-re-rendering).
 
 Specifically, if the state slice passed to a reducer by `combineReducers` is a mutable object, the reducer can modify it directly and return it.
 
@@ -249,7 +160,9 @@ If it does, the shallow equality check that `combineReducers` performs will alwa
 
 Accordingly, `combineReducers` will not set its `hasChanged` flag, even though the state has changed. If none of the other reducers return a new, updated state slice, the `hasChanged` flag will remain set to false, causing `combineReducers` to return the _existing_ root state object.
 
-The store will still be updated with the new values for the root state, but because the root state object itself is still the same object, libraries that bind to Redux, such as React-Redux, will not be aware of the state’s mutation, and so will not trigger a wrapped component’s re-rendering.
+The store will still be updated with the new values for the root state, but because the root state object itself is still the same object, libraries that bind to Redux, such as React-Redux, will not be aware of the state’s mutation, and so will not re-render the subscribed components.
+
+Redux Toolkit's `configureStore` adds a development-only immutability check middleware that throws an error when a reducer mutates state, so this class of bug is caught immediately rather than showing up as a component that does not update.
 
 #### Further Information
 
@@ -257,69 +170,7 @@ The store will still be updated with the new values for the root state, but beca
 
 - [Using Redux: Immutable Update Patterns](../usage/structuring-reducers/ImmutableUpdatePatterns.md)
 - [Troubleshooting: Never mutate reducer arguments](../usage/Troubleshooting.md#never-mutate-reducer-arguments)
-
-### Why does a reducer mutating the state prevent React-Redux from re-rendering a wrapped component?
-
-If a Redux reducer directly mutates, and returns, the state object passed into it, the values of the root state object will change, but the object itself will not.
-
-Because React-Redux performs a shallow check on the root state object to determine if its wrapped components need re-rendering or not, it will not be able to detect the state mutation, and so will not trigger a re-rendering.
-
-#### Further Information
-
-**Documentation**
-
-- [Troubleshooting: My views aren’t updating when something changes outside of Redux](https://react-redux.js.org/troubleshooting#my-views-aren-t-updating-when-something-changes-outside-of-redux)
-
-### Why does a selector mutating and returning a persistent object to `mapStateToProps` prevent React-Redux from re-rendering a wrapped component?
-
-If one of the values of the props object returned from `mapStateToProps` is an object that persists across calls to `connect` (such as, potentially, the root state object), yet is directly mutated and returned by a selector function, React-Redux will not be able to detect the mutation, and so will not trigger a re-render of the wrapped component.
-
-As we’ve seen, the values in the mutable object returned by the selector function may have changed, but the object itself has not, and shallow equality checking only compares the objects themselves, not their values.
-
-For example, the following `mapStateToProps` function will never trigger a re-render:
-
-```js
-// State object held in the Redux store
-const state = {
-  user: {
-    accessCount: 0,
-    name: 'keith'
-  }
-}
-
-// Selector function
-const getUser = state => {
-  ++state.user.accessCount // mutate the state object
-  return state
-}
-
-// mapStateToProps
-const mapStateToProps = state => ({
-  // The object returned from getUser() is always
-  // the same object, so this wrapped
-  // component will never re-render, even though it's been
-  // mutated
-  userRecord: getUser(state)
-})
-
-const a = mapStateToProps(state)
-const b = mapStateToProps(state)
-
-a.userRecord === b.userRecord
-//> true
-```
-
-Note that, conversely, if an _immutable_ object is used, the [component may re-render when it should not](#immutability-issues-with-react-redux).
-
-#### Further Information
-
-**Articles**
-
-- [Practical Redux, Part 6: Connected Lists, Forms, and Performance](https://blog.isquaredsoftware.com/2017/01/practical-redux-part-6-connected-lists-forms-and-performance/)
-
-**Discussions**
-
-- [#1948: Is getMappedItems an anti-pattern in mapStateToProps?](https://github.com/reduxjs/redux/issues/1948)
+- [Redux Toolkit: Immutability Middleware](https://redux-toolkit.js.org/api/immutabilityMiddleware)
 
 ### How does immutability enable a shallow check to detect object mutations?
 
@@ -339,77 +190,17 @@ You cannot mutate an immutable object; instead, you must mutate a copy of it, le
 
 That’s perfectly OK when you mutate the copy, but in the context of a reducer, if you return a copy that _hasn’t_ been mutated, Redux’s `combineReducers` function will still think that the state needs to be updated, as you're returning an entirely different object from the state slice object that was passed in.
 
-`combineReducers` will then return this new root state object to the store. The new object will have the same values as the current root state object, but because it's a different object, it will cause the store to be updated, which will ultimately cause all connected components to be re-rendered unnecessarily.
+`combineReducers` will then return this new root state object to the store. The new object will have the same values as the current root state object, but because it's a different object, it will cause the store to be updated. Every `useSelector` hook in the app will re-run its selector, and any selector that reads from the copied slice and returns a new reference will re-render its component unnecessarily.
 
-To prevent this from happening, you must _always return the state slice object that’s passed into a reducer if the reducer does not mutate the state._
+To prevent this from happening, you must _always return the state slice object that’s passed into a reducer if the reducer does not mutate the state._ Reducers generated by `createSlice` do this automatically: Immer returns the original object when no changes were made to the draft.
+
+The same problem applies on the selector side, where a selector that returns a new array or object on every call causes a re-render on every dispatch. See [Why is my component re-rendering too often?](./ReactRedux.md#why-is-my-component-re-rendering-too-often) for that case.
 
 #### Further Information
 
 **Articles**
 
 - [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f#.5hmnwygsy)
-- [Building Efficient UI with React and Redux](https://www.toptal.com/react/react-redux-and-immutablejs)
-
-### How can immutability in `mapStateToProps` cause components to render unnecessarily?
-
-Certain immutable operations, such as an Array filter, will always return a new object, even if the values themselves have not changed.
-
-If such an operation is used as a selector function in `mapStateToProps`, the shallow equality check that React-Redux performs on each value
-in the props object that’s returned will always fail, as the selector is returning a new object each time.
-
-As such, even though the values of that new object have not changed, the wrapped component will always be re-rendered,
-
-For example, the following will always trigger a re-render:
-
-```js
-// A JavaScript array's 'filter' method treats the array as immutable,
-// and returns a filtered copy of the array.
-const getVisibleTodos = todos => todos.filter(t => !t.completed)
-
-const state = {
-  todos: [
-    {
-      text: 'do todo 1',
-      completed: false
-    },
-    {
-      text: 'do todo 2',
-      completed: true
-    }
-  ]
-}
-
-const mapStateToProps = state => ({
-  // getVisibleTodos() always returns a new array, and so the
-  // 'visibleToDos' prop will always reference a different array,
-  // causing the wrapped component to re-render, even if the array's
-  // values haven't changed
-  visibleToDos: getVisibleTodos(state.todos)
-})
-
-const a = mapStateToProps(state)
-//  Call mapStateToProps(state) again with exactly the same arguments
-const b = mapStateToProps(state)
-
-a.visibleToDos
-//> { "completed": false, "text": "do todo 1" }
-
-b.visibleToDos
-//> { "completed": false, "text": "do todo 1" }
-
-a.visibleToDos === b.visibleToDos
-//> false
-```
-
-Note that, conversely, if the values in your props object refer to mutable objects, [your component may not render when it should](#shallow-checking-stops-component-re-rendering).
-
-#### Further Information
-
-**Articles**
-
-- [React.js pure render performance anti-pattern](https://medium.com/@esamatti/react-js-pure-render-performance-anti-pattern-fb88c101332f#.b8bpx1ncj)
-- [Building Efficient UI with React and Redux](https://www.toptal.com/react/react-redux-and-immutablejs)
-- [ImmutableJS: worth the price?](https://medium.com/@AlexFaunt/immutablejs-worth-the-price-66391b8742d4#.a3alci2g8)
 
 ## What approaches are there for handling data immutability? Do I have to use Immer?
 
