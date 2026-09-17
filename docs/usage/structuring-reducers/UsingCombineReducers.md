@@ -5,9 +5,14 @@ description: 'Structuring Reducers > Using combineReducers: Explanations of how 
 hide_title: true
 ---
 
+<!-- prettier-ignore -->
+import HandWrittenReducersNote from "../../components/_HandWrittenReducersNote.mdx";
+
 &nbsp;
 
 # Using `combineReducers`
+
+<HandWrittenReducersNote />
 
 ## Core Concepts
 
@@ -24,9 +29,9 @@ There are several important ideas to be aware of when using `combineReducers`:
 
 ## Defining State Shape
 
-There are two ways to define the initial shape and contents of your store's state. First, the `createStore` function can take `preloadedState` as its second argument. This is primarily intended for initializing the store with state that was previously persisted elsewhere, such as the browser's localStorage. The other way is for the root reducer to return the initial state value when the state argument is `undefined`. These two approaches are described in more detail in [Initializing State](./InitializingState.md), but there are some additional concerns to be aware of when using `combineReducers`.
+There are two ways to define the initial shape and contents of your store's state. First, `configureStore` accepts a `preloadedState` option. This is primarily intended for initializing the store with state that was previously persisted elsewhere, such as the browser's localStorage. The other way is for the root reducer to return the initial state value when the state argument is `undefined`. These two approaches are described in more detail in [Initializing State](./InitializingState.md), but there are some additional concerns to be aware of when using `combineReducers`.
 
-`combineReducers` takes an object full of slice reducer functions, and creates a function that outputs a corresponding state object with the same keys. This means that if no preloaded state is provided to `createStore`, the naming of the keys in the input slice reducer object will define the naming of the keys in the output state object. The correlation between these names is not always apparent, especially when using features such as default module exports and object literal shorthands.
+`combineReducers` takes an object full of slice reducer functions, and creates a function that outputs a corresponding state object with the same keys. This means that if no preloaded state is provided when creating the store, the naming of the keys in the input slice reducer object will define the naming of the keys in the output state object. The correlation between these names is not always apparent, especially when using features such as default module exports and object literal shorthands.
 
 Here's an example of how use of object literal shorthand with `combineReducers` can define the state shape:
 
@@ -39,7 +44,7 @@ export const firstNamedReducer = (state = 1, action) => state
 export const secondNamedReducer = (state = 2, action) => state
 
 // rootReducer.js
-import { combineReducers, createStore } from 'redux'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
 import theDefaultReducer, {
   firstNamedReducer,
@@ -53,7 +58,7 @@ const rootReducer = combineReducers({
   secondNamedReducer
 })
 
-const store = createStore(rootReducer)
+const store = configureStore({ reducer: rootReducer })
 console.log(store.getState())
 // {theDefaultReducer : 0, firstNamedReducer : 1, secondNamedReducer : 2}
 ```
@@ -65,7 +70,7 @@ Also, the resulting names are a bit odd. It's generally not a good practice to a
 A better usage might look like:
 
 ```js
-import { combineReducers, createStore } from 'redux'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
 // Rename the default import to whatever name we want. We can also rename a named import.
 import defaultState, {
@@ -79,9 +84,11 @@ const rootReducer = combineReducers({
   secondState // key name same as the carefully renamed named export
 })
 
-const reducerInitializedStore = createStore(rootReducer)
+const reducerInitializedStore = configureStore({ reducer: rootReducer })
 console.log(reducerInitializedStore.getState())
 // {defaultState : 0, firstState : 1, secondState : 2}
 ```
 
 This state shape better reflects the data involved, because we took care to set up the keys we passed to `combineReducers`.
+
+`configureStore` does this step for you when its `reducer` option is an object of slice reducers: it calls `combineReducers` on that object, so the keys you write there become the top-level state keys. Redux Toolkit also has [`combineSlices`](https://redux-toolkit.js.org/api/combineSlices), which builds the root reducer from slice objects and supports adding reducers lazily.

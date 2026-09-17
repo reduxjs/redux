@@ -5,11 +5,16 @@ sidebar_label: Basic Reducer Structure
 description: 'Structuring Reducers > Basic Reducer Structure: Overview of how reducer functions work with Redux state'
 ---
 
+<!-- prettier-ignore -->
+import HandWrittenReducersNote from "../../components/_HandWrittenReducersNote.mdx";
+
 # Basic Reducer Structure and State Shape
+
+<HandWrittenReducersNote />
 
 ## Basic Reducer Structure
 
-First and foremost, it's important to understand that your entire application really only has **one single reducer function**: the function that you've passed into `createStore` as the first argument. That one single reducer function ultimately needs to do several things:
+First and foremost, it's important to understand that your entire application really only has **one single reducer function**: the function that you've passed to the store as the `reducer` option of `configureStore`. That one single reducer function ultimately needs to do several things:
 
 - The first time the reducer is called, the `state` value will be `undefined`. The reducer needs to handle this case by supplying a default state value before handling the incoming action.
 - It needs to look at the previous state and the dispatched action, and determine what kind of work needs to be done

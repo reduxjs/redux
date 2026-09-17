@@ -4,6 +4,9 @@ title: Store
 description: 'API > Store: the core Redux store methods'
 ---
 
+<!-- prettier-ignore -->
+import CoreApiNote from "../components/_CoreApiNote.mdx";
+
 # Store
 
 A store holds the whole [state tree](../understanding/thinking-in-redux/Glossary.md#state) of your application.
@@ -11,7 +14,9 @@ The only way to change the state inside it is to dispatch an [action](../underst
 
 A store is not a class. It's just an object with a few methods on it.
 
-To create a store, **pass your root [reducer function](../understanding/thinking-in-redux/Glossary.md#reducer) to Redux Toolkit's [`configureStore` method](https://redux-toolkit.js.org/api/configureStore)**, which will set up a Redux store with a good default configuration. (Alternately, if you're not yet using Redux Toolkit, you can use the original [`createStore`](createStore.md) method, but we encourage you to [migrate your code to use Redux Toolkit](../usage/migrating-to-modern-redux.mdx) as soon as possible)
+<CoreApiNote />
+
+To create a store, pass your root [reducer function](../understanding/thinking-in-redux/Glossary.md#reducer) to `configureStore` (or to the deprecated core [`createStore`](createStore.md)).
 
 ## Store Methods
 
@@ -63,8 +68,8 @@ To learn how to describe asynchronous API calls, read the current state inside a
 #### Example
 
 ```js
-import { createStore } from 'redux'
-const store = createStore(todos, ['Use Redux'])
+import { configureStore } from '@reduxjs/toolkit'
+const store = configureStore({ reducer: todos, preloadedState: ['Use Redux'] })
 
 function addTodo(text) {
   return {

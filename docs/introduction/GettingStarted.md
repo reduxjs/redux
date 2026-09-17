@@ -25,66 +25,24 @@ make your Redux code better.
 
 ## Installation
 
-### Redux Toolkit
-
 Redux Toolkit is available as a package on NPM for use with a module bundler or in a Node application:
 
 ```bash
 # NPM
-npm install @reduxjs/toolkit
+npm install @reduxjs/toolkit react-redux
 
 # Yarn
-yarn add @reduxjs/toolkit
+yarn add @reduxjs/toolkit react-redux
 ```
 
-### Creating a New Redux Project
-
-The recommended way to start new apps with Redux is to use one of our [official templates](https://github.com/reduxjs/redux-templates). These templates come pre-configured with Redux Toolkit, and include a small example app to get you started.
-
-To create a new project, you can use a tool like `tiged` to clone and extract the template.
+The recommended way to start a new React + Redux app is to use one of our [official templates](https://github.com/reduxjs/redux-templates), which come pre-configured with Redux Toolkit and include a small example app:
 
 ```bash
 # Vite + TypeScript
 npx tiged reduxjs/redux-templates/packages/vite-template-redux my-app
-
-# Create React App + TypeScript
-npx tiged reduxjs/redux-templates/packages/cra-template-redux-typescript my-app
-
-# Create React App + JavaScript
-npx tiged reduxjs/redux-templates/packages/cra-template-redux my-app
-
-# Expo + TypeScript
-npx tiged reduxjs/redux-templates/packages/expo-template-redux-typescript my-app
-
-# React Native + TypeScript
-npx tiged reduxjs/redux-templates/packages/react-native-template-redux-typescript my-app
-
-# Standalone Redux Toolkit App Structure Example
-npx tiged reduxjs/redux-templates/packages/rtk-app-structure-example my-app
 ```
 
-In addition to our official templates, the community has created other templates, such as the [Next.js `with-redux` template](https://github.com/vercel/next.js/tree/canary/examples/with-redux).
-
-```bash
-# Next.js + Redux
-npx create-next-app --example with-redux my-app
-```
-
-### Redux Core
-
-The Redux core library is available as a package on NPM for use with a module bundler or in a Node application:
-
-```bash
-# NPM
-npm install redux
-
-# Yarn
-yarn add redux
-```
-
-The package includes a precompiled ESM build that can be used as a [`<script type="module">` tag](https://unpkg.com/redux/dist/redux.browser.mjs) directly in the browser.
-
-For more details, see the [Installation](Installation.md) page.
+See the [Installation](Installation.md) page for the full list of templates (including Expo, React Native, and Next.js), the Redux DevTools browser extension, and installing the Redux core package by itself.
 
 ## Basic Example
 
@@ -94,14 +52,20 @@ To specify how state gets updated in response to an action, you write pure _redu
 
 Redux Toolkit simplifies the process of writing Redux logic and setting up the store. With Redux Toolkit, the basic app logic looks like:
 
-```js
+```ts
 import { createSlice, configureStore } from '@reduxjs/toolkit'
+
+interface CounterState {
+  value: number
+}
+
+const initialState: CounterState = {
+  value: 0
+}
 
 const counterSlice = createSlice({
   name: 'counter',
-  initialState: {
-    value: 0
-  },
+  initialState,
   reducers: {
     incremented: state => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
@@ -208,7 +172,7 @@ The [**Redux Fundamentals tutorial**](../tutorials/fundamentals/part-1-overview.
 
 Redux maintainer Mark Erikson appeared on the "Learn with Jason" show to explain how we recommend using Redux today. The show includes a live-coded example app that shows how to use Redux Toolkit and React-Redux hooks with TypeScript, as well as the new RTK Query data fetching APIs.
 
-See [the "Learn Modern Redux" show notes page](https://www.learnwithjason.dev/let-s-learn-modern-redux) for a transcript and links to the example app source.
+See [the "Learn Modern Redux" show notes page](https://codetv.dev/series/learn-with-jason/s4/let-s-learn-modern-redux) for a transcript and links to the example app source.
 
 <LiteYouTubeEmbed
     id="9zySeP5vH9c"
@@ -218,9 +182,9 @@ See [the "Learn Modern Redux" show notes page](https://www.learnwithjason.dev/le
 ### Additional Tutorials
 
 - The Redux repository contains several example projects demonstrating various aspects of how to use Redux. Almost all examples have a corresponding CodeSandbox sandbox. This is an interactive version of the code that you can play with online. See the complete list of examples in the **[Examples page](./Examples.md)**.
-- Redux creator Dan Abramov's **free ["Getting Started with Redux" video series](https://egghead.io/courses/fundamentals-of-redux-course-from-dan-abramov-bd5cc867)** and **[Building React Applications with Idiomatic Redux](https://egghead.io/courses/building-react-applications-with-idiomatic-redux)** video courses on Egghead.io
-- Redux maintainer Mark Erikson's **["Redux Fundamentals" conference talk](https://blog.isquaredsoftware.com/2018/03/presentation-reactathon-redux-fundamentals/)** and [**"Redux Fundamentals" workshop slides**](https://blog.isquaredsoftware.com/2018/06/redux-fundamentals-workshop-slides/)
-- Dave Ceddia's post [**A Complete React Redux Tutorial for Beginners**](https://daveceddia.com/redux-tutorial/)
+- Redux creator Dan Abramov's **free ["Getting Started with Redux" video series](https://egghead.io/courses/fundamentals-of-redux-course-from-dan-abramov-bd5cc867)** and **[Building React Applications with Idiomatic Redux](https://egghead.io/courses/building-react-applications-with-idiomatic-redux)** video courses on Egghead.io. These predate Redux Toolkit and show the core APIs written by hand. They're still a good explanation of how Redux works underneath, but read the Essentials tutorial first.
+- Redux maintainer Mark Erikson's **["Redux Fundamentals" conference talk](https://blog.isquaredsoftware.com/2018/03/presentation-reactathon-redux-fundamentals/)** and [**"Redux Fundamentals" workshop slides**](https://blog.isquaredsoftware.com/2018/06/redux-fundamentals-workshop-slides/) (2018, older patterns)
+- Dave Ceddia's post [**A Complete React Redux Tutorial for Beginners**](https://daveceddia.com/redux-tutorial/) (older patterns)
 
 ### Other Resources
 

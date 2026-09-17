@@ -3,6 +3,9 @@ id: implementing-undo-history
 title: Implementing Undo History
 ---
 
+<!-- prettier-ignore -->
+import CoreApiNote from "../components/_CoreApiNote.mdx";
+
 # Implementing Undo History
 
 :::important Prerequisites
@@ -11,6 +14,8 @@ title: Implementing Undo History
 - Understanding of ["reducer composition"](../tutorials/fundamentals/part-3-state-actions-reducers.md#splitting-reducers)
 
 :::
+
+<CoreApiNote />
 
 Building an Undo and Redo functionality into an app has traditionally required conscious effort from the developer. It is not an easy problem with classical MVC frameworks because you need to keep track of every past state by cloning all relevant models. In addition, you need to be mindful of the undo stack because the user-initiated changes should be undoable.
 
@@ -353,8 +358,8 @@ function todos(state = [], action) {
 // This is also a reducer!
 const undoableTodos = undoable(todos)
 
-import { createStore } from 'redux'
-const store = createStore(undoableTodos)
+import { configureStore } from '@reduxjs/toolkit'
+const store = configureStore({ reducer: undoableTodos })
 
 store.dispatch({
   type: 'ADD_TODO',

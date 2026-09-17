@@ -5,9 +5,14 @@ description: 'Structuring Reducers > Beyond combineReducers: Examples of reducer
 hide_title: true
 ---
 
+<!-- prettier-ignore -->
+import HandWrittenReducersNote from "../../components/_HandWrittenReducersNote.mdx";
+
 &nbsp;
 
 # Beyond `combineReducers`
+
+<HandWrittenReducersNote />
 
 The `combineReducers` utility included with Redux is very useful, but is deliberately limited to handle a single common use case: updating a state tree that is a plain Javascript object, by delegating the work of updating each slice of state to a specific slice reducer. It does _not_ handle other use cases, such as trying to pass other portions of the state tree as an additional argument to a slice reducer, or performing "ordering" of slice reducer calls. It also does not care how a given slice reducer does its work.
 
@@ -103,6 +108,8 @@ const rootReducer = reduceReducers(combinedReducers, crossSliceReducer)
 ```
 
 Note that if you use `reduceReducers`, you should make sure that the first reducer in the list is able to define the initial state, since the later reducers will generally assume that the entire state already exists and not try to provide defaults.
+
+The most common cross-slice case, where several slices each need to respond to the same action, doesn't need any of this. With Redux Toolkit, each slice can handle that action in its `extraReducers` option, and `configureStore` combines the slice reducers as usual. The custom root reducer approach above is only needed when one slice's update depends on the _current_ state of another slice.
 
 ## Further Suggestions
 

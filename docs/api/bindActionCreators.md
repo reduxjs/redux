@@ -13,17 +13,15 @@ description: 'API > bindActionCreators: wrapping action creators for dispatching
 
 Turns an object whose values are [action creators](../understanding/thinking-in-redux/Glossary.md#action-creator), into an object with the same keys, but with every action creator wrapped into a [`dispatch`](Store.md#dispatchaction) call so they may be invoked directly.
 
-Normally you should just call [`dispatch`](Store.md#dispatchaction) directly on your [`Store`](Store.md) instance. If you use Redux with React, [react-redux](https://github.com/reduxjs/react-redux) will provide you with the [`dispatch`](Store.md#dispatchaction) function so you can call it directly, too.
+:::info
 
-The only use case for `bindActionCreators` is when you want to pass some action creators down to a component that isn't aware of Redux, and you don't want to pass [`dispatch`](Store.md#dispatchaction) or the Redux store to it.
+Normally you should just call [`dispatch`](Store.md#dispatchaction) directly. If you use Redux with React, [React-Redux's `useDispatch` hook](https://react-redux.js.org/api/hooks#usedispatch) gives you the `dispatch` function inside components.
 
-For convenience, you can also pass an action creator as the first argument, and get a dispatch wrapped function in return.
-
-:::warning Warning
-
-This was originally intended for use with the legacy React-Redux `connect` method. It still works, but is rarely needed.
+The only use case for `bindActionCreators` is when you want to pass some action creators down to a component that isn't aware of Redux, and you don't want to pass `dispatch` or the Redux store to it. It was originally intended for use with the legacy React-Redux `connect` method, and is rarely needed today.
 
 :::
+
+For convenience, you can also pass an action creator as the first argument, and get a dispatch wrapped function in return.
 
 ## Parameters
 

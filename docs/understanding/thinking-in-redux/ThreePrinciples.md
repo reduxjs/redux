@@ -4,7 +4,12 @@ title: Three Principles
 description: 'Understanding > Three Principles: Three key principles for using Redux'
 ---
 
+<!-- prettier-ignore -->
+import CoreApiNote from "../../components/_CoreApiNote.mdx";
+
 # Three Principles
+
+<CoreApiNote />
 
 Redux can be described in three fundamental principles:
 
@@ -92,9 +97,8 @@ function todos(state = [], action) {
   }
 }
 
-import { combineReducers, createStore } from 'redux'
-const reducer = combineReducers({ visibilityFilter, todos })
-const store = createStore(reducer)
+import { configureStore } from '@reduxjs/toolkit'
+const store = configureStore({ reducer: { visibilityFilter, todos } })
 ```
 
 That's it! Now you know what Redux is all about.

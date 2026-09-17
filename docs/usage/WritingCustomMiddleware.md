@@ -3,6 +3,9 @@ id: writing-custom-middleware
 title: Writing Custom Middleware
 ---
 
+<!-- prettier-ignore -->
+import CoreApiNote from "../components/_CoreApiNote.mdx";
+
 # Writing Custom Middleware
 
 :::tip What You'll Learn
@@ -12,6 +15,8 @@ title: Writing Custom Middleware
 - How to make sure that your middleware is compatible with other Redux projects
 
 :::
+
+<CoreApiNote />
 
 Middleware in Redux can be mainly used to either
 

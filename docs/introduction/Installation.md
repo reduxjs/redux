@@ -20,7 +20,33 @@ npm install @reduxjs/toolkit
 yarn add @reduxjs/toolkit
 ```
 
-The package includes a precompiled ESM build that can be used as a [`<script type="module">` tag](https://unpkg.com/redux/dist/redux.browser.mjs) directly in the browser.
+The package includes a precompiled ESM build that can be used as a [`<script type="module">` tag](https://unpkg.com/@reduxjs/toolkit/dist/redux-toolkit.browser.mjs) directly in the browser.
+
+## Create a React Redux App
+
+The recommended way to start a new app with React and Redux is to use one of our [official templates](https://github.com/reduxjs/redux-templates). These come with Redux Toolkit and React-Redux already configured for that build tool, and include a small example app that shows how to use several of Redux Toolkit's features.
+
+Use a tool like `tiged` to clone and extract a template:
+
+```bash
+# Vite + TypeScript
+npx tiged reduxjs/redux-templates/packages/vite-template-redux my-app
+
+# Expo + TypeScript
+npx tiged reduxjs/redux-templates/packages/expo-template-redux-typescript my-app
+
+# React Native + TypeScript
+npx tiged reduxjs/redux-templates/packages/react-native-template-redux-typescript my-app
+
+# Standalone Redux Toolkit app structure example
+npx tiged reduxjs/redux-templates/packages/rtk-app-structure-example my-app
+```
+
+For Next.js, use [Next's `with-redux` example](https://github.com/vercel/next.js/tree/canary/examples/with-redux) and see our [Redux with Next.js guide](../usage/nextjs.mdx):
+
+```bash
+npx create-next-app --example with-redux my-app
+```
 
 ## Complementary Packages
 
@@ -41,6 +67,7 @@ Redux Toolkit's `configureStore` automatically sets up integration with the [Red
 - Redux DevTools Extension:
   - [Redux DevTools Extension for Chrome](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en)
   - [Redux DevTools Extension for Firefox](https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/)
+  - [Redux DevTools Extension for Edge](https://microsoftedge.microsoft.com/addons/detail/redux-devtools/nnkgneoiohoecpdiaponcejilbhhikei)
 
 If you're using React, you'll want the React DevTools extension as well:
 
@@ -48,29 +75,9 @@ If you're using React, you'll want the React DevTools extension as well:
   - [React DevTools Extension for Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en)
   - [React DevTools Extension for Firefox](https://addons.mozilla.org/en-US/firefox/addon/react-devtools/)
 
-## Create a React Redux App
-
-The recommended way to start new apps with React and Redux is by using [our official Redux+TS template for Vite](https://github.com/reduxjs/redux-templates), or by creating a new Next.js project using [Next's `with-redux` template](https://github.com/vercel/next.js/tree/canary/examples/with-redux).
-
-Both of these already have Redux Toolkit and React-Redux configured appropriately for that build tool, and come with a small example app that demonstrates how to use several of Redux Toolkit's features.
-
-```bash
-# Vite with our Redux+TS template
-# (using the `degit` tool to clone and extract the template)
-npx degit reduxjs/redux-templates/packages/vite-template-redux my-app
-
-# Next.js using the `with-redux` template
-npx create-next-app --example with-redux my-app
-```
-
-We do not currently have official React Native templates, but recommend these templates for standard React Native and for Expo:
-
-- https://github.com/rahsheen/react-native-template-redux-typescript
-- https://github.com/rahsheen/expo-template-redux-typescript
-
 ## Redux Core
 
-To install the `redux` core package by itself:
+Redux Toolkit already includes and re-exports the `redux` core package, so most apps do not need to install it separately. To install the `redux` core package by itself:
 
 ```bash
 # NPM

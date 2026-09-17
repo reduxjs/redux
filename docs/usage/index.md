@@ -19,9 +19,17 @@ The pages in this category assume you understand the core Redux terms and concep
 This section covers information on how to set up and organize Redux-based projects.
 
 - [Configuring Your Store](ConfiguringYourStore.md)
+- [Redux Toolkit Setup with Next.js](nextjs.mdx)
 - [Code Splitting](CodeSplitting.md)
 - [Server Rendering](ServerRendering.md)
 - [Isolating Redux Sub-Apps](IsolatingSubapps.md)
+
+## Migrations
+
+This section covers how to update existing Redux code to current patterns and versions.
+
+- [Migrating to Modern Redux](migrating-to-modern-redux.mdx)
+- [Migrating to RTK 2.0 and Redux 5.0](migrations/migrating-rtk-2.md)
 
 ## Code Quality
 
@@ -37,5 +45,8 @@ This section provides information about typical Redux patterns and approaches fo
 
 - [Structuring Reducers](structuring-reducers/StructuringReducers.md)
 - [Reducing Boilerplate](ReducingBoilerplate.md)
-- [Deriving Data with Selectors](../usage/deriving-data-selectors.md)
+- [Deriving Data with Selectors](deriving-data-selectors.md)
+- [Writing Logic with Thunks](writing-logic-thunks.mdx)
+- [Side Effects Approaches](side-effects-approaches.mdx)
+- [Writing Custom Middleware](WritingCustomMiddleware.md)
 - [Implementing Undo History](ImplementingUndoHistory.md)
