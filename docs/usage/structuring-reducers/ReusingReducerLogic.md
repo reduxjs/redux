@@ -6,6 +6,8 @@ description: 'Structuring Reducers > Reusing Reducer Logic: Patterns for creatin
 
 # Reusing Reducer Logic
 
+_This page shows reducer patterns written by hand. See the [Structuring Reducers intro](StructuringReducers.md) for how they relate to Redux Toolkit's `createSlice`._
+
 As an application grows, common patterns in reducer logic will start to emerge. You may find several parts of your reducer logic doing the same kinds of work for different types of data, and want to reduce duplication by reusing the same common logic for each data type. Or, you may want to have multiple "instances" of a certain type of data being handled in the store. However, the global structure of a Redux store comes with some trade-offs: it makes it easy to track the overall state of an application, but can also make it harder to "target" actions that need to update a specific piece of state, particularly if you are using `combineReducers`.
 
 As an example, let's say that we want to track multiple counters in our application, named A, B, and C. We define our initial `counter` reducer, and we use `combineReducers` to set up our state:

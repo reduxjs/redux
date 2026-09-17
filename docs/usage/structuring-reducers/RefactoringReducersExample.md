@@ -7,6 +7,8 @@ description: 'Structuring Reducers > Refactoring Reducers: Examples of ways to r
 
 # Refactoring Reducer Logic Using Functional Decomposition and Reducer Composition
 
+_This page shows reducer patterns written by hand. See the [Structuring Reducers intro](StructuringReducers.md) for how they relate to Redux Toolkit's `createSlice`._
+
 It may be helpful to see examples of what the different types of sub-reducer functions look like and how they fit together. Let's look at a demonstration of how a large single reducer function can be refactored into a composition of several smaller functions.
 
 > **Note**: this example is deliberately written in a verbose style in order to illustrate the concepts and the process of refactoring, rather than perfectly concise code.

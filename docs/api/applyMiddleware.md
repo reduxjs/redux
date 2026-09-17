@@ -5,6 +5,9 @@ hide_title: true
 description: 'API > applyMiddleware: extending the Redux store'
 ---
 
+<!-- prettier-ignore -->
+import CoreApiNote from "../components/_CoreApiNote.mdx";
+
 &nbsp;
 
 # `applyMiddleware(...middleware)`
@@ -13,11 +16,9 @@ description: 'API > applyMiddleware: extending the Redux store'
 
 Middleware is the suggested way to extend Redux with custom functionality. Middleware lets you wrap the store's [`dispatch`](Store.md#dispatchaction) method for fun and profit. The key feature of middleware is that it is composable. Multiple middleware can be combined together, where each middleware requires no knowledge of what comes before or after it in the chain.
 
-:::warning Warning
+<CoreApiNote />
 
-You shouldn't have to call `applyMiddleware` directly. Redux Toolkit's [`configureStore` method](https://redux-toolkit.js.org/api/configureStore) automatically adds a default set of middleware to the store, or can accept a list of middleware to add.
-
-:::
+You shouldn't have to call `applyMiddleware` directly. `configureStore` adds a default set of middleware to the store, and accepts a `middleware` callback for adding more.
 
 The most common use case for middleware is to support asynchronous actions without much boilerplate code or a dependency on a library like [Rx](https://github.com/Reactive-Extensions/RxJS). It does so by letting you dispatch [async actions](../understanding/thinking-in-redux/Glossary.md#async-action) in addition to normal actions.
 

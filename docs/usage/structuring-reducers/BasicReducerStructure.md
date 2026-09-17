@@ -7,6 +7,8 @@ description: 'Structuring Reducers > Basic Reducer Structure: Overview of how re
 
 # Basic Reducer Structure and State Shape
 
+_This page shows reducer patterns written by hand. See the [Structuring Reducers intro](StructuringReducers.md) for how they relate to Redux Toolkit's `createSlice`._
+
 ## Basic Reducer Structure
 
 First and foremost, it's important to understand that your entire application really only has **one single reducer function**: the function that you've passed into `createStore` as the first argument. That one single reducer function ultimately needs to do several things:

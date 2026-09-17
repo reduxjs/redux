@@ -6,6 +6,8 @@ description: 'Structuring Reducers > Normalizing State Shape: Why and how to sto
 
 # Normalizing State Shape
 
+_This page shows reducer patterns written by hand. See the [Structuring Reducers intro](StructuringReducers.md) for how they relate to Redux Toolkit's `createSlice`._
+
 Many applications deal with data that is nested or relational in nature. For example, a blog editor could have many Posts, each Post could have many Comments, and both Posts and Comments would be written by a User. Data for this kind of application might look like:
 
 ```js

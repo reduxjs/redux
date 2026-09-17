@@ -6,6 +6,8 @@ description: 'Structuring Reducers > Immutable Update Patterns: How to correctly
 
 # Immutable Update Patterns
 
+_This page shows reducer patterns written by hand. See the [Structuring Reducers intro](StructuringReducers.md) for how they relate to Redux Toolkit's `createSlice`._
+
 The articles listed in [Prerequisite Concepts#Immutable Data Management](PrerequisiteConcepts.md#immutable-data-management) give a number of good examples for how to perform basic update operations immutably, such as updating a field in an object or adding an item to the end of an array. However, reducers will often need to use those basic operations in combination to perform more complicated tasks. Here are some examples for some of the more common tasks you might have to implement.
 
 ## Updating Nested Objects

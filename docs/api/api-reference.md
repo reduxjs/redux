@@ -3,6 +3,9 @@ id: api-reference
 title: API Reference
 ---
 
+<!-- prettier-ignore -->
+import CoreApiNote from "../components/_CoreApiNote.mdx";
+
 # API Reference
 
 This section documents the original Redux core API. The Redux core is small - it defines a set of contracts for you to implement (such as [reducers](../understanding/thinking-in-redux/Glossary.md#reducer)) and provides a few helper functions to tie these contracts together.
@@ -14,19 +17,9 @@ See their API docs here:
 - https://redux-toolkit.js.org/
 - https://react-redux.js.org/
 
-:::danger
+<CoreApiNote />
 
-**The original Redux core `createStore` method is deprecated!**
-
-`createStore` will continue to work indefinitely, but we discourage direct use of `createStore` or the original `redux` package.
-
-Instead, you should use [the `configureStore` method](https://redux-toolkit.js.org/api/configureStore) from our official [Redux Toolkit](https://redux-toolkit.js.org) package, which wraps `createStore` to provide a better default setup and configuration approach. You should also use Redux Toolkit's [`createSlice` method](https://redux-toolkit.js.org/api/createSlice) for writing reducer logic.
-
-Redux Toolkit also re-exports all of the other APIs included in the `redux` package as well.
-
-See the [**Migrating to Modern Redux** page](../usage/migrating-to-modern-redux.mdx) for details on how to update your existing legacy Redux codebase to use Redux Toolkit.
-
-:::
+Redux Toolkit also re-exports all of the APIs included in the `redux` package. The original [`createStore`](createStore.md) method is deprecated in favor of `configureStore`, but will continue to work indefinitely.
 
 ## Top-Level Exports
 

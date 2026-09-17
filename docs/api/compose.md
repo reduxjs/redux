@@ -5,6 +5,9 @@ hide_title: true
 description: 'API > compose: composing multiple functions together'
 ---
 
+<!-- prettier-ignore -->
+import CoreApiNote from "../components/_CoreApiNote.mdx";
+
 &nbsp;
 
 # `compose(...functions)`
@@ -16,11 +19,9 @@ Composes functions from right to left.
 This is a functional programming utility, and is included in Redux as a convenience.
 You might want to use it to apply several [store enhancers](../understanding/thinking-in-redux/Glossary.md#store-enhancer) in a row. `compose` is also usable as a general-purpose standalone method.
 
-:::warning Warning
+<CoreApiNote />
 
-You shouldn't have to call `compose` directly. Redux Toolkit's [`configureStore` method](https://redux-toolkit.js.org/api/configureStore) automatically configures a Redux store with the standard `applyMiddleware` and Redux DevTools store enhancers, and offers an `enhancers` argument to pass in additional enhancers.
-
-:::
+You shouldn't have to call `compose` directly. `configureStore` sets up the standard `applyMiddleware` and Redux DevTools store enhancers, and offers an `enhancers` callback for adding more.
 
 ## Arguments
 

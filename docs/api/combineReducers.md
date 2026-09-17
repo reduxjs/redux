@@ -5,6 +5,9 @@ hide_title: true
 description: 'API > combineReducers: merging slice reducers to create combined state'
 ---
 
+<!-- prettier-ignore -->
+import CoreApiNote from "../components/_CoreApiNote.mdx";
+
 &nbsp;
 
 # `combineReducers(reducers)`
@@ -15,9 +18,9 @@ The `combineReducers` helper function turns an object whose values are different
 
 The resulting combined reducer calls every slice reducer any time an action is dispatched, and gathers their results into a single state object. This enables splitting up reducer logic into separate functions, each managing their own slice of the state independently.
 
-:::tip
+<CoreApiNote />
 
-This should be rarely needed - Redux Toolkit's [`configureStore` method](https://redux-toolkit.js.org/api/configureStore) will automatically call `combineReducers` for you if you pass in an object of slice reducers:
+You should rarely need to call `combineReducers` yourself. `configureStore` calls it for you if you pass in an object of slice reducers:
 
 ```ts
 const store = configureStore({
@@ -28,9 +31,7 @@ const store = configureStore({
 })
 ```
 
-You can still call `combineReducers()` yourself if you need to construct the root reducer manually first.
-
-:::
+You can still call `combineReducers()` directly if you need to construct the root reducer manually first, and Redux Toolkit's [`combineSlices`](https://redux-toolkit.js.org/api/combineSlices) does the same job with support for lazy-loaded slices.
 
 ### State Slices
 
@@ -82,7 +83,7 @@ Any reducer passed to `combineReducers` must satisfy these rules:
 
 - If the `state` given to it is `undefined`, it must return the initial state for this specific reducer. According to the previous rule, the initial state must not be `undefined` either. It is handy to specify it with optional arguments syntax, but you can also explicitly check the first argument for being `undefined`.
 
-While `combineReducers` attempts to check that your reducers conform to some of these rules, you should remember them, and do your best to follow them. `combineReducers` will check your reducers by passing `undefined` to them; this is done even if you specify initial state to `Redux.createStore(combineReducers(...), initialState)`. Therefore, you **must** ensure your reducers work properly when receiving `undefined` as state, even if you never intend for them to actually receive `undefined` in your own code.
+While `combineReducers` attempts to check that your reducers conform to some of these rules, you should remember them, and do your best to follow them. `combineReducers` will check your reducers by passing `undefined` to them; this is done even if you specify initial state with `configureStore({ reducer, preloadedState })`. Therefore, you **must** ensure your reducers work properly when receiving `undefined` as state, even if you never intend for them to actually receive `undefined` in your own code.
 
 ## Example
 
