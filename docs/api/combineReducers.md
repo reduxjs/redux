@@ -14,7 +14,7 @@ import CoreApiNote from "../components/_CoreApiNote.mdx";
 
 ## Overview
 
-The `combineReducers` helper function turns an object whose values are different "slice reducer" functions into a single combined reducer function you can pass to Redux Toolkit's [`configureStore`](https://redux-toolkit.js.org/api/configureStore) (or the legacy [`createStore`](createStore.md) method)
+The `combineReducers` helper function turns an object whose values are different "slice reducer" functions into a single combined reducer function you can pass to the store.
 
 The resulting combined reducer calls every slice reducer any time an action is dispatched, and gathers their results into a single state object. This enables splitting up reducer logic into separate functions, each managing their own slice of the state independently.
 

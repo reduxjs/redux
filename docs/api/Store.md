@@ -16,7 +16,7 @@ A store is not a class. It's just an object with a few methods on it.
 
 <CoreApiNote />
 
-To create a store, **pass your root [reducer function](../understanding/thinking-in-redux/Glossary.md#reducer) to Redux Toolkit's [`configureStore` method](https://redux-toolkit.js.org/api/configureStore)**, which will set up a Redux store with a good default configuration. The original [`createStore`](createStore.md) method also works, but is deprecated.
+To create a store, pass your root [reducer function](../understanding/thinking-in-redux/Glossary.md#reducer) to `configureStore` (or to the deprecated core [`createStore`](createStore.md)).
 
 ## Store Methods
 
@@ -68,8 +68,8 @@ To learn how to describe asynchronous API calls, read the current state inside a
 #### Example
 
 ```js
-import { createStore } from 'redux'
-const store = createStore(todos, ['Use Redux'])
+import { configureStore } from '@reduxjs/toolkit'
+const store = configureStore({ reducer: todos, preloadedState: ['Use Redux'] })
 
 function addTodo(text) {
   return {
