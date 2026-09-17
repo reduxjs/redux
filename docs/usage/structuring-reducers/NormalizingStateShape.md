@@ -4,9 +4,12 @@ title: Normalizing State Shape
 description: 'Structuring Reducers > Normalizing State Shape: Why and how to store data items for lookup based on ID'
 ---
 
+<!-- prettier-ignore -->
+import HandWrittenReducersNote from "../../components/_HandWrittenReducersNote.mdx";
+
 # Normalizing State Shape
 
-_This page shows reducer patterns written by hand. See the [Structuring Reducers intro](StructuringReducers.md) for how they relate to Redux Toolkit's `createSlice`._
+<HandWrittenReducersNote />
 
 Many applications deal with data that is nested or relational in nature. For example, a blog editor could have many Posts, each Post could have many Comments, and both Posts and Comments would be written by a User. Data for this kind of application might look like:
 

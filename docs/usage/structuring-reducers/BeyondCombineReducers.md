@@ -5,11 +5,14 @@ description: 'Structuring Reducers > Beyond combineReducers: Examples of reducer
 hide_title: true
 ---
 
+<!-- prettier-ignore -->
+import HandWrittenReducersNote from "../../components/_HandWrittenReducersNote.mdx";
+
 &nbsp;
 
 # Beyond `combineReducers`
 
-_This page shows reducer patterns written by hand. See the [Structuring Reducers intro](StructuringReducers.md) for how they relate to Redux Toolkit's `createSlice`._
+<HandWrittenReducersNote />
 
 The `combineReducers` utility included with Redux is very useful, but is deliberately limited to handle a single common use case: updating a state tree that is a plain Javascript object, by delegating the work of updating each slice of state to a specific slice reducer. It does _not_ handle other use cases, such as trying to pass other portions of the state tree as an additional argument to a slice reducer, or performing "ordering" of slice reducer calls. It also does not care how a given slice reducer does its work.
 

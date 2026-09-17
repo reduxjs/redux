@@ -4,9 +4,12 @@ title: Initializing State
 description: 'Structuring Reducers > Initializing State: How Redux state is initialized'
 ---
 
+<!-- prettier-ignore -->
+import HandWrittenReducersNote from "../../components/_HandWrittenReducersNote.mdx";
+
 # Initializing State
 
-_This page shows reducer patterns written by hand. See the [Structuring Reducers intro](StructuringReducers.md) for how they relate to Redux Toolkit's `createSlice`._
+<HandWrittenReducersNote />
 
 There are two main ways to initialize state for your application. `configureStore` accepts an optional `preloadedState` value (the same value is the second argument to the core `createStore` function). Reducers can also specify an initial value by looking for an incoming state argument that is `undefined`, and returning the value they'd like to use as a default. This can either be done with an explicit check inside the reducer, or by using the default argument value syntax: `function myReducer(state = someDefaultValue, action)`.
 

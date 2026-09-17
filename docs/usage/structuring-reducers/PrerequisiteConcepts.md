@@ -5,9 +5,12 @@ sidebar_label: Prerequisite Concepts
 description: 'Structuring Reducers > Prerequisite Concepts: Key concepts to understand when using Redux'
 ---
 
+<!-- prettier-ignore -->
+import HandWrittenReducersNote from "../../components/_HandWrittenReducersNote.mdx";
+
 # Prerequisite Reducer Concepts
 
-_This page shows reducer patterns written by hand. See the [Structuring Reducers intro](StructuringReducers.md) for how they relate to Redux Toolkit's `createSlice`._
+<HandWrittenReducersNote />
 
 As described in ["Redux Fundamentals" Part 3: State, Actions, and Reducers](../../tutorials/fundamentals/part-3-state-actions-reducers.md), a Redux reducer function:
 

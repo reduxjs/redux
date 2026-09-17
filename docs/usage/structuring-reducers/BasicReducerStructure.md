@@ -5,9 +5,12 @@ sidebar_label: Basic Reducer Structure
 description: 'Structuring Reducers > Basic Reducer Structure: Overview of how reducer functions work with Redux state'
 ---
 
+<!-- prettier-ignore -->
+import HandWrittenReducersNote from "../../components/_HandWrittenReducersNote.mdx";
+
 # Basic Reducer Structure and State Shape
 
-_This page shows reducer patterns written by hand. See the [Structuring Reducers intro](StructuringReducers.md) for how they relate to Redux Toolkit's `createSlice`._
+<HandWrittenReducersNote />
 
 ## Basic Reducer Structure
 

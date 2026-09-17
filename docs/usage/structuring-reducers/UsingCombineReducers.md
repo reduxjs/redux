@@ -5,11 +5,14 @@ description: 'Structuring Reducers > Using combineReducers: Explanations of how 
 hide_title: true
 ---
 
+<!-- prettier-ignore -->
+import HandWrittenReducersNote from "../../components/_HandWrittenReducersNote.mdx";
+
 &nbsp;
 
 # Using `combineReducers`
 
-_This page shows reducer patterns written by hand. See the [Structuring Reducers intro](StructuringReducers.md) for how they relate to Redux Toolkit's `createSlice`._
+<HandWrittenReducersNote />
 
 ## Core Concepts
 
