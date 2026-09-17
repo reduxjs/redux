@@ -18,7 +18,7 @@ In particular, immutability in the context of a Web app enables sophisticated ch
 
 - [Introduction to Immer](https://immerjs.github.io/immer/)
 - [JavaScript Immutability presentation (PDF - see slide 12 for benefits)](https://www.jfokus.se/jfokus16/preso/JavaScript-Immutability--Dont-Go-Changing.pdf)
-- [React: Optimizing Performance](https://facebook.github.io/react/docs/optimizing-performance.html)
+- [React: Optimizing Performance](https://legacy.reactjs.org/docs/optimizing-performance.html)
 - [JavaScript Application Architecture On The Road To 2015](https://medium.com/google-developers/javascript-application-architecture-on-the-road-to-2015-d8125811101b#.djje0rfys)
 
 ## Why is immutability required by Redux?

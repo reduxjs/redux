@@ -410,13 +410,13 @@ const todosSlice = createSlice({
 
 ## Fetching Data with RTK Query
 
-Redux Toolkit has a new [**RTK Query data fetching API**](https://redux-toolkit.js.org/rtk-query/overview). RTK Query is a purpose built data fetching and caching solution for Redux apps, and **can eliminate the need to write _any_ thunks or reducers to manage data fetching**.
+Redux Toolkit includes the [**RTK Query data fetching API**](https://redux-toolkit.js.org/rtk-query/overview). RTK Query is a purpose built data fetching and caching solution for Redux apps, and **can eliminate the need to write _any_ thunks or reducers to manage data fetching**.
 
 RTK Query actually uses `createAsyncThunk` internally for all requests, along with a custom middleware to manage cache data lifetimes.
 
 First, create an "API slice" with definitions for the server endpoints your app will talk to. Each endpoint will auto-generate a React hook with a name based on the endpoint and request type, like `useGetPokemonByNameQuery`:
 
-```js title="RTK Query: API slice (pokemonSlice.js)"
+```js title="RTK Query: API slice (services/pokemon.js)"
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const pokemonApi = createApi({

@@ -19,9 +19,9 @@ The intended guarantee is that Redux eventually calls all subscribers with the m
 
 A potential use-case for using the action inside a subscriber -- which is an unsupported feature -- is to ensure that a component only re-renders after certain kinds of actions. Instead, re-rendering should be controlled through:
 
-1. the [shouldComponentUpdate](https://facebook.github.io/react/docs/react-component.html#shouldcomponentupdate) lifecycle method
-2. the [virtual DOM equality check (vDOMEq)](https://facebook.github.io/react/docs/optimizing-performance.html#avoid-reconciliation)
-3. [React.PureComponent](https://facebook.github.io/react/docs/optimizing-performance.html#examples)
+1. the [shouldComponentUpdate](https://react.dev/reference/react/Component#shouldcomponentupdate) lifecycle method
+2. the [virtual DOM equality check (vDOMEq)](https://legacy.reactjs.org/docs/optimizing-performance.html#avoid-reconciliation)
+3. [React.PureComponent](https://react.dev/reference/react/PureComponent)
 4. Using React-Redux: use [mapStateToProps](https://react-redux.js.org/api#connect) to subscribe components to only the parts of the store that they need.
 
 #### Further Information
@@ -84,7 +84,7 @@ The [curried function signature](https://github.com/reactjs/redux/issues/1744) o
 
 `combineReducers` is opinionated to encourage splitting reducer logic by domain. As stated in [Beyond `combineReducers`](../usage/structuring-reducers/BeyondCombineReducers.md),`combineReducers` is deliberately limited to handle a single common use case: updating a state tree that is a plain Javascript object by delegating the work of updating each slice of state to a specific slice reducer.
 
-It's not immediately obvious what a potential third argument to each reducer should be: the entire state tree, some callback function, some other part of the state tree, etc. If `combineReducers` doesn't fit your use case, consider using libraries like [combineSectionReducers](https://github.com/ryo33/combine-section-reducers) or [reduceReducers](https://github.com/acdlite/reduce-reducers) for other options with deeply nested reducers and reducers that require access to the global state.
+It's not immediately obvious what a potential third argument to each reducer should be: the entire state tree, some callback function, some other part of the state tree, etc. If `combineReducers` doesn't fit your use case, consider using libraries like [combineSectionReducers](https://github.com/ryo33/combine-section-reducers) or [reduceReducers](https://github.com/redux-utilities/reduce-reducers) for other options with deeply nested reducers and reducers that require access to the global state.
 
 If none of the published utilities solve your use case, you can always write a function yourself that does just exactly what you need.
 

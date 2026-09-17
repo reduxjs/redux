@@ -99,23 +99,7 @@ Redux notifies subscribers after each successfully dispatched action (i.e. an ac
 
 There are several addons that add batching capabilities in various ways, like: [redux-batched-actions](https://github.com/tshelburne/redux-batched-actions) (a higher-order reducer that lets you dispatch several actions as if it was one and “unpack” them in the reducer), [redux-batched-subscribe](https://github.com/tappleby/redux-batched-subscribe) (a store enhancer that lets you debounce subscriber calls for multiple dispatches), or [redux-batch](https://github.com/manaflair/redux-batch) (a store enhancer that handles dispatching an array of actions with a single subscriber notification).
 
-For React-Redux specifically, starting in [React-Redux v7](https://github.com/reduxjs/react-redux/releases/tag/v7.0.1) a new `batch` public API is available to help minimize the number of React re-renders when dispatching actions outside of React event handlers. It wraps React's `unstable_batchedUpdate()` API, allows any React updates in an event loop tick to be batched together into a single render pass. React already uses this internally for its own event handler callbacks. This API is actually part of the renderer packages like ReactDOM and React Native, not the React core itself.
-
-Since React-Redux needs to work in both ReactDOM and React Native environments, we've taken care of importing this API from the correct renderer at build time for our own use. We also now re-export this function publicly ourselves, renamed to `batch()`. You can use it to ensure that multiple actions dispatched outside of React only result in a single render update, like this:
-
-```js
-import { batch } from 'react-redux'
-
-function myThunk() {
-  return (dispatch, getState) => {
-    // should only result in one combined re-render, not two
-    batch(() => {
-      dispatch(increment())
-      dispatch(increment())
-    })
-  }
-}
-```
+For React specifically, React 18 and later automatically batch all state updates that happen in the same event loop tick into a single render pass, including updates triggered by Redux dispatches outside of React event handlers (in thunks, timeouts, or promise callbacks). Dispatching several actions in a row will still notify subscribers and run selectors once per action, but React will only render once. React-Redux still exports a `batch()` function from earlier versions, but it is a no-op in React-Redux v9 and will be removed in v10.
 
 #### Further information
 
@@ -127,10 +111,6 @@ function myThunk() {
 - [#1813: Use a loop to support dispatching arrays](https://github.com/reduxjs/redux/pull/1813)
 - [React Redux #263: Huge performance issue when dispatching hundreds of actions](https://github.com/reduxjs/react-redux/issues/263)
 - [React-Redux #1177: Roadmap: v6, Context, Subscriptions, and Hooks](https://github.com/reduxjs/react-redux/issues/1177)
-
-**Libraries**
-
-- [Redux Addons Catalog: Store - Change Subscriptions](https://github.com/markerikson/redux-ecosystem-links/blob/master/store.md#store-change-subscriptions)
 
 ### Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?
 

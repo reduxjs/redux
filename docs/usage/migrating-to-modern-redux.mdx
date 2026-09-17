@@ -286,7 +286,7 @@ const todosSlice = createSlice({
     todoAdded(state, action) {
       const { id, text } = action.payload
       // "Mutating" update syntax thanks to Immer, and no `return` needed
-      state.todos.push({
+      state.push({
         id,
         text,
         completed: false
@@ -297,7 +297,7 @@ const todosSlice = createSlice({
       // Look for the specific nested object to update.
       // In this case, `action.payload` is the default field in the action,
       // and can hold the `id` value - no need for `action.id` separately
-      const matchingTodo = state.todos.find(todo => todo.id === action.payload)
+      const matchingTodo = state.find(todo => todo.id === action.payload)
 
       if (matchingTodo) {
         // Can directly "mutate" the nested object
@@ -643,7 +643,7 @@ export function* pingSaga() {
 ```
 
 ```js title="src/epics/ping.js"
-import { filter, mapTo } from 'rxjs/operators'
+import { delay, mapTo } from 'rxjs/operators'
 import { ofType } from 'redux-observable'
 
 const pingEpic = action$ =>
@@ -653,12 +653,12 @@ const pingEpic = action$ =>
 ```js title="src/app/store.js"
 import { createStore, applyMiddleware } from 'redux'
 import createSagaMiddleware from 'redux-saga'
-import { combineEpics, createEpicMiddleware  } from 'redux-observable';
+import { combineEpics, createEpicMiddleware } from 'redux-observable'
 
 // skip reducers
 
-import { pingEpic } from '../sagas/ping'
-import { pingSaga } from '../epics/ping
+import { pingSaga } from '../sagas/ping'
+import { pingEpic } from '../epics/ping'
 
 function* rootSaga() {
   yield pingSaga()
@@ -697,17 +697,21 @@ export const { startListening, stopListening } = listenerMiddleware
 import { createSlice } from '@reduxjs/toolkit'
 import { startListening } from '../../app/listenerMiddleware'
 
+const initialState = {}
+
 const pingSlice = createSlice({
   name: 'ping',
   initialState,
   reducers: {
+    // "Signal" action, dispatched only to kick off the listener
+    ping() {},
     pong(state, action) {
       // state update here
     }
   }
 })
 
-export const { pong } = pingSlice.actions
+export const { ping, pong } = pingSlice.actions
 export default pingSlice.reducer
 
 // highlight-start
@@ -716,7 +720,7 @@ export default pingSlice.reducer
 // it directly in a slice file.
 startListening({
   // Match this exact action type based on the action creator
-  actionCreator: pong,
+  actionCreator: ping,
   // Run this effect callback whenever that action is dispatched
   effect: async (action, listenerApi) => {
     // Listener effect functions get a `listenerApi` object
@@ -780,7 +784,8 @@ export const toggleTodo = (id: string): ToggleTodoAction => ({
 ```
 
 ```ts no-transpile title="src/reducers/todos.ts"
-import { ADD_TODO, TOGGLE_TODO, TodoActions } from '../constants/todos'
+import { ADD_TODO, TOGGLE_TODO } from '../constants/todos'
+import { TodoActions } from '../actions/todos'
 
 interface Todo {
   id: string
@@ -967,11 +972,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(TodoListItem)
 - Each function passed in via `mapDispatch` becomes a separate callback function defined inside the component
 
 ```js title="src/features/todos/TodoListItem.js"
-import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
-  todoAdded,
   todoToggled,
+  todoDeleted,
   selectTodoById,
   selectActiveTodoId
 } from './todosSlice'

@@ -18,7 +18,7 @@ It is tempting to modify the `state` or `action` passed to you by Redux. Don't d
 
 Redux assumes that you never mutate the objects it gives to you in the reducer. **Every single time, you must return the new state object.** Even if you don't use a library like [Immer](https://github.com/immerjs/immer), you need to completely avoid mutation.
 
-Immutability is what lets [react-redux](https://github.com/gaearon/react-redux) efficiently subscribe to fine-grained updates of your state. It also enables great developer experience features such as time travel with [redux-devtools](https://github.com/reduxjs/redux-devtools).
+Immutability is what lets [react-redux](https://github.com/reduxjs/react-redux) efficiently subscribe to fine-grained updates of your state. It also enables great developer experience features such as time travel with [redux-devtools](https://github.com/reduxjs/redux-devtools).
 
 For example, a reducer like this is wrong because it mutates the state:
 
@@ -73,7 +73,7 @@ function todos(state = [], action) {
 }
 ```
 
-It's more code, but it's exactly what makes Redux predictable and efficient. If you want to have less code, you can use a helper like [`React.addons.update`](https://facebook.github.io/react/docs/update.html) to write immutable transformations with a terse syntax:
+It's more code, but it's exactly what makes Redux predictable and efficient. If you want to have less code, you can use a helper like [`React.addons.update`](https://legacy.reactjs.org/docs/update.html) to write immutable transformations with a terse syntax:
 
 ```js
 // Before:
@@ -167,7 +167,7 @@ handleClick() {
 }
 ```
 
-If you're somewhere deep in the component hierarchy, it is cumbersome to pass the store down manually. This is why [react-redux](https://github.com/gaearon/react-redux) lets you use a `connect` [higher-order component](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) that will, apart from subscribing you to a Redux store, inject `dispatch` into your component's props.
+If you're somewhere deep in the component hierarchy, it is cumbersome to pass the store down manually. This is why [react-redux](https://github.com/reduxjs/react-redux) lets you use a `connect` [higher-order component](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) that will, apart from subscribing you to a Redux store, inject `dispatch` into your component's props.
 
 The fixed code looks like this:
 

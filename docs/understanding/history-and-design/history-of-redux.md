@@ -36,7 +36,7 @@ Redux became popular in _spite_ of that boilerplate, but it was always the bigge
 
 ## 2017: Ecosystem Competition
 
-By 2017-18, things had changed. A lot of the community was now focusing more on "data fetching and caching" rather than "client-side state management", and that's when we saw the rise of libraries like Apollo, React Query, SWR, and Urql for data fetching. At the same time, we also had the _new_ React Context API came out, which does properly pass updated values down the component tree.
+By 2017-18, things had changed. A lot of the community was now focusing more on "data fetching and caching" rather than "client-side state management", and that's when we saw the rise of libraries like Apollo, React Query (now TanStack Query), SWR, and Urql for data fetching. At the same time, we also had the _new_ React Context API came out, which does properly pass updated values down the component tree.
 
 That meant that Redux wasn't nearly as "required" as it used to be - there were now other tools that solved many of the same problems, with varying amounts of overlap (and often with less code). The frequent complaints about "boilerplate" also caused a lot of concern from folks using Redux.
 

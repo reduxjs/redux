@@ -52,6 +52,8 @@ We will add two middlewares and one enhancer:
 npm install redux-thunk
 ```
 
+(Redux Toolkit's `configureStore` includes the thunk middleware by default, so this step is only needed when setting up a store by hand with `createStore`.)
+
 #### middleware/logger.js
 
 ```js
@@ -199,7 +201,7 @@ This also makes our `createStore` function easier to reason about - each step is
 
 ## Integrating the devtools extension
 
-Another common feature which you may wish to add to your app is the `redux-devtools-extension` integration.
+Another common feature which you may wish to add to your app is the Redux DevTools Extension integration. (`configureStore` enables this automatically; the steps below are for a hand-written `createStore` setup.)
 
 The extension is a suite of tools which give you absolute control over your Redux store - it allows you to inspect and replay actions, explore your state at different times, dispatch actions directly to the store, and much more. [Click here to read more about the available features.](https://github.com/reduxjs/redux-devtools/tree/main/extension)
 
@@ -208,17 +210,17 @@ There are several ways to integrate the extension, but we will use the most conv
 First, we install the package via npm:
 
 ```sh
-npm install --save-dev redux-devtools-extension
+npm install --save-dev @redux-devtools/extension
 ```
 
-Next, we remove the `compose` function which we imported from `redux`, and replace it with a new `composeWithDevTools` function imported from `redux-devtools-extension`.
+Next, we remove the `compose` function which we imported from `redux`, and replace it with a new `composeWithDevTools` function imported from `@redux-devtools/extension`.
 
 The final code looks like this:
 
 ```js
 import { applyMiddleware, createStore } from 'redux'
 import { thunk } from 'redux-thunk'
-import { composeWithDevTools } from 'redux-devtools-extension'
+import { composeWithDevTools } from '@redux-devtools/extension'
 
 import monitorReducersEnhancer from './enhancers/monitorReducers'
 import loggerMiddleware from './middleware/logger'

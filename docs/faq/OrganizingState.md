@@ -91,7 +91,7 @@ The [same rules of thumb for deciding what should go in the Redux store](#do-i-h
 
 Based on this, in most cases you probably don't need a Redux-based form management library either. We suggest trying these approaches, in this order:
 
-- Even if the data is coming from the Redux store, start by writing your form logic by hand. It's likely this is all you'll need. (See [**Gosha Arinich's posts on working with forms in React**](https://goshakkk.name/on-forms-react/) for some excellent guidance on this.)
+- Even if the data is coming from the Redux store, start by writing your form logic by hand. It's likely this is all you'll need. (See [**Gosha Arinich's posts on working with forms in React**](https://goshacmd.com/on-forms-react/) for some excellent guidance on this.)
 - If you decide that writing forms "manually" is too difficult, try a React-based form library like [Formik](https://github.com/jaredpalmer/formik) or [React-Final-Form](https://github.com/final-form/react-final-form).
 - If you are absolutely sure you _must_ use a Redux-based form library because the other approaches aren't sufficient, then you may finally want to look at [Redux-Form](https://github.com/erikras/redux-form) and [React-Redux-Form](https://github.com/davidkpiano/react-redux-form).
 
@@ -103,7 +103,7 @@ Other kinds of UI state follow these rules of thumb as well. The classic example
 
 **Articles**
 
-- [Gosha Arinich: Writings on Forms in React](https://goshakkk.name/on-forms-react/)
+- [Gosha Arinich: Writings on Forms in React](https://goshacmd.com/on-forms-react/)
 - [Practical Redux, Part 6: Connected Lists and Forms](https://blog.isquaredsoftware.com/2017/01/practical-redux-part-6-connected-lists-forms-and-performance/)
 - [Practical Redux, Part 7: Form Change Handling](https://blog.isquaredsoftware.com/2017/01/practical-redux-part-7-forms-editing-reducers/)
 - [Practical Redux, Part 10: Managing Modals and Context Menus](https://blog.isquaredsoftware.com/2017/07/practical-redux-part-10-managing-modals/)
