@@ -8,7 +8,7 @@ description: 'Structuring Reducers > Initializing State: How Redux state is init
 
 _This page shows reducer patterns written by hand. See the [Structuring Reducers intro](StructuringReducers.md) for how they relate to Redux Toolkit's `createSlice`._
 
-There are two main ways to initialize state for your application. The `createStore` method can accept an optional `preloadedState` value as its second argument. Reducers can also specify an initial value by looking for an incoming state argument that is `undefined`, and returning the value they'd like to use as a default. This can either be done with an explicit check inside the reducer, or by using the default argument value syntax: `function myReducer(state = someDefaultValue, action)`.
+There are two main ways to initialize state for your application. `configureStore` accepts an optional `preloadedState` value (the same value is the second argument to the core `createStore` function). Reducers can also specify an initial value by looking for an incoming state argument that is `undefined`, and returning the value they'd like to use as a default. This can either be done with an explicit check inside the reducer, or by using the default argument value syntax: `function myReducer(state = someDefaultValue, action)`.
 
 It's not always immediately clear how these two approaches interact. Fortunately, the process does follow some predictable rules. Here's how the pieces fit together.
 
@@ -46,22 +46,22 @@ function counter(state = 0, action) {
 Now let's say you create a store with it.
 
 ```js
-import { createStore } from 'redux'
-const store = createStore(counter)
+import { configureStore } from '@reduxjs/toolkit'
+const store = configureStore({ reducer: counter })
 console.log(store.getState()) // 0
 ```
 
-The initial state is zero. Why? Because the second argument to `createStore` was `undefined`. This is the `state` passed to your reducer the first time. When Redux initializes it dispatches a "dummy" action to fill the state. So your `counter` reducer was called with `state` equal to `undefined`. **This is exactly the case that "activates" the default argument.** Therefore, `state` is now `0` as per the default `state` value (`state = 0`). This state (`0`) will be returned.
+The initial state is zero. Why? Because no `preloadedState` was passed, so it was `undefined`. This is the `state` passed to your reducer the first time. When Redux initializes it dispatches a "dummy" action to fill the state. So your `counter` reducer was called with `state` equal to `undefined`. **This is exactly the case that "activates" the default argument.** Therefore, `state` is now `0` as per the default `state` value (`state = 0`). This state (`0`) will be returned.
 
 Let's consider a different scenario:
 
 ```js
-import { createStore } from 'redux'
-const store = createStore(counter, 42)
+import { configureStore } from '@reduxjs/toolkit'
+const store = configureStore({ reducer: counter, preloadedState: 42 })
 console.log(store.getState()) // 42
 ```
 
-Why is it `42`, and not `0`, this time? Because `createStore` was called with `42` as the second argument. This argument becomes the `state` passed to your reducer along with the dummy action. **This time, `state` is not undefined (it's `42`!), so default argument syntax has no effect.** The `state` is `42`, and `42` is returned from the reducer.
+Why is it `42`, and not `0`, this time? Because `42` was passed as the `preloadedState`. This value becomes the `state` passed to your reducer along with the dummy action. **This time, `state` is not undefined (it's `42`!), so default argument syntax has no effect.** The `state` is `42`, and `42` is returned from the reducer.
 
 ### Combined Reducers
 
@@ -90,23 +90,26 @@ function combined(state = {}, action) {
 }
 ```
 
-If we call `createStore` without the `preloadedState`, it's going to initialize the `state` to `{}`. Therefore, `state.a` and `state.b` will be `undefined` by the time it calls `a` and `b` reducers. **Both `a` and `b` reducers will receive `undefined` as _their_ `state` arguments, and if they specify default `state` values, those will be returned.** This is how the combined reducer returns a `{ a: 'lol', b: 'wat' }` state object on the first invocation.
+If we create the store without a `preloadedState`, the combined reducer is going to initialize the `state` to `{}`. Therefore, `state.a` and `state.b` will be `undefined` by the time it calls `a` and `b` reducers. **Both `a` and `b` reducers will receive `undefined` as _their_ `state` arguments, and if they specify default `state` values, those will be returned.** This is how the combined reducer returns a `{ a: 'lol', b: 'wat' }` state object on the first invocation.
 
 ```js
-import { createStore } from 'redux'
-const store = createStore(combined)
+import { configureStore } from '@reduxjs/toolkit'
+const store = configureStore({ reducer: combined })
 console.log(store.getState()) // { a: 'lol', b: 'wat' }
 ```
 
 Let's consider a different scenario:
 
 ```js
-import { createStore } from 'redux'
-const store = createStore(combined, { a: 'horse' })
+import { configureStore } from '@reduxjs/toolkit'
+const store = configureStore({
+  reducer: combined,
+  preloadedState: { a: 'horse' }
+})
 console.log(store.getState()) // { a: 'horse', b: 'wat' }
 ```
 
-Now I specified the `preloadedState` as the argument to `createStore()`. The state returned from the combined reducer _combines_ the initial state I specified for the `a` reducer with the `'wat'` default argument specified that `b` reducer chose itself.
+Now I specified a `preloadedState`. The state returned from the combined reducer _combines_ the initial state I specified for the `a` reducer with the `'wat'` default argument specified that `b` reducer chose itself.
 
 Let's recall what the combined reducer does:
 
@@ -124,4 +127,6 @@ In this case, `state` was specified so it didn't fall back to `{}`. It was an ob
 
 ## Recap
 
-To sum this up, if you stick to Redux conventions and return the initial state from reducers when they're called with `undefined` as the `state` argument (the easiest way to implement this is to specify the `state` default argument value), you're going to have a nice useful behavior for combined reducers. **They will prefer the corresponding value in the `preloadedState` object you pass to the `createStore()` function, but if you didn't pass any, or if the corresponding field is not set, the default `state` argument specified by the reducer is chosen instead.** This approach works well because it provides both initialization and hydration of existing data, but lets individual reducers reset their state if their data was not preserved. Of course you can apply this pattern recursively, as you can use `combineReducers()` on many levels, or even compose reducers manually by calling reducers and giving them the relevant part of the state tree.
+To sum this up, if you stick to Redux conventions and return the initial state from reducers when they're called with `undefined` as the `state` argument (the easiest way to implement this is to specify the `state` default argument value), you're going to have a nice useful behavior for combined reducers. **They will prefer the corresponding value in the `preloadedState` object you pass when creating the store, but if you didn't pass any, or if the corresponding field is not set, the default `state` argument specified by the reducer is chosen instead.** This approach works well because it provides both initialization and hydration of existing data, but lets individual reducers reset their state if their data was not preserved. Of course you can apply this pattern recursively, as you can use `combineReducers()` on many levels, or even compose reducers manually by calling reducers and giving them the relevant part of the state tree.
+
+The `initialState` option of Redux Toolkit's `createSlice` works the same way: the generated slice reducer returns that value when it receives `undefined`, and a `preloadedState` passed to `configureStore` still takes precedence for that slice.

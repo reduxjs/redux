@@ -106,6 +106,8 @@ const rootReducer = reduceReducers(combinedReducers, crossSliceReducer)
 
 Note that if you use `reduceReducers`, you should make sure that the first reducer in the list is able to define the initial state, since the later reducers will generally assume that the entire state already exists and not try to provide defaults.
 
+The most common cross-slice case, where several slices each need to respond to the same action, doesn't need any of this. With Redux Toolkit, each slice can handle that action in its `extraReducers` option, and `configureStore` combines the slice reducers as usual. The custom root reducer approach above is only needed when one slice's update depends on the _current_ state of another slice.
+
 ## Further Suggestions
 
 Again, it's important to understand that Redux reducers are _just_ functions. While `combineReducers` is useful, it's just one tool in the toolbox. Functions can contain conditional logic other than switch statements, functions can be composed to wrap each other, and functions can call other functions. Maybe you need one of your slice reducers to be able to reset its state, and to only respond to specific actions overall. You could do:
