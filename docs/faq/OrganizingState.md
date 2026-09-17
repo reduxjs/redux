@@ -101,6 +101,11 @@ Other kinds of UI state follow these rules of thumb as well. The classic example
 
 #### Further Information
 
+**Documentation**
+
+- [Style Guide: Avoid Putting Form State In Redux](../style-guide/style-guide.md#avoid-putting-form-state-in-redux)
+- [Style Guide: Evaluate Where Each Piece of State Should Live](../style-guide/style-guide.md#evaluate-where-each-piece-of-state-should-live)
+
 **Articles**
 
 - [Gosha Arinich: Writings on Forms in React](https://goshacmd.com/on-forms-react/)
