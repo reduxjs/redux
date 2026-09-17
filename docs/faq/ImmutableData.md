@@ -130,7 +130,7 @@ It then runs a shallow equality check on its reference to the root state object 
 **Articles**
 
 - [API: React-Redux’s connect function and `mapStateToProps`](https://react-redux.js.org/using-react-redux/connect-mapstate)
-- [Redux FAQ: Why isn't my component re-rendering, or my `mapStateToProps` running?](./ReactRedux.md#why-isnt-my-component-re-rendering-or-my-mapstatetoprops-running)
+- [Redux FAQ: Why isn't my component re-rendering?](./ReactRedux.md#why-isnt-my-component-re-rendering)
 
 ### Why does React-Redux shallowly check each value within the props object returned from `mapStateToProp`?
 
