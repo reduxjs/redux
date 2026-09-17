@@ -59,7 +59,7 @@ This chain of middleware is defined by the arguments passed to the `applyMiddlew
 
 Redux provides a single `store.subscribe` method for notifying listeners that the store has updated. Listener callbacks do not receive the current state as an argument—it is simply an indication that _something_ has changed. The subscriber logic can then call `getState()` to get the current state value.
 
-This API is intended as a low-level primitive with no dependencies or complications, and can be used to build higher-level subscription logic. UI bindings such as React Redux can create a subscription for each connected component. It is also possible to write functions that can intelligently compare the old state vs the new state, and execute additional logic if certain pieces have changed. Examples include [redux-watch](https://github.com/jprichardson/redux-watch), [redux-subscribe](https://github.com/ashaffer/redux-subscribe) and [redux-subscriber](https://github.com/ivantsov/redux-subscriber) which offer different approaches to specifying subscriptions and handling changes.
+This API is intended as a low-level primitive with no dependencies or complications, and can be used to build higher-level subscription logic. UI bindings such as React Redux can create a subscription for each connected component. It is also possible to write functions that can intelligently compare the old state vs the new state, and execute additional logic if certain pieces have changed. Examples include [redux-watch](https://github.com/ExodusOSS/redux-watch), [redux-subscribe](https://github.com/ashaffer/redux-subscribe) and [redux-subscriber](https://github.com/ivantsov/redux-subscriber) which offer different approaches to specifying subscriptions and handling changes.
 
 The new state is not passed to the listeners in order to simplify implementing store enhancers such as the Redux DevTools. In addition, subscribers are intended to react to the state value itself, not the action. Middleware can be used if the action is important and needs to be handled specifically.
 
@@ -77,7 +77,3 @@ The new state is not passed to the listeners in order to simplify implementing s
 - [#922: Proposal: add subscribe to middleware API](https://github.com/reduxjs/redux/issues/922)
 - [#1057: subscribe listener can get action param?](https://github.com/reduxjs/redux/issues/1057)
 - [#1300: Redux is great but major feature is missing](https://github.com/reduxjs/redux/issues/1300)
-
-**Libraries**
-
-- [Redux Addons Catalog: Store Change Subscriptions](https://github.com/markerikson/redux-ecosystem-links/blob/master/store.md#store-change-subscriptions)

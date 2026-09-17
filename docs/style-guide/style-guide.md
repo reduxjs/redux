@@ -22,7 +22,7 @@ However, time and experience have shown that for some topics, certain approaches
 
 With that in mind, **we've put together this list of recommendations to help you avoid errors, bikeshedding, and anti-patterns**. We also understand that team preferences vary and different projects have different requirements, so no style guide will fit all sizes. **You are encouraged to follow these recommendations, but take the time to evaluate your own situation and decide if they fit your needs**.
 
-Finally, we'd like to thank the Vue documentation authors for writing the [Vue Style Guide page](https://vuejs.org/v2/style-guide/), which was the inspiration for this page.
+Finally, we'd like to thank the Vue documentation authors for writing the [Vue Style Guide page](https://v2.vuejs.org/v2/style-guide/), which was the inspiration for this page.
 
 ## Rule Categories
 
@@ -462,7 +462,7 @@ The hooks API does introduce some different tradeoffs than `connect` does in ter
 
 <DetailedExplanation>
 
-The [classic `connect` API](https://react-redux.js.org/api/connect) is a [Higher Order Component](https://reactjs.org/docs/higher-order-components.html). It generates a new wrapper component that subscribes to the store, renders your own component, and passes down data from the store and action creators as props.
+The [classic `connect` API](https://react-redux.js.org/api/connect) is a [Higher Order Component](https://legacy.reactjs.org/docs/higher-order-components.html). It generates a new wrapper component that subscribes to the store, renders your own component, and passes down data from the store and action creators as props.
 
 This is a deliberate level of indirection, and allows you to write "presentational"-style components that receive all their values as props, without being specifically dependent on Redux.
 

@@ -57,7 +57,7 @@ Redux is inspired by functional programming, and out of the box, has no place fo
 
 In general, Redux suggests that code with side effects should be part of the action creation process. While that logic _can_ be performed inside of a UI component, it generally makes sense to extract that logic into a reusable function so that the same logic can be called from multiple places—in other words, an action creator function.
 
-The simplest and most common way to do this is to add the [Redux Thunk](https://github.com/reduxjs/redux-thunk) middleware that lets you write action creators with more complex and asynchronous logic. Another widely-used method is [Redux Saga](https://github.com/yelouafi/redux-saga) which lets you write more synchronous-looking code using generators, and can act like “background threads” or “daemons” in a Redux app. Yet another approach is [Redux Loop](https://github.com/raisemarketplace/redux-loop), which inverts the process by allowing your reducers to declare side effects in response to state changes and have them executed separately. Beyond that, there are _many_ other community-developed libraries and ideas, each with their own take on how side effects should be managed.
+The simplest and most common way to do this is to add the [Redux Thunk](https://github.com/reduxjs/redux-thunk) middleware that lets you write action creators with more complex and asynchronous logic. Another widely-used method is [Redux Saga](https://github.com/redux-saga/redux-saga) which lets you write more synchronous-looking code using generators, and can act like “background threads” or “daemons” in a Redux app. Yet another approach is [Redux Loop](https://github.com/raisemarketplace/redux-loop), which inverts the process by allowing your reducers to declare side effects in response to state changes and have them executed separately. Beyond that, there are _many_ other community-developed libraries and ideas, each with their own take on how side effects should be managed.
 
 #### Further information
 
@@ -69,8 +69,6 @@ The simplest and most common way to do this is to add the [Redux Thunk](https://
 **Articles**
 
 - [Redux Side-Effects and You](https://medium.com/@fward/redux-side-effects-and-you-66f2e0842fc3)
-- [Pure functionality and side effects in Redux](http://blog.hivejs.org/building-the-ui-2/)
-- [From Flux to Redux: Async Actions the easy way](http://danmaz74.me/2015/08/19/from-flux-to-redux-async-actions-the-easy-way/)
 - [React/Redux Links: "Redux Side Effects" category](https://github.com/markerikson/react-redux-links/blob/master/redux-side-effects.md)
 - [Gist: Redux-Thunk examples](https://gist.github.com/markerikson/ea4d0a6ce56ee479fe8b356e099f857e)
 
@@ -92,7 +90,7 @@ The simplest and most common way to do this is to add the [Redux Thunk](https://
 
 ### What async middleware should I use? How do you decide between thunks, sagas, observables, or something else?
 
-There are [many async/side effect middlewares available](https://github.com/markerikson/redux-ecosystem-links/blob/master/side-effects.md), but the most commonly used ones are [`redux-thunk`](https://github.com/reduxjs/redux-thunk), [`redux-saga`](https://github.com/redux-saga/redux-saga), and [`redux-observable`](https://github.com/redux-observable/redux-observable). These are different tools, with different strengths, weaknesses, and use cases.
+There are many async/side effect middlewares available, but the most commonly used ones are [`redux-thunk`](https://github.com/reduxjs/redux-thunk), [`redux-saga`](https://github.com/redux-saga/redux-saga), and [`redux-observable`](https://github.com/redux-observable/redux-observable). These are different tools, with different strengths, weaknesses, and use cases.
 
 As a general rule of thumb:
 
@@ -108,7 +106,7 @@ Since sagas and observables have the same use case, an application would normall
 
 - [Decembersoft: What is the right way to do asynchronous operations in Redux?](https://decembersoft.com/posts/what-is-the-right-way-to-do-asynchronous-operations-in-redux/)
 - [Redux-Thunk vs Redux-Saga: an overview](https://medium.com/@shoshanarosenfield/redux-thunk-vs-redux-saga-93fe82878b2d)
-- [Redux-Saga V.S. Redux-Observable](https://hackmd.io/s/H1xLHUQ8e#side-by-side-comparison)
+- [Redux-Saga V.S. Redux-Observable](https://hackmd.io/@2qVnJRlJRHCk20dvVxsySA/H1xLHUQ8e#side-by-side-comparison)
 
 **Discussions**
 

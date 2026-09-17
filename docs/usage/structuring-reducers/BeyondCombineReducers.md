@@ -95,7 +95,7 @@ function rootReducer(state, action) {
 }
 ```
 
-As it turns out, there's a useful utility called [reduce-reducers](https://github.com/acdlite/reduce-reducers) that can make that process easier. It simply takes multiple reducers and runs `reduce()` on them, passing the intermediate state values to the next reducer in line:
+As it turns out, there's a useful utility called [reduce-reducers](https://github.com/redux-utilities/reduce-reducers) that can make that process easier. It simply takes multiple reducers and runs `reduce()` on them, passing the intermediate state values to the next reducer in line:
 
 ```js
 // Same as the "manual" rootReducer above
@@ -122,4 +122,4 @@ const rootReducer = combineReducers({
 
 Note that `combineReducers` doesn't know or care that there's anything special about the reducer function that's responsible for managing `a`. We didn't need to modify `combineReducers` to specifically know how to undo things - we just built up the pieces we needed into a new composed function.
 
-Also, while `combineReducers` is the one reducer utility function that's built into Redux, there's a wide variety of third-party reducer utilities that have published for reuse. The [Redux Addons Catalog](https://github.com/markerikson/redux-ecosystem-links) lists many of the third-party utilities that are available. Or, if none of the published utilities solve your use case, you can always write a function yourself that does just exactly what you need.
+Also, while `combineReducers` is the one reducer utility function that's built into Redux, there's a wide variety of third-party reducer utilities that have been published for reuse. Or, if none of the published utilities solve your use case, you can always write a function yourself that does just exactly what you need.

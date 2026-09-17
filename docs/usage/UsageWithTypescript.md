@@ -16,7 +16,7 @@ title: Usage With TypeScript
 
 - Understanding of [TypeScript syntax and terms](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
 - Familiarity with TypeScript concepts like [generics](https://www.typescriptlang.org/docs/handbook/2/generics.html) and [utility types](https://www.typescriptlang.org/docs/handbook/utility-types.html)
-- Knowledge of [React Hooks](https://reactjs.org/docs/hooks-intro.html)
+- Knowledge of [React Hooks](https://react.dev/reference/react/hooks)
 
 :::
 

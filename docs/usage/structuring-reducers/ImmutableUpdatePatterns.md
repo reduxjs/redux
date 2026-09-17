@@ -168,8 +168,6 @@ var newCollection = update(collection, {
 
 They can provide a useful alternative to writing manual immutable update logic.
 
-A list of many immutable update utilities can be found in the [Immutable Data#Immutable Update Utilities](https://github.com/markerikson/redux-ecosystem-links/blob/master/immutable-data.md#immutable-update-utilities) section of the [Redux Addons Catalog](https://github.com/markerikson/redux-ecosystem-links).
-
 ## Simplifying Immutable Updates with Redux Toolkit
 
 Our **[Redux Toolkit](https://redux-toolkit.js.org/)** package includes a [`createReducer` utility](https://redux-toolkit.js.org/api/createReducer) that uses Immer internally.
@@ -210,5 +208,5 @@ and action types based on the reducer functions you provide, with the same Immer
 ## Further Information
 
 - [Dave Ceddia: The Complete Guide to Immutability in React and Redux](https://daveceddia.com/react-redux-immutability-guide/)
-- [React docs: Updating Objects in State](https://beta.reactjs.org/learn/updating-objects-in-state)
-- [React docs: Updating Arrays in State](https://beta.reactjs.org/learn/updating-arrays-in-state)
+- [React docs: Updating Objects in State](https://react.dev/learn/updating-objects-in-state)
+- [React docs: Updating Arrays in State](https://react.dev/learn/updating-arrays-in-state)

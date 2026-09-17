@@ -128,10 +128,6 @@ function myThunk() {
 - [React Redux #263: Huge performance issue when dispatching hundreds of actions](https://github.com/reduxjs/react-redux/issues/263)
 - [React-Redux #1177: Roadmap: v6, Context, Subscriptions, and Hooks](https://github.com/reduxjs/react-redux/issues/1177)
 
-**Libraries**
-
-- [Redux Addons Catalog: Store - Change Subscriptions](https://github.com/markerikson/redux-ecosystem-links/blob/master/store.md#store-change-subscriptions)
-
 ### Will having “one state tree” cause memory problems? Will dispatching many actions take up memory?
 
 First, in terms of raw memory usage, Redux is no different than any other JavaScript library. The only difference is that all the various object references are nested together into one tree, instead of maybe saved in various independent model instances such as in Backbone. Second, a typical Redux app would probably have somewhat _less_ memory usage than an equivalent Backbone app because Redux encourages use of plain JavaScript objects and arrays rather than creating instances of Models and Collections. Finally, Redux only holds onto a single state tree reference at a time. Objects that are no longer referenced in that tree will be garbage collected, as usual.

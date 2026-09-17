@@ -10,12 +10,12 @@ sidebar_label: Miscellaneous
 
 Yes, lots of them! To name just a few:
 
-- [Twitter's mobile site](https://mobile.twitter.com/)
-- [Wordpress's new admin page](https://github.com/Automattic/wp-calypso)
-- [Firefox's new debugger](https://github.com/devtools-html/debugger.html)
-- [The HyperTerm terminal application](https://github.com/zeit/hyperterm)
+- [Twitter / X's web client](https://x.com/)
+- [Wordpress's admin page](https://github.com/Automattic/wp-calypso)
+- [Firefox's debugger](https://github.com/firefox-devtools/debugger)
+- [The Hyper terminal application](https://github.com/vercel/hyper)
 
-And many, many more! The Redux Addons Catalog has **[a list of Redux-based applications and examples](https://github.com/markerikson/redux-ecosystem-links/blob/master/apps-and-examples.md)** that points to a variety of actual applications, large and small.
+And many, many more!
 
 #### Further information
 
@@ -44,13 +44,9 @@ Authentication is essential to any real application. When going about authentica
 
 **Articles**
 
-- [Authentication with JWT by Auth0](https://auth0.com/blog/2016/01/04/secure-your-react-and-redux-app-with-jwt-authentication/)
+- [Authentication with JWT by Auth0](https://auth0.com/blog/secure-your-react-and-redux-app-with-jwt-authentication/)
 - [Tips to Handle Authentication in Redux](https://medium.com/@MattiaManzati/tips-to-handle-authentication-in-redux-2-introducing-redux-saga-130d6872fbe7)
 
 **Examples**
 
 - [react-redux-jwt-auth-example](https://github.com/joshgeller/react-redux-jwt-auth-example)
-
-**Libraries**
-
-- [Redux Addons Catalog: Use Cases - Authentication](https://github.com/markerikson/redux-ecosystem-links/blob/master/use-cases.md#authentication)
