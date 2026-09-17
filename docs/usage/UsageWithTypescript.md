@@ -40,11 +40,9 @@ We assume that a typical Redux project is using Redux Toolkit and React Redux to
 
 [Redux Toolkit](https://redux-toolkit.js.org) (RTK) is the standard approach for writing modern Redux logic. RTK is already written in TypeScript, and its API is designed to provide a good experience for TypeScript usage.
 
-[React Redux](https://react-redux.js.org) has its type definitions in a separate [`@types/react-redux` typedefs package](https://npm.im/@types/react-redux) on NPM. In addition to typing the library functions, the types also export some helpers to make it easier to write typesafe interfaces between your Redux store and your React components.
+[React Redux](https://react-redux.js.org) is also written in TypeScript and ships its own type definitions, so no separate `@types` package is needed. In addition to typing the library functions, the types also export some helpers to make it easier to write typesafe interfaces between your Redux store and your React components.
 
-As of React Redux v7.2.3, the `react-redux` package has a dependency on `@types/react-redux`, so the type definitions will be automatically installed with the library. Otherwise, you'll need to manually install them yourself (typically `npm install @types/react-redux` ).
-
-The [Redux+TS template for Create-React-App](https://github.com/reduxjs/cra-template-redux-typescript) comes with a working example of these patterns already configured.
+The [Redux+TS project templates](https://github.com/reduxjs/redux-templates) come with a working example of these patterns already configured.
 
 ### Define Root State and Dispatch Types
 
@@ -284,7 +282,7 @@ export const exampleMiddleware: Middleware<
 
 :::caution
 
-If you are using `typescript-eslint`, the `@typescript-eslint/ban-types` rule might report an error if you use `{}` for the dispatch value. The recommended changes it makes are incorrect and will break your Redux store types, you should disable the rule for this line and keep using `{}`.
+If you are using `typescript-eslint`, the `@typescript-eslint/no-empty-object-type` rule (formerly part of `@typescript-eslint/ban-types`) might report an error if you use `{}` for the dispatch value. The recommended changes it makes are incorrect and will break your Redux store types, you should disable the rule for this line and keep using `{}`.
 
 :::
 
@@ -377,11 +375,7 @@ While [React Redux](https://react-redux.js.org) is a separate library from Redux
 
 For a complete guide on how to correctly use React Redux with TypeScript, see **[the "Static Typing" page in the React Redux docs](https://react-redux.js.org/using-react-redux/static-typing)**. This section will highlight the standard patterns.
 
-If you are using TypeScript, the React Redux types are maintained separately in DefinitelyTyped, but included as a dependency of the react-redux package, so they should be installed automatically. If you still need to install them manually, run:
-
-```sh
-npm install @types/react-redux
-```
+React Redux ships its own type definitions as part of the `react-redux` package, so there is nothing extra to install.
 
 ### Typing the `useSelector` hook
 
@@ -419,7 +413,7 @@ However, prefer creating a pre-typed `useAppDispatch` hook with the correct type
 
 ### Typing the `connect` higher order component
 
-If you are still using `connect`, you should use the `ConnectedProps<T>` type exported by `@types/react-redux^7.1.2` to infer the types of the props from `connect` automatically. This requires splitting the `connect(mapState, mapDispatch)(MyComponent)` call into two parts:
+If you are still using `connect`, you should use the `ConnectedProps<T>` type exported by `react-redux` to infer the types of the props from `connect` automatically. This requires splitting the `connect(mapState, mapDispatch)(MyComponent)` call into two parts:
 
 ```tsx
 import { connect, ConnectedProps } from 'react-redux'

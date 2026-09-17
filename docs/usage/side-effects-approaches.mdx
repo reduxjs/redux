@@ -274,7 +274,7 @@ In addition, listener entries can be added and removed dynamically at runtime by
 #### Listener Tradeoffs
 
 - 👍: Built into Redux Toolkit; `async/await` is more familiar syntax; similar to thunks; lightweight concepts and size; works great with TypeScript
-- 👎: Relatively new and not as "battle-tested" yet; not _quite_ as flexible as sagas/observables
+- 👎: Not _quite_ as flexible as sagas/observables
 
 ```js title="Listener Examples"
 // Create the middleware instance and methods
@@ -429,7 +429,7 @@ State machines can be very useful for defining possible known states for a syste
 
 Redux reducers _can_ be written as true Finite State Machines, but RTK doesn't include anything to help with this. In practice, they tend to be _partial_ state machines that really only care about the dispatched action to determine how to update the state. Listeners, sagas, and observables can be used for the "run side effects after dispatch" aspect, but can sometimes require more work to ensure a side effect only runs at a specific time.
 
-[XState](https://xstate.js.org/docs/) is a powerful library for defining true state machines and executing them, including managing state transitions based on events and triggering related side effects. It also has related tools for creating state machine definitions via a graphical editor, which can then be loaded into the XState logic for execution.
+[XState](https://stately.ai/docs) is a powerful library for defining true state machines and executing them, including managing state transitions based on events and triggering related side effects. It also has related tools for creating state machine definitions via a graphical editor, which can then be loaded into the XState logic for execution.
 
 While there currently is no official integration between XState and Redux, it _is_ possible to use an XState machine as a Redux reducer, and the XState developers have created a useful POC demonstrating using XState as a Redux side effects middleware:
 

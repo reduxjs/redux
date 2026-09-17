@@ -1,7 +1,7 @@
 ---
 id: three-principles
 title: Three Principles
-description: 'Introduction > Three Principles: Three key principles for using Redux'
+description: 'Understanding > Three Principles: Three key principles for using Redux'
 ---
 
 # Three Principles
