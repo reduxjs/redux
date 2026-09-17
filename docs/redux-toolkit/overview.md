@@ -7,13 +7,13 @@ hide_title: true
 
 ## What is Redux Toolkit?
 
-**[Redux Toolkit](https://redux-toolkit.js.org)** is our official, opinionated, batteries-included toolset for efficient Redux development. It is intended to be the standard way to write Redux logic, and we strongly recommend that you use it.
+**[Redux Toolkit](https://redux-toolkit.js.org)** is our official, opinionated, batteries-included toolset for efficient Redux development. It is intended to be the standard way to write Redux logic, and [we strongly recommend that you use it](../style-guide/style-guide.md#use-redux-toolkit-for-writing-redux-logic).
 
-It includes several utility functions that simplify the most common Redux use cases, including store setup, defining reducers, immutable update logic, and even creating entire "slices" of state at once without writing any action creators or action types by hand. It also includes the most widely used Redux addons, like Redux Thunk for async logic and Reselect for writing selector functions, so that you can use them right away.
+The Redux core library is deliberately unopinionated: it lets you decide how to set up the store, what your state contains, and how to build your reducers. Redux Toolkit was created to address the three most common complaints that flexibility produced ("configuring a store is too complicated", "I have to add a lot of packages to get Redux to do anything useful", and "Redux requires too much boilerplate code") by providing an official set of tools that handle the common cases with good defaults. It bakes in our recommended best practices, catches common mistakes, and lets you write much less code, while still following the same Redux data flow. It can be added at the start of a new project or used as part of an incremental migration in an existing one.
+
+You are not _required_ to use Redux Toolkit to use Redux, but see [Why Redux Toolkit is How to Use Redux Today](../introduction/why-rtk-is-redux-today.md) for why we recommend it for all Redux apps.
 
 ### Installation
-
-Redux Toolkit is available as a package on NPM for use with a module bundler or in a Node application:
 
 ```bash
 # NPM
@@ -23,44 +23,17 @@ npm install @reduxjs/toolkit
 yarn add @reduxjs/toolkit
 ```
 
-## Purpose
-
-The Redux core library is deliberately unopinionated. It lets you decide how you want to handle everything, like store setup, what your state contains, and how you want to build your reducers.
-
-This is good in some cases, because it gives you flexibility, but that flexibility isn't always needed. Sometimes we just want the simplest possible way to get started, with some good default behavior out of the box. Or, maybe you're writing a larger application and finding yourself writing some similar code, and you'd like to cut down on how much of that code you have to write by hand.
-
-**Redux Toolkit** was originally created to help address three common concerns about Redux:
-
-- "Configuring a Redux store is too complicated"
-- "I have to add a lot of packages to get Redux to do anything useful"
-- "Redux requires too much boilerplate code"
-
-We can't solve every use case, but in the spirit of [`create-react-app`](https://github.com/facebook/create-react-app) and [`apollo-boost`](https://www.apollographql.com/blog/announcement/frontend/zero-config-graphql-state-management/), we can provide an official recommended set of tools that handle the most common use cases and reduce the need to make extra decisions.
-
-## Why You Should Use Redux Toolkit
-
-**Redux Toolkit** makes it easier to write good Redux applications and speeds up development, by baking in our recommended best practices, providing good default behaviors, catching mistakes, and allowing you to write simpler code. Redux Toolkit is **beneficial to all Redux users** regardless of skill level or experience. It can be added at the start of a new project, or used as part of an incremental migration in an existing project.
-
-Note that **you are not _required_ to use Redux Toolkit to use Redux**. There are many existing applications that use other Redux wrapper libraries, or write all Redux logic "by hand", and if you still prefer to use a different approach, go ahead!
-
-However, [**we _strongly_ recommend using Redux Toolkit for all Redux apps**](../style-guide/style-guide.md#use-redux-toolkit-for-writing-redux-logic).
-
-Overall, whether you're a brand new Redux user setting up your first project, or an experienced user who wants to simplify an existing application, **using Redux Toolkit will make your code better and more maintainable**.
-
 ## What's Included
 
-Redux Toolkit includes:
-
-- [`configureStore()`](https://redux-toolkit.js.org/api/configureStore): wraps `createStore` to provide simplified configuration options and good defaults. It can automatically combine your slice reducers, adds whatever Redux middleware you supply, includes `redux-thunk` by default, and enables use of the Redux DevTools Extension.
-- [`createReducer()`](https://redux-toolkit.js.org/api/createReducer): that lets you supply a lookup table of action types to case reducer functions, rather than writing switch statements. In addition, it automatically uses the [`immer` library](https://github.com/immerjs/immer) to let you write simpler immutable updates with normal mutative code, like `state.todos[3].completed = true`.
-- [`createAction()`](https://redux-toolkit.js.org/api/createAction): generates an action creator function for the given action type string. The function itself has `toString()` defined, so that it can be used in place of the type constant.
-- [`createSlice()`](https://redux-toolkit.js.org/api/createSlice): accepts an object of reducer functions, a slice name, and an initial state value, and automatically generates a slice reducer with corresponding action creators and action types.
-- [`createAsyncThunk`](https://redux-toolkit.js.org/api/createAsyncThunk): accepts an action type string and a function that returns a promise, and generates a thunk that dispatches `pending/fulfilled/rejected` action types based on that promise
-- [`createEntityAdapter`](https://redux-toolkit.js.org/api/createEntityAdapter): generates a set of reusable reducers and selectors to manage normalized data in the store
-- The [`createSelector` utility](https://redux-toolkit.js.org/api/createSelector) from the [Reselect](https://github.com/reduxjs/reselect) library, re-exported for ease of use.
-
-Redux Toolkit also has the [**RTK Query data fetching API**](https://redux-toolkit.js.org/rtk-query/overview). RTK Query is a powerful data fetching and caching tool built specifically for Redux. It is designed to simplify common cases for loading data in a web application, eliminating the need to hand-write data fetching & caching logic yourself.
+- [`configureStore()`](https://redux-toolkit.js.org/api/configureStore): sets up a store with good defaults. It automatically combines your slice reducers, includes the thunk middleware plus development-mode checks for accidental mutations and non-serializable values, and enables the Redux DevTools Extension.
+- [`createSlice()`](https://redux-toolkit.js.org/api/createSlice): accepts a slice name, an initial state, and an object of reducer functions, and generates the slice reducer plus matching action creators and action types. Reducers can be written with "mutating" syntax thanks to the [Immer library](https://immerjs.github.io/immer/).
+- [`createAsyncThunk()`](https://redux-toolkit.js.org/api/createAsyncThunk): accepts an action type string and a function that returns a promise, and generates a thunk that dispatches `pending/fulfilled/rejected` actions based on that promise.
+- [`createEntityAdapter()`](https://redux-toolkit.js.org/api/createEntityAdapter): generates reusable reducers and selectors for managing normalized data in the store.
+- [`createListenerMiddleware()`](https://redux-toolkit.js.org/api/createListenerMiddleware): runs additional logic in response to dispatched actions or state changes, as a lighter-weight alternative to sagas or observables.
+- [`combineSlices()`](https://redux-toolkit.js.org/api/combineSlices): combines slice reducers and supports lazily injecting slices for code splitting.
+- [`createSelector`](https://redux-toolkit.js.org/api/createSelector) from [Reselect](https://reselect.js.org), re-exported for writing memoized selectors, along with lower-level utilities like [`createReducer()`](https://redux-toolkit.js.org/api/createReducer) and [`createAction()`](https://redux-toolkit.js.org/api/createAction).
+- [**RTK Query**](https://redux-toolkit.js.org/rtk-query/overview): a data fetching and caching layer built for Redux. You define API endpoints and it generates the reducers, thunks, and React hooks for fetching, caching, and invalidating that data, so you don't hand-write loading state or data fetching logic.
 
 ## Documentation
 
-The complete Redux Toolkit documentation is available at **[https://redux-toolkit.js.org](https://redux-toolkit.js.org)**.
+The complete Redux Toolkit documentation is available at **[https://redux-toolkit.js.org](https://redux-toolkit.js.org)**. Start with the [Redux Toolkit Quick Start](https://redux-toolkit.js.org/tutorials/quick-start) or the [Redux Essentials tutorial](../tutorials/essentials/part-1-overview-concepts.md) here.
