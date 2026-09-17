@@ -10,17 +10,29 @@ The Redux docs are intended to teach the basic concepts of Redux, as well as exp
 
 This page includes our recommendations for some of the best external resources available to learn Redux. For an additional extensive list of tutorials, articles, and other resources on React, Redux, Javascript, and related topics, see the [React/Redux Links list](https://github.com/markerikson/react-redux-links).
 
+:::tip Start with the tutorials
+
+If you're new to Redux, start with our own tutorials first. [The Redux Essentials tutorial](../tutorials/essentials/part-1-overview-concepts.md) teaches how to build real apps with Redux Toolkit and React-Redux, and [the Redux Fundamentals tutorial](../tutorials/fundamentals/part-1-overview.md) explains how Redux works from the ground up. We also have a page of [recommended videos](../tutorials/videos.md).
+
+Several of the articles below were written before Redux Toolkit existed. Where that's the case, we've noted it. The concepts still apply, but the code samples use older patterns.
+
+:::
+
 ## Basic Introductions
 
 _Tutorials that teach the basic concepts of Redux and how to use it_
 
+- **Modern Redux with Redux Toolkit** <br />
+  https://blog.isquaredsoftware.com/2022/06/presentations-modern-redux-rtk/ <br />
+  Redux maintainer Mark Erikson's presentation on how Redux Toolkit simplifies Redux usage, why we recommend it as the standard way to write Redux logic, and how it compares to the older hand-written patterns.
+
 - **Intro to React, Redux, and TypeScript** <br />
   https://blog.isquaredsoftware.com/2020/12/presentations-react-redux-ts-intro/ <br />
-  Redux maintainer Mark Erikson's slideset that covers the basics of React, Redux, and TypeScript. Redux topics include stores, reducers, middleware, React-Redux, and Redux Toolkit.
+  Mark Erikson's slideset that covers the basics of React, Redux, and TypeScript. Redux topics include stores, reducers, middleware, React-Redux, and Redux Toolkit.
 
 - **Learn Modern Redux - Redux Toolkit, React-Redux Hooks, and RTK Query** <br />
-  https://www.learnwithjason.dev/let-s-learn-modern-redux <br />
-  An episode of the "Learn with Jason" show, with Redux maintainer Mark Erikson as guest. The episode features a live-coded app, and shows how to create a new React+TS project, add the Redux packages, and set up Redux Toolkit and React-Redux from scratch (including our recommended TS hooks configuration). It also shows how to use the upcoming RTK Query data fetching API and display that data in a UI.
+  https://codetv.dev/series/learn-with-jason/s4/let-s-learn-modern-redux <br />
+  An episode of the "Learn with Jason" show, with Redux maintainer Mark Erikson as guest. The episode features a live-coded app, and shows how to create a new React+TS project, add the Redux packages, and set up Redux Toolkit and React-Redux from scratch (including our recommended TS hooks configuration). It also shows how to use the RTK Query data fetching API and display that data in a UI.
 
 - **Redux Tutorial: An Overview and Walkthrough** <br />
   https://www.taniarascia.com/redux-react-guide/ <br />
@@ -31,24 +43,60 @@ _Tutorials that teach the basic concepts of Redux and how to use it_
   An easy-to-follow tutorial that builds a small todo app with Redux Toolkit and React-Redux, including data fetching.
 
 - **Redux made easy with Redux Toolkit and TypeScript** <br />
-  https://www.mattbutton.com/redux-made-easy-with-redux-toolkit-and-typescript/ <br />
+  https://mattbutton.com/redux-made-easy-with-redux-toolkit-and-typescript/ <br />
   A helpful tutorial that shows how to use Redux Toolkit and TypeScript together to write Redux applications, and how RTK simplifies typical Redux usage.
-
-- **Redux: From Twitter Hype to Production** <br/>
-  https://slides.com/jenyaterpil/redux-from-twitter-hype-to-production#/ <br/>
-  A well-produced slideshow that visually steps through core Redux concepts, usage with React, project organization, and side effects with thunks and sagas. Has some good animated diagrams demonstrating how data flows through a React+Redux architecture.
 
 ## Using Redux With React
 
 _Explanations of the React-Redux bindings library_
 
+- **React-Redux docs** <br />
+  https://react-redux.js.org/ <br />
+  The official docs for React-Redux, including the `useSelector` and `useDispatch` hooks, the recommended TypeScript setup, and the older `connect` API.
+
 - **Modernizing a Legacy Redux Application with React-Redux Hooks** <br />
   https://app.egghead.io/playlists/modernizing-a-legacy-redux-application-with-react-hooks-c528 <br />
   A video series that shows the differences between the earlier `connect` API and the newer React-Redux hooks API, and how to use those hooks in your components.
 
-- **Why Redux is Useful in React Apps** <br/>
-  https://www.fullstackreact.com/articles/redux-with-mark-erikson/ <br/>
-  An explanation of some of the benefits of using Redux with React, including sharing data between components and hot module reloading.
+- **A (Mostly) Complete Guide to React Rendering Behavior** <br />
+  https://blog.isquaredsoftware.com/2020/05/blogged-answers-a-mostly-complete-guide-to-react-rendering-behavior/ <br />
+  Mark Erikson's explanation of when and why React components re-render, and how React-Redux fits into that. Useful background for understanding `useSelector` and performance.
+
+## TypeScript
+
+_Using Redux with TypeScript_
+
+- **Redux: Usage with TypeScript** <br />
+  [Usage with TypeScript](../usage/UsageWithTypescript.md) <br />
+  Our own guide to setting up a typed store, typed hooks, and typed slices and thunks.
+
+- **Redux Toolkit: TypeScript Quick Start** <br />
+  https://redux-toolkit.js.org/tutorials/typescript <br />
+  https://redux-toolkit.js.org/usage/usage-with-typescript <br />
+  The Redux Toolkit docs on using RTK with TypeScript, from the initial store setup through typing each RTK API.
+
+## Data Fetching with RTK Query
+
+_Fetching and caching server data with the RTK Query API in Redux Toolkit_
+
+- **RTK Query Overview** <br />
+  https://redux-toolkit.js.org/rtk-query/overview <br />
+  The RTK Query docs, covering what RTK Query is, how to define an API slice, and how to use the generated hooks in components.
+
+- **Redux Essentials, Parts 7 and 8** <br />
+  [Part 7: RTK Query Basics](../tutorials/essentials/part-7-rtk-query-basics.md) <br />
+  [Part 8: RTK Query Advanced Patterns](../tutorials/essentials/part-8-rtk-query-advanced.md) <br />
+  Our own tutorial shows how to convert an app from thunks to RTK Query, and how to handle cache invalidation, optimistic updates, and streaming updates.
+
+- **RTK Query Basics: Query Endpoints, Data Flow and TypeScript** <br />
+  https://egghead.io/courses/rtk-query-basics-query-endpoints-data-flow-and-typescript-57ea3c43 <br />
+  A free video course by Lenz Weber-Tronic, the creator of RTK Query.
+
+## Redux DevTools
+
+- **Redux DevTools** <br />
+  https://github.com/reduxjs/redux-devtools <br />
+  The Redux DevTools browser extension lets you inspect every dispatched action and state change, and jump back and forth between states. `configureStore` enables it automatically in development. The repo includes the extension, the standalone `@redux-devtools/cli` for React Native and other environments, and the underlying DevTools components.
 
 ## Project-Based Tutorials
 
@@ -57,7 +105,7 @@ _Tutorials that teach Redux concepts by building projects, including larger "rea
 - **Practical Redux** <br/>
   https://blog.isquaredsoftware.com/2016/10/practical-redux-part-0-introduction/ <br/>
   https://blog.isquaredsoftware.com/series/practical-redux/ <br/>
-  An ongoing series of posts intended to demonstrate a number of specific Redux techniques by building a sample application, based on the MekHQ application for managing Battletech campaigns. Written by Redux co-maintainer Mark Erikson. Covers topics like managing relational data, connecting multiple components and lists, complex reducer logic for features, handling forms, showing modal dialogs, and much more. (Note: this is an older series, and today we recommend newer patterns for writing Redux code. However, many of the principles in this series are still valuable.)
+  A series of posts intended to demonstrate a number of specific Redux techniques by building a sample application, based on the MekHQ application for managing Battletech campaigns. Written by Redux co-maintainer Mark Erikson. Covers topics like managing relational data, connecting multiple components and lists, complex reducer logic for features, handling forms, showing modal dialogs, and much more. (Note: this is an older series, and today we recommend newer patterns for writing Redux code. However, many of the principles in this series are still valuable.)
 
 ## Redux Implementation
 
@@ -66,116 +114,93 @@ _Explanations of how Redux works internally, by writing miniature reimplementati
 - **Getting Started with Redux - Video Series** <br/>
   https://egghead.io/courses/fundamentals-of-redux-course-from-dan-abramov-bd5cc867 <br/>
   https://github.com/tayiorbeii/egghead.io_redux_course_notes <br/>
-  Dan Abramov, the creator of Redux, demonstrates various concepts in 30 short (2-5 minute) videos. The linked Github repo contains notes and transcriptions of the videos.
+  Dan Abramov, the creator of Redux, demonstrates various concepts in 30 short (2-5 minute) videos. The linked Github repo contains notes and transcriptions of the videos. (Note: these videos predate Redux Toolkit and show hand-written reducers and action creators. Watch them to understand how Redux works, after reading the Essentials tutorial to see how we write Redux code today.)
 
 - **Building React Applications with Idiomatic Redux - Video Series** <br/>
   https://egghead.io/courses/building-react-applications-with-idiomatic-redux <br/>
   https://github.com/tayiorbeii/egghead.io_idiomatic_redux_course_notes <br/>
-  Dan Abramov's second video tutorial series, continuing directly after the first. Includes lessons on store initial state, using Redux with React Router, using "selector" functions, normalizing state, use of Redux middleware, async action creators, and more. The linked Github repo contains notes and transcriptions of the videos.
+  Dan Abramov's second video tutorial series, continuing directly after the first. Includes lessons on store initial state, using Redux with React Router, using "selector" functions, normalizing state, use of Redux middleware, async action creators, and more. The linked Github repo contains notes and transcriptions of the videos. (Same note as above: older patterns, still valuable for the concepts.)
 
 - **Live React: Hot Reloading and Time Travel** <br/>
-  https://youtube.com/watch?v=xsSnOQynTHs <br/>
+  https://www.youtube.com/watch?v=xsSnOQynTHs <br/>
   Dan Abramov's original conference talk that introduced Redux. See how constraints enforced by Redux make hot reloading with time travel easy
 
 - **Build Yourself a Redux** <br/>
-  https://zapier.com/engineering/how-to-build-redux/ <br/>
+  https://zapier.com/blog/how-to-build-redux/ <br/>
   An excellent in-depth "build a mini-Redux" article, which covers not only Redux's core, but also `connect` and middleware as well.
-
-- **Connect.js explained** <br/>
-  https://gist.github.com/gaearon/1d19088790e70ac32ea636c025ba424e <br/>
-  A very simplified version of React Redux's `connect()` function that illustrates the basic implementation
-
-- **Let's Write Redux!** <br/>
-  https://www.jamasoftware.com/blog/lets-write-redux/ <br/>
-  Walks through writing a miniature version of Redux step-by-step, to help explain the concepts and implementation.
 
 ## Reducers
 
 _Articles discussing ways to write reducer functions_
 
+- **Structuring Reducers** <br/>
+  [Structuring Reducers](../usage/structuring-reducers/StructuringReducers.md) <br/>
+  Our own guide to splitting, combining, and reusing reducer logic, normalizing state, and immutable update patterns. Redux Toolkit's `createSlice` applies these same patterns.
+
 - **Taking Advantage of `combineReducers`** <br/>
   https://randycoulman.com/blog/2016/11/22/taking-advantage-of-combinereducers/ <br/>
-  Examples of using `combineReducers` multiple times to produce a state tree, and some thoughts on tradeoffs in various approaches to reducer logic.
-
-- **The Power of Higher-Order Reducers** <br/>
-  https://slides.com/omnidan/hor#/ <br/>
-  A slideshow from the author of redux-undo and other libraries, explaining the concept of higher-order reducers and how they can be used
-
-- **Reducer composition with Higher Order Reducers** <br/>
-  https://medium.com/@mange_vibration/reducer-composition-with-higher-order-reducers-35c3977ed08f <br/>
-  Some great examples of writing small functions that can be composed together to perform larger specific reducer tasks, such as providing initial state, filtering, updating specific keys, and more.
-
-- **Higher Order Reducers - It just sounds scary** <br/>
-  https://medium.com/@danielkagan/high-order-reducers-it-just-sounds-scary-2b9e5dbfc705 <br/>
-  Explains how reducers can be composed like Lego bricks to create reusable and testable reducer logic.
+  Examples of using `combineReducers` multiple times to produce a state tree, and some thoughts on tradeoffs in various approaches to reducer logic. The same ideas apply to the `reducer` object passed to `configureStore`.
 
 ## Selectors
 
 _Explanations of how and why to use selector functions to read values from state_
 
+- **Deriving Data with Selectors** <br/>
+  [Deriving Data with Selectors](../usage/deriving-data-selectors.md) <br/>
+  Our own guide to writing selectors, memoizing them with Reselect, and using them with React-Redux.
+
+- **Reselect docs** <br/>
+  https://reselect.js.org/ <br/>
+  The official Reselect docs, including the `createSelector` API, memoization options, and the development-mode checks that catch common selector mistakes.
+
 - **Idiomatic Redux: Using Reselect Selectors for Encapsulation and Performance** <br/>
   https://blog.isquaredsoftware.com/2017/12/idiomatic-redux-using-reselect-selectors/ <br/>
-  A complete guide to why you should use selector functions with Redux, how to use the Reselect library to write optimized selectors, and advanced tips for improving performance.
-
-- **ReactCasts #8: Selectors in Redux** <br/>
-  https://www.youtube.com/watch?v=frT3to2ACCw <br/>
-  A great overview of why and how to use selector functions to retrieve data from the store, and derive additional data from store values
-
-- **Optimizing React Redux Application Development with Reselect** <br/>
-  https://codebrahma.com/reselect-tutorial-optimizing-react-redux-application-development-with-reselect/ <br/>
-  A good tutorial on Reselect. Covers the concept of "selector functions", how to use Reselect's API, and how to use memoized selectors to improve performance.
-
-- **Usage of Reselect in a React-Redux Application** <br/>
-  https://dashbouquet.com/blog/frontend-development/usage-of-reselect-in-a-react-redux-application <br/>
-  Discusses the importance of memoized selectors for performance, and good practices for using Reselect.
-
-- **React, Reselect, and Redux** <br/>
-  https://medium.com/@parkerdan/react-reselect-and-redux-b34017f8194c <br/>
-  An explanation of how Reselect's memoized selector functions are useful in Redux apps, and how to create unique selector instances for each component instance.
+  A complete guide to why you should use selector functions with Redux, how to use the Reselect library to write optimized selectors, and advanced tips for improving performance. (Note: the code samples use `connect`, but the reasoning applies equally to `useSelector`.)
 
 ## Normalization
 
 _How to structure the Redux store like a database for best performance_
 
+- **Normalizing State Shape** <br/>
+  [Normalizing State Shape](../usage/structuring-reducers/NormalizingStateShape.md) <br/>
+  Our own guide to why and how to store data in a normalized `{ids, entities}` shape.
+
+- **`createEntityAdapter`** <br/>
+  https://redux-toolkit.js.org/api/createEntityAdapter <br/>
+  The Redux Toolkit API that generates reducers and selectors for managing normalized data in a slice.
+
 - **Querying a Redux Store** <br/>
   https://medium.com/@adamrackis/querying-a-redux-store-37db8c7f3b0f <br/>
-  A look at best practices for organizing and storing data in Redux, including normalizing data and use of selector functions.
-
-- **Normalizing Redux Stores for Maximum Code Reuse** <br/>
-  https://medium.com/@adamrackis/normalizing-redux-stores-for-maximum-code-reuse-ae6e3844ae95 <br/>
-  Thoughts on how normalized Redux stores enable some useful data handling approaches, with examples of using selector functions to denormalize hierarchical data.
-
-- **Advanced Redux Entity Normalization** <br/>
-  https://medium.com/@dcousineau/advanced-redux-entity-normalization-f5f1fe2aefc5 <br/>
-  Describes a "keyWindow" concept for tracking subsets of entities in state, similar to an SQL "view". A useful extension to the idea of normalized data.
+  A look at best practices for organizing and storing data in Redux, including normalizing data and use of selector functions. (Note: predates `createEntityAdapter`, which now handles the update logic described here.)
 
 ## Middleware
 
 _Explanations and examples of how middleware work and how to write them_
 
+- **Middleware** <br/>
+  [Understanding Redux: Middleware](../understanding/history-and-design/middleware.md) <br/>
+  [Writing Custom Middleware](../usage/WritingCustomMiddleware.md) <br/>
+  Our own explanation of what middleware are and how `applyMiddleware` works, plus a guide to writing your own.
+
 - **Exploring Redux Middlewares** <br/>
   https://blog.krawaller.se/posts/exploring-redux-middleware/ <br/>
   Understanding middlewares through a series of small experiments
 
-- **Redux Middleware Tutorial** <br/>
-  https://github.com/pshrmn/notes/blob/master/redux/redux-middleware.md <br/>
-  An overview of what middleware is, how `applyMiddleware` works, and how to write middleware.
+## Side Effects
 
-- **ReactCasts #6: Redux Middleware** <br/>
-  https://www.youtube.com/watch?v=T-qtHI1qHIg <br/>
-  A screencast that describes how middleware fit into Redux, their uses, and how to implement a custom middleware
+_Handling async behavior in Redux_
 
-- **A Beginner's Guide to Redux Middleware** <br/>
-  https://www.codementor.io/reactjs/tutorial/beginner-s-guide-to-redux-middleware <br/>
-  A useful explanation of middleware use cases, with numerous examples
+- **Side Effects Approaches** <br/>
+  [Side Effects Approaches](../usage/side-effects-approaches.mdx) <br/>
+  Our recommendations for handling side effects: RTK Query for data fetching, thunks for general async logic, and the listener middleware for reacting to actions. Also compares sagas and observables.
 
-- **Functional Composition in Javascript** <br/>
-  https://joecortopassi.com/articles/functional-composition-in-javascript/ <br/>
-  Breaking down how the `compose` function works
+- **Writing Logic with Thunks** <br/>
+  [Writing Logic with Thunks](../usage/writing-logic-thunks.mdx) <br/>
+  Our own guide to what thunks are, why they exist, and how to write them.
 
-## Side Effects - Basics
-
-_Introductions to handling async behavior in Redux_
+- **`createListenerMiddleware`** <br/>
+  https://redux-toolkit.js.org/api/createListenerMiddleware <br/>
+  The Redux Toolkit API for running logic in response to dispatched actions, with cancellation and debouncing support. Covers most use cases that previously needed sagas.
 
 - **Stack Overflow: Dispatching Redux Actions with a Timeout** <br/>
   https://stackoverflow.com/questions/35411423/how-to-dispatch-a-redux-action-with-a-timeout/35415559#35415559 <br/>
@@ -189,47 +214,9 @@ _Introductions to handling async behavior in Redux_
   https://daveceddia.com/what-is-a-thunk/ <br/>
   A quick explanation for what the word "thunk" means in general, and for Redux specifically.
 
-- **Thunks in Redux: The Basics** <br/>
-  https://medium.com/fullstack-academy/thunks-in-redux-the-basics-85e538a3fe60 <br/>
-  A detailed look at what thunks are, what they solve, and how to use them.
-
-## Side Effects - Advanced
-
-_Advanced tools and techniques for managing async behavior_
-
-- **What is the right way to do asynchronous operations in Redux?** <br/>
-  https://decembersoft.com/posts/what-is-the-right-way-to-do-asynchronous-operations-in-redux/ <br/>
-  An excellent look at the most popular libraries for Redux side effects, with comparisons of how each one works.
-
-- **Redux 4 Ways** <br/>
-  https://medium.com/react-native-training/redux-4-ways-95a130da0cdc <br/>
-  Side-by-side comparisons of implementing some basic data fetching using thunks, sagas, observables, and a promise middleware
-
 - **Idiomatic Redux: Thoughts on Thunks, Sagas, Abstractions, and Reusability** <br/>
   https://blog.isquaredsoftware.com/2017/01/idiomatic-redux-thoughts-on-thunks-sagas-abstraction-and-reusability/ <br/>
   A response to several "thunks are bad" concerns, arguing that thunks (and sagas) are still a valid approach for managing complex sync logic and async side effects.
-
-- **Javascript Power Tools: Redux-Saga** <br/>
-  https://formidable.com/blog/2017/javascript-power-tools-redux-saga/ <br/>
-  https://formidable.com/blog/2017/composition-patterns-in-redux-saga/ <br/>
-  https://formidable.com/blog/2017/real-world-redux-saga-patterns/ <br/>
-  A fantastic series that teaches the concepts, implementation, and benefits behind Redux-Saga, including how ES6 generators are used to control function flow, how sagas can be composed together to accomplish concurrency, and practical use cases for sagas.
-
-- **Exploring Redux Sagas** <br/>
-  https://medium.com/onfido-tech/exploring-redux-sagas-cc1fca2015ee <br/>
-  An excellent article that explores how to use sagas to provide a glue layer to implement decoupled business logic in a Redux application.
-
-- **Taming Redux with Sagas** <br/>
-  https://objectpartners.com/2017/11/20/taming-redux-with-sagas/ <br/>
-  A good overview of Redux-Saga, including info on generator functions, use cases for sagas, using sagas to deal with promises, and testing sagas.
-
-- **Reactive Redux State with RxJS** <br/>
-  https://ivanjov.com/reactive-redux-state-with-rxjs/ <br/>
-  Describes the concept of "Reactive Programming" and the RxJS library, and shows how to use redux-observable to fetch data, along with examples of testing.
-
-- **Using redux-observable to handle asynchronous logic in Redux** <br/>
-  https://medium.com/dailyjs/using-redux-observable-to-handle-asynchronous-logic-in-redux-d49194742522 <br/>
-  An extended post that compares a thunk-based implementation of handling a line-drawing example vs an observable-based implementation.
 
 ## Thinking in Redux
 
@@ -239,121 +226,71 @@ _Deeper looks at how Redux is meant to be used, and why it works the way it does
   https://changelog.com/posts/when-and-when-not-to-reach-for-redux <br />
   Redux maintainer Mark Erikson describes the problems Redux was created to solve, and how it compares to other commonly used tools.
 
-* **You Might Not Need Redux** <br/>
+- **Why React Context is Not a "State Management" Tool (and Why It Doesn't Replace Redux)** <br />
+  https://blog.isquaredsoftware.com/2021/01/context-redux-differences/ <br />
+  Mark Erikson explains what React Context actually does, how it differs from Redux, and when each one is the right choice.
+
+- **You Might Not Need Redux** <br/>
   https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367 <br/>
   Dan Abramov discusses the tradeoffs involved in using Redux.
 
-* **Idiomatic Redux: The Tao of Redux, Part 1 - Implementation and Intent** <br/>
+- **Idiomatic Redux: The Tao of Redux, Part 1 - Implementation and Intent** <br/>
   https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-1/ <br/>
   A deep dive into how Redux actually works, the constraints it asks you to follow, and the intent behind its design and usage.
 
-* **Idiomatic Redux: The Tao of Redux, Part 2 - Practice and Philosophy** <br/>
+- **Idiomatic Redux: The Tao of Redux, Part 2 - Practice and Philosophy** <br/>
   https://blog.isquaredsoftware.com/2017/05/idiomatic-redux-tao-of-redux-part-2/ <br/>
   A follow-up look at why common Redux usage patterns exist, other ways that Redux can be used, and thoughts on the pros and cons of those different patterns and approaches.
 
-* **What's So Great About Redux?** <br/>
-  https://medium.freecodecamp.org/whats-so-great-about-redux-ac16f1cc0f8b <br/>
-  Deep and fascinating analysis of how Redux compares to OOP and message-passing, how typical Redux usage can devolve towards Java-like "setter" functions with more boilerplate, and something of a plea for a higher-level "blessed" abstraction on top of Redux to make it easier to work with and learn for newbies. Very worth reading.
+- **What's So Great About Redux?** <br/>
+  https://www.freecodecamp.org/news/whats-so-great-about-redux-ac16f1cc0f8b <br/>
+  Deep and fascinating analysis of how Redux compares to OOP and message-passing, how typical Redux usage can devolve towards Java-like "setter" functions with more boilerplate, and something of a plea for a higher-level "blessed" abstraction on top of Redux to make it easier to work with and learn for newbies. Very worth reading. (Redux Toolkit is that abstraction.)
 
 ## Redux Architecture
 
 _Patterns and practices for structuring larger Redux applications_
 
+- **Redux Style Guide** <br/>
+  [Style Guide](../style-guide/style-guide.md) <br/>
+  Our recommended patterns and best practices for structuring Redux applications, organized by priority.
+
 - **Avoiding Accidental Complexity When Structuring Your App State** <br/>
   https://hackernoon.com/avoiding-accidental-complexity-when-structuring-your-app-state-6e6d22ad5e2a <br/>
   An excellent set of guidelines for organizing your Redux store structure.
 
-- **Redux Step by Step: A Simple and Robust Workflow for Real Life Apps** <br/>
-  https://hackernoon.com/redux-step-by-step-a-simple-and-robust-workflow-for-real-life-apps-1fdf7df46092 <br/>
-  A follow-up to the "Accidental Complexity" article, discussing principle
-
-- **Things I Wish I Knew About Redux** <br/>
-  https://medium.com/horrible-hacks/things-i-wish-i-knew-about-redux-9924abf2f9e0 <br/>
-  https://www.reddit.com/r/javascript/comments/4taau2/things_i_wish_i_knew_about_redux/ <br/>
-  A number of excellent tips and lessons learned after building an app with Redux. Includes info on connecting components, selecting data, and app/project structure. Additional discussion on Reddit.
-
-- **React+Redux: Tips and Best Practices for Clean, Reliable, & Maintainable Code** <br/>
-  https://speakerdeck.com/goopscoop/react-plus-redux-tips-and-best-practices-for-clean-reliable-and-scalable-code <br/>
-  An excellent slideshow with a wide variety of tips and suggestions, including keeping action creators simple and data manipulation in reducers, abstracting away API calls, avoiding spreading props, and more.
-
 - **Redux for state management in large web apps** <br/>
-  https://blog.mapbox.com/redux-for-state-management-in-large-web-apps-c7f3fab3ce9b <br/>
-  Excellent discussion and examples of idiomatic Redux architecture, and how Mapbox applies those approaches to their Mapbox Studio application.
+  https://medium.com/mapbox/redux-for-state-management-in-large-web-apps-c7f3fab3ce9b <br/>
+  Excellent discussion and examples of idiomatic Redux architecture, and how Mapbox applies those approaches to their Mapbox Studio application. (Note: written in 2017, so the code samples use `connect` and hand-written reducers.)
 
 ## Apps and Examples
 
-- **React-Redux RealWorld Example: TodoMVC for the Real World** <br/>
-  https://github.com/GoThinkster/redux-review <br/>
-  An example full-stack "real world" application built with Redux. Demos a Medium-like social blogging site that includes JWT authentication, CRUD, favoriting articles, following users, routing, and more. The RealWorld project also includes many other implementations of the front and back ends of the site, specifically intended to show how different server and client implementations of the same project and API spec compare with each other.
+- **Redux Templates** <br/>
+  https://github.com/reduxjs/redux-templates <br/>
+  Official project templates for Vite, Next.js, and other setups, preconfigured with Redux Toolkit, React-Redux, and TypeScript.
 
-- **Project Mini-Mek** <br/>
-  https://github.com/markerikson/project-minimek <br/>
-  A sample app to demonstrate various useful Redux techniques, accompanying the "Practical Redux" blog series at https://blog.isquaredsoftware.com/series/practical-redux
-
-- **react-redux-yelp-clone** <br/>
-  https://github.com/mohamed-ismat/react-redux-yelp-clone <br/>
-  An adaptation of the "Yelp Clone" app by FullStackReact. It extends the original by using Redux and Redux Saga instead of local state, as well as React Router v4, styled-components, and other modern standards. Based on the React-Boilerplate starter kit.
-
-- **WordPress-Calypso** <br/>
-  https://github.com/Automattic/wp-calypso <br/>
-  The new JavaScript- and API-powered WordPress.com
-
-- **Sound-Redux** <br/>
-  https://github.com/andrewngu/sound-redux <br/>
-  A Soundcloud client built with React / Redux
+- **Redux Essentials Example App** <br/>
+  https://github.com/reduxjs/redux-essentials-example-app <br/>
+  The social media feed app built in [the Redux Essentials tutorial](../tutorials/essentials/part-1-overview-concepts.md), using Redux Toolkit, RTK Query, and TypeScript.
 
 - **Webamp** <br/>
   https://webamp.org <br/>
   https://github.com/captbaritone/webamp <br/>
   An in-browser recreation of Winamp2, built with React and Redux. Actually plays MP3s, and lets you load in local MP3 files.
 
-- **Tello** <br/>
-  https://github.com/joshwcomeau/Tello <br/>
-  A simple and delightful way to track and manage TV shows
-
-- **io-808** <br/>
-  https://github.com/vincentriemer/io-808 <br/>
-  An attempt at a fully recreated web-based TR-808 drum machine
+- **WordPress-Calypso** <br/>
+  https://github.com/Automattic/wp-calypso <br/>
+  The JavaScript- and API-powered WordPress.com
 
 ## Redux Docs Translations
 
-- [中文文档](http://camsong.github.io/redux-in-chinese/) — Chinese
+- [中文文档](https://cn.redux.js.org/) — Chinese
 - [繁體中文文件](https://github.com/chentsulin/redux) — Traditional Chinese
 - [Redux in Russian](https://github.com/rajdee/redux-in-russian) — Russian
 - [Redux en Español](https://es.redux.js.org/) - Spanish
 - [Redux in Korean](https://ko.redux.js.org/) - Korean
 
-## Books
-
-- **Redux in Action** <br/>
-  https://www.manning.com/books/redux-in-action <br/>
-  A comprehensive book that covers many key aspects of using Redux, including the basics of reducers and actions and use with React, complex middlewares and side effects, application structure, performance, testing, and much more. Does a great job of explaining the pros, cons, and tradeoffs of many approaches to using Redux. Personally recommended by Redux co-maintainer Mark Erikson.
-
-- **The Complete Redux Book** <br/>
-  https://leanpub.com/redux-book <br/>
-  How do I manage a large state in production? Why do I need store enhancers? What is the best way to handle form validations? Get the answers to all these questions and many more using simple terms and sample code. Learn everything you need to use Redux to build complex and production-ready web applications. (Note: now permanently free!)
-
-- **Taming the State in React** <br/>
-  https://www.robinwieruch.de/learn-react-redux-mobx-state-management/ <br/>
-  If you have learned React with the previous book of the author called The Road to learn React, Taming the State in React will be the perfect blend to learn about basic and advanced state management in React. You will start out with learning only Redux without React. Afterward, the book shows you how to connect Redux to your React application. The advanced chapters will teach you about normalization, naming, selectors and asynchronous actions. In the end, you will set up and build a real world application with React and Redux.
-
-## Courses
-
-- **Modern React with Redux, by Stephen Grider (paid)** <br/>
-  https://www.udemy.com/react-redux/ <br/>
-  Master the fundamentals of React and Redux with this tutorial as you develop apps with React Router, Webpack, and ES2015. This course will get you up and running quickly, and teach you the core knowledge you need to deeply understand and build React components and structure applications with Redux.
-
-- **Redux, by Tyler McGinnis (paid)** <br/>
-  https://tylermcginnis.com/courses/redux/ <br/>
-  When learning Redux, you need to learn it in the context of an app big enough to see the benefits. That's why this course is huge. A better name might be _"Real World Redux"_. If you're sick of "todo list" Redux tutorials, you've come to the right place. In this course we'll talk all about what makes Redux special for managing state in your application. We'll build an actual "real world" application so you can see how Redux handles edge cases like optimistic updates and error handling. We'll also cover many other technologies that work well with Redux, Firebase, and CSS Modules.
-
-- **Learn Redux, by Wes Bos (free)** <br/>
-  https://learnredux.com/ <br/>
-  A video course that walks through building 'Reduxstagram' — a simple photo app that will simplify the core ideas behind Redux, React Router and React.js
-
 ## More Resources
 
 - [React-Redux Links](https://github.com/markerikson/react-redux-links) is a curated list of high-quality articles, tutorials, and related content for React, Redux, ES2015, and more.
-- [Redux Ecosystem Links](https://github.com/markerikson/redux-ecosystem-links) is a categorized collection of Redux-related libraries, addons, and utilities.
 - [Awesome Redux](https://github.com/xgrommx/awesome-redux) is an extensive list of Redux-related repositories.
 - [DEV Community](https://dev.to/t/redux) is a place to share Redux projects, articles and tutorials as well as start discussions and ask for feedback on Redux-related topics. Developers of all skill-levels are welcome to take part.
