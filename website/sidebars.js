@@ -73,7 +73,8 @@ module.exports = {
         items: [
           'usage/usage-with-typescript',
           'usage/writing-tests',
-          'usage/troubleshooting'
+          'usage/troubleshooting',
+          'usage/debugging'
         ]
       },
       {

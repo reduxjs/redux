@@ -1,12 +1,14 @@
 ---
 id: troubleshooting
-title: Troubleshooting and Debugging
+title: Troubleshooting
 ---
 
-# Troubleshooting and Debugging
+# Troubleshooting
 
-This is a place to share common problems and solutions to them, plus an overview of the tools for figuring out what your Redux app is doing.
+This is a place to share common problems and solutions to them.
 The examples use React and Redux Toolkit, but you should still find them useful if you use something else.
+
+If your problem isn't listed here, the [Debugging Redux](./DebuggingRedux.md) page describes how to track down what your app is actually doing, using the Redux DevTools and other tools.
 
 ## Common Problems
 
@@ -187,22 +189,9 @@ export const useAppSelector = useSelector.withTypes<RootState>()
 
 Query and mutation hooks do not throw. They return `isError`, `error`, and `status` fields, and the error object has a different shape depending on whether the request failed on the network (`{ status: 'FETCH_ERROR', error: string }`) or the server returned a non-2xx status (`{ status: number, data: unknown }`). Read the hook result rather than wrapping it in `try`/`catch`. See [RTK Query error handling](https://redux-toolkit.js.org/rtk-query/usage/error-handling). The "RTK Query" tab in the Redux DevTools shows every cached query, its status, and its last response.
 
-## Debugging with the Redux DevTools
-
-Most Redux problems come down to one of three questions: was the action dispatched, what did the reducer do with it, and what did the component select? The [Redux DevTools Extension](https://github.com/reduxjs/redux-devtools/tree/main/extension) answers all three. `configureStore` enables the connection in development automatically; install the browser extension for [Chrome](https://chromewebstore.google.com/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd), [Firefox](https://addons.mozilla.org/en-US/firefox/addon/reduxdevtools/), or [Edge](https://microsoftedge.microsoft.com/addons/detail/redux-devtools/nnkgneoiohoecpdiaponcejilbhhikei) and open the "Redux" panel.
-
-- **Action list**: every dispatched action, in order. Click one to see its contents under the "Action" tab. If an action you expected is missing, the code that should have dispatched it did not run, or did not call `dispatch`.
-- **Diff**: the "Diff" tab shows exactly which values in the state changed as a result of the selected action. An empty diff for an action that should have changed something usually means the reducer returned the existing state, either because no case matched the action type or because it mutated the state instead of returning a new value.
-- **State**: the full state tree after the selected action. Use it to confirm the actual shape when a selector returns `undefined`.
-- **Time travel**: clicking "Jump" on an earlier action sets the app back to that state so you can see how the UI looked at that point. "Skip" removes an action from the history and recomputes the state without it.
-- **Trace**: with `devTools: { trace: true }` passed to `configureStore`, the "Trace" tab shows the stack trace of the code that dispatched each action. This is the fastest way to answer "who dispatched this?". It is off by default because capturing stacks is slow; see the [extension options](https://github.com/reduxjs/redux-devtools/blob/main/extension/docs/API/Arguments.md).
-- **RTK Query**: lists every query and mutation in the cache with its arguments, status, cached data, tags, and subscriber count.
-
-Because state is only changed by dispatching actions, and every action is logged, the action list is a complete history of what happened. Read the list top to bottom and find the first action after which the state looks wrong. The bug is in that action's reducer, or in whatever dispatched it. This is what the Redux docs mean by "predictable": you can always trace a wrong value back to the specific step that produced it.
-
-For a longer walkthrough of this approach, and of the browser debugger and logging techniques it builds on, see Mark Erikson's talk [Debugging JavaScript: Tools and Techniques](https://blog.isquaredsoftware.com/presentations/2023-06-debugging-js/). [Replay](https://www.replay.io/) records a browser session so you can step through it afterwards with a full debugger, which is useful when a bug only shows up in a long sequence of actions that is hard to reproduce by hand.
-
 ## Something else doesn't work
+
+Most Redux problems come down to one of three questions: was the action dispatched, what did the reducer do with it, and what did the component select? The Redux DevTools answer all three. See [Debugging Redux](./DebuggingRedux.md) for how to use them, and for the general debugging approach they fit into.
 
 Ask around on the **#redux** [Reactiflux](https://www.reactiflux.com/) Discord channel, or [create an issue](https://github.com/reduxjs/redux/issues).
 
