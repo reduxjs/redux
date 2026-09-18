@@ -169,7 +169,7 @@ Redux Toolkit's `configureStore` adds a development-only immutability check midd
 **Documentation**
 
 - [Using Redux: Immutable Update Patterns](../usage/structuring-reducers/ImmutableUpdatePatterns.md)
-- [Troubleshooting: Never mutate reducer arguments](../usage/Troubleshooting.md#never-mutate-reducer-arguments)
+- [Troubleshooting: The reducer mutated the state](../usage/Troubleshooting.md#the-reducer-mutated-the-state)
 - [Redux Toolkit: Immutability Middleware](https://redux-toolkit.js.org/api/immutabilityMiddleware)
 
 ### How does immutability enable a shallow check to detect object mutations?
