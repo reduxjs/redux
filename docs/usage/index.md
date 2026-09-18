@@ -38,6 +38,7 @@ This section provides information on tools and techniques used to improve the qu
 - [Usage with TypeScript](UsageWithTypescript.md)
 - [Writing Tests](WritingTests.mdx)
 - [Troubleshooting](Troubleshooting.md)
+- [Debugging Redux](DebuggingRedux.md)
 
 ## Redux Logic and Patterns
 
