@@ -52,13 +52,17 @@ If you'd like to see the final version of what we're going to build, you can che
 
 #### Creating a New Redux + React Project
 
-Once you've finished this tutorial, you'll probably want to try working on your own projects. **We recommend using the [Redux templates for Create-React-App](https://github.com/reduxjs/cra-template-redux) as the fastest way to create a new Redux + React project**. It comes with Redux Toolkit and React-Redux already configured, using [a modernized version of the "counter" app example you saw in Part 1](./part-1-overview.md). This lets you jump right into writing your actual application code without having to add the Redux packages and set up the store.
+Once you've finished this tutorial, you'll probably want to try working on your own projects. **We recommend using the [Redux+TS template for Vite](https://github.com/reduxjs/redux-templates/tree/master/packages/vite-template-redux) as the fastest way to create a new Redux + React project**. It comes with Redux Toolkit and React-Redux already configured, using [a modernized version of the "counter" app example you saw in Part 1](./part-1-overview.md). This lets you jump right into writing your actual application code without having to add the Redux packages and set up the store. You can create a new project from it with `tiged`:
+
+```sh
+npx tiged reduxjs/redux-templates/packages/vite-template-redux my-app
+```
 
 If you want to know specific details on how to add Redux to a project, see this explanation:
 
 <DetailedExplanation title="Detailed Explanation: Adding Redux to a React Project">
 
-The Redux template for CRA comes with Redux Toolkit and React-Redux already configured. If you're setting up a new project from scratch without that template, follow these steps:
+The Redux template for Vite comes with Redux Toolkit and React-Redux already configured. If you're setting up a new project from scratch without that template, follow these steps:
 
 - Add the `@reduxjs/toolkit` and `react-redux` packages
 - Create a Redux store using RTK's `configureStore` API, and pass in at least one reducer function
@@ -78,7 +82,7 @@ root.render(
 
 #### Exploring the Initial Project
 
-This initial project is based on [the standard Vite](https://create-react-app.dev/docs/getting-started) project template, with some modifications.
+This initial project is based on [the standard Vite](https://vite.dev/guide/) React project template, with some modifications.
 
 Let's take a quick look at what the initial project contains:
 

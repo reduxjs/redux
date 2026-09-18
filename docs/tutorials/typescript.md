@@ -30,7 +30,7 @@ Redux Toolkit is already written in TypeScript, so its TS type definitions are b
 
 [React Redux](https://react-redux.js.org) is also written in TypeScript as of version 8, and also includes its own type definitions.
 
-The [Redux+TS template for Create-React-App](https://github.com/reduxjs/cra-template-redux-typescript) comes with a working example of these patterns already configured.
+The [Redux+TS template for Vite](https://github.com/reduxjs/redux-templates/tree/master/packages/vite-template-redux) comes with a working example of these patterns already configured.
 
 ## Project Setup
 

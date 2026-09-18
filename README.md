@@ -23,17 +23,18 @@ Both of these already have Redux Toolkit and React-Redux configured appropriatel
 
 ```bash
 # Vite with our Redux+TS template
-# (using the `degit` tool to clone and extract the template)
-npx degit reduxjs/redux-templates/packages/vite-template-redux my-app
+# (using the `tiged` tool to clone and extract the template)
+npx tiged reduxjs/redux-templates/packages/vite-template-redux my-app
 
 # Next.js using the `with-redux` template
 npx create-next-app --example with-redux my-app
 ```
 
-We do not currently have official React Native templates, but recommend these templates for standard React Native and for Expo:
+For React Native, we have [an official Redux+TS template for Expo](https://github.com/reduxjs/redux-templates/tree/master/packages/expo-template-redux-typescript):
 
-- https://github.com/rahsheen/react-native-template-redux-typescript
-- https://github.com/rahsheen/expo-template-redux-typescript
+```bash
+npx tiged reduxjs/redux-templates/packages/expo-template-redux-typescript my-app
+```
 
 ```
 npm install @reduxjs/toolkit react-redux

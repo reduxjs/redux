@@ -266,7 +266,7 @@ _Patterns and practices for structuring larger Redux applications_
 
 - **Redux Templates** <br/>
   https://github.com/reduxjs/redux-templates <br/>
-  Official project templates for Vite, Next.js, and other setups, preconfigured with Redux Toolkit, React-Redux, and TypeScript.
+  Official project templates for Vite and Expo, preconfigured with Redux Toolkit, React-Redux, and TypeScript. For Next.js, see [Next's `with-redux` example](https://github.com/vercel/next.js/tree/canary/examples/with-redux).
 
 - **Redux Essentials Example App** <br/>
   https://github.com/reduxjs/redux-essentials-example-app <br/>

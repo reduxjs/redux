@@ -39,13 +39,13 @@ Here's the live version of the project. You can play around with it by clicking 
 If you'd like to set up this project on your own computer, you can create a local copy with this command:
 
 ```sh
-npx degit reduxjs/redux-templates/packages/rtk-app-structure-example my-app
+npx tiged reduxjs/redux-templates/packages/rtk-app-structure-example my-app
 ```
 
 You can also create a new project using the full Redux Toolkit template for Vite:
 
 ```sh
-npx degit reduxjs/redux-templates/packages/vite-template-redux my-app
+npx tiged reduxjs/redux-templates/packages/vite-template-redux my-app
 ```
 
 ### Using the Counter App
