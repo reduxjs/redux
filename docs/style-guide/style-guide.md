@@ -48,7 +48,7 @@ Where multiple, equally good options exist, an arbitrary choice can be made to e
 
 Mutating state is the most common cause of bugs in Redux applications, including components failing to re-render properly, and will also break time-travel debugging in the Redux DevTools. **Actual mutation of state values should always be avoided**, both inside reducers and in all other application code.
 
-Use tools such as [`redux-immutable-state-invariant`](https://github.com/leoasis/redux-immutable-state-invariant) to catch mutations during development, and [Immer](https://immerjs.github.io/immer/) to avoid accidental mutations in state updates.
+Redux Toolkit's `configureStore` includes [an immutability check middleware](https://redux-toolkit.js.org/api/immutabilityMiddleware) that catches mutations during development, and `createSlice` uses [Immer](https://immerjs.github.io/immer/) so that state updates can't accidentally mutate the real data.
 
 > **Note**: it is okay to modify _copies_ of existing values - that is a normal part of writing immutable update logic. Also, if you are using the Immer library for immutable updates, writing "mutating" logic is acceptable because the real data isn't being mutated - Immer safely tracks changes and generates immutably-updated values internally.
 
@@ -135,39 +135,51 @@ There are valid cases where some or all of the new state should be calculated fi
 
 The Redux core does not actually care whether a new state value is calculated in the reducer or in the action creation logic. For example, for a todo app, the logic for a "toggle todo" action requires immutably updating an array of todos. It is legal to have the action contain just the todo ID and calculate the new array in the reducer:
 
-```js
+```ts
 // Click handler:
-const onTodoClicked = (id) => {
-    dispatch({type: "todos/toggleTodo", payload: {id}})
+const onTodoClicked = (id: string) => {
+  dispatch(todoToggled(id))
 }
 
 // Reducer:
-case "todos/toggleTodo": {
-    return state.map(todo => {
-        if(todo.id !== action.payload.id) return todo;
-
-        return {...todo, completed: !todo.completed };
-    })
-}
+const todosSlice = createSlice({
+  name: 'todos',
+  initialState,
+  reducers: {
+    todoToggled(state, action: PayloadAction<string>) {
+      const todo = state.find(todo => todo.id === action.payload)
+      if (todo) {
+        todo.completed = !todo.completed
+      }
+    }
+  }
+})
 ```
 
 And also to calculate the new array first and put the entire new array in the action:
 
-```js
+```ts
 // Click handler:
-const onTodoClicked = id => {
+const onTodoClicked = (id: string) => {
   const newTodos = todos.map(todo => {
     if (todo.id !== id) return todo
 
     return { ...todo, completed: !todo.completed }
   })
 
-  dispatch({ type: 'todos/toggleTodo', payload: { todos: newTodos } })
+  dispatch(todosReplaced(newTodos))
 }
 
 // Reducer:
-case "todos/toggleTodo":
-    return action.payload.todos;
+const todosSlice = createSlice({
+  name: 'todos',
+  initialState,
+  reducers: {
+    todosReplaced(state, action: PayloadAction<Todo[]>) {
+      return action.payload
+    }
+  }
+})
 ```
 
 However, doing the logic in the reducer is preferable for several reasons:
@@ -191,22 +203,22 @@ In addition, slice reducers should exercise control over what other values are r
 <DetailedExplanation>
 Picture a "current user" reducer that looks like:
 
-```js
+```ts
 const initialState = {
   firstName: null,
   lastName: null,
   age: null
 }
 
-export default function usersReducer(state = initialState, action) {
-  switch (action.type) {
-    case 'users/userLoggedIn': {
+const usersSlice = createSlice({
+  name: 'users',
+  initialState,
+  reducers: {
+    userLoggedIn(state, action) {
       return action.payload
     }
-    default:
-      return state
   }
-}
+})
 ```
 
 In this example, the reducer completely assumes that `action.payload` is going to be a correctly formatted object.
@@ -311,51 +323,53 @@ With TypeScript, this also makes it easy to use [discriminated unions](https://b
 
 Typically, reducer logic is written by taking the action into account first. When modeling logic with state machines, it's important to take the state into account first. Creating "finite state reducers" for each state helps encapsulate behavior per state:
 
-```js
-import {
-  FETCH_USER,
-  // ...
-} from './actions'
+```ts
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-const IDLE_STATUS = 'idle';
-const LOADING_STATUS = 'loading';
-const SUCCESS_STATUS = 'success';
-const FAILURE_STATUS = 'failure';
+type UserState =
+  | { status: 'idle'; user: null; error: null }
+  | { status: 'loading'; user: null; error: null }
+  | { status: 'success'; user: User; error: null }
+  | { status: 'failure'; user: null; error: string }
 
-const fetchIdleUserReducer = (state, action) => {
-  // state.status is "idle"
-  switch (action.type) {
-    case FETCH_USER:
-      return {
-        ...state,
-        status: LOADING_STATUS
+const initialState: UserState = { status: 'idle', user: null, error: null }
+
+const userSlice = createSlice({
+  name: 'user',
+  initialState,
+  reducers: {
+    fetchUserStarted(state) {
+      // Only an idle or failed fetch can start loading
+      switch (state.status) {
+        case 'idle':
+        case 'failure':
+          return { status: 'loading', user: null, error: null }
+        default:
+          return state
+      }
+    },
+    fetchUserSucceeded(state, action: PayloadAction<User>) {
+      // A result only matters if we were actually loading
+      switch (state.status) {
+        case 'loading':
+          return { status: 'success', user: action.payload, error: null }
+        default:
+          return state
+      }
+    },
+    fetchUserFailed(state, action: PayloadAction<string>) {
+      switch (state.status) {
+        case 'loading':
+          return { status: 'failure', user: null, error: action.payload }
+        default:
+          return state
       }
     }
-    default:
-      return state;
   }
-}
-
-// ... other reducers
-
-const fetchUserReducer = (state, action) => {
-  switch (state.status) {
-    case IDLE_STATUS:
-      return fetchIdleUserReducer(state, action);
-    case LOADING_STATUS:
-      return fetchLoadingUserReducer(state, action);
-    case SUCCESS_STATUS:
-      return fetchSuccessUserReducer(state, action);
-    case FAILURE_STATUS:
-      return fetchFailureUserReducer(state, action);
-    default:
-      // this should never be reached
-      return state;
-  }
-}
+})
 ```
 
-Now, since you're defining behavior per state instead of per action, you also prevent impossible transitions. For instance, a `FETCH_USER` action should have no effect when `status === LOADING_STATUS`, and you can enforce that, instead of accidentally introducing edge-cases.
+Now, since you're defining behavior per state instead of per action, you also prevent impossible transitions. For instance, a `fetchUserStarted` action should have no effect when `status === 'loading'`, and you can enforce that, instead of accidentally introducing edge-cases.
 
 </DetailedExplanation>
 
@@ -375,7 +389,7 @@ This has several benefits:
 - Less logic is needed to calculate those additional values and keep them in sync with the rest of the data
 - The original state is still there as a reference and isn't being replaced
 
-Deriving data is often done in "selector" functions, which can encapsulate the logic for doing the derived data calculations. In order to improve performance, these selectors can be _memoized_ to cache previous results, using libraries like `reselect` and `proxy-memoize`.
+Deriving data is often done in "selector" functions, which can encapsulate the logic for doing the derived data calculations. In order to improve performance, these selectors can be _memoized_ to cache previous results, using [Reselect](https://reselect.js.org) (re-exported from Redux Toolkit as `createSelector`).
 
 ### Model Actions as Events, Not Setters
 

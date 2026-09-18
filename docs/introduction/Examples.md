@@ -143,4 +143,3 @@ Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/ma
 This example demonstrates rendering a deeply nested tree view and representing its state in a normalized form so it is easy to update from reducers. Good rendering performance is achieved by the container components granularly subscribing only to the tree nodes that they render.
 
 This example includes tests.
-

@@ -33,17 +33,17 @@ You shouldn't have to call `compose` directly. `configureStore` sets up the stan
 
 ## Example
 
-This example demonstrates how to use `compose` to enhance a [store](Store.md) with [`applyMiddleware`](applyMiddleware.md) and a few developer tools from the [redux-devtools](https://github.com/reduxjs/redux-devtools) package.
+This example demonstrates how to use `compose` to enhance a [store](Store.md) with [`applyMiddleware`](applyMiddleware.md) and a second store enhancer. The enhancers are applied from right to left, so `applyMiddleware` wraps the store that `persistEnhancer` produced.
 
 ```js
 import { createStore, applyMiddleware, compose } from 'redux'
 import { thunk } from 'redux-thunk'
-import DevTools from './containers/DevTools'
+import { persistEnhancer } from './enhancers/persist'
 import reducer from '../reducers'
 
 const store = createStore(
   reducer,
-  compose(applyMiddleware(thunk), DevTools.instrument())
+  compose(applyMiddleware(thunk), persistEnhancer)
 )
 ```
 

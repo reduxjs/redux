@@ -103,7 +103,7 @@ Because thunks are a general-purpose tool that can contain arbitrary logic, they
 - Writing logic that needs to dispatch multiple actions in a row or over time
 - Writing logic that needs access to `getState` to make decisions or include other state values in an action
 
-Thunks are "one-shot" functions, with no sense of a lifecycle. They also cannot see other dispatched actions. So, they should not generally be used for initializing persistent connections like websockets, and you can't use them to respond to other actions.
+Thunks are "one-shot" functions, with no sense of a lifecycle. They also cannot see other dispatched actions. So, they should not generally be used for initializing persistent connections like websockets, and you can't use them to respond to other actions. For those cases, use Redux Toolkit's [listener middleware](https://redux-toolkit.js.org/api/createListenerMiddleware), which runs logic in response to dispatched actions or state changes. See [Side Effects Approaches](./side-effects-approaches.mdx) for a comparison.
 
 **Thunks are best used for complex synchronous logic, and simple to moderate async logic such as making a standard AJAX request and dispatching actions based on the request results.**
 
@@ -364,6 +364,47 @@ const onClick = () => {
 ```
 
 This is not a _recommended_ practice per se, but it's semantically legal and will work fine.
+
+### Typing Thunks
+
+The default `Dispatch` type from the Redux core doesn't know about thunks, so `dispatch(someThunk())` is a type error unless the dispatch type includes the thunk middleware. The usual setup is to derive `AppDispatch` from the store, define an `AppThunk` type for hand-written thunks, and use a pre-typed `useAppDispatch` hook in components:
+
+```ts title="Typing hand-written thunks" no-transpile
+// app/store.ts
+import { configureStore } from '@reduxjs/toolkit'
+import type { Action, ThunkAction } from '@reduxjs/toolkit'
+
+export const store = configureStore({ reducer: rootReducer })
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  Action
+>
+
+// app/hooks.ts
+import { useDispatch, useSelector } from 'react-redux'
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
+export const useAppSelector = useSelector.withTypes<RootState>()
+
+// features/todos/todosSlice.ts
+export const addTodosIfAllowed =
+  (todoText: string): AppThunk =>
+  (dispatch, getState) => {
+    if (selectCanAddNewTodo(getState(), MAX_TODOS)) {
+      dispatch(todoAdded(todoText))
+    }
+  }
+
+// in a component
+const dispatch = useAppDispatch()
+dispatch(addTodosIfAllowed('Buy milk'))
+```
+
+`configureStore` infers the dispatch type from its middleware, so `AppDispatch` already includes the thunk middleware's overload. See [Usage with TypeScript](./UsageWithTypescript.md#define-root-state-and-dispatch-types) for the full setup.
 
 ## Using `createAsyncThunk`
 

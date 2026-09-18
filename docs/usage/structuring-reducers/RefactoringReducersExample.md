@@ -407,3 +407,67 @@ const appReducer = combineReducers({
 We now have examples of several kinds of split-up reducer functions: helper utilities like `updateObject` and `createReducer`, handlers for specific cases like `setVisibilityFilter` and `addTodo`, and slice-of-state handlers like `visibilityReducer` and `todosReducer`. We also can see that `appReducer` is an example of a "root reducer".
 
 Although the final result in this example is noticeably longer than the original version, this is primarily due to the extraction of the utility functions, the addition of comments, and some deliberate verbosity for the sake of clarity, such as separate return statements. Looking at each function individually, the amount of responsibility is now smaller, and the intent is hopefully clearer. Also, in a real application, these functions would probably then be split into separate files such as `reducerUtilities.js`, `visibilityReducer.js`, `todosReducer.js`, and `rootReducer.js`.
+
+#### The Same Result with Redux Toolkit
+
+Every piece we extracted above has a counterpart in Redux Toolkit. `createSlice` is a lookup table of case reducers, like our hand-written `createReducer`, and it generates the action types and action creators for us. Immer handles the copying that `updateObject` and `updateItemInArray` did. `configureStore` calls `combineReducers` when it's given an object of slice reducers. So the two slices from the final step, written with Redux Toolkit, look like this:
+
+```ts
+import { configureStore, createSlice } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
+
+type VisibilityFilter = 'SHOW_ALL' | 'SHOW_ACTIVE' | 'SHOW_COMPLETED'
+
+const visibilitySlice = createSlice({
+  name: 'visibilityFilter',
+  initialState: 'SHOW_ALL' as VisibilityFilter,
+  reducers: {
+    // Case reducer: returning a value replaces the slice state
+    visibilityFilterSet(state, action: PayloadAction<VisibilityFilter>) {
+      return action.payload
+    }
+  }
+})
+
+interface Todo {
+  id: string
+  text: string
+  completed: boolean
+}
+
+const todosSlice = createSlice({
+  name: 'todos',
+  initialState: [] as Todo[],
+  reducers: {
+    // Case reducers: "mutating" the draft is converted to an immutable update
+    todoAdded(state, action: PayloadAction<{ id: string; text: string }>) {
+      state.push({ ...action.payload, completed: false })
+    },
+    todoToggled(state, action: PayloadAction<string>) {
+      const todo = state.find(todo => todo.id === action.payload)
+      if (todo) {
+        todo.completed = !todo.completed
+      }
+    },
+    todoEdited(state, action: PayloadAction<{ id: string; text: string }>) {
+      const todo = state.find(todo => todo.id === action.payload.id)
+      if (todo) {
+        todo.text = action.payload.text
+      }
+    }
+  }
+})
+
+export const { visibilityFilterSet } = visibilitySlice.actions
+export const { todoAdded, todoToggled, todoEdited } = todosSlice.actions
+
+// "Root reducer": configureStore combines these for us
+export const store = configureStore({
+  reducer: {
+    visibilityFilter: visibilitySlice.reducer,
+    todos: todosSlice.reducer
+  }
+})
+```
+
+The structure is the same one we arrived at by hand: case reducers grouped into slice reducers, combined into a root reducer. The difference is that the utilities, the action constants, and the action creators are generated rather than written.

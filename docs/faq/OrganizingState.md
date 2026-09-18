@@ -64,7 +64,6 @@ The adapter does not turn nested objects into separate entities or replace relat
 - [Redux Toolkit: `createEntityAdapter`](https://redux-toolkit.js.org/api/createEntityAdapter)
 - [Redux Fundamentals: Async Logic and Data Flow](../tutorials/fundamentals/part-6-async-logic.md)
 - [Redux Fundamentals: Standard Redux Patterns](../tutorials/fundamentals/part-7-standard-patterns.md)
-- [Examples: Real World example](../introduction/Examples.md#real-world)
 - [Using Redux: Structuring Reducers - Prerequisite Concepts](../usage/structuring-reducers/PrerequisiteConcepts.md#normalizing-data)
 - [Using Redux: Structuring Reducers - Normalizing State Shape](../usage/structuring-reducers/NormalizingStateShape.md)
 

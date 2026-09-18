@@ -12,34 +12,85 @@ import HandWrittenReducersNote from "../../components/_HandWrittenReducersNote.m
 
 <HandWrittenReducersNote />
 
-As mentioned in [Normalizing State Shape](./NormalizingStateShape.md), the Normalizr library is frequently used to transform nested response data into a normalized shape suitable for integration into the store. However, that doesn't address the issue of executing further updates to that normalized data as it's being used elsewhere in the application. There are a variety of different approaches that you can use, based on your own preference. We'll use the example of handling mutations for Comments on a Post.
+[Normalizing State Shape](./NormalizingStateShape.md) describes how to store relational data as lookup tables keyed by ID. That page covers how the data gets into that shape. This page covers what happens afterwards: how to update normalized data as the app runs. We'll use the example of adding a Comment to a Post, which has to touch both the Posts table and the Comments table.
 
-## Standard Approaches
+## Updating with `createSlice` and `createEntityAdapter`
 
-### Simple Merging
+Redux Toolkit's [`createEntityAdapter`](https://redux-toolkit.js.org/api/createEntityAdapter) generates a set of reducer functions for a normalized `{ ids, entities }` table: `addOne`, `updateOne`, `removeOne`, `upsertMany`, and so on. Combined with [`createSlice`](https://redux-toolkit.js.org/api/createSlice), which uses Immer so you can write "mutating" update logic, most of the code on this page disappears.
 
-One approach is to merge the contents of the action into the existing state. In this case, we can use deep recursive merge, not just a shallow copy, to allow for actions with partial items to update stored items. The Lodash `merge` function can handle this for us:
+Adding a comment needs two things to happen: the Comment object goes into the comments table, and the Comment's ID gets appended to the parent Post's `comments` array. Each slice handles its own half of that work in response to the same action:
 
-```js
-import merge from 'lodash/merge'
+```ts
+// features/comments/commentsSlice.ts
+import { createEntityAdapter, createSlice, nanoid } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
 
-function commentsById(state = {}, action) {
-  switch (action.type) {
-    default: {
-      if (action.entities && action.entities.comments) {
-        return merge({}, state, action.entities.comments.byId)
+export interface Comment {
+  id: string
+  postId: string
+  text: string
+}
+
+const commentsAdapter = createEntityAdapter<Comment>()
+
+const commentsSlice = createSlice({
+  name: 'comments',
+  initialState: commentsAdapter.getInitialState(),
+  reducers: {
+    commentAdded: {
+      reducer: commentsAdapter.addOne,
+      // Generate the comment's ID once, in the action creator,
+      // so every reducer that handles this action sees the same ID
+      prepare(postId: string, text: string) {
+        return { payload: { id: nanoid(), postId, text } }
       }
-      return state
     }
   }
+})
+
+export const { commentAdded } = commentsSlice.actions
+export default commentsSlice.reducer
+
+// features/posts/postsSlice.ts
+import { createEntityAdapter, createSlice } from '@reduxjs/toolkit'
+import { commentAdded } from '../comments/commentsSlice'
+
+export interface Post {
+  id: string
+  title: string
+  comments: string[]
 }
+
+const postsAdapter = createEntityAdapter<Post>()
+
+const postsSlice = createSlice({
+  name: 'posts',
+  initialState: postsAdapter.getInitialState(),
+  reducers: {
+    postAdded: postsAdapter.addOne
+  },
+  extraReducers: builder => {
+    builder.addCase(commentAdded, (state, action) => {
+      const { postId, id: commentId } = action.payload
+      // Immer lets us "push" onto the draft; the actual state is copied
+      state.entities[postId]?.comments.push(commentId)
+    })
+  }
+})
+
+export const { postAdded } = postsSlice.actions
+export default postsSlice.reducer
 ```
 
-This requires the least amount of work on the reducer side, but does require that the action creator potentially do a fair amount of work to organize the data into the correct shape before the action is dispatched. It also doesn't handle trying to delete an item.
+The comments slice owns the `commentAdded` action. Its `prepare` callback generates the ID, and `commentsAdapter.addOne` inserts the new object into `entities` and its ID into `ids`. The posts slice listens for that same action in `extraReducers` and appends the comment ID to the right post. Neither slice knows anything about the other's state shape.
+
+The rest of this page shows the same update written without Redux Toolkit, so you can see what these utilities are doing.
+
+## Hand-Written Approaches
 
 ### Slice Reducer Composition
 
-If we have a nested tree of slice reducers, each slice reducer will need to know how to respond to this action appropriately. We will need to include all the relevant data in the action. We need to update the correct Post object with the comment's ID, create a new Comment object using that ID as a key, and include the Comment's ID in the list of all Comment IDs. Here's how the pieces for this might fit together:
+Without `createEntityAdapter` and Immer, each slice reducer still needs to respond to the same action, and each update has to copy every level of nesting it touches. The action must carry everything the reducers need: the post ID, the new comment's ID, and the comment text. Here's how the pieces fit together with the `byId` / `allIds` shape used elsewhere in this section:
 
 ```js
 // actions.js
@@ -141,179 +192,29 @@ const commentsReducer = combineReducers({
 
 The example is a bit long, because it's showing how all the different slice reducers and case reducers fit together. Note the delegation involved here. The `postsById` slice reducer delegates the work for this case to `addComment`, which inserts the new Comment's ID into the correct Post item. Meanwhile, both the `commentsById` and `allComments` slice reducers have their own case reducers, which update the Comments lookup table and list of all Comment IDs appropriately.
 
-## Other Approaches
+Compare this with the `createSlice` version above: `commentsAdapter.addOne` replaces `addCommentEntry` and `addCommentId` together, and Immer replaces the nested spreads in `addComment`.
 
-### Task-Based Updates
+### Simple Merging
 
-Since reducers are just functions, there's an infinite number of ways to split up this logic. While using slice reducers is the most common, it's also possible to organize behavior in a more task-oriented structure. Because this will often involve more nested updates, you may want to use an immutable update utility library like [dot-prop-immutable](https://github.com/debitoor/dot-prop-immutable) or [object-path-immutable](https://github.com/mariocasciaro/object-path-immutable) to simplify the update statements. Here's an example of what that might look like:
-
-```js
-import posts from './postsReducer'
-import comments from './commentsReducer'
-import dotProp from 'dot-prop-immutable'
-import { combineReducers } from 'redux'
-import reduceReducers from 'reduce-reducers'
-
-const combinedReducer = combineReducers({
-  posts,
-  comments
-})
-
-function addComment(state, action) {
-  const { payload } = action
-  const { postId, commentId, commentText } = payload
-
-  // State here is the entire combined state
-  const updatedWithPostState = dotProp.set(
-    state,
-    `posts.byId.${postId}.comments`,
-    comments => comments.concat(commentId)
-  )
-
-  const updatedWithCommentsTable = dotProp.set(
-    updatedWithPostState,
-    `comments.byId.${commentId}`,
-    { id: commentId, text: commentText }
-  )
-
-  const updatedWithCommentsList = dotProp.set(
-    updatedWithCommentsTable,
-    `comments.allIds`,
-    allIds => allIds.concat(commentId)
-  )
-
-  return updatedWithCommentsList
-}
-
-const featureReducers = createReducer(
-  {},
-  {
-    ADD_COMMENT: addComment
-  }
-)
-
-const rootReducer = reduceReducers(combinedReducer, featureReducers)
-```
-
-This approach makes it very clear what's happening for the `"ADD_COMMENTS"` case, but it does require nested updating logic, and some specific knowledge of the state tree shape. Depending on how you want to compose your reducer logic, this may or may not be desired.
-
-### Redux-ORM
-
-The [Redux-ORM](https://github.com/redux-orm/redux-orm) library provides a very useful abstraction layer for managing normalized data in a Redux store. It allows you to declare Model classes and define relations between them. It can then generate the empty "tables" for your data types, act as a specialized selector tool for looking up the data, and perform immutable updates on that data.
-
-There's a couple ways Redux-ORM can be used to perform updates. First, the Redux-ORM docs suggest defining reducer functions on each Model subclass, then including the auto-generated combined reducer function into your store:
+Another approach is to merge the contents of the action into the existing state. In this case, we can use deep recursive merge, not just a shallow copy, to allow for actions with partial items to update stored items. The Lodash `merge` function can handle this for us:
 
 ```js
-// models.js
-import { Model, fk, attr, ORM } from 'redux-orm'
+import merge from 'lodash/merge'
 
-export class Post extends Model {
-  static get fields() {
-    return {
-      id: attr(),
-      name: attr()
-    }
-  }
-
-  static reducer(action, Post, session) {
-    switch (action.type) {
-      case 'CREATE_POST': {
-        Post.create(action.payload)
-        break
+function commentsById(state = {}, action) {
+  switch (action.type) {
+    default: {
+      if (action.entities && action.entities.comments) {
+        return merge({}, state, action.entities.comments.byId)
       }
+      return state
     }
   }
 }
-Post.modelName = 'Post'
-
-export class Comment extends Model {
-  static get fields() {
-    return {
-      id: attr(),
-      text: attr(),
-      // Define a foreign key relation - one Post can have many Comments
-      postId: fk({
-        to: 'Post', // must be the same as Post.modelName
-        as: 'post', // name for accessor (comment.post)
-        relatedName: 'comments' // name for backward accessor (post.comments)
-      })
-    }
-  }
-
-  static reducer(action, Comment, session) {
-    switch (action.type) {
-      case 'ADD_COMMENT': {
-        Comment.create(action.payload)
-        break
-      }
-    }
-  }
-}
-Comment.modelName = 'Comment'
-
-// Create an ORM instance and hook up the Post and Comment models
-export const orm = new ORM()
-orm.register(Post, Comment)
-
-// main.js
-import { createStore, combineReducers } from 'redux'
-import { createReducer } from 'redux-orm'
-import { orm } from './models'
-
-const rootReducer = combineReducers({
-  // Insert the auto-generated Redux-ORM reducer.  This will
-  // initialize our model "tables", and hook up the reducer
-  // logic we defined on each Model subclass
-  entities: createReducer(orm)
-})
-
-// Dispatch an action to create a Post instance
-store.dispatch({
-  type: 'CREATE_POST',
-  payload: {
-    id: 1,
-    name: 'Test Post Please Ignore'
-  }
-})
-
-// Dispatch an action to create a Comment instance as a child of that Post
-store.dispatch({
-  type: 'ADD_COMMENT',
-  payload: {
-    id: 123,
-    text: 'This is a comment',
-    postId: 1
-  }
-})
 ```
 
-The Redux-ORM library maintains relationships between models for you. Updates are by default applied immutably, simplifying the update process.
+This requires the least amount of work on the reducer side, but does require that the action creator potentially do a fair amount of work to organize the data into the correct shape before the action is dispatched. It also doesn't handle trying to delete an item. `createEntityAdapter`'s `upsertMany` covers the same use case: it inserts new items and shallowly merges fields into existing ones.
 
-Another variation on this is to use Redux-ORM as an abstraction layer within a single case reducer:
+### Other Approaches
 
-```js
-import { orm } from './models'
-
-// Assume this case reducer is being used in our "entities" slice reducer,
-// and we do not have reducers defined on our Redux-ORM Model subclasses
-function addComment(entitiesState, action) {
-  // Start an immutable session
-  const session = orm.session(entitiesState)
-
-  session.Comment.create(action.payload)
-
-  // The internal state reference has now changed
-  return session.state
-}
-```
-
-By using the session interface you can now use relationship accessors to directly access referenced models:
-
-```js
-const session = orm.session(store.getState().entities)
-const comment = session.Comment.first() // Comment instance
-const { post } = comment // Post instance
-post.comments.filter(c => c.text === 'This is a comment').count() // 1
-```
-
-Overall, Redux-ORM provides a very useful set of abstractions for defining relations between data types, creating the "tables" in our state, retrieving and denormalizing relational data, and applying immutable updates to relational data.
+Since reducers are just functions, the update logic can be split up other ways. One option is a task-oriented reducer that handles the whole `ADD_COMMENT` case at the root level and updates both tables itself, usually with a path-based update helper. This makes the single case easy to follow, but the reducer then has to know the entire state tree's shape. Another option is an ORM-style layer such as [Redux-ORM](https://github.com/redux-orm/redux-orm), which declares Model classes with relations and generates the tables and update logic for you. Redux-ORM has not had a release since 2020, so we don't recommend it for new code. For most apps, `createEntityAdapter` plus `extraReducers` covers the same ground with less machinery.

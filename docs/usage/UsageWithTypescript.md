@@ -81,26 +81,7 @@ While it's possible to import the `RootState` and `AppDispatch` types into each 
 
 Since these are actual variables, not types, it's important to define them in a separate file such as `app/hooks.ts`, not the store setup file. This allows you to import them into any component file that needs to use the hooks, and avoids potential circular import dependency issues.
 
-#### `.withTypes()`
-
-Previously, the approach for "pre-typing" hooks with your app setting was a little varied. The result would look something like the snippet below:
-
-```ts title="app/hooks.ts"
-import type { TypedUseSelectorHook } from 'react-redux'
-import { useDispatch, useSelector, useStore } from 'react-redux'
-import type { AppDispatch, AppStore, RootState } from './store'
-
-// highlight-start
-// Use throughout your app instead of plain `useDispatch` and `useSelector`
-export const useAppDispatch: () => AppDispatch = useDispatch
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
-export const useAppStore: () => AppStore = useStore
-// highlight-end
-```
-
-React Redux v9.1.0 adds a new `.withTypes` method to each of these hooks, analogous to the [`.withTypes`](https://redux-toolkit.js.org/usage/usage-with-typescript#defining-a-pre-typed-createasyncthunk) method found on Redux Toolkit's `createAsyncThunk`.
-
-The setup now becomes:
+Each of the React Redux hooks has a `.withTypes()` method (added in React Redux v9.1.0) that returns a copy of the hook with the given types built in, analogous to the [`.withTypes`](https://redux-toolkit.js.org/usage/usage-with-typescript#defining-a-pre-typed-createasyncthunk) method on Redux Toolkit's `createAsyncThunk`:
 
 ```ts title="app/hooks.ts"
 import { useDispatch, useSelector, useStore } from 'react-redux'
@@ -413,43 +394,7 @@ However, prefer creating a pre-typed `useAppDispatch` hook with the correct type
 
 ### Typing the `connect` higher order component
 
-If you are still using `connect`, you should use the `ConnectedProps<T>` type exported by `react-redux` to infer the types of the props from `connect` automatically. This requires splitting the `connect(mapState, mapDispatch)(MyComponent)` call into two parts:
-
-```tsx
-import { connect, ConnectedProps } from 'react-redux'
-
-interface RootState {
-  isOn: boolean
-}
-
-const mapState = (state: RootState) => ({
-  isOn: state.isOn
-})
-
-const mapDispatch = {
-  toggleOn: () => ({ type: 'TOGGLE_IS_ON' })
-}
-
-const connector = connect(mapState, mapDispatch)
-
-// The inferred type will look like:
-// {isOn: boolean, toggleOn: () => void}
-type PropsFromRedux = ConnectedProps<typeof connector>
-
-type Props = PropsFromRedux & {
-  backgroundColor: string
-}
-
-const MyComponent = (props: Props) => (
-  <div style={{ backgroundColor: props.backgroundColor }}>
-    <button onClick={props.toggleOn}>
-      Toggle is {props.isOn ? 'ON' : 'OFF'}
-    </button>
-  </div>
-)
-
-export default connector(MyComponent)
-```
+If you are still using the legacy `connect` API, use the `ConnectedProps<T>` type exported by `react-redux` to infer the props that `connect` injects. See [Static Typing with `connect`](https://react-redux.js.org/using-react-redux/usage-with-typescript#typing-the-connect-higher-order-component) in the React Redux docs for the full pattern.
 
 ## Usage with Redux Toolkit
 
@@ -585,7 +530,7 @@ const fetchUserById = createAsyncThunk(
   // Declare the type your function argument here:
   // highlight-next-line
   async (userId: number) => {
-    const response = await fetch(`https://reqres.in/api/users/${userId}`)
+    const response = await fetch(`/api/users/${userId}`)
     // Inferred return type: Promise<MyData>
     // highlight-next-line
     return (await response.json()) as MyData
@@ -617,7 +562,7 @@ const fetchUserById = createAsyncThunk<
   }
   // highlight-end
 >('users/fetchById', async (userId, thunkApi) => {
-  const response = await fetch(`https://reqres.in/api/users/${userId}`, {
+  const response = await fetch(`/api/users/${userId}`, {
     headers: {
       Authorization: `Bearer ${thunkApi.extra.jwt}`
     }
@@ -708,12 +653,9 @@ In addition, if you're using `createSlice`, you already know that all actions de
 For further information, see these additional resources:
 
 - Redux library documentation:
-  - [React Redux docs: Static Typing](https://react-redux.js.org/using-react-redux/static-typing): Examples of how to use the React Redux APIs with TypeScript
+  - [React Redux docs: Usage with TypeScript](https://react-redux.js.org/using-react-redux/usage-with-typescript): Examples of how to use the React Redux APIs with TypeScript
   - [Redux Toolkit docs: Usage with TypeScript](https://redux-toolkit.js.org/usage/usage-with-typescript): Examples of how to use the Redux Toolkit APIs with TypeScript
-- React + Redux + TypeScript guides:
-  - [React+TypeScript Cheatsheet](https://github.com/typescript-cheatsheets/react-typescript-cheatsheet): a comprehensive guide to using React with TypeScript
-  - [React + Redux in TypeScript Guide](https://github.com/piotrwitek/react-redux-typescript-guide): extensive information on patterns for using React and Redux with TypeScript
-    - _Note: while this guide has some useful info, many of the patterns it shows go against our recommended practices shown in this page, such as using action type unions. We link this out of completeness_
+- React + TypeScript guides:
+  - [React+TypeScript Cheatsheet](https://github.com/typescript-cheatsheets/react): a comprehensive guide to using React with TypeScript
 - Other articles:
   - [Do Not Create Union Types with Redux Action Types](https://phryneas.de/redux-typescript-no-discriminating-union)
-  - [Redux with Code-Splitting and Type Checking](https://www.matthewgerstman.com/tech/redux-code-split-typecheck/)
