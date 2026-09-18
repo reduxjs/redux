@@ -60,7 +60,7 @@ Because of these rules, it's important that the following core concepts are full
 
 **Reading List**:
 
-- [Understanding Programmatic Side-Effects](https://c2fo.io/c2fo/programming/2016/05/11/understanding-programmatic-side-effects/)
+- [Redux Style Guide: Reducers Must Not Have Side Effects](../../style-guide/style-guide.md#reducers-must-not-have-side-effects)
 - [Learning Functional Programming in Javascript](https://youtu.be/e-5obm1G_FY)
 - [An Introduction to Reasonably Pure Functional Programming](https://www.sitepoint.com/an-introduction-to-reasonably-pure-functional-programming/)
 
@@ -71,10 +71,14 @@ Because of these rules, it's important that the following core concepts are full
 - Mutability vs immutability
 - Immutably updating objects and arrays safely
 - Avoiding functions and statements that mutate state
+- How Immer lets you write "mutating" code that produces immutable updates
 
 **Reading List**:
 
-- [Pros and Cons of Using Immutability With React](https://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
+- [Redux Docs: Immutable Update Patterns](./ImmutableUpdatePatterns.md)
+- [React docs: Updating Objects in State](https://react.dev/learn/updating-objects-in-state) and [Updating Arrays in State](https://react.dev/learn/updating-arrays-in-state)
+- [Immer docs](https://immerjs.github.io/immer/) and [Redux Toolkit: Writing Reducers with Immer](https://redux-toolkit.js.org/usage/immer-reducers)
+- [Dave Ceddia: The Complete Guide to Immutability in React and Redux](https://daveceddia.com/react-redux-immutability-guide/)
 - [Immutable Data using ES6 and Beyond](https://wecodetheweb.com/2016/02/12/immutable-javascript-using-es6-and-beyond/)
 
 #### Normalizing Data
@@ -95,8 +99,5 @@ Because of these rules, it's important that the following core concepts are full
 - [Redux Toolkit: `createEntityAdapter`](https://redux-toolkit.js.org/api/createEntityAdapter)
 - [Essentials: Performance and Normalizing Data](../../tutorials/essentials/part-6-performance-normalization.md)
 - [Normalizr Documentation](https://github.com/paularmstrong/normalizr) (stable, but no longer actively maintained)
-- [Redux Without Profanity: Normalizr](https://tonyhb.gitbooks.io/redux-without-profanity/content/normalizer.html)
 - [Querying a Redux Store](https://medium.com/@adamrackis/querying-a-redux-store-37db8c7f3b0f)
 - [Wikipedia: Associative Entity](https://en.wikipedia.org/wiki/Associative_entity)
-- [Database Design: Many-to-Many](https://web.csulb.edu/colleges/coe/cecs/dbdesign/dbdesign.php?page=manymany.php)
-- [Avoiding Accidental Complexity When Structuring Your App State](https://medium.com/@talkol/avoiding-accidental-complexity-when-structuring-your-app-state-6e6d22ad5e2a)

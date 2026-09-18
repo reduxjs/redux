@@ -62,7 +62,7 @@ Notice that the structure of the data is a bit complex, and some of the data is 
 
 - When a piece of data is duplicated in several places, it becomes harder to make sure that it is updated appropriately.
 - Nested data means that the corresponding reducer logic has to be more nested and therefore more complex. In particular, trying to update a deeply nested field can become very ugly very fast.
-- Since immutable data updates require all ancestors in the state tree to be copied and updated as well, and new object references will cause connected UI components to re-render, an update to a deeply nested data object could force totally unrelated UI components to re-render even if the data they're displaying hasn't actually changed.
+- Since immutable data updates require all ancestors in the state tree to be copied and updated as well, and new object references will cause components that read them with `useSelector` to re-render, an update to a deeply nested data object could force totally unrelated UI components to re-render even if the data they're displaying hasn't actually changed.
 
 Because of this, the recommended approach to managing relational or nested data in a Redux store is to treat a portion of your store as if it were a database, and keep that data in a _normalized_ form.
 
@@ -74,6 +74,8 @@ The basic concepts of normalizing data are:
 - Each "data table" should store the individual items in an object, with the IDs of the items as keys and the items themselves as the values.
 - Any references to individual items should be done by storing the item's ID.
 - Arrays of IDs should be used to indicate ordering.
+
+Redux Toolkit's [`createEntityAdapter`](https://redux-toolkit.js.org/api/createEntityAdapter) implements this shape for you as `{ ids: [], entities: {} }`, and generates the reducer functions and selectors for working with it. The examples on this page use the equivalent field names `allIds` and `byId` so that the structure is spelled out, but the idea is the same: one lookup object keyed by ID, plus one array of IDs for ordering.
 
 An example of a normalized state structure for the blog example above might look like:
 
@@ -153,7 +155,7 @@ This state structure is much flatter overall. Compared to the original nested fo
 - The logic for retrieving or updating a given item is now fairly simple and consistent. Given an item's type and its ID, we can directly look it up in a couple simple steps, without having to dig through other objects to find it.
 - Since each data type is separated, an update like changing the text of a comment would only require new copies of the "comments > byId > comment" portion of the tree. This will generally mean fewer portions of the UI that need to update because their data has changed. In contrast, updating a comment in the original nested shape would have required updating the comment object, the parent post object, the array of all post objects, and likely have caused _all_ of the Post components and Comment components in the UI to re-render themselves.
 
-Note that a normalized state structure generally implies that more components are connected and each component is responsible for looking up its own data, as opposed to a few connected components looking up large amounts of data and passing all that data downwards. As it turns out, having connected parent components simply pass item IDs to connected children is a good pattern for optimizing UI performance in a React Redux application, so keeping state normalized plays a key role in improving performance.
+Note that a normalized state structure generally implies that more components read from the store, and each component is responsible for looking up its own data with `useSelector`, as opposed to a few components selecting large amounts of data and passing all that data downwards. As it turns out, having parent components simply pass item IDs to children that select their own item is a good pattern for optimizing UI performance in a React Redux application, so keeping state normalized plays a key role in improving performance.
 
 ## Organizing Normalized Data in State
 

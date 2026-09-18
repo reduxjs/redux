@@ -158,6 +158,44 @@ These basic patterns allow you to do things like having multiple instances of a 
 
 In addition to generating reducers this way, you might also want to generate action creators using the same approach, and could generate them both at the same time with helper functions.
 
+## Reusing Logic with a `createSlice` Factory
+
+With Redux Toolkit, the "generate prefixed action types" approach falls out of `createSlice` for free. Every action type a slice generates is prefixed with the slice's `name`, so a function that calls `createSlice` with a different name each time produces reducers that only respond to their own actions, along with matching action creators:
+
+```ts
+import { configureStore, createSlice } from '@reduxjs/toolkit'
+
+function makeCounterSlice(name: string) {
+  return createSlice({
+    name,
+    initialState: 0,
+    reducers: {
+      incremented: state => state + 1,
+      decremented: state => state - 1
+    }
+  })
+}
+
+const counterA = makeCounterSlice('counterA')
+const counterB = makeCounterSlice('counterB')
+const counterC = makeCounterSlice('counterC')
+
+const store = configureStore({
+  reducer: {
+    counterA: counterA.reducer,
+    counterB: counterB.reducer,
+    counterC: counterC.reducer
+  }
+})
+
+store.dispatch(counterB.actions.incremented())
+// dispatches { type: 'counterB/incremented' }
+console.log(store.getState())
+// { counterA: 0, counterB: 1, counterC: 0 }
+```
+
+This is the `createCounterWithNamedType` pattern from above, with the action types and action creators generated for you. If you need several slices to share reducer logic but keep separate action types, define the case reducer functions once and pass them into each `createSlice` call.
+
 ## Collection / Item Reducer Pattern
 
 This pattern allows you to have multiple states and use a common reducer to update each state based on an additional parameter inside the action object.
