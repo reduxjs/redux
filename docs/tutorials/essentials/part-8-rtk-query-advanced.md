@@ -130,9 +130,13 @@ export const EditPostForm = () => {
     const content = elements.postContent.value
 
     if (title && content) {
-      // highlight-next-line
-      await updatePost({ id: post.id, title, content })
-      navigate(`/posts/${postId}`)
+      try {
+        // highlight-next-line
+        await updatePost({ id: post.id, title, content }).unwrap()
+        navigate(`/posts/${postId}`)
+      } catch (err) {
+        console.error('Failed to save the post: ', err)
+      }
     }
   }
 
