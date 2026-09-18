@@ -32,21 +32,20 @@ And many, many more!
 
 Authentication is essential to any real application. When going about authentication you must keep in mind that nothing changes with how you should organize your application and you should implement authentication in the same way you would any other feature. It is relatively straightforward:
 
-1. Create action constants for `LOGIN_SUCCESS`, `LOGIN_FAILURE`, etc.
+1. Create an `auth` slice with `createSlice` that holds the current user and token (or a flag indicating whether the user is logged in), plus loading and error fields for the login request.
 
-2. Create action creators that take in credentials, a flag that signifies whether authentication succeeded, a token, or an error message as the payload.
+2. Make the login request either with an [RTK Query mutation](https://redux-toolkit.js.org/rtk-query/usage/mutations) or with a [`createAsyncThunk`](https://redux-toolkit.js.org/api/createAsyncThunk) that takes the credentials and returns the token. Handle the pending, fulfilled, and rejected cases in the slice's `extraReducers` (or with `addMatcher` for the mutation's lifecycle actions) to save the token or the error message.
 
-3. Create an async action creator with Redux Thunk middleware or any middleware you see fit to fire a network request to an API that returns a token if the credentials are valid. Then save the token in the local storage or show a response to the user if it failed. You can perform these side effects from the action creators you wrote in the previous step.
+3. Read the token from the store when making other requests. With RTK Query, do this in `baseQuery`'s [`prepareHeaders`](https://redux-toolkit.js.org/rtk-query/api/fetchBaseQuery#setting-default-headers-on-requests) callback, which receives `getState`. For other code that needs the token outside a component, see [How can I use the Redux store in non-component files?](./CodeStructure.md#how-can-i-use-the-redux-store-in-non-component-files).
 
-4. Create a reducer that returns the next state for each possible authentication case (`LOGIN_SUCCESS`, `LOGIN_FAILURE`, etc).
+4. If you want the session to survive a page reload, persist the token from a [listener middleware](https://redux-toolkit.js.org/api/createListenerMiddleware) effect that runs when the login succeeds, and read it back into `preloadedState` when you create the store.
 
 #### Further information
 
+**Documentation**
+
+- [RTK Query: Authentication example](https://redux-toolkit.js.org/rtk-query/usage/examples#authentication)
+
 **Articles**
 
-- [Authentication with JWT by Auth0](https://auth0.com/blog/secure-your-react-and-redux-app-with-jwt-authentication/)
-- [Tips to Handle Authentication in Redux](https://medium.com/@MattiaManzati/tips-to-handle-authentication-in-redux-2-introducing-redux-saga-130d6872fbe7)
-
-**Examples**
-
-- [react-redux-jwt-auth-example](https://github.com/joshgeller/react-redux-jwt-auth-example)
+- [Authentication with JWT by Auth0](https://auth0.com/blog/secure-your-react-and-redux-app-with-jwt-authentication/) (2016, uses `connect` and hand-written thunks; the overall flow still applies)

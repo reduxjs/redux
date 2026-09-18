@@ -16,7 +16,7 @@ Since Redux is just a data store library, it has no direct opinion on how your p
 - "Feature folders" / "Domain"-style : separate folders per feature or domain, possibly with sub-folders per file type
 - “Ducks/Slices”: similar to domain style, but explicitly tying together actions and reducers, often by defining them in the same file
 
-It's generally suggested that selectors are defined alongside reducers and exported, and then reused elsewhere (such as in `mapStateToProps` functions, in async action creators, or sagas) to colocate all the code that knows about the actual shape of the state tree in the reducer files.
+It's generally suggested that selectors are defined alongside reducers and exported, and then reused elsewhere (such as in `useSelector` calls, in thunks, or in listener middleware) to colocate all the code that knows about the actual shape of the state tree in the reducer files.
 
 :::tip
 
@@ -55,9 +55,9 @@ While it ultimately doesn't matter how you lay out your code on disk, it's impor
 
 **Documentation**
 
-- [Style Guide: Structure Files as Feature Folders with Single-File Logic](../style-guide/style-guide.md##structure-files-as-feature-folders-with-single-file-logic)
+- [Style Guide: Structure Files as Feature Folders with Single-File Logic](../style-guide/style-guide.md#structure-files-as-feature-folders-with-single-file-logic)
 - [Redux Essentials tutorial: App Structure](../tutorials/essentials/part-2-app-structure.md)
-- [FAQ: Actions - "1:1 mapping between reducers and actions?"](./Actions.md#actions-reducer-mappings)
+- [FAQ: Actions - "1:1 mapping between reducers and actions?"](./Actions.md#is-there-always-a-one-to-one-mapping-between-reducers-and-actions)
 
 **Articles**
 
@@ -148,7 +148,7 @@ Middleware are the right place for persistent connections like websockets in a R
 - Middleware exist for the lifetime of the application
 - Like with the store itself, you probably only need a single instance of a given connection that the whole app can use
 - Middleware can see all dispatched actions and dispatch actions themselves. This means a middleware can take dispatched actions and turn those into messages sent over the websocket, and dispatch new actions when a message is received over the websocket.
-- A websocket connection instance isn't serializable, so [it doesn't belong in the store state itself](/faq/organizing-state#organizing-state-non-serializable)
+- A websocket connection instance isn't serializable, so [it doesn't belong in the store state itself](./OrganizingState.md#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)
 
 See [this example that shows how a socket middleware might dispatch and respond to Redux actions](https://gist.github.com/markerikson/3df1cf5abbac57820a20059287b4be58).
 

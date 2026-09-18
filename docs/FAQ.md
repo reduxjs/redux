@@ -59,11 +59,14 @@ description: 'FAQ Index: Frequently Asked Questions about Redux'
   - [Why doesn't mapDispatchToProps allow use of return values from `getState()` or `mapStateToProps()`?](faq/DesignDecisions.md#why-doesnt-mapdispatchtoprops-allow-use-of-return-values-from-getstate-or-mapstatetoprops)
 - **React Redux**
   - [Why should I use React-Redux?](faq/ReactRedux.md#why-should-i-use-react-redux)
-  - [Why isn't my component re-rendering, or my mapStateToProps running?](faq/ReactRedux.md#why-isnt-my-component-re-rendering-or-my-mapstatetoprops-running)
+  - [Why isn't my component re-rendering?](faq/ReactRedux.md#why-isnt-my-component-re-rendering)
   - [Why is my component re-rendering too often?](faq/ReactRedux.md#why-is-my-component-re-rendering-too-often)
-  - [How can I speed up my mapStateToProps?](faq/ReactRedux.md#how-can-i-speed-up-my-mapstatetoprops)
-  - [Why don't I have this.props.dispatch available in my connected component?](faq/ReactRedux.md#why-dont-i-have-thispropsdispatch-available-in-my-connected-component)
-  - [Should I only connect my top component, or can I connect multiple components in my tree?](faq/ReactRedux.md#should-i-only-connect-my-top-component-or-can-i-connect-multiple-components-in-my-tree)
+  - [How do I select multiple values from the store?](faq/ReactRedux.md#how-do-i-select-multiple-values-from-the-store)
+  - [How do I use Redux with React 18 and React 19?](faq/ReactRedux.md#how-do-i-use-redux-with-react-18-and-react-19)
+  - [How do I access the store outside a component?](faq/ReactRedux.md#how-do-i-access-the-store-outside-a-component)
+  - [How do I type `useSelector` and `useDispatch`?](faq/ReactRedux.md#how-do-i-type-useselector-and-usedispatch)
+  - [Is `connect` still supported?](faq/ReactRedux.md#is-connect-still-supported)
+  - [How does Redux compare to the React Context API?](faq/ReactRedux.md#how-does-redux-compare-to-the-react-context-api)
 - **Miscellaneous**
   - [Are there any larger, “real” Redux projects?](faq/Miscellaneous.md#are-there-any-larger-real-redux-projects)
   - [How can I implement authentication in Redux?](faq/Miscellaneous.md#how-can-i-implement-authentication-in-redux)
