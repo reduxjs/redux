@@ -23,6 +23,7 @@ For the APIs you'll use day to day, see the [Redux Toolkit API docs](https://red
 - [applyMiddleware(...middlewares)](applyMiddleware.md)
 - [bindActionCreators(actionCreators, dispatch)](bindActionCreators.md)
 - [compose(...functions)](compose.md)
+- [Utility functions](utils.md): `isAction`, `isPlainObject`
 
 ## Store API
 
