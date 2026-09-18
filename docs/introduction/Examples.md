@@ -106,44 +106,6 @@ This example shows how reducers can delegate handling actions to other reducers,
 
 This example includes tests.
 
-### Todos with Undo
-
-Run the [Todos with Undo](https://github.com/reduxjs/redux/tree/master/examples/todos-with-undo) example:
-
-```sh
-git clone https://github.com/reduxjs/redux.git
-
-cd redux/examples/todos-with-undo
-npm install
-npm start
-```
-
-Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todos-with-undo):
-
-<iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/todos-with-undo/?codemirror=1&runonclick=1"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
-
-This is a variation on the previous example. It is almost identical, but additionally shows how wrapping your reducer with [Redux Undo](https://github.com/omnidan/redux-undo) lets you add a Undo/Redo functionality to your app with a few lines of code.
-
-### TodoMVC
-
-Run the [TodoMVC](https://github.com/reduxjs/redux/tree/master/examples/todomvc) example:
-
-```sh
-git clone https://github.com/reduxjs/redux.git
-
-cd redux/examples/todomvc
-npm install
-npm start
-```
-
-Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/todomvc):
-
-<iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/todomvc/?codemirror=1&runonclick=1"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
-
-This is the classical [TodoMVC](http://todomvc.com/) example. It's here for the sake of comparison, but it covers the same points as the Todos example.
-
-This example includes tests.
-
 ### Shopping Cart
 
 Run the [Shopping Cart](https://github.com/reduxjs/redux/tree/master/examples/shopping-cart) example:
@@ -182,52 +144,3 @@ This example demonstrates rendering a deeply nested tree view and representing i
 
 This example includes tests.
 
-### Async
-
-Run the [Async](https://github.com/reduxjs/redux/tree/master/examples/async) example:
-
-```sh
-git clone https://github.com/reduxjs/redux.git
-
-cd redux/examples/async
-npm install
-npm start
-```
-
-Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/async):
-
-<iframe class="codesandbox"src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/async/?codemirror=1&runonclick=1"sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
-
-This example includes reading from an asynchronous API, fetching data in response to user input, showing loading indicators, caching the response, and invalidating the cache. It uses [Redux Thunk](https://github.com/reduxjs/redux-thunk) middleware to encapsulate asynchronous side effects. Today, [RTK Query](https://redux-toolkit.js.org/rtk-query/overview) handles this kind of data fetching and caching for you.
-
-### Universal
-
-Run the [Universal](https://github.com/reduxjs/redux/tree/master/examples/universal) example:
-
-```sh
-git clone https://github.com/reduxjs/redux.git
-
-cd redux/examples/universal
-npm install
-npm start
-```
-
-This is a basic demonstration of [server rendering](../usage/ServerRendering.md) with Redux and React. It shows how to prepare the initial store state on the server, and pass it down to the client so the client store can boot up from an existing state.
-
-### Real World
-
-Run the [Real World](https://github.com/reduxjs/redux/tree/master/examples/real-world) example:
-
-```sh
-git clone https://github.com/reduxjs/redux.git
-
-cd redux/examples/real-world
-npm install
-npm start
-```
-
-Or check out the [sandbox](https://codesandbox.io/s/github/reduxjs/redux/tree/master/examples/real-world):
-
-<iframe class="codesandbox" src="https://codesandbox.io/embed/github/reduxjs/redux/tree/master/examples/real-world/?codemirror=1&runonclick=1" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
-
-This is the most advanced example. It is dense by design. It covers keeping fetched entities in a normalized cache, implementing a custom middleware for API calls, rendering partially loaded data, pagination, caching responses, displaying error messages, and routing. Additionally, it includes Redux DevTools.

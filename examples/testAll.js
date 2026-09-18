@@ -18,7 +18,7 @@ const cmdArgs = [
 ]
 
 for (const dir of exampleDirs) {
-  if (dir === 'counter-vanilla' || dir === 'universal') continue
+  if (dir === 'counter-vanilla') continue
 
   console.log(chalk.bold.yellow('\n\n==> Testing %s...\n\n'), dir)
   for (const cmdArg of cmdArgs) {
