@@ -97,7 +97,7 @@ Selector functions are typically defined in two different parts of a Redux appli
 - In slice files, alongside the reducer logic
 - In component files, either outside the component, or inline in `useSelector` calls
 
-A selector function can be used anywhere you have access to the entire Redux root state value. This includes the `useSelector` hook, the `mapState` function for `connect`, middleware, thunks, and sagas. For example, thunks and middleware have access to the `getState` argument, so you can call a selector there:
+A selector function can be used anywhere you have access to the entire Redux root state value. This includes the `useSelector` hook, middleware, thunks, listeners, and sagas. For example, thunks and middleware have access to the `getState` argument, so you can call a selector there:
 
 ```js
 function addTodosIfAllowed(todoText) {
@@ -152,8 +152,8 @@ One common description of selectors is that they're like **"queries into your st
 
 Selector functions often need to perform relatively "expensive" calculations, or create derived values that are new object and array references. This can be a concern for application performance, for several reasons:
 
-- Selectors used with `useSelector` or `mapState` will be re-run after every dispatched action, regardless of what section of the Redux root state was actually updated. Re-running expensive calculations when the input state sections didn't change is a waste of CPU time, and it's very likely that the inputs won't have changed most of the time anyway.
-- `useSelector` and `mapState` rely on `===` reference equality checks of the return values to determine if the component needs to re-render. If a selector _always_ returns new references, it will force the component to re-render even if the derived data is effectively the same as last time. This is especially common with array operations like `map()` and `filter()`, which return new array references.
+- Selectors used with `useSelector` will be re-run after every dispatched action, regardless of what section of the Redux root state was actually updated. Re-running expensive calculations when the input state sections didn't change is a waste of CPU time, and it's very likely that the inputs won't have changed most of the time anyway.
+- `useSelector` relies on `===` reference equality checks of the return values to determine if the component needs to re-render. If a selector _always_ returns new references, it will force the component to re-render even if the derived data is effectively the same as last time. This is especially common with array operations like `map()` and `filter()`, which return new array references.
 
 As an example, this component is written badly, because its `useSelector` call _always_ returns a new array reference. That means the component will re-render after _every_ dispatched action, even if the input `state.todos` slice hasn't changed:
 
@@ -193,11 +193,11 @@ Next, we'll look at some options for writing memoized selectors.
 
 ## Writing Memoized Selectors with Reselect
 
-The Redux ecosystem has traditionally used a library called [**Reselect**](https://github.com/reduxjs/reselect) to create memoized selector functions. There also are other similar libraries, as well as multiple variations and wrappers around Reselect - we'll look at those later.
+The Redux ecosystem has traditionally used a library called [**Reselect**](https://reselect.js.org) to create memoized selector functions. There also are other similar libraries, as well as multiple variations and wrappers around Reselect - we'll look at those later.
 
 ### `createSelector` Overview
 
-Reselect provides a function called [`createSelector`](https://github.com/reduxjs/reselect#createselectorinputselectors--inputselectors-resultfunc) to generate memoized selectors. `createSelector` accepts one or more "input selector" functions, plus an "output selector" function, and returns a new selector function for you to use.
+Reselect provides a function called [`createSelector`](https://reselect.js.org/api/createselector/) to generate memoized selectors. `createSelector` accepts one or more "input selector" functions, plus an "output selector" function, and returns a new selector function for you to use.
 
 `createSelector` is included as part of [our official Redux Toolkit package](https://redux-toolkit.js.org), and is re-exported for ease of use.
 
@@ -272,16 +272,18 @@ Note that the second time we called `selectTodosForCurrentUser`, the "output sel
 
 ### `createSelector` Behavior
 
-It's important to note that by default, **`createSelector` only memoizes the most recent set of parameters**. That means that if you call a selector repeatedly with different inputs, it will still return a result, but it will have to keep re-running the output selector to produce the result:
+Reselect 5 memoizes with [`weakMapMemoize`](https://reselect.js.org/api/weakmapmemoize/) by default. It keeps a separate cache entry for each distinct set of arguments, keyed by reference, so calling a selector with several different inputs in a row does not evict earlier results:
 
-**Note:** As of Reselect 5.0.0, `createSelector` uses `weakMapMemoize` by default, which provides better memory management than the previous `lruMemoize` implementation. This means memoized values are automatically cleaned up when no longer referenced.
-
-```js
-const a = someSelector(state, 1) // first call, not memoized
-const b = someSelector(state, 1) // same inputs, memoized
-const c = someSelector(state, 2) // different inputs, not memoized
-const d = someSelector(state, 1) // different inputs from last time, not memoized
+```ts
+const a = someSelector(state, 1) // first call: runs the output selector
+const b = someSelector(state, 1) // same inputs: cached
+const c = someSelector(state, 2) // new inputs: runs the output selector
+const d = someSelector(state, 1) // still cached from the first call
 ```
+
+Cache entries are held in `WeakMap`s keyed by the argument objects, so they are released when those objects are garbage collected. There is no size limit to configure.
+
+Reselect 4 and earlier used `lruMemoize` with a cache size of 1, which only remembered the most recent set of arguments. In that version, `c` would have evicted the result for `(state, 1)`, and `d` would have recalculated. `lruMemoize` is still available if you want a bounded cache, and the ["Selector Factories"](#selector-factories) section below explains when it still matters.
 
 Also, you can pass multiple arguments into a selector. Reselect will call all of the input selectors with those exact inputs:
 
@@ -374,21 +376,47 @@ For consistency, you may want to consider passing additional parameters to a sel
 
 #### Selector Factories
 
-**`createSelector` only has a default cache size of 1, and this is per each unique instance of a selector**. This creates problems when a single selector function needs to get reused in multiple places with differing inputs.
+With Reselect 4's `lruMemoize` and its default cache size of 1, a single selector instance could only remember one set of arguments. If several components called `selectItemsByCategory(state, category)` with different categories, each call evicted the previous result and the output selector re-ran every time. The workaround was a "selector factory" - a function that calls `createSelector()` and returns a fresh selector instance for each component:
 
-One option is to create a "selector factory" - a function that runs `createSelector()` and generates a new unique selector instance every time it's called:
-
-```js
-const makeSelectItemsByCategory = () => {
-  const selectItemsByCategory = createSelector(
-    [state => state.items, (state, category) => category],
+```ts
+const makeSelectItemsByCategory = () =>
+  createSelector(
+    [(state: RootState) => state.items, (state, category: string) => category],
     (items, category) => items.filter(item => item.category === category)
   )
-  return selectItemsByCategory
-}
 ```
 
-This is particularly useful when multiple similar UI components need to derive different subsets of the data based on props.
+With Reselect 5's default `weakMapMemoize`, one shared selector already keeps a cache entry per distinct argument set, so **you usually do not need a factory**. A factory is still useful if you have opted back into `lruMemoize` for a bounded cache, or if you want a component's cached results released as soon as it unmounts rather than when the argument objects are garbage collected. See ["Creating Unique Selector Instances"](#creating-unique-selector-instances) for how to use one with `useSelector`.
+
+### Reselect 5
+
+Reselect 5 (released December 2023) is written in TypeScript and changes a few defaults that are worth knowing about:
+
+- **`weakMapMemoize` is the default memoizer.** As described above, it caches per distinct argument set with no size limit. To get the previous behavior, pass `memoize: lruMemoize` (and optionally `memoizeOptions: { maxSize: 10 }`) to `createSelector` or build a custom `createSelector` with [`createSelectorCreator`](https://reselect.js.org/api/createselectorcreator/).
+- **`createSelector.withTypes<RootState>()`** returns a `createSelector` whose input selectors are pre-typed to receive your root state, so you do not have to annotate `state` in every input selector.
+- **Development-mode checks** warn about the two common mistakes shown earlier on this page: an input selector that returns a new reference on every call, and an output selector that just returns its input. They run on the first call to each selector in development and are disabled in production. See [Development-only checks](https://reselect.js.org/api/development-only-checks/).
+
+```ts title="src/app/selectors.ts"
+import { createSelector, lruMemoize } from '@reduxjs/toolkit'
+import type { RootState } from './store'
+
+export const createAppSelector = createSelector.withTypes<RootState>()
+
+// Input selectors receive `RootState` without annotations
+export const selectCompletedTodos = createAppSelector(
+  [state => state.todos],
+  todos => todos.filter(todo => todo.completed)
+)
+
+// Opt back into a bounded LRU cache for one selector
+export const selectItemsByCategory = createAppSelector(
+  [state => state.items, (state, category: string) => category],
+  (items, category) => items.filter(item => item.category === category),
+  { memoize: lruMemoize, memoizeOptions: { maxSize: 10 } }
+)
+```
+
+Redux Toolkit re-exports `createSelector`, `createSelectorCreator`, `lruMemoize`, and `weakMapMemoize` from Reselect, so you do not need to install Reselect separately. The [Reselect docs](https://reselect.js.org) cover the full API.
 
 ## Alternative Selector Libraries
 
@@ -396,15 +424,15 @@ While Reselect is the most widely used selector library with Redux, there are ma
 
 ### `proxy-memoize`
 
-`proxy-memoize` is a relatively new memoized selector library that uses a unique implementation approach. It relies on ES2015 `Proxy` objects to track attempted reads of nested values, then compares only the nested values on later calls to see if they've changed. This can provide better results than Reselect in some cases.
+[`proxy-memoize`](https://github.com/dai-shi/proxy-memoize) uses a different implementation approach. It relies on `Proxy` objects to track which nested values a selector actually reads, then compares only those values on later calls to see if they've changed. This can provide better results than Reselect in some cases.
 
 A good example of this is a selector that derives an array of todo descriptions:
 
-```js
-import { createSelector } from 'reselect'
+```ts
+import { createSelector } from '@reduxjs/toolkit'
 
 const selectTodoDescriptionsReselect = createSelector(
-  [state => state.todos],
+  [(state: RootState) => state.todos],
   todos => todos.map(todo => todo.text)
 )
 ```
@@ -413,31 +441,28 @@ Unfortunately, this will recalculate the derived array if any other value inside
 
 The same selector with `proxy-memoize` might look like:
 
-```js
+```ts
 import { memoize } from 'proxy-memoize'
 
-const selectTodoDescriptionsProxy = memoize(state =>
+const selectTodoDescriptionsProxy = memoize((state: RootState) =>
   state.todos.map(todo => todo.text)
 )
 ```
 
-Unlike Reselect, `proxy-memoize` can detect that only the `todo.text` fields are being accessed, and will only recalculate the rest if one of the `todo.text` fields changed.
-
-It also has a built-in `size` option, which lets you set the desired cache size for a single selector instance.
+Unlike Reselect, `proxy-memoize` can detect that only the `todo.text` fields are being accessed, and will only recalculate if one of the `todo.text` fields changed.
 
 It has some tradeoffs and differences from Reselect:
 
 - All values are passed in as a single object argument
-- It requires that the environment supports ES2015 `Proxy` objects (no IE11)
 - It's more magical, whereas Reselect is more explicit
 - There are some edge cases regarding the `Proxy`-based tracking behavior
-- It's newer and less widely used
+- It's less widely used
 
-All that said, **we officially encourage considering using `proxy-memoize` as a viable alternative to Reselect**.
+`proxy-memoize` is a reasonable alternative to Reselect if you have selectors that read only a small part of a large input and want to avoid recalculating when unrelated fields change.
 
 ### `re-reselect`
 
-https://github.com/toomuchdesign/re-reselect improves Reselect's caching behavior, by allowing you to define a "key selector". This is used to manage multiple instances of Reselect selectors internally, which can help simplify usage across multiple components.
+[`re-reselect`](https://github.com/toomuchdesign/re-reselect) wraps Reselect and adds a "key selector" that picks a cache key from the selector arguments, managing a separate Reselect selector instance per key. With Reselect 5's `weakMapMemoize` already caching per argument set, this is mostly useful when you want an explicit key (such as a string ID) rather than reference identity to decide which cache entry to use.
 
 ```js
 import { createCachedSelector } from 're-reselect'
@@ -455,20 +480,6 @@ const getUsersByLibrary = createCachedSelector(
   (_state_, libraryName) => libraryName
 )
 ```
-
-### `reselect-tools`
-
-Sometimes it can be hard to trace how multiple Reselect selectors relate to each other, and what caused a selector to recalculate. https://github.com/skortchmark9/reselect-tools provides a way to trace selector dependencies, and its own DevTools to help visualize those relationships and check selector values.
-
-### `redux-views`
-
-https://github.com/josepot/redux-views is similar to `re-reselect`, in that it provides a way to select unique keys for each item for consistent caching. It was designed as a near-drop-in replacement for Reselect, and actually proposed as an option for a potential Reselect version 5.
-
-### Reselect v5 Proposal
-
-We've opened up a roadmap discussion in the Reselect repo to figure out potential enhancements to a future version of Reselect, such as improving the API to better support larger cache sizes, rewriting the codebase in TypeScript, and other possible improvements. We'd welcome additional community feedback in that discussion:
-
-[**Reselect v5 Roadmap Discussion: Goals and API Design**](https://github.com/reduxjs/reselect/discussions/491)
 
 ## Using Selectors with React-Redux
 
@@ -492,26 +503,24 @@ function TodoListitem({ todoId }) {
 
 ### Creating Unique Selector Instances
 
-There are many cases where a selector function needs to be reused across multiple components. If the components will all be calling the selector with different arguments, it will break memoization - the selector never sees the same arguments multiple times in a row, and thus can never return a cached value.
+A memoized selector is often shared across many components that each call it with different arguments. With Reselect 5's default `weakMapMemoize`, that works as-is: the shared selector keeps a cache entry per distinct argument set, so the components do not evict each other's results.
 
-The standard approach here is to create a unique instance of a memoized selector in the component, and then use that with `useSelector`. That allows each component to consistently pass the same arguments to its own selector instance, and that selector can correctly memoize the results.
+If you have opted into `lruMemoize` with a small cache, or want a component's cached results released as soon as it unmounts, create a unique selector instance per component with a [selector factory](#selector-factories) and `useMemo`:
 
-This is normally done with `useMemo`:
-
-```js
+```tsx
+import { useMemo } from 'react'
 import { makeSelectItemsByCategory } from './categoriesSlice'
+import { useAppSelector } from '../../app/hooks'
 
-function CategoryList({ category }) {
+function CategoryList({ category }: { category: string }) {
   // Create a new memoized selector, for each component instance, on mount
   const selectItemsByCategory = useMemo(makeSelectItemsByCategory, [])
 
-  const itemsByCategory = useSelector(state =>
+  const itemsByCategory = useAppSelector(state =>
     selectItemsByCategory(state, category)
   )
 }
 ```
-
-Reselect 5's default `weakMapMemoize` reduces the need for this pattern: a selector created with `createSelector` keeps a separate cache entry for each distinct set of arguments, so several components calling one shared selector with different `category` values no longer evict each other's results. Creating a per-component instance is still the right choice when the selector's inputs are complex, or when you want each component's cache to be released as soon as it unmounts.
 
 If you still use the legacy `connect` API, the equivalent is the ["factory function" form of `mapStateToProps`](https://react-redux.js.org/api/connect#factory-functions), where `mapState` returns a new `mapState` function on its first call.
 
@@ -626,12 +635,9 @@ There may also be other benefits to having "localized" versions of selectors as 
 ## Further Information
 
 - Selector libraries:
-  - Reselect: https://github.com/reduxjs/reselect
+  - Reselect: https://reselect.js.org
   - `proxy-memoize`: https://github.com/dai-shi/proxy-memoize
   - `re-reselect`: https://github.com/toomuchdesign/re-reselect
-  - `reselect-tools`: https://github.com/skortchmark9/reselect-tools
-  - `redux-views`: https://github.com/josepot/redux-views
-- [Reselect v5 Roadmap Discussion: Goals and API Design](https://github.com/reduxjs/reselect/discussions/491)
 - Randy Coulman has an excellent series of blog posts on selector architecture and different approaches for globalizing Redux selectors, with tradeoffs:
   - [Encapsulating the Redux State Tree](https://randycoulman.com/blog/2016/09/13/encapsulating-the-redux-state-tree/)
   - [Redux Reducer/Selector Asymmetry](https://randycoulman.com/blog/2016/09/20/redux-reducer-selector-asymmetry/)
