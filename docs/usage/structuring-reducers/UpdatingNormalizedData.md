@@ -16,7 +16,7 @@ import HandWrittenReducersNote from "../../components/_HandWrittenReducersNote.m
 
 ## Updating with `createSlice` and `createEntityAdapter`
 
-Redux Toolkit's [`createEntityAdapter`](https://redux-toolkit.js.org/api/createEntityAdapter) generates a set of reducer functions for a normalized `{ ids, entities }` table: `addOne`, `updateOne`, `removeOne`, `upsertMany`, and so on. Combined with [`createSlice`](https://redux-toolkit.js.org/api/createSlice), which uses Immer so you can write "mutating" update logic, most of the code on this page disappears.
+Redux Toolkit's [`createEntityAdapter`](/toolkit/api/createEntityAdapter) generates a set of reducer functions for a normalized `{ ids, entities }` table: `addOne`, `updateOne`, `removeOne`, `upsertMany`, and so on. Combined with [`createSlice`](/toolkit/api/createSlice), which uses Immer so you can write "mutating" update logic, most of the code on this page disappears.
 
 Adding a comment needs two things to happen: the Comment object goes into the comments table, and the Comment's ID gets appended to the parent Post's `comments` array. Each slice handles its own half of that work in response to the same action:
 

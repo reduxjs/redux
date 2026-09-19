@@ -121,7 +121,7 @@ That single comparison is why immutability matters on the React side. If a reduc
 
 - [Redux FAQ: Why isn't my component re-rendering?](./ReactRedux.md#why-isnt-my-component-re-rendering)
 - [Redux FAQ: Why is my component re-rendering too often?](./ReactRedux.md#why-is-my-component-re-rendering-too-often)
-- [React Redux: `useSelector`](https://react-redux.js.org/api/hooks#useselector)
+- [React Redux: `useSelector`](/react-redux/api/hooks#useselector)
 
 ### Why will shallow equality checking not work with mutable objects?
 
@@ -170,7 +170,7 @@ Redux Toolkit's `configureStore` adds a development-only immutability check midd
 
 - [Using Redux: Immutable Update Patterns](../usage/structuring-reducers/ImmutableUpdatePatterns.md)
 - [Troubleshooting: The reducer mutated the state](../usage/Troubleshooting.md#the-reducer-mutated-the-state)
-- [Redux Toolkit: Immutability Middleware](https://redux-toolkit.js.org/api/immutabilityMiddleware)
+- [Redux Toolkit: Immutability Middleware](/toolkit/api/immutabilityMiddleware)
 
 ### How does immutability enable a shallow check to detect object mutations?
 

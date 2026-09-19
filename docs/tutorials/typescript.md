@@ -28,7 +28,7 @@ This page focuses on just how to set up the TypeScript aspects . For explanation
 
 Redux Toolkit is already written in TypeScript, so its TS type definitions are built in.
 
-[React Redux](https://react-redux.js.org) is also written in TypeScript as of version 8, and also includes its own type definitions.
+[React Redux](/react-redux) is also written in TypeScript as of version 8, and also includes its own type definitions.
 
 The [Redux+TS template for Vite](https://github.com/reduxjs/redux-templates/tree/master/packages/vite-template-redux) comes with a working example of these patterns already configured.
 
@@ -36,7 +36,7 @@ The [Redux+TS template for Vite](https://github.com/reduxjs/redux-templates/tree
 
 ### Define Root State and Dispatch Types
 
-[Redux Toolkit's `configureStore` API](https://redux-toolkit.js.org/api/configureStore) should not need any additional typings. You will, however, want to extract the `RootState` type and the `Dispatch` type so that they can be referenced as needed. Inferring these types from the store itself means that they correctly update as you add more state slices or modify middleware settings.
+[Redux Toolkit's `configureStore` API](/toolkit/api/configureStore) should not need any additional typings. You will, however, want to extract the `RootState` type and the `Dispatch` type so that they can be referenced as needed. Inferring these types from the store itself means that they correctly update as you add more state slices or modify middleware settings.
 
 Since those are types, it's safe to export them directly from your store setup file such as `app/store.ts` and import them directly into other files.
 

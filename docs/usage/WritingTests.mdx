@@ -300,7 +300,7 @@ To test the component, we `render` it into the DOM, and assert that the app resp
 
 ### Setting Up a Reusable Test Render Function
 
-React Testing Library's `render` function accepts a tree of React elements and renders those components. Just like in a real app, any Redux-connected components will need [a React-Redux `<Provider>` component wrapped around them](https://react-redux.js.org/tutorials/quick-start#provide-the-redux-store-to-react), with a real Redux store set up and provided.
+React Testing Library's `render` function accepts a tree of React elements and renders those components. Just like in a real app, any Redux-connected components will need [a React-Redux `<Provider>` component wrapped around them](/react-redux/tutorials/quick-start#provide-the-redux-store-to-react), with a real Redux store set up and provided.
 
 Additionally, **the test code should create a separate Redux store instance for every test, rather than reusing the same store instance and resetting its state**. That ensures no values accidentally leak between tests.
 
@@ -541,7 +541,7 @@ test('fetches & receives a user after clicking the fetch user button', async () 
 })
 ```
 
-In this test, **we have completely avoided testing any Redux code directly, treating it as an implementation detail**. As a result, we are free to re-factor the _implementation_, while our tests will continue to pass and avoid false negatives (tests that fail despite the app still behaving how we want it to). We might change our state structure, convert our slice to use [RTK-Query](https://redux-toolkit.js.org/rtk-query/overview), or remove Redux entirely, and our tests will still pass. We have a strong degree of confidence that if we change some code and our tests report a failure, then our app really _is_ broken.
+In this test, **we have completely avoided testing any Redux code directly, treating it as an implementation detail**. As a result, we are free to re-factor the _implementation_, while our tests will continue to pass and avoid false negatives (tests that fail despite the app still behaving how we want it to). We might change our state structure, convert our slice to use [RTK-Query](/toolkit/rtk-query/overview), or remove Redux entirely, and our tests will still pass. We have a strong degree of confidence that if we change some code and our tests report a failure, then our app really _is_ broken.
 
 ### Preparing Initial Test State
 
@@ -980,11 +980,11 @@ However, since [most selectors are memoized to remember their last inputs](./der
 
 ### Action Creators & Thunks
 
-In Redux, action creators are functions which return plain objects. Our recommendation is not to write action creators manually, but instead have them generated automatically by [`createSlice`](https://redux-toolkit.js.org/api/createSlice#return-value), or created via [`createAction`](https://redux-toolkit.js.org/api/createAction) from [`@reduxjs/toolkit`](https://redux-toolkit.js.org/introduction/getting-started). As such, **you should not feel the need to test action creators by themselves** (the Redux Toolkit maintainers have already done that for you!).
+In Redux, action creators are functions which return plain objects. Our recommendation is not to write action creators manually, but instead have them generated automatically by [`createSlice`](/toolkit/api/createSlice#return-value), or created via [`createAction`](/toolkit/api/createAction) from [`@reduxjs/toolkit`](/toolkit/introduction/getting-started). As such, **you should not feel the need to test action creators by themselves** (the Redux Toolkit maintainers have already done that for you!).
 
 The return value of action creators is considered an implementation detail within your application, and when following an integration testing style, do not need explicit tests.
 
-Similarly for thunks using [Redux Thunk](https://github.com/reduxjs/redux-thunk), our recommendation is not to write them manually, but instead use [`createAsyncThunk`](https://redux-toolkit.js.org/api/createAsyncThunk) from [`@reduxjs/toolkit`](https://redux-toolkit.js.org/introduction/getting-started). The thunk handles dispatching the appropriate `pending`, `fulfilled` and `rejected` action types for you based on the lifecycle of the thunk.
+Similarly for thunks using [Redux Thunk](https://github.com/reduxjs/redux-thunk), our recommendation is not to write them manually, but instead use [`createAsyncThunk`](/toolkit/api/createAsyncThunk) from [`@reduxjs/toolkit`](/toolkit/introduction/getting-started). The thunk handles dispatching the appropriate `pending`, `fulfilled` and `rejected` action types for you based on the lifecycle of the thunk.
 
 We consider thunk behavior to be an implementation detail of the application, and recommend that it be covered by testing the group of components (or whole app) using it, rather than testing the thunk in isolation.
 

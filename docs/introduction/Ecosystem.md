@@ -8,7 +8,7 @@ description: 'Introduction > Ecosystem: Links to popular, recommended, and inter
 
 Redux is a tiny library, but its contracts and APIs are carefully chosen to spawn an ecosystem of tools and extensions, and the community has created a wide variety of helpful addons, libraries, and tools. You don't need to use any of these addons to use Redux, but they can help make it easier to implement features and solve problems in your application.
 
-Most of what the community built as separate addons in the early years of Redux is now part of [Redux Toolkit](https://redux-toolkit.js.org): store setup, immutable updates, action creators, normalized entity management, data fetching and caching, and reactive side effects. Check whether RTK already covers your use case before reaching for a third-party library.
+Most of what the community built as separate addons in the early years of Redux is now part of [Redux Toolkit](/toolkit): store setup, immutable updates, action creators, normalized entity management, data fetching and caching, and reactive side effects. Check whether RTK already covers your use case before reaching for a third-party library.
 
 This page lists the addons that the Redux maintainers recommend today, plus a few widely used community libraries that are still maintained. For a much larger (and much older) catalog, see the [Redux Ecosystem Links](https://github.com/markerikson/redux-ecosystem-links) list, but be aware that most of the libraries there have not been updated since 2020.
 
@@ -25,13 +25,13 @@ This page lists the addons that the Redux maintainers recommend today, plus a fe
 **[reduxjs/redux-toolkit](https://github.com/reduxjs/redux-toolkit)** <br />
 The official, opinionated, batteries-included toolset for Redux development. It is the standard way to write Redux logic. Redux Toolkit includes:
 
-- [`configureStore`](https://redux-toolkit.js.org/api/configureStore): sets up the store with the thunk middleware, DevTools integration, and development-mode checks for accidental mutations and non-serializable values
-- [`createSlice`](https://redux-toolkit.js.org/api/createSlice): generates action creators and action types from a set of reducer functions, with [Immer](https://immerjs.github.io/immer/) built in for "mutating" immutable updates
-- [`createAsyncThunk`](https://redux-toolkit.js.org/api/createAsyncThunk): dispatches pending/fulfilled/rejected actions around an async function
-- [`createEntityAdapter`](https://redux-toolkit.js.org/api/createEntityAdapter): prebuilt reducers and selectors for normalized `{ ids, entities }` state
-- [`createListenerMiddleware`](https://redux-toolkit.js.org/api/createListenerMiddleware): runs effects in response to dispatched actions or state changes
-- [RTK Query](https://redux-toolkit.js.org/rtk-query/overview): data fetching and caching, generated from an API definition
-- [`combineSlices`](https://redux-toolkit.js.org/api/combineSlices) and [`createDynamicMiddleware`](https://redux-toolkit.js.org/api/createDynamicMiddleware): lazy-loaded reducers and middleware for code splitting
+- [`configureStore`](/toolkit/api/configureStore): sets up the store with the thunk middleware, DevTools integration, and development-mode checks for accidental mutations and non-serializable values
+- [`createSlice`](/toolkit/api/createSlice): generates action creators and action types from a set of reducer functions, with [Immer](https://immerjs.github.io/immer/) built in for "mutating" immutable updates
+- [`createAsyncThunk`](/toolkit/api/createAsyncThunk): dispatches pending/fulfilled/rejected actions around an async function
+- [`createEntityAdapter`](/toolkit/api/createEntityAdapter): prebuilt reducers and selectors for normalized `{ ids, entities }` state
+- [`createListenerMiddleware`](/toolkit/api/createListenerMiddleware): runs effects in response to dispatched actions or state changes
+- [RTK Query](/toolkit/rtk-query/overview): data fetching and caching, generated from an API definition
+- [`combineSlices`](/toolkit/api/combineSlices) and [`createDynamicMiddleware`](/toolkit/api/createDynamicMiddleware): lazy-loaded reducers and middleware for code splitting
 
 **[reduxjs/react-redux](https://github.com/reduxjs/react-redux)** <br />
 The official React bindings for Redux, maintained by the Redux team. Provides the `useSelector` and `useDispatch` hooks and the `<Provider>` component.
@@ -106,7 +106,7 @@ export const addTodoIfAllowed =
   }
 ```
 
-**[createListenerMiddleware (Redux Toolkit)](https://redux-toolkit.js.org/api/createListenerMiddleware)** <br />
+**[createListenerMiddleware (Redux Toolkit)](/toolkit/api/createListenerMiddleware)** <br />
 A lightweight alternative to sagas and observables. Listeners run an effect after a matching action is dispatched, and the effect can wait for further actions or state changes, cancel itself, and start child tasks.
 
 **Best for**: "when X happens, do Y" logic, analytics, and reacting to state changes.

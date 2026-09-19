@@ -30,7 +30,7 @@ Redux Toolkit 2.0 includes some utilities designed to simplify code splitting wi
 
 ### `combineSlices`
 
-The [`combineSlices`](https://redux-toolkit.js.org/api/combineSlices) utility is designed to allow for easy reducer injection. It also supersedes `combineReducers`, in that it can be used to combine multiple slices and reducers into one root reducer.
+The [`combineSlices`](/toolkit/api/combineSlices) utility is designed to allow for easy reducer injection. It also supersedes `combineReducers`, in that it can be used to combine multiple slices and reducers into one root reducer.
 
 At setup it accepts a set of slices and reducer maps, and returns a reducer instance with attached methods for injection.
 
@@ -372,7 +372,7 @@ Middleware is injected when `createDispatchWithMiddlewareHook` is called, _not_ 
 
 ##### `createDispatchWithMiddlewareHookFactory`
 
-This method take a React context instance and creates an instance of `createDispatchWithMiddlewareHook` which uses that context. (see [Providing custom context](https://react-redux.js.org/using-react-redux/accessing-store#providing-custom-context))
+This method take a React context instance and creates an instance of `createDispatchWithMiddlewareHook` which uses that context. (see [Providing custom context](/react-redux/using-react-redux/accessing-store#providing-custom-context))
 
 ```ts
 import { createContext } from 'react'

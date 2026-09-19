@@ -199,7 +199,7 @@ The Redux ecosystem has traditionally used a library called [**Reselect**](https
 
 Reselect provides a function called [`createSelector`](https://reselect.js.org/api/createselector/) to generate memoized selectors. `createSelector` accepts one or more "input selector" functions, plus an "output selector" function, and returns a new selector function for you to use.
 
-`createSelector` is included as part of [our official Redux Toolkit package](https://redux-toolkit.js.org), and is re-exported for ease of use.
+`createSelector` is included as part of [our official Redux Toolkit package](/toolkit), and is re-exported for ease of use.
 
 `createSelector` can accept multiple input selectors, which can be provided as separate arguments or as an array. The results from all the input selectors are provided as separate arguments to the output selector:
 
@@ -522,7 +522,7 @@ function CategoryList({ category }: { category: string }) {
 }
 ```
 
-If you still use the legacy `connect` API, the equivalent is the ["factory function" form of `mapStateToProps`](https://react-redux.js.org/api/connect#factory-functions), where `mapState` returns a new `mapState` function on its first call.
+If you still use the legacy `connect` API, the equivalent is the ["factory function" form of `mapStateToProps`](/react-redux/api/connect#factory-functions), where `mapState` returns a new `mapState` function on its first call.
 
 ## Using Selectors Effectively
 
@@ -628,7 +628,7 @@ const selectAllTodosCompletedLocalized = todos =>
 
 "Localized" selectors can be turned into "globalized" selectors by wrapping them in a function that knows how to retrieve the right slice of state and pass it onwards.
 
-Redux Toolkit's [`createEntityAdapter` API](https://redux-toolkit.js.org/api/createEntityAdapter#selector-functions) is an example of this pattern. If you call `todosAdapter.getSelectors()`, with no argument, it returns a set of "localized" selectors that expect the _entity slice state_ as their argument. If you call `todosAdapter.getSelectors(state => state.todos)`, it returns a set of "globalized" selectors that expect to be called with the _Redux root state_ as their argument.
+Redux Toolkit's [`createEntityAdapter` API](/toolkit/api/createEntityAdapter#selector-functions) is an example of this pattern. If you call `todosAdapter.getSelectors()`, with no argument, it returns a set of "localized" selectors that expect the _entity slice state_ as their argument. If you call `todosAdapter.getSelectors(state => state.todos)`, it returns a set of "globalized" selectors that expect to be called with the _Redux root state_ as their argument.
 
 There may also be other benefits to having "localized" versions of selectors as well. For example, say we have an advanced scenario of keeping multiple copies of `createEntityAdapter` data nested in the store, such as a `chatRoomsAdapter` that tracks rooms, and each room definition then has a `chatMessagesAdapter` state to store the messages. We can't directly look up the messages for each room - we first have to retrieve the room object, then select the messages out of that. This is easier if we have a set of "localized" selectors for the messages.
 

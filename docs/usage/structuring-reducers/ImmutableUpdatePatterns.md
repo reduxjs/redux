@@ -43,7 +43,7 @@ Obviously, each layer of nesting makes this harder to read, and gives more chanc
 
 ##### Simplifying Nested Updates with Redux Toolkit and Immer
 
-Redux Toolkit's [`createSlice`](https://redux-toolkit.js.org/api/createSlice) and [`createReducer`](https://redux-toolkit.js.org/api/createReducer) wrap your case reducers in Immer's [`produce` function](https://immerjs.github.io/immer/produce). Inside them, you can write code that appears to "mutate" `state`, and Immer applies the update immutably, copying exactly the levels that changed. The nested example above becomes:
+Redux Toolkit's [`createSlice`](/toolkit/api/createSlice) and [`createReducer`](/toolkit/api/createReducer) wrap your case reducers in Immer's [`produce` function](https://immerjs.github.io/immer/produce). Inside them, you can write code that appears to "mutate" `state`, and Immer applies the update immutably, copying exactly the levels that changed. The nested example above becomes:
 
 ```ts
 import { createSlice } from '@reduxjs/toolkit'
@@ -188,7 +188,7 @@ There are libraries that shorten this code. [Immer](https://immerjs.github.io/im
 ## Further Information
 
 - [Immer docs](https://immerjs.github.io/immer/)
-- [Redux Toolkit: Writing Reducers with Immer](https://redux-toolkit.js.org/usage/immer-reducers)
+- [Redux Toolkit: Writing Reducers with Immer](/toolkit/usage/immer-reducers)
 - [Dave Ceddia: The Complete Guide to Immutability in React and Redux](https://daveceddia.com/react-redux-immutability-guide/)
 - [React docs: Updating Objects in State](https://react.dev/learn/updating-objects-in-state)
 - [React docs: Updating Arrays in State](https://react.dev/learn/updating-arrays-in-state)

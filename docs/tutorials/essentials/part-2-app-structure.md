@@ -25,7 +25,7 @@ Now, let's look at a real working example to see how these pieces fit together.
 
 The sample project we'll look at is a small counter application that lets us add or subtract from a number as we click buttons. It may not be very exciting, but it shows all the important pieces of a React+Redux application in action.
 
-The project has been created using a smaller version of [the official Redux Toolkit template for Vite](https://github.com/reduxjs/redux-templates/tree/master/packages/vite-template-redux). Out of the box, it has already been configured with a standard Redux application structure, using [Redux Toolkit](https://redux-toolkit.js.org) to create the Redux store and logic, and [React-Redux](https://react-redux.js.org) to connect together the Redux store and the React components.
+The project has been created using a smaller version of [the official Redux Toolkit template for Vite](https://github.com/reduxjs/redux-templates/tree/master/packages/vite-template-redux). Out of the box, it has already been configured with a standard Redux application structure, using [Redux Toolkit](/toolkit) to create the Redux store and logic, and [React-Redux](/react-redux) to connect together the Redux store and the React components.
 
 Here's the live version of the project. You can play around with it by clicking the buttons in the app preview on the right, and browse through the source files on the left.
 
@@ -294,7 +294,7 @@ We know that actions are plain objects with a `type` field, the `type` field is 
 
 We _could_ write those all by hand, every time. But, that would be tedious. Besides, what's _really_ important in Redux is the reducer functions, and the logic they have for calculating new state.
 
-Redux Toolkit has a function called [**`createSlice`**](https://redux-toolkit.js.org/api/createSlice), which takes care of the work of generating action type strings, action creator functions, and action objects. All you have to do is define a name for this slice, write an object that has some reducer functions in it, and it generates the corresponding action code automatically. The string from the `name` option is used as the first part of each action type, and the key name of each reducer function is used as the second part. So, the `"counter"` name + the `"increment"` reducer function generated an action type of `{type: "counter/increment"}`. (After all, why write this by hand if the computer can do it for us!)
+Redux Toolkit has a function called [**`createSlice`**](/toolkit/api/createSlice), which takes care of the work of generating action type strings, action creator functions, and action objects. All you have to do is define a name for this slice, write an object that has some reducer functions in it, and it generates the corresponding action code automatically. The string from the `name` option is used as the first part of each action type, and the key name of each reducer function is used as the second part. So, the `"counter"` name + the `"increment"` reducer function generated an action type of `{type: "counter/increment"}`. (After all, why write this by hand if the computer can do it for us!)
 
 In addition to the `name` field, `createSlice` needs us to pass in the initial state value for the reducers, so that there is a `state` the first time it gets called. In this case, we're providing an object with a `value` field that starts off at 0, and a `status` field that starts off with `'idle'`.
 
@@ -459,7 +459,7 @@ If we're using TypeScript, we need to tell TS what the type of `action.payload` 
 
 For more information on immutability and writing immutable updates, see [the "Immutable Update Patterns" docs page](../../usage/structuring-reducers/ImmutableUpdatePatterns.md) and [The Complete Guide to Immutability in React and Redux](https://daveceddia.com/react-redux-immutability-guide/).
 
-For details on using Immer for "mutating" immutable updates, see [the Immer docs](https://immerjs.github.io/immer/) and the ["Writing Reducers with Immer" docs page](https://redux-toolkit.js.org/usage/immer-reducers).
+For details on using Immer for "mutating" immutable updates, see [the Immer docs](https://immerjs.github.io/immer/) and the ["Writing Reducers with Immer" docs page](/toolkit/usage/immer-reducers).
 
 :::
 
@@ -553,7 +553,7 @@ const fetchUserById = (userId: string): AppThunk => {
 }
 ```
 
-Redux Toolkit includes a [**`createAsyncThunk`**](https://redux-toolkit.js.org/api/createAsyncThunk) method that does all of the dispatching work for you. The next function in `counterSlice.ts` is an async thunk that makes a mock API request with a counter value. When we dispatch this thunk, it will dispatch a `pending` action before making the request, and either a `fulfilled` or `rejected` action after the async logic is done.
+Redux Toolkit includes a [**`createAsyncThunk`**](/toolkit/api/createAsyncThunk) method that does all of the dispatching work for you. The next function in `counterSlice.ts` is an async thunk that makes a mock API request with a counter value. When we dispatch this thunk, it will dispatch a `pending` action before making the request, and either a `fulfilled` or `rejected` action after the async logic is done.
 
 ```ts title="features/counter/counterSlice.ts"
 // Thunks are commonly used for async logic like fetching data.
@@ -725,7 +725,7 @@ However, in our component, it doesn't look like we're storing the actual current
 
 While React includes several built-in hooks like `useState` and `useEffect`, other libraries can create their own [custom hooks](https://reactjs.org/docs/hooks-custom.html) that use React's hooks to build custom logic.
 
-The [React-Redux library](https://react-redux.js.org/) has [a set of custom hooks that allow your React component to interact with a Redux store](https://react-redux.js.org/api/hooks).
+The [React-Redux library](/react-redux) has [a set of custom hooks that allow your React component to interact with a Redux store](/react-redux/api/hooks).
 
 #### Reading Data with `useSelector`
 

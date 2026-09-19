@@ -236,17 +236,17 @@ Then, if we click back to the main "Posts" tab, we should also see:
 
 Because we provided the relationships between the endpoints using tags, **RTK Query knew that it needed to refetch the individual post and the list of posts when we made that edit and the specific tag with that ID was invalidated** - no further changes needed! Meanwhile, as we were editing the post, the cache removal timer for the `getPosts` data expired, so it was removed from the cache. When we opened the `<PostsList>` component again, RTK Query saw that it did not have the data in cache and refetched it.
 
-There is one caveat here. By specifying a plain `'Post'` tag in `getPosts` and invalidating it in `addNewPost`, we actually end up forcing a refetch of all _individual_ posts as well. If we really want to just refetch the list of posts for the `getPosts` endpoint, you can include an additional tag with an arbitrary ID, like `{type: 'Post', id: 'LIST'}`, and invalidate that tag instead. The RTK Query docs have [a table that describes what will happen if certain general/specific tag combinations are invalidated](https://redux-toolkit.js.org/rtk-query/usage/automated-refetching#tag-invalidation-behavior).
+There is one caveat here. By specifying a plain `'Post'` tag in `getPosts` and invalidating it in `addNewPost`, we actually end up forcing a refetch of all _individual_ posts as well. If we really want to just refetch the list of posts for the `getPosts` endpoint, you can include an additional tag with an arbitrary ID, like `{type: 'Post', id: 'LIST'}`, and invalidate that tag instead. The RTK Query docs have [a table that describes what will happen if certain general/specific tag combinations are invalidated](/toolkit/rtk-query/usage/automated-refetching#tag-invalidation-behavior).
 
 :::info
 
 RTK Query has many other options for controlling when and how to refetch data, including "conditional fetching", "lazy queries", and "prefetching", and query definitions can be customized in a variety of ways. See the RTK Query usage guide docs for more details on using these features:
 
-- [RTK Query: Automated Re-Fetching](https://redux-toolkit.js.org/rtk-query/usage/automated-refetching)
-- [RTK Query: Conditional Fetching](https://redux-toolkit.js.org/rtk-query/usage/conditional-fetching)
-- [RTK Query: Prefetching](https://redux-toolkit.js.org/rtk-query/usage/prefetching)
-- [RTK Query: Customizing Queries](https://redux-toolkit.js.org/rtk-query/usage/customizing-queries)
-- [RTK Query: `useLazyQuery`](https://redux-toolkit.js.org/rtk-query/api/created-api/hooks#uselazyquery)
+- [RTK Query: Automated Re-Fetching](/toolkit/rtk-query/usage/automated-refetching)
+- [RTK Query: Conditional Fetching](/toolkit/rtk-query/usage/conditional-fetching)
+- [RTK Query: Prefetching](/toolkit/rtk-query/usage/prefetching)
+- [RTK Query: Customizing Queries](/toolkit/rtk-query/usage/customizing-queries)
+- [RTK Query: `useLazyQuery`](/toolkit/rtk-query/api/created-api/hooks#uselazyquery)
 
 :::
 
@@ -256,7 +256,7 @@ When we switched from dispatching thunks for adding posts to using an RTK Query 
 
 Fortunately, this is simple to fix. RTK Query actually uses `createAsyncThunk` internally, and we've already seen that it dispatches Redux actions as the requests are made. We can update the toast listener to watch for RTKQ's internal actions being dispatched, and show the toast message when that happens.
 
-`createApi` automatically generates thunks internally for each endpoint. It also automatically generates [RTK "matcher" functions](https://redux-toolkit.js.org/api/matching-utilities), which accept an action object and return `true` if the action matches some condition. These matchers can be used in any place that needs to check if an action matches a given condition, such as inside `startAppListening`. They also act as TypeScript type guards, narrowing the TS type of the `action` object so that you can safely access its fields.
+`createApi` automatically generates thunks internally for each endpoint. It also automatically generates [RTK "matcher" functions](/toolkit/api/matching-utilities), which accept an action object and return `true` if the action matches some condition. These matchers can be used in any place that needs to check if an action matches a given condition, such as inside `startAppListening`. They also act as TypeScript type guards, narrowing the TS type of the `action` object so that you can safely access its fields.
 
 Currently, the toast listener is watching for the single specific action type with `actionCreator: addNewPost.fulfilled`. We'll update it to watch for the posts being added with `matcher: apiSlice.endpoints.addNewPost.matchFulfilled`:
 
@@ -339,7 +339,7 @@ Each endpoint object contains:
 
 - The same primary query/mutation hook that we exported from the root API slice object, but named as `useQuery` or `useMutation`
 - For query endpoints, an additional set of query hooks for scenarios like "lazy queries" or partial subscriptions
-- A set of ["matcher" utilities](https://redux-toolkit.js.org/api/matching-utilities) to check for the `pending/fulfilled/rejected` actions dispatched by requests for this endpoint
+- A set of ["matcher" utilities](/toolkit/api/matching-utilities) to check for the `pending/fulfilled/rejected` actions dispatched by requests for this endpoint
 - An `initiate` thunk that triggers a request for this endpoint
 - A `select` function that creates [memoized selectors](../../usage/deriving-data-selectors.md) that can retrieve the cached result data + status entries for this endpoint
 
@@ -378,7 +378,7 @@ In this case, we're manually dispatching the thunk to start prefetching the data
 
 :::caution
 
-Manually dispatching an RTKQ request thunk will create a subscription entry, but it's then up to you to [unsubscribe from that data later](https://redux-toolkit.js.org/rtk-query/usage/usage-without-react-hooks#removing-a-subscription) - otherwise the data stays in the cache permanently. In this case, we always need user data, so we can skip unsubscribing.
+Manually dispatching an RTKQ request thunk will create a subscription entry, but it's then up to you to [unsubscribe from that data later](/toolkit/rtk-query/usage/usage-without-react-hooks#removing-a-subscription) - otherwise the data stays in the cache permanently. In this case, we always need user data, so we can skip unsubscribing.
 
 :::
 
@@ -840,7 +840,7 @@ RTK Query includes **utilities to update the client-side cache directly**. This 
 
 #### Cache Update Utilities
 
-API slices have some [additional methods attached, under `api.util`](https://redux-toolkit.js.org/rtk-query/api/created-api/api-slice-utils). This includes thunks for modifying the cache: `upsertQueryData` to add or replace a cache entry, and `updateQueryData` to modify a cache entry. Since these are thunks, they can be used anywhere you have access to `dispatch`.
+API slices have some [additional methods attached, under `api.util`](/toolkit/rtk-query/api/created-api/api-slice-utils). This includes thunks for modifying the cache: `upsertQueryData` to add or replace a cache entry, and `updateQueryData` to modify a cache entry. Since these are thunks, they can be used anywhere you have access to `dispatch`.
 
 In particular, the `updateQueryData` util thunk takes three arguments: the name of the endpoint to update, the same cache key argument used to identify the specific cached entry we want to update, and a callback that updates the cached data. **`updateQueryData` uses Immer, so you can "mutate" the drafted cache data the same way you would in `createSlice`**:
 
@@ -857,7 +857,7 @@ dispatch(
 
 #### The `onQueryStarted` Lifecycle
 
-The first lifecycle method we'll look at is [**`onQueryStarted`**](https://redux-toolkit.js.org/rtk-query/api/createApi#onquerystarted). This option is available for both queries and mutations.
+The first lifecycle method we'll look at is [**`onQueryStarted`**](/toolkit/rtk-query/api/createApi#onquerystarted). This option is available for both queries and mutations.
 
 If provided, `onQueryStarted` will be called every time a new request goes out. This gives us a place to run additional logic in response to the request.
 
@@ -943,7 +943,7 @@ We've already seen the `onQueryStarted` lifecycle that let us implement optimist
 
 #### The `onCacheEntryAdded` Lifecycle
 
-Like `onQueryStarted`, the [**`onCacheEntryAdded`**](https://redux-toolkit.js.org/rtk-query/api/createApi#oncacheentryadded) lifecycle method is available for both queries and mutations.
+Like `onQueryStarted`, the [**`onCacheEntryAdded`**](/toolkit/rtk-query/api/createApi#oncacheentryadded) lifecycle method is available for both queries and mutations.
 
 `onCacheEntryAdded` will be called any time a new cache entry (endpoint + serialized query arg) is added to the cache. This means it will run less often than `onQueryStarted`, which runs whenever a request happens.
 
@@ -1456,7 +1456,7 @@ Let's take one last look at the whole application in action:
 
 Congratulations, **you've completed the Redux Essentials tutorial!** You should now have a solid understanding of what Redux Toolkit and React-Redux are, how to write and organize Redux logic, Redux data flow and usage with React, and how to use APIs like `configureStore` and `createSlice`. You should also know how RTK Query can simplify the process of fetching and using cached data.
 
-For more details on using RTK Query, see [the RTK Query usage guide docs](https://redux-toolkit.js.org/rtk-query/usage/queries) and [API reference](https://redux-toolkit.js.org/rtk-query/api/createApi).
+For more details on using RTK Query, see [the RTK Query usage guide docs](/toolkit/rtk-query/usage/queries) and [API reference](/toolkit/rtk-query/api/createApi).
 
 The concepts we've covered in this tutorial so far should be enough to get you started building your own applications using React and Redux. Now's a great time to try working on a project yourself to solidify these concepts and see how they work in practice. If you're not sure what kind of a project to build, see [this list of app project ideas](https://github.com/florinpop17/app-ideas) for some inspiration.
 

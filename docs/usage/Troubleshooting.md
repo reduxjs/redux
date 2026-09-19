@@ -70,7 +70,7 @@ function todosReducer(state: Todo[] = [], action: UnknownAction): Todo[] {
 
 The same rule applies to selectors and to code that reads from `store.getState()`: don't modify the objects you get back.
 
-In development, `configureStore` adds a middleware that checks for accidental mutations and throws an error like `A state mutation was detected between dispatches, in the path 'todos.0.completed'`. If you see that error, the path tells you which value was changed in place. See [the immutability middleware docs](https://redux-toolkit.js.org/api/immutabilityMiddleware) for details. The [Immutable Update Patterns](./structuring-reducers/ImmutableUpdatePatterns.md) page covers how to write these updates by hand.
+In development, `configureStore` adds a middleware that checks for accidental mutations and throws an error like `A state mutation was detected between dispatches, in the path 'todos.0.completed'`. If you see that error, the path tells you which value was changed in place. See [the immutability middleware docs](/toolkit/api/immutabilityMiddleware) for details. The [Immutable Update Patterns](./structuring-reducers/ImmutableUpdatePatterns.md) page covers how to write these updates by hand.
 
 #### The action was never dispatched
 
@@ -136,7 +136,7 @@ A non-serializable value was detected in an action, in the path: `payload.dueDat
 Value: Fri Sep 18 2026 10:00:00 GMT-0400 (Eastern Daylight Time)
 ```
 
-The usual causes are `Date` objects, class instances, `Map`/`Set`, functions, and Promises. The fix is to convert the value before it goes into an action or the state: store `dueDate.toISOString()` instead of a `Date`, store a plain object instead of a class instance, and keep functions and Promises out of actions entirely. If a value must be non-serializable, you can tell the middleware to ignore specific paths or action types, or disable the check. See [Working with Non-Serializable Data](https://redux-toolkit.js.org/usage/usage-guide#working-with-non-serializable-data) and the [serializability middleware docs](https://redux-toolkit.js.org/api/serializabilityMiddleware).
+The usual causes are `Date` objects, class instances, `Map`/`Set`, functions, and Promises. The fix is to convert the value before it goes into an action or the state: store `dueDate.toISOString()` instead of a `Date`, store a plain object instead of a class instance, and keep functions and Promises out of actions entirely. If a value must be non-serializable, you can tell the middleware to ignore specific paths or action types, or disable the check. See [Working with Non-Serializable Data](/toolkit/usage/usage-guide#working-with-non-serializable-data) and the [serializability middleware docs](/toolkit/api/serializabilityMiddleware).
 
 The FAQ explains why this matters: [Can I put functions, promises, or other non-serializable items in my store state?](../faq/OrganizingState.md#can-i-put-functions-promises-or-other-non-serializable-items-in-my-store-state)
 
@@ -165,7 +165,7 @@ const selectCompletedTodos = createSelector(
 const completed = useAppSelector(selectCompletedTodos)
 ```
 
-See [Why is my component re-rendering too often?](../faq/ReactRedux.md#why-is-my-component-re-rendering-too-often) and [Deriving Data with Selectors](./deriving-data-selectors.md). The check itself is described in the [React-Redux hooks docs](https://react-redux.js.org/api/hooks#development-mode-checks).
+See [Why is my component re-rendering too often?](../faq/ReactRedux.md#why-is-my-component-re-rendering-too-often) and [Deriving Data with Selectors](./deriving-data-selectors.md). The check itself is described in the [React-Redux hooks docs](/react-redux/api/hooks#development-mode-checks).
 
 ### "could not find react-redux context value; please ensure the component is wrapped in a `<Provider>`"
 
@@ -187,7 +187,7 @@ export const useAppSelector = useSelector.withTypes<RootState>()
 
 ### An RTK Query hook returns an error
 
-Query and mutation hooks do not throw. They return `isError`, `error`, and `status` fields, and the error object has a different shape depending on whether the request failed on the network (`{ status: 'FETCH_ERROR', error: string }`) or the server returned a non-2xx status (`{ status: number, data: unknown }`). Read the hook result rather than wrapping it in `try`/`catch`. See [RTK Query error handling](https://redux-toolkit.js.org/rtk-query/usage/error-handling). The "RTK Query" tab in the Redux DevTools shows every cached query, its status, and its last response.
+Query and mutation hooks do not throw. They return `isError`, `error`, and `status` fields, and the error object has a different shape depending on whether the request failed on the network (`{ status: 'FETCH_ERROR', error: string }`) or the server returned a non-2xx status (`{ status: number, data: unknown }`). Read the hook result rather than wrapping it in `try`/`catch`. See [RTK Query error handling](/toolkit/rtk-query/usage/error-handling). The "RTK Query" tab in the Redux DevTools shows every cached query, its status, and its last response.
 
 ## Something else doesn't work
 

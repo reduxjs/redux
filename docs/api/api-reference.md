@@ -14,7 +14,7 @@ This section documents the original Redux core API. The Redux core is small - it
 
 Redux Toolkit re-exports all of the APIs included in the `redux` package, so you don't need to install `redux` separately. The original [`createStore`](createStore.md) method is deprecated in favor of `configureStore`, but will continue to work indefinitely.
 
-For the APIs you'll use day to day, see the [Redux Toolkit API docs](https://redux-toolkit.js.org/) and the [React-Redux API docs](https://react-redux.js.org/).
+For the APIs you'll use day to day, see the [Redux Toolkit API docs](/toolkit) and the [React-Redux API docs](/react-redux).
 
 ## Top-Level Exports
 

@@ -24,8 +24,8 @@ Overall, React-Redux encourages good React architecture, and implements complex 
 
 **Documentation**
 
-- **[React-Redux docs: Why Use React-Redux?](https://react-redux.js.org/introduction/why-use-react-redux)**
-- [React-Redux docs: Hooks](https://react-redux.js.org/api/hooks)
+- **[React-Redux docs: Why Use React-Redux?](/react-redux/introduction/why-use-react-redux)**
+- [React-Redux docs: Hooks](/react-redux/api/hooks)
 
 ### Why isn't my component re-rendering?
 
@@ -69,8 +69,8 @@ const todosSlice = createSlice({
 **Documentation**
 
 - [Troubleshooting](../usage/Troubleshooting.md)
-- [React Redux: Troubleshooting](https://react-redux.js.org/troubleshooting)
-- [Redux Toolkit: Immutability Middleware](https://redux-toolkit.js.org/api/immutabilityMiddleware)
+- [React Redux: Troubleshooting](/react-redux/troubleshooting)
+- [Redux Toolkit: Immutability Middleware](/toolkit/api/immutabilityMiddleware)
 - [Using Redux: Structuring Reducers - Prerequisite Concepts](../usage/structuring-reducers/PrerequisiteConcepts.md)
 - [Using Redux: Structuring Reducers - Immutable Update Patterns](../usage/structuring-reducers/ImmutableUpdatePatterns.md)
 - [FAQ: Immutable Data](./ImmutableData.md)
@@ -113,7 +113,7 @@ Two other things worth knowing:
 
 **Documentation**
 
-- [React Redux: Hooks - Development mode checks](https://react-redux.js.org/api/hooks#development-mode-checks)
+- [React Redux: Hooks - Development mode checks](/react-redux/api/hooks#development-mode-checks)
 - [React: `memo`](https://react.dev/reference/react/memo)
 - [FAQ: Performance - How well does Redux "scale"?](./Performance.md#how-well-does-redux-scale-in-terms-of-performance-and-architecture)
 - [Using Redux: Deriving Data with Selectors](../usage/deriving-data-selectors.md)
@@ -170,7 +170,7 @@ Both `createSelector` and `shallowEqual` are workarounds for one specific proble
 
 - [Using Redux: Deriving Data with Selectors](../usage/deriving-data-selectors.md)
 - [Reselect docs](https://reselect.js.org/)
-- [React Redux: Hooks - Equality Comparisons and Updates](https://react-redux.js.org/api/hooks#equality-comparisons-and-updates)
+- [React Redux: Hooks - Equality Comparisons and Updates](/react-redux/api/hooks#equality-comparisons-and-updates)
 
 ### How do I use Redux with React 18 and React 19?
 
@@ -192,7 +192,7 @@ React Server Components and frameworks built on them, such as the Next.js App Ro
 
 ### How do I access the store outside a component?
 
-Prefer not to. Most code that wants the store from outside a component is doing async logic or responding to an action, and both belong in a [thunk](../usage/writing-logic-thunks.mdx) or a [listener middleware](https://redux-toolkit.js.org/api/createListenerMiddleware) effect, where `dispatch` and `getState` are passed in as arguments.
+Prefer not to. Most code that wants the store from outside a component is doing async logic or responding to an action, and both belong in a [thunk](../usage/writing-logic-thunks.mdx) or a [listener middleware](/toolkit/api/createListenerMiddleware) effect, where `dispatch` and `getState` are passed in as arguments.
 
 When you do need the store instance itself:
 
@@ -206,7 +206,7 @@ Importing a store singleton does not work with server rendering, where each requ
 **Documentation**
 
 - [FAQ: Code Structure - How can I use the Redux store in non-component files?](./CodeStructure.md#how-can-i-use-the-redux-store-in-non-component-files)
-- [React Redux: Hooks - `useStore()`](https://react-redux.js.org/api/hooks#usestore)
+- [React Redux: Hooks - `useStore()`](/react-redux/api/hooks#usestore)
 - [Using Redux: Writing Logic with Thunks](../usage/writing-logic-thunks.mdx)
 
 ### How do I type `useSelector` and `useDispatch`?
@@ -236,7 +236,7 @@ export const useAppSelector = useSelector.withTypes<RootState>()
 **Documentation**
 
 - [Using Redux: Usage with TypeScript](../usage/UsageWithTypescript.md#define-typed-hooks)
-- [React Redux: Usage with TypeScript](https://react-redux.js.org/using-react-redux/usage-with-typescript)
+- [React Redux: Usage with TypeScript](/react-redux/using-react-redux/usage-with-typescript)
 
 ### Is `connect` still supported?
 
@@ -251,7 +251,7 @@ Yes. `connect`, `mapStateToProps`, and `mapDispatchToProps` still work in React-
 - Connected components anywhere in the tree are fine and were always fine. "Only connect the top component" was early advice that Dan Abramov withdrew; more, smaller subscribed components generally perform better than a few large ones. The same is true for `useSelector`.
 - `connect` and the hooks can be mixed in one app. Migrate a component at a time.
 
-The [React-Redux `connect` API docs](https://react-redux.js.org/api/connect) and the [Connect tutorial](https://react-redux.js.org/tutorials/connect) cover the full API.
+The [React-Redux `connect` API docs](/react-redux/api/connect) and the [Connect tutorial](/react-redux/tutorials/connect) cover the full API.
 
 </details>
 

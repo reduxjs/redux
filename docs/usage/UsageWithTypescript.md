@@ -38,15 +38,15 @@ There are multiple possible approaches to type checking Redux code. **This page 
 
 We assume that a typical Redux project is using Redux Toolkit and React Redux together.
 
-[Redux Toolkit](https://redux-toolkit.js.org) (RTK) is the standard approach for writing modern Redux logic. RTK is already written in TypeScript, and its API is designed to provide a good experience for TypeScript usage.
+[Redux Toolkit](/toolkit) (RTK) is the standard approach for writing modern Redux logic. RTK is already written in TypeScript, and its API is designed to provide a good experience for TypeScript usage.
 
-[React Redux](https://react-redux.js.org) is also written in TypeScript and ships its own type definitions, so no separate `@types` package is needed. In addition to typing the library functions, the types also export some helpers to make it easier to write typesafe interfaces between your Redux store and your React components.
+[React Redux](/react-redux) is also written in TypeScript and ships its own type definitions, so no separate `@types` package is needed. In addition to typing the library functions, the types also export some helpers to make it easier to write typesafe interfaces between your Redux store and your React components.
 
 The [Redux+TS project templates](https://github.com/reduxjs/redux-templates) come with a working example of these patterns already configured.
 
 ### Define Root State and Dispatch Types
 
-Using [configureStore](https://redux-toolkit.js.org/api/configureStore) should not need any additional typings. You will, however, want to extract the `RootState` type and the `Dispatch` type so that they can be referenced as needed. Inferring these types from the store itself means that they correctly update as you add more state slices or modify middleware settings.
+Using [configureStore](/toolkit/api/configureStore) should not need any additional typings. You will, however, want to extract the `RootState` type and the `Dispatch` type so that they can be referenced as needed. Inferring these types from the store itself means that they correctly update as you add more state slices or modify middleware settings.
 
 Since those are types, it's safe to export them directly from your store setup file such as `app/store.ts` and import them directly into other files.
 
@@ -81,7 +81,7 @@ While it's possible to import the `RootState` and `AppDispatch` types into each 
 
 Since these are actual variables, not types, it's important to define them in a separate file such as `app/hooks.ts`, not the store setup file. This allows you to import them into any component file that needs to use the hooks, and avoids potential circular import dependency issues.
 
-Each of the React Redux hooks has a `.withTypes()` method (added in React Redux v9.1.0) that returns a copy of the hook with the given types built in, analogous to the [`.withTypes`](https://redux-toolkit.js.org/usage/usage-with-typescript#defining-a-pre-typed-createasyncthunk) method on Redux Toolkit's `createAsyncThunk`:
+Each of the React Redux hooks has a `.withTypes()` method (added in React Redux v9.1.0) that returns a copy of the hook with the given types built in, analogous to the [`.withTypes`](/toolkit/usage/usage-with-typescript#defining-a-pre-typed-createasyncthunk) method on Redux Toolkit's `createAsyncThunk`:
 
 ```ts title="app/hooks.ts"
 import { useDispatch, useSelector, useStore } from 'react-redux'
@@ -352,9 +352,9 @@ Don't forget that **the default `useDispatch` hook does not know about thunks**,
 
 ## Usage with React Redux
 
-While [React Redux](https://react-redux.js.org) is a separate library from Redux itself, it is commonly used with React.
+While [React Redux](/react-redux) is a separate library from Redux itself, it is commonly used with React.
 
-For a complete guide on how to correctly use React Redux with TypeScript, see **[the "Static Typing" page in the React Redux docs](https://react-redux.js.org/using-react-redux/static-typing)**. This section will highlight the standard patterns.
+For a complete guide on how to correctly use React Redux with TypeScript, see **[the "Static Typing" page in the React Redux docs](/react-redux/using-react-redux/usage-with-typescript)**. This section will highlight the standard patterns.
 
 React Redux ships its own type definitions as part of the `react-redux` package, so there is nothing extra to install.
 
@@ -394,11 +394,11 @@ However, prefer creating a pre-typed `useAppDispatch` hook with the correct type
 
 ### Typing the `connect` higher order component
 
-If you are still using the legacy `connect` API, use the `ConnectedProps<T>` type exported by `react-redux` to infer the props that `connect` injects. See [Static Typing with `connect`](https://react-redux.js.org/using-react-redux/usage-with-typescript#typing-the-connect-higher-order-component) in the React Redux docs for the full pattern.
+If you are still using the legacy `connect` API, use the `ConnectedProps<T>` type exported by `react-redux` to infer the props that `connect` injects. See [Static Typing with `connect`](/react-redux/using-react-redux/usage-with-typescript#typing-the-connect-higher-order-component) in the React Redux docs for the full pattern.
 
 ## Usage with Redux Toolkit
 
-The [Standard Redux Toolkit Project Setup with TypeScript](#standard-redux-toolkit-project-setup-with-typescript) section already covered the normal usage patterns for `configureStore` and `createSlice`, and the [Redux Toolkit "Usage with TypeScript" page](https://redux-toolkit.js.org/usage/usage-with-typescript) covers all of the RTK APIs in detail.
+The [Standard Redux Toolkit Project Setup with TypeScript](#standard-redux-toolkit-project-setup-with-typescript) section already covered the normal usage patterns for `configureStore` and `createSlice`, and the [Redux Toolkit "Usage with TypeScript" page](/toolkit/usage/usage-with-typescript) covers all of the RTK APIs in detail.
 
 Here are some additional typing patterns you will commonly see when using RTK.
 
@@ -653,8 +653,8 @@ In addition, if you're using `createSlice`, you already know that all actions de
 For further information, see these additional resources:
 
 - Redux library documentation:
-  - [React Redux docs: Usage with TypeScript](https://react-redux.js.org/using-react-redux/usage-with-typescript): Examples of how to use the React Redux APIs with TypeScript
-  - [Redux Toolkit docs: Usage with TypeScript](https://redux-toolkit.js.org/usage/usage-with-typescript): Examples of how to use the Redux Toolkit APIs with TypeScript
+  - [React Redux docs: Usage with TypeScript](/react-redux/using-react-redux/usage-with-typescript): Examples of how to use the React Redux APIs with TypeScript
+  - [Redux Toolkit docs: Usage with TypeScript](/toolkit/usage/usage-with-typescript): Examples of how to use the Redux Toolkit APIs with TypeScript
 - React + TypeScript guides:
   - [React+TypeScript Cheatsheet](https://github.com/typescript-cheatsheets/react): a comprehensive guide to using React with TypeScript
 - Other articles:

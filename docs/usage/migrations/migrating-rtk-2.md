@@ -112,7 +112,7 @@ We now export an `UnknownAction` type, which treats all fields other than `actio
 
 `AnyAction` still exists for compatibility, but has been marked as deprecated.
 
-Note that [Redux Toolkit's action creators have a `.match()` method](https://redux-toolkit.js.org/api/createAction#actioncreatormatch) that acts as a useful type guard:
+Note that [Redux Toolkit's action creators have a `.match()` method](/toolkit/api/createAction#actioncreatormatch) that acts as a useful type guard:
 
 ```ts
 if (todoAdded.match(someUnknownAction)) {
@@ -215,7 +215,7 @@ createSlice({
 
 To simplify upgrading codebases, we've published a set of codemods that will automatically transform the deprecated "object" syntax into the equivalent "builder" syntax.
 
-The codemods package is available on NPM as [`@reduxjs/rtk-codemods`](https://www.npmjs.com/package/@reduxjs/rtk-codemods). More details are available [here](https://redux-toolkit.js.org/api/codemods).
+The codemods package is available on NPM as [`@reduxjs/rtk-codemods`](https://www.npmjs.com/package/@reduxjs/rtk-codemods). More details are available [here](/toolkit/api/codemods).
 
 To run the codemods against your codebase, run `npx @reduxjs/rtk-codemods <TRANSFORM NAME> path/of/files/ or/some**/*glob.js.`
 
@@ -452,7 +452,7 @@ These features are new in Redux Toolkit 2.0, and help cover additional use cases
 
 The Redux core has always included `combineReducers`, which takes an object full of "slice reducer" functions and generates a reducer that calls those slice reducers. RTK's `createSlice` generates slice reducers + associated action creators, and we've taught the pattern of exporting individual action creators as named exports and the slice reducer as a default export. Meanwhile, we've never had official support for lazy-loading reducers, although we've had [sample code for some "reducer injection" patterns in our docs](https://redux.js.org/usage/code-splitting).
 
-This release includes a new [`combineSlices`](https://redux-toolkit.js.org/api/combineSlices) API that is designed to enable lazy-loading of reducers at runtime. It accepts individual slices or an object full of slices as arguments, and automatically calls `combineReducers` using the `sliceObject.name` field as the key for each state field. The generated reducer function has an additional `.inject()` method attached that can be used to dynamically inject additional slices at runtime. It also includes a `.withLazyLoadedSlices()` method that can be used to generate TS types for reducers that will be added later. See [#2776](https://github.com/reduxjs/redux-toolkit/issues/2776) for the original discussion around this idea.
+This release includes a new [`combineSlices`](/toolkit/api/combineSlices) API that is designed to enable lazy-loading of reducers at runtime. It accepts individual slices or an object full of slices as arguments, and automatically calls `combineReducers` using the `sliceObject.name` field as the key for each state field. The generated reducer function has an additional `.inject()` method attached that can be used to dynamically inject additional slices at runtime. It also includes a `.withLazyLoadedSlices()` method that can be used to generate TS types for reducers that will be added later. See [#2776](https://github.com/reduxjs/redux-toolkit/issues/2776) for the original discussion around this idea.
 
 For now, we are not building this into `configureStore`, so you'll need to call `const rootReducer = combineSlices(.....)` yourself and pass that to `configureStore({reducer: rootReducer})`.
 
@@ -519,7 +519,7 @@ expect(combinedReducer(undefined, dummyAction()).number).toBe(
 
 ### `selectors` field in `createSlice`
 
-The existing `createSlice` API now has support for defining [`selectors`](https://redux-toolkit.js.org/api/createSlice#selectors) directly as part of the slice. By default, these will be generated with the assumption that the slice is mounted in the root state using `slice.name` as the field, such as `name: "todos"` -> `rootState.todos`. Additionally, there's now a `slice.selectSlice` method that does that default root state lookup.
+The existing `createSlice` API now has support for defining [`selectors`](/toolkit/api/createSlice#selectors) directly as part of the slice. By default, these will be generated with the assumption that the slice is mounted in the root state using `slice.name` as the field, such as `name: "todos"` -> `rootState.todos`. Additionally, there's now a `slice.selectSlice` method that does that default root state lookup.
 
 You can call `sliceObject.getSelectors(selectSliceState)` to generate the selectors with an alternate location, similar to how `entityAdapter.getSelectors()` works.
 
@@ -592,7 +592,7 @@ We've _wanted_ to include a way to define thunks directly inside of `createSlice
 
 We've settled on these compromises:
 
-- **In order to create async thunks with `createSlice`, you specifically need to [set up a custom version of `createSlice` that has access to `createAsyncThunk`](https://redux-toolkit.js.org/api/createSlice#createasyncthunk)**.
+- **In order to create async thunks with `createSlice`, you specifically need to [set up a custom version of `createSlice` that has access to `createAsyncThunk`](/toolkit/api/createSlice#createasyncthunk)**.
 - You can declare thunks inside of `createSlice.reducers`, by using a "creator callback" syntax for the `reducers` field that is similar to the `build` callback syntax in RTK Query's `createApi` (using typed functions to create fields in an object). Doing this does look a bit different than the existing "object" syntax for the `reducers` field, but is still fairly similar.
 - You can customize _some_ of the types for thunks inside of `createSlice`, but you _cannot_ customize the `state` or `dispatch` types. If those are needed, you can manually do an `as` cast, like `getState() as RootState`.
 
@@ -662,7 +662,7 @@ export const { addTodo, deleteTodo, fetchTodo } = todosSlice.actions
 
 #### Codemod
 
-**Using the new callback syntax is entirely optional (the object syntax is still standard)**, but an existing slice would need to be converted before it can take advantage of the new capabilities this syntax provides. To make this easier, a [codemod](https://redux-toolkit.js.org/api/codemods) is provided.
+**Using the new callback syntax is entirely optional (the object syntax is still standard)**, but an existing slice would need to be converted before it can take advantage of the new capabilities this syntax provides. To make this easier, a [codemod](/toolkit/api/codemods) is provided.
 
 ```sh
 npx @reduxjs/rtk-codemods createSliceReducerBuilder ./src/features/todos/slice.ts
@@ -672,7 +672,7 @@ npx @reduxjs/rtk-codemods createSliceReducerBuilder ./src/features/todos/slice.t
 
 A Redux store's middleware pipeline is fixed at store creation time and can't be changed later. We _have_ seen ecosystem libraries that tried to allow dynamically adding and removing middleware, potentially useful for things like code splitting.
 
-This is a relatively niche use case, but we've built [our own version of a "dynamic middleware" middleware](https://redux-toolkit.js.org/api/createDynamicMiddleware). Add it to the Redux store at setup time, and it lets you add middleware later at runtime. It also comes with a [React hook integration that will automatically add a middleware to the store and return the updated dispatch method.](https://redux-toolkit.js.org/api/createDynamicMiddleware#react-integration).
+This is a relatively niche use case, but we've built [our own version of a "dynamic middleware" middleware](/toolkit/api/createDynamicMiddleware). Add it to the Redux store at setup time, and it lets you add middleware later at runtime. It also comes with a [React hook integration that will automatically add a middleware to the store and return the updated dispatch method.](/toolkit/api/createDynamicMiddleware#react-integration).
 
 ```ts
 import { createDynamicMiddleware, configureStore } from '@reduxjs/toolkit'
@@ -699,7 +699,7 @@ We've updated `configureStore` to add the `autoBatchEnhancer` to the store setup
 
 ### `entityAdapter.getSelectors` accepts a `createSelector` function
 
-[`entityAdapter.getSelectors()`](https://redux-toolkit.js.org/api/createEntityAdapter#selector-functions) now accepts an options object as its second argument. This allows you to pass in your own preferred `createSelector` method, which will be used to memoize the generated selectors. This could be useful if you want to use one of Reselect's new alternate memoizers, or some other memoization library with an equivalent signature.
+[`entityAdapter.getSelectors()`](/toolkit/api/createEntityAdapter#selector-functions) now accepts an options object as its second argument. This allows you to pass in your own preferred `createSelector` method, which will be used to memoize the generated selectors. This could be useful if you want to use one of Reselect's new alternate memoizers, or some other memoization library with an equivalent signature.
 
 ### Immer 10.0
 

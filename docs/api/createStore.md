@@ -14,7 +14,7 @@ There should only be a single store in your app.
 
 :::danger
 
-**`createStore` is deprecated.** Use Redux Toolkit's [`configureStore`](https://redux-toolkit.js.org/api/configureStore) instead, which wraps `createStore` with a better default setup. `createStore` still works and will not be removed; see [Deprecation and `legacy_createStore`](#deprecation-and-alternate-legacy_createstore-export) below for details and [Migrating to Modern Redux](../usage/migrating-to-modern-redux.mdx) for how to update existing code.
+**`createStore` is deprecated.** Use Redux Toolkit's [`configureStore`](/toolkit/api/configureStore) instead, which wraps `createStore` with a better default setup. `createStore` still works and will not be removed; see [Deprecation and `legacy_createStore`](#deprecation-and-alternate-legacy_createstore-export) below for details and [Migrating to Modern Redux](../usage/migrating-to-modern-redux.mdx) for how to update existing code.
 
 :::
 
