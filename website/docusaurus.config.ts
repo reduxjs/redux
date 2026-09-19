@@ -29,7 +29,19 @@ const config: Config = {
       innerHTML: `import('/pagefind/pagefind.js').then(m => { window.pagefind = m }).catch(() => {})`
     }
   ],
-  themes: [require.resolve('@getcanary/docusaurus-theme-search-pagefind')],
+  themes: [
+    [
+      require.resolve('@getcanary/docusaurus-theme-search-pagefind'),
+      {
+        // Search tabs match picomatch patterns against `hostname + pathname`
+        tabs: [
+          { name: 'All', pattern: '**/*' },
+          { name: 'Redux', pattern: '!**/react-redux/**' },
+          { name: 'React Redux', pattern: '**/react-redux/**' }
+        ]
+      }
+    ]
+  ],
   themeConfig: {
     tableOfContents: {
       minHeadingLevel: 2,
@@ -50,6 +62,20 @@ const config: Config = {
         src: 'img/redux.svg'
       },
       items: [
+        {
+          label: 'Libraries',
+          type: 'dropdown',
+          position: 'left',
+          items: [
+            { label: 'Redux', to: '/' },
+            {
+              label: 'React Redux',
+              to: 'react-redux/introduction/getting-started'
+            },
+            { label: 'Redux Toolkit', href: 'https://redux-toolkit.js.org' },
+            { label: 'Reselect', href: 'https://reselect.js.org' }
+          ]
+        },
         {
           label: 'Getting Started',
           to: 'introduction/getting-started',
@@ -115,6 +141,18 @@ const config: Config = {
               type: 'doc',
               to: 'api/api-reference'
             }
+          ]
+        },
+        {
+          title: 'Libraries',
+          items: [
+            { label: 'Redux', to: '/' },
+            {
+              label: 'React Redux',
+              to: 'react-redux/introduction/getting-started'
+            },
+            { label: 'Redux Toolkit', href: 'https://redux-toolkit.js.org' },
+            { label: 'Reselect', href: 'https://reselect.js.org' }
           ]
         },
         {
