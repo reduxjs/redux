@@ -6,6 +6,7 @@ description: 'The official Redux Essentials tutorial: learn how data flows in a 
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
+import { LiveExample } from '@site/src/components/LiveExample'
 
 :::tip What You'll Learn
 
@@ -41,19 +42,18 @@ The example app is not meant as a complete production-ready project. The goal is
 
 For this tutorial, we've created a pre-configured starter project that already has React and Redux set up, includes some default styling, and has a fake REST API that will allow us to write actual API requests in our app. You'll use this as the basis for writing the actual application code.
 
-To get started, you can open and fork this CodeSandbox:
+To get started, you can open and fork this StackBlitz project:
 
-<iframe
-  class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/ts-checkpoint-0-setup/?&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
-  title="redux-essentials-example-app"
-  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-></iframe>
+<LiveExample
+  repo="reduxjs/redux-essentials-example-app"
+  ref="sb-ts-checkpoint-0-setup"
+  file="src/main.tsx"
+  title="Redux Essentials: starter project"
+/>
 
-You can also [clone the same project from this Github repo](https://github.com/reduxjs/redux-essentials-example-app). The project is configured to use [Yarn 4](https://yarnpkg.com/) as the package manager, but you can use any package manager ([NPM](https://docs.npmjs.com/cli/v10), [PNPM](https://pnpm.io/), or [Bun](https://bun.sh/docs/cli/install)) as you prefer. After installing packages, you can start the local dev server with the `yarn dev` command.
+You can also [clone the same project from this Github repo](https://github.com/reduxjs/redux-essentials-example-app). The project is configured to use [pnpm](https://pnpm.io/) as the package manager, but you can use any package manager ([NPM](https://docs.npmjs.com/cli/v10), [Yarn](https://yarnpkg.com/), or [Bun](https://bun.sh/docs/cli/install)) as you prefer. After installing packages, you can start the local dev server with the `pnpm dev` command.
 
-If you'd like to see the final version of what we're going to build, you can check out [the **`tutorial-steps-ts` branch**](https://github.com/reduxjs/redux-essentials-example-app/tree/tutorial-steps-ts), or [look at the final version in this CodeSandbox](https://codesandbox.io/s/github/reduxjs/redux-essentials-example-app/tree/tutorial-steps-ts).
+If you'd like to see the final version of what we're going to build, you can check out [the **`tutorial-steps-ts` branch**](https://github.com/reduxjs/redux-essentials-example-app/tree/tutorial-steps-ts), or [open the final version on StackBlitz](https://stackblitz.com/github/reduxjs/redux-essentials-example-app/tree/sb-ts-checkpoint-6-rtkqConversion).
 
 > We'd like to thank [Tania Rascia](https://www.taniarascia.com/), whose [Using Redux with React](https://www.taniarascia.com/redux-react-guide/) tutorial helped inspire the example in this page. It also uses her [Primitive UI CSS starter](https://taniarascia.github.io/primitive/) for styling.
 
@@ -424,7 +424,7 @@ interface AddPostFormElements extends HTMLFormElement {
 }
 
 export const AddPostForm = () => {
-  const handleSubmit = (e: React.FormEvent<AddPostFormElements>) => {
+  const handleSubmit = (e: React.SubmitEvent<AddPostFormElements>) => {
     // Prevent server submission
     e.preventDefault()
 
@@ -584,7 +584,7 @@ export const AddPostForm = () => {
 
   // highlight-end
 
-  const handleSubmit = (e: React.FormEvent<AddPostFormElements>) => {
+  const handleSubmit = (e: React.SubmitEvent<AddPostFormElements>) => {
     // Prevent server submission
     e.preventDefault()
 
@@ -657,13 +657,12 @@ Remember, **the Redux store should only contain data that's considered "global" 
 
 We've set up the basics of a Redux app - store, slice with reducers, and UI to dispatch actions. Here's what the app looks like so far:
 
-<iframe
-  class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/ts-checkpoint-1-postAdded?fontsize=14&hidenavigation=1&module=%2fsrc%2Ffeatures%2Fposts%2FpostsSlice.ts&theme=dark&runonclick=1"
-  title="redux-essentials-example"
-  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-></iframe>
+<LiveExample
+  repo="reduxjs/redux-essentials-example-app"
+  ref="sb-ts-checkpoint-1-postAdded"
+  file="src/features/posts/postsSlice.ts"
+  title="Redux Essentials: end of Part 3"
+/>
 
 Let's recap what you've learned in this section:
 
