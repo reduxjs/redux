@@ -2,7 +2,10 @@
   base    = "website"
   publish = "website/build"
   command = "cd ../docs && pnpm install --frozen-lockfile && cd ../website && pnpm install --frozen-lockfile && pnpm fetch-docs --force && pnpm build && cp _redirects ./build"
-  ignore  = "git diff --quiet HEAD^ HEAD -- ../docs/ ."
+  # Skip the build when nothing under docs/, website/, or this file changed since
+  # the last build of this branch. Builds triggered by a build hook (used by the
+  # other library repos when their docs change) ignore this command entirely.
+  ignore  = "[ \"$CACHED_COMMIT_REF\" = \"$COMMIT_REF\" ] && exit 1; git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- ../docs/ . ../netlify.toml"
 
 [build.environment]
 # pnpm 11 requires Node 22.13 or newer.
