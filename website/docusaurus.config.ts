@@ -4,6 +4,7 @@ import {
   transpileCodeblocks
 } from './plugins/remark-typescript-tools/index.js'
 import type { Options, ThemeConfig } from '@docusaurus/preset-classic'
+import type { Options as DocsOptions } from '@docusaurus/plugin-content-docs'
 import type { Config } from '@docusaurus/types'
 import type { Options as UmamiOptions } from '@dipakparmar/docusaurus-plugin-umami'
 
@@ -211,6 +212,22 @@ const config: Config = {
     ]
   ],
   plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'react-redux',
+        path: 'external/react-redux/docs',
+        routeBasePath: 'react-redux',
+        sidebarPath: require.resolve('./sidebars.react-redux.ts'),
+        include: [
+          '{api,introduction,using-react-redux,tutorials}/*.{md,mdx}',
+          'troubleshooting.md'
+        ],
+        editUrl: ({ docPath }) =>
+          `https://github.com/reduxjs/react-redux/edit/master/docs/${docPath}`,
+        showLastUpdateTime: false
+      } satisfies DocsOptions
+    ],
     [
       '@dipakparmar/docusaurus-plugin-umami',
       {
