@@ -286,3 +286,13 @@ details.detailed-explanation p {
   max-width: 900px;
   margin: 1rem auto 2rem;
 }
+
+/* library switcher in the navbar */
+.navbar__library-prefix {
+  opacity: 0.7;
+  font-weight: normal;
+}
+
+.navbar__library-name {
+  font-weight: 600;
+}

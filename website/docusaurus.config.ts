@@ -4,6 +4,7 @@ import {
   transpileCodeblocks
 } from './plugins/remark-typescript-tools/index.js'
 import type { Options, ThemeConfig } from '@docusaurus/preset-classic'
+import type { Options as DocsOptions } from '@docusaurus/plugin-content-docs'
 import type { Config } from '@docusaurus/types'
 import type { Options as UmamiOptions } from '@dipakparmar/docusaurus-plugin-umami'
 
@@ -16,6 +17,8 @@ const config: Config = {
   favicon: 'img/favicon/favicon.ico',
   organizationName: 'reduxjs',
   projectName: 'redux',
+  // RTK docs reference /img/usage/... from their own website/static
+  staticDirectories: ['static', 'external/redux-toolkit/website/static'],
   headTags: [
     {
       // Rspack (`future.v4.fasterByDefault`) bundles the dynamic
@@ -28,7 +31,21 @@ const config: Config = {
       innerHTML: `import('/pagefind/pagefind.js').then(m => { window.pagefind = m }).catch(() => {})`
     }
   ],
-  themes: [require.resolve('@getcanary/docusaurus-theme-search-pagefind')],
+  themes: [
+    [
+      require.resolve('@getcanary/docusaurus-theme-search-pagefind'),
+      {
+        // Search tabs match picomatch patterns against `hostname + pathname`
+        tabs: [
+          { name: 'All', pattern: '**/*' },
+          { name: 'Redux', pattern: '!**/{react-redux,toolkit,reselect}/**' },
+          { name: 'Redux Toolkit', pattern: '**/toolkit/**' },
+          { name: 'React Redux', pattern: '**/react-redux/**' },
+          { name: 'Reselect', pattern: '**/reselect/**' }
+        ]
+      }
+    ]
+  ],
   themeConfig: {
     tableOfContents: {
       minHeadingLevel: 2,
@@ -49,6 +66,34 @@ const config: Config = {
         src: 'img/redux.svg'
       },
       items: [
+        {
+          // Rendered by src/components/LibraryDropdownNavbarItem.tsx, registered
+          // in src/theme/NavbarItem/ComponentTypes.tsx. Shows the current library.
+          type: 'custom-libraryDropdown',
+          position: 'left',
+          libraries: [
+            {
+              label: 'Redux',
+              to: 'introduction/getting-started',
+              routeBasePath: '/'
+            },
+            {
+              label: 'Redux Toolkit',
+              to: 'toolkit/introduction/getting-started',
+              routeBasePath: 'toolkit'
+            },
+            {
+              label: 'React Redux',
+              to: 'react-redux/introduction/getting-started',
+              routeBasePath: 'react-redux'
+            },
+            {
+              label: 'Reselect',
+              to: 'reselect/introduction/getting-started',
+              routeBasePath: 'reselect'
+            }
+          ]
+        },
         {
           label: 'Getting Started',
           to: 'introduction/getting-started',
@@ -114,6 +159,21 @@ const config: Config = {
               type: 'doc',
               to: 'api/api-reference'
             }
+          ]
+        },
+        {
+          title: 'Libraries',
+          items: [
+            { label: 'Redux', to: '/' },
+            {
+              label: 'Redux Toolkit',
+              to: 'toolkit/introduction/getting-started'
+            },
+            {
+              label: 'React Redux',
+              to: 'react-redux/introduction/getting-started'
+            },
+            { label: 'Reselect', to: 'reselect/introduction/getting-started' }
           ]
         },
         {
@@ -211,6 +271,117 @@ const config: Config = {
     ]
   ],
   plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'react-redux',
+        path: 'external/react-redux/docs',
+        routeBasePath: 'react-redux',
+        sidebarPath: require.resolve('./sidebars.react-redux.ts'),
+        include: [
+          '{api,introduction,using-react-redux,tutorials}/*.{md,mdx}',
+          'troubleshooting.md'
+        ],
+        editUrl: ({ docPath }) =>
+          `https://github.com/reduxjs/react-redux/edit/master/docs/${docPath}`,
+        showLastUpdateTime: false
+      } satisfies DocsOptions
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'toolkit',
+        path: 'external/redux-toolkit/docs',
+        routeBasePath: 'toolkit',
+        sidebarPath: require.resolve('./sidebars.toolkit.ts'),
+        include: [
+          '{api,assets,introduction,migrations,rtk-query,tutorials,usage}/**/*.{md,mdx}'
+        ],
+        editUrl: ({ docPath }) =>
+          `https://github.com/reduxjs/redux-toolkit/edit/master/docs/${docPath}`,
+        showLastUpdateTime: false,
+        remarkPlugins: [
+          [
+            linkDocblocks,
+            {
+              extractorSettings: {
+                tsconfig: resolve(
+                  __dirname,
+                  'external/redux-toolkit/docs/tsconfig.json'
+                ),
+                basedir: resolve(
+                  __dirname,
+                  'external/redux-toolkit/packages/toolkit/src'
+                ),
+                rootFiles: [
+                  'index.ts',
+                  'query/index.ts',
+                  'query/createApi.ts',
+                  'query/endpointDefinitions.ts',
+                  'query/react/index.ts',
+                  'query/react/ApiProvider.tsx',
+                  'query/core/buildMiddleware/cacheCollection.ts'
+                ]
+              }
+            }
+          ],
+          [
+            transpileCodeblocks,
+            {
+              compilerSettings: {
+                // RTK's own tsconfig. Its `paths` point at the unbuilt
+                // `packages/toolkit/dist`, so TypeScript falls back to
+                // normal resolution and finds `@reduxjs/toolkit` (and the
+                // docs' other devDependencies) in this site's node_modules.
+                tsconfig: resolve(
+                  __dirname,
+                  'external/redux-toolkit/docs/tsconfig.json'
+                ),
+                externalResolutions: {}
+              }
+            }
+          ]
+        ]
+      } satisfies DocsOptions
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'reselect',
+        path: 'external/reselect/website/docs',
+        routeBasePath: 'reselect',
+        sidebarPath: require.resolve('./sidebars.reselect.ts'),
+        editUrl: ({ docPath }) =>
+          `https://github.com/reduxjs/reselect/edit/master/website/docs/${docPath}`,
+        showLastUpdateTime: false
+      } satisfies DocsOptions
+    ],
+    // Reselect's docs import shared components as `@site/src/components/*`,
+    // which resolves against this site. Point those specifiers at the fetched
+    // Reselect copies instead. The resolver stops at the first matching alias
+    // key and Docusaurus registers `@site` itself, so these exact-match keys
+    // have to come before it; mutating the existing alias map is the only way
+    // to control that order.
+    function reselectComponentAliases() {
+      const components = resolve(
+        __dirname,
+        'external/reselect/website/src/components'
+      )
+      const aliases = Object.fromEntries(
+        ['InternalLinks', 'ExternalLinks', 'PackageManagerTabs'].map(name => [
+          `@site/src/components/${name}$`,
+          resolve(components, `${name}.tsx`)
+        ])
+      )
+      return {
+        name: 'reselect-component-aliases',
+        configureWebpack: config => {
+          config.resolve ??= {}
+          config.resolve.alias = { ...aliases, ...config.resolve.alias }
+          return {}
+        }
+      }
+    },
     [
       '@dipakparmar/docusaurus-plugin-umami',
       {
