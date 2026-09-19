@@ -87,12 +87,11 @@ const sidebars: SidebarsConfig = {
             'api/matching-utilities',
             'api/other-exports',
             'api/codemods',
-            // `/errors` on this site is the Redux core decoder; RTK's decoder is
-            // not ported yet, so link to the live RTK site for now.
+            // src/pages/toolkit/errors.tsx, reads external/redux-toolkit/errors.json
             {
               type: 'link',
               label: 'Error Messages',
-              href: 'https://redux-toolkit.js.org/errors',
+              href: '/toolkit/errors',
             },
           ],
         },
