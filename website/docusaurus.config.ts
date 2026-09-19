@@ -17,6 +17,8 @@ const config: Config = {
   favicon: 'img/favicon/favicon.ico',
   organizationName: 'reduxjs',
   projectName: 'redux',
+  // RTK docs reference /img/usage/... from their own website/static
+  staticDirectories: ['static', 'external/redux-toolkit/website/static'],
   headTags: [
     {
       // Rspack (`future.v4.fasterByDefault`) bundles the dynamic
@@ -36,7 +38,8 @@ const config: Config = {
         // Search tabs match picomatch patterns against `hostname + pathname`
         tabs: [
           { name: 'All', pattern: '**/*' },
-          { name: 'Redux', pattern: '!**/react-redux/**' },
+          { name: 'Redux', pattern: '!**/{react-redux,toolkit}/**' },
+          { name: 'Redux Toolkit', pattern: '**/toolkit/**' },
           { name: 'React Redux', pattern: '**/react-redux/**' }
         ]
       }
@@ -69,10 +72,13 @@ const config: Config = {
           items: [
             { label: 'Redux', to: '/' },
             {
+              label: 'Redux Toolkit',
+              to: 'toolkit/introduction/getting-started'
+            },
+            {
               label: 'React Redux',
               to: 'react-redux/introduction/getting-started'
             },
-            { label: 'Redux Toolkit', href: 'https://redux-toolkit.js.org' },
             { label: 'Reselect', href: 'https://reselect.js.org' }
           ]
         },
@@ -148,10 +154,13 @@ const config: Config = {
           items: [
             { label: 'Redux', to: '/' },
             {
+              label: 'Redux Toolkit',
+              to: 'toolkit/introduction/getting-started'
+            },
+            {
               label: 'React Redux',
               to: 'react-redux/introduction/getting-started'
             },
-            { label: 'Redux Toolkit', href: 'https://redux-toolkit.js.org' },
             { label: 'Reselect', href: 'https://reselect.js.org' }
           ]
         },
@@ -263,11 +272,52 @@ const config: Config = {
         ],
         editUrl: ({ docPath }) =>
           `https://github.com/reduxjs/react-redux/edit/master/docs/${docPath}`,
-        showLastUpdateTime: false
-      } satisfies DocsOptions
-    ],
-    [
-      '@dipakparmar/docusaurus-plugin-umami',
+          showLastUpdateTime: false
+        } satisfies DocsOptions
+      ],
+      [
+        '@docusaurus/plugin-content-docs',
+        {
+          id: 'toolkit',
+          path: 'external/redux-toolkit/docs',
+          routeBasePath: 'toolkit',
+          sidebarPath: require.resolve('./sidebars.toolkit.ts'),
+          include: [
+            '{api,assets,introduction,migrations,rtk-query,tutorials,usage}/**/*.{md,mdx}'
+          ],
+          editUrl: ({ docPath }) =>
+            `https://github.com/reduxjs/redux-toolkit/edit/master/docs/${docPath}`,
+          showLastUpdateTime: false,
+          remarkPlugins: [
+            [
+              linkDocblocks,
+              {
+                extractorSettings: {
+                  tsconfig: resolve(
+                    __dirname,
+                    'external/redux-toolkit/docs/tsconfig.json'
+                  ),
+                  basedir: resolve(
+                    __dirname,
+                    'external/redux-toolkit/packages/toolkit/src'
+                  ),
+                  rootFiles: [
+                    'index.ts',
+                    'query/index.ts',
+                    'query/createApi.ts',
+                    'query/endpointDefinitions.ts',
+                    'query/react/index.ts',
+                    'query/react/ApiProvider.tsx',
+                    'query/core/buildMiddleware/cacheCollection.ts'
+                  ]
+                }
+              }
+            ]
+          ]
+        } satisfies DocsOptions
+      ],
+      [
+        '@dipakparmar/docusaurus-plugin-umami',
       {
         websiteID: '4bb3bf09-7460-453f-857d-874d8a361cb6',
         analyticsDomain: 'redux-docs-umami.up.railway.app',
