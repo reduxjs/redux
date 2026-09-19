@@ -67,20 +67,31 @@ const config: Config = {
       },
       items: [
         {
-          label: 'Libraries',
-          type: 'dropdown',
+          // Rendered by src/components/LibraryDropdownNavbarItem.tsx, registered
+          // in src/theme/NavbarItem/ComponentTypes.tsx. Shows the current library.
+          type: 'custom-libraryDropdown',
           position: 'left',
-          items: [
-            { label: 'Redux', to: '/' },
+          libraries: [
+            {
+              label: 'Redux',
+              to: 'introduction/getting-started',
+              routeBasePath: '/'
+            },
             {
               label: 'Redux Toolkit',
-              to: 'toolkit/introduction/getting-started'
+              to: 'toolkit/introduction/getting-started',
+              routeBasePath: 'toolkit'
             },
             {
               label: 'React Redux',
-              to: 'react-redux/introduction/getting-started'
+              to: 'react-redux/introduction/getting-started',
+              routeBasePath: 'react-redux'
             },
-            { label: 'Reselect', to: 'reselect/introduction/getting-started' }
+            {
+              label: 'Reselect',
+              to: 'reselect/introduction/getting-started',
+              routeBasePath: 'reselect'
+            }
           ]
         },
         {
