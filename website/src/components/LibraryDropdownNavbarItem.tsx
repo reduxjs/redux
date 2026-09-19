@@ -1,4 +1,6 @@
 import React from 'react'
+import Link from '@docusaurus/Link'
+import useBaseUrl from '@docusaurus/useBaseUrl'
 import DropdownNavbarItem from '@theme/NavbarItem/DropdownNavbarItem'
 import type { Props as DropdownProps } from '@theme/NavbarItem/DropdownNavbarItem'
 import {
@@ -26,6 +28,7 @@ export default function LibraryDropdownNavbarItem({
   ...props
 }: Props): React.ReactNode {
   const current = useCurrentLibrary(libraries)
+  const currentUrl = useBaseUrl(current.to)
 
   const otherPrefixes = libraries
     .map(lib => normalizeRouteBasePath(lib.routeBasePath))
@@ -43,11 +46,20 @@ export default function LibraryDropdownNavbarItem({
   })
 
   return (
-    <DropdownNavbarItem
-      {...props}
-      className="navbar__library-dropdown"
-      html={`<span class="navbar__library-prefix">Library:</span> <span class="navbar__library-name">${current.label}</span>`}
-      items={items}
-    />
+    <>
+      <DropdownNavbarItem
+        {...props}
+        className="navbar__library-dropdown"
+        html={`<span class="navbar__library-prefix">Library:</span> <span class="navbar__library-name">${current.label}</span>`}
+        items={items}
+      />
+      {/* Infima hides every navbar__item below 997px, so the closed mobile bar
+          gets its own label; the site title is hidden there instead. */}
+      {!props.mobile && (
+        <Link className="navbar__library-mobile" to={currentUrl}>
+          {current.label}
+        </Link>
+      )}
+    </>
   )
 }

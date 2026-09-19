@@ -291,8 +291,43 @@ details.detailed-explanation p {
 .navbar__library-prefix {
   opacity: 0.7;
   font-weight: normal;
+  margin-right: 0.3em;
 }
 
 .navbar__library-name {
   font-weight: 600;
+}
+
+.navbar__library-mobile {
+  display: none;
+}
+
+@media screen and (max-width: 996px) {
+  .navbar__title {
+    display: none;
+  }
+
+  .navbar__library-mobile {
+    display: inline-block;
+    color: var(--ifm-navbar-link-color);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .navbar__library-mobile:hover {
+    text-decoration: none;
+    color: var(--ifm-navbar-link-hover-color);
+  }
+}
+
+.navbar-sidebar__library {
+  display: block;
+  padding: 0.5rem 1rem 0;
+  color: var(--ifm-font-base-color);
+}
+
+.navbar-sidebar__library:hover {
+  text-decoration: none;
 }

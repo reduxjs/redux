@@ -1,5 +1,6 @@
 import { useLocation } from '@docusaurus/router'
 import useBaseUrl from '@docusaurus/useBaseUrl'
+import { useThemeConfig } from '@docusaurus/theme-common'
 
 export interface LibraryEntry {
   readonly label: string
@@ -24,6 +25,21 @@ export interface LibraryNavbarItem {
 export function normalizeRouteBasePath(routeBasePath: string): string {
   const trimmed = routeBasePath.replace(/^\/+|\/+$/g, '')
   return trimmed === '' ? '/' : `/${trimmed}/`
+}
+
+const EMPTY: readonly LibraryEntry[] = []
+
+/**
+ * Reads the `libraries` list off the `custom-libraryDropdown` navbar item, for
+ * theme components that are not rendered as navbar items themselves.
+ */
+export function useLibraries(): readonly LibraryEntry[] {
+  const { navbar } = useThemeConfig()
+  const dropdown = navbar.items.find(
+    item => item.type === 'custom-libraryDropdown'
+  )
+  const libraries: unknown = dropdown?.libraries
+  return Array.isArray(libraries) ? (libraries as LibraryEntry[]) : EMPTY
 }
 
 /**
