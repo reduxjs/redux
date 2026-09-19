@@ -7,6 +7,80 @@ import type { Options, ThemeConfig } from '@docusaurus/preset-classic'
 import type { Options as DocsOptions } from '@docusaurus/plugin-content-docs'
 import type { Config } from '@docusaurus/types'
 import type { Options as UmamiOptions } from '@dipakparmar/docusaurus-plugin-umami'
+import type { LibraryEntry } from './src/components/useCurrentLibrary'
+
+// One entry per docs plugin instance. Read by the two custom navbar items in
+// src/components/ (LibraryDropdownNavbarItem, LibraryLinksNavbarItem), which
+// are registered in src/theme/NavbarItem/ComponentTypes.tsx. `navbarItems`
+// are the right-hand links shown while that library's pages are active.
+const libraries: LibraryEntry[] = [
+  {
+    label: 'Redux',
+    to: 'introduction/getting-started',
+    routeBasePath: '/',
+    navbarItems: [
+      { label: 'Getting Started', to: 'introduction/getting-started' },
+      {
+        label: 'Tutorial',
+        to: 'tutorials/essentials/part-1-overview-concepts'
+      },
+      { label: 'Usage Guide', type: 'doc', docId: 'usage/index' },
+      { label: 'API', type: 'doc', docId: 'api/api-reference' },
+      { label: 'FAQ', to: 'faq' },
+      { label: 'Best Practices', type: 'doc', docId: 'style-guide/style-guide' },
+      { label: 'GitHub', href: 'https://www.github.com/reduxjs/redux' },
+      {
+        label: 'Need help?',
+        to: 'introduction/getting-started#help-and-discussion'
+      }
+    ]
+  },
+  {
+    label: 'Redux Toolkit',
+    to: 'toolkit/introduction/getting-started',
+    routeBasePath: 'toolkit',
+    navbarItems: [
+      { label: 'Getting Started', to: 'toolkit/introduction/getting-started' },
+      { label: 'Tutorials', to: 'toolkit/tutorials/overview' },
+      { label: 'Usage Guide', to: 'toolkit/usage/usage-guide' },
+      { label: 'API', to: 'toolkit/api/configureStore' },
+      { label: 'RTK Query', to: 'toolkit/rtk-query/overview' },
+      { label: 'GitHub', href: 'https://github.com/reduxjs/redux-toolkit' }
+    ]
+  },
+  {
+    label: 'React Redux',
+    to: 'react-redux/introduction/getting-started',
+    routeBasePath: 'react-redux',
+    navbarItems: [
+      {
+        label: 'Getting Started',
+        to: 'react-redux/introduction/getting-started'
+      },
+      { label: 'Tutorial', to: 'react-redux/tutorials/quick-start' },
+      {
+        label: 'Using React Redux',
+        to: 'react-redux/using-react-redux/connect-mapstate'
+      },
+      { label: 'API', to: 'react-redux/api/hooks' },
+      { label: 'GitHub', href: 'https://www.github.com/reduxjs/react-redux' },
+      {
+        label: 'Need help?',
+        to: 'react-redux/introduction/getting-started#help-and-discussion'
+      }
+    ]
+  },
+  {
+    label: 'Reselect',
+    to: 'reselect/introduction/getting-started',
+    routeBasePath: 'reselect',
+    navbarItems: [
+      { label: 'Getting Started', to: 'reselect/introduction/getting-started' },
+      { label: 'API', to: 'reselect/api/createSelector' },
+      { label: 'GitHub', href: 'https://www.github.com/reduxjs/reselect' }
+    ]
+  }
+]
 
 const config: Config = {
   title: 'Redux',
@@ -67,71 +141,14 @@ const config: Config = {
       },
       items: [
         {
-          // Rendered by src/components/LibraryDropdownNavbarItem.tsx, registered
-          // in src/theme/NavbarItem/ComponentTypes.tsx. Shows the current library.
           type: 'custom-libraryDropdown',
           position: 'left',
-          libraries: [
-            {
-              label: 'Redux',
-              to: 'introduction/getting-started',
-              routeBasePath: '/'
-            },
-            {
-              label: 'Redux Toolkit',
-              to: 'toolkit/introduction/getting-started',
-              routeBasePath: 'toolkit'
-            },
-            {
-              label: 'React Redux',
-              to: 'react-redux/introduction/getting-started',
-              routeBasePath: 'react-redux'
-            },
-            {
-              label: 'Reselect',
-              to: 'reselect/introduction/getting-started',
-              routeBasePath: 'reselect'
-            }
-          ]
+          libraries
         },
         {
-          label: 'Getting Started',
-          to: 'introduction/getting-started',
-          position: 'right'
-        },
-        {
-          label: 'Tutorial',
-          to: 'tutorials/essentials/part-1-overview-concepts',
-          position: 'right'
-        },
-        {
-          label: 'Usage Guide',
-          type: 'doc',
-          docId: 'usage/index',
-          position: 'right'
-        },
-        {
-          label: 'API',
-          type: 'doc',
-          docId: 'api/api-reference',
-          position: 'right'
-        },
-        { label: 'FAQ', to: 'faq', position: 'right' },
-        {
-          label: 'Best Practices',
-          type: 'doc',
-          docId: 'style-guide/style-guide',
-          position: 'right'
-        },
-        {
-          label: 'GitHub',
-          href: 'https://www.github.com/reduxjs/redux',
-          position: 'right'
-        },
-        {
-          label: 'Need help?',
-          to: 'introduction/getting-started#help-and-discussion',
-          position: 'right'
+          type: 'custom-libraryLinks',
+          position: 'right',
+          libraries
         }
       ]
     },
