@@ -1,0 +1,38 @@
+.container {
+  margin: 1rem 0 1.5rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--ifm-color-emphasis-100);
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+  font-size: 0.875rem;
+}
+
+.title {
+  font-weight: 600;
+}
+
+.links {
+  display: flex;
+  gap: 1rem;
+}
+
+.frame {
+  display: block;
+  width: 100%;
+  border: 0;
+}
+
+.fallback {
+  padding: 1rem 0.75rem;
+  font-size: 0.875rem;
+}
