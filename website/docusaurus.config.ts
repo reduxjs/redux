@@ -272,52 +272,68 @@ const config: Config = {
         ],
         editUrl: ({ docPath }) =>
           `https://github.com/reduxjs/react-redux/edit/master/docs/${docPath}`,
-          showLastUpdateTime: false
-        } satisfies DocsOptions
-      ],
-      [
-        '@docusaurus/plugin-content-docs',
-        {
-          id: 'toolkit',
-          path: 'external/redux-toolkit/docs',
-          routeBasePath: 'toolkit',
-          sidebarPath: require.resolve('./sidebars.toolkit.ts'),
-          include: [
-            '{api,assets,introduction,migrations,rtk-query,tutorials,usage}/**/*.{md,mdx}'
-          ],
-          editUrl: ({ docPath }) =>
-            `https://github.com/reduxjs/redux-toolkit/edit/master/docs/${docPath}`,
-          showLastUpdateTime: false,
-          remarkPlugins: [
-            [
-              linkDocblocks,
-              {
-                extractorSettings: {
-                  tsconfig: resolve(
-                    __dirname,
-                    'external/redux-toolkit/docs/tsconfig.json'
-                  ),
-                  basedir: resolve(
-                    __dirname,
-                    'external/redux-toolkit/packages/toolkit/src'
-                  ),
-                  rootFiles: [
-                    'index.ts',
-                    'query/index.ts',
-                    'query/createApi.ts',
-                    'query/endpointDefinitions.ts',
-                    'query/react/index.ts',
-                    'query/react/ApiProvider.tsx',
-                    'query/core/buildMiddleware/cacheCollection.ts'
-                  ]
-                }
+        showLastUpdateTime: false
+      } satisfies DocsOptions
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'toolkit',
+        path: 'external/redux-toolkit/docs',
+        routeBasePath: 'toolkit',
+        sidebarPath: require.resolve('./sidebars.toolkit.ts'),
+        include: [
+          '{api,assets,introduction,migrations,rtk-query,tutorials,usage}/**/*.{md,mdx}'
+        ],
+        editUrl: ({ docPath }) =>
+          `https://github.com/reduxjs/redux-toolkit/edit/master/docs/${docPath}`,
+        showLastUpdateTime: false,
+        remarkPlugins: [
+          [
+            linkDocblocks,
+            {
+              extractorSettings: {
+                tsconfig: resolve(
+                  __dirname,
+                  'external/redux-toolkit/docs/tsconfig.json'
+                ),
+                basedir: resolve(
+                  __dirname,
+                  'external/redux-toolkit/packages/toolkit/src'
+                ),
+                rootFiles: [
+                  'index.ts',
+                  'query/index.ts',
+                  'query/createApi.ts',
+                  'query/endpointDefinitions.ts',
+                  'query/react/index.ts',
+                  'query/react/ApiProvider.tsx',
+                  'query/core/buildMiddleware/cacheCollection.ts'
+                ]
               }
-            ]
+            }
+          ],
+          [
+            transpileCodeblocks,
+            {
+              compilerSettings: {
+                // RTK's own tsconfig. Its `paths` point at the unbuilt
+                // `packages/toolkit/dist`, so TypeScript falls back to
+                // normal resolution and finds `@reduxjs/toolkit` (and the
+                // docs' other devDependencies) in this site's node_modules.
+                tsconfig: resolve(
+                  __dirname,
+                  'external/redux-toolkit/docs/tsconfig.json'
+                ),
+                externalResolutions: {}
+              }
+            }
           ]
-        } satisfies DocsOptions
-      ],
-      [
-        '@dipakparmar/docusaurus-plugin-umami',
+        ]
+      } satisfies DocsOptions
+    ],
+    [
+      '@dipakparmar/docusaurus-plugin-umami',
       {
         websiteID: '4bb3bf09-7460-453f-857d-874d8a361cb6',
         analyticsDomain: 'redux-docs-umami.up.railway.app',
