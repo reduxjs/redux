@@ -54,7 +54,7 @@ This example includes tests.
 
 ### Project Templates
 
-The [`reduxjs/redux-templates`](https://github.com/reduxjs/redux-templates) repo contains Vite project templates for React + Redux Toolkit, in both JavaScript and TypeScript. These are the recommended starting point for a new Redux app.
+The [`reduxjs/redux-templates`](https://github.com/reduxjs/redux-templates) repo contains our official project templates for React + Redux Toolkit with TypeScript, including a Vite template and an Expo template. These are the recommended starting point for a new Redux app.
 
 ### Redux Essentials Example App
 
