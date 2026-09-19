@@ -38,9 +38,10 @@ const config: Config = {
         // Search tabs match picomatch patterns against `hostname + pathname`
         tabs: [
           { name: 'All', pattern: '**/*' },
-          { name: 'Redux', pattern: '!**/{react-redux,toolkit}/**' },
+          { name: 'Redux', pattern: '!**/{react-redux,toolkit,reselect}/**' },
           { name: 'Redux Toolkit', pattern: '**/toolkit/**' },
-          { name: 'React Redux', pattern: '**/react-redux/**' }
+          { name: 'React Redux', pattern: '**/react-redux/**' },
+          { name: 'Reselect', pattern: '**/reselect/**' }
         ]
       }
     ]
@@ -79,7 +80,7 @@ const config: Config = {
               label: 'React Redux',
               to: 'react-redux/introduction/getting-started'
             },
-            { label: 'Reselect', href: 'https://reselect.js.org' }
+            { label: 'Reselect', to: 'reselect/introduction/getting-started' }
           ]
         },
         {
@@ -161,7 +162,7 @@ const config: Config = {
               label: 'React Redux',
               to: 'react-redux/introduction/getting-started'
             },
-            { label: 'Reselect', href: 'https://reselect.js.org' }
+            { label: 'Reselect', to: 'reselect/introduction/getting-started' }
           ]
         },
         {
@@ -332,6 +333,44 @@ const config: Config = {
         ]
       } satisfies DocsOptions
     ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'reselect',
+        path: 'external/reselect/website/docs',
+        routeBasePath: 'reselect',
+        sidebarPath: require.resolve('./sidebars.reselect.ts'),
+        editUrl: ({ docPath }) =>
+          `https://github.com/reduxjs/reselect/edit/master/website/docs/${docPath}`,
+        showLastUpdateTime: false
+      } satisfies DocsOptions
+    ],
+    // Reselect's docs import shared components as `@site/src/components/*`,
+    // which resolves against this site. Point those specifiers at the fetched
+    // Reselect copies instead. The resolver stops at the first matching alias
+    // key and Docusaurus registers `@site` itself, so these exact-match keys
+    // have to come before it; mutating the existing alias map is the only way
+    // to control that order.
+    function reselectComponentAliases() {
+      const components = resolve(
+        __dirname,
+        'external/reselect/website/src/components'
+      )
+      const aliases = Object.fromEntries(
+        ['InternalLinks', 'ExternalLinks', 'PackageManagerTabs'].map(name => [
+          `@site/src/components/${name}$`,
+          resolve(components, `${name}.tsx`)
+        ])
+      )
+      return {
+        name: 'reselect-component-aliases',
+        configureWebpack: config => {
+          config.resolve ??= {}
+          config.resolve.alias = { ...aliases, ...config.resolve.alias }
+          return {}
+        }
+      }
+    },
     [
       '@dipakparmar/docusaurus-plugin-umami',
       {
