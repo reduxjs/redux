@@ -1,7 +1,7 @@
 [build]
   base    = "website"
   publish = "website/build"
-  command = "cd ../docs && pnpm install --frozen-lockfile && cd ../website && pnpm install --frozen-lockfile && pnpm build && cp _redirects ./build"
+  command = "cd ../docs && pnpm install --frozen-lockfile && cd ../website && pnpm install --frozen-lockfile && pnpm fetch-docs --force && pnpm build && cp _redirects ./build"
   ignore  = "git diff --quiet HEAD^ HEAD -- ../docs/ ."
 
 [build.environment]
