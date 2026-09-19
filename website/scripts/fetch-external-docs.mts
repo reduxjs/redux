@@ -5,7 +5,7 @@
  * Usage: node --experimental-strip-types scripts/fetch-external-docs.ts [--force] [name...]
  *
  * Per library, in order of precedence:
- *   DOCS_SOURCE_<NAME>  local directory whose `<docsDir>` is copied as-is (for per-PR previews)
+ *   DOCS_SOURCE_<NAME>  local repo checkout whose listed dirs are copied as-is (for per-PR previews)
  *   DOCS_REPO_<NAME>    git URL or local path to clone (default: GitHub)
  *   DOCS_REF_<NAME>     branch or tag to clone (default: master)
  *
@@ -19,14 +19,26 @@ import { fileURLToPath } from 'node:url'
 interface ExternalSource {
   repo: string
   ref: string
-  docsDir: string
+  /** Directories to check out, relative to the repo root. The first one is the docs folder. */
+  dirs: string[]
 }
 
 const sources: Record<string, ExternalSource> = {
   'react-redux': {
     repo: 'https://github.com/reduxjs/react-redux.git',
     ref: 'master',
-    docsDir: 'docs',
+    dirs: ['docs'],
+  },
+  'redux-toolkit': {
+    repo: 'https://github.com/reduxjs/redux-toolkit.git',
+    ref: 'master',
+    dirs: [
+      'docs',
+      // linkDocblocks reads doc comments straight from the library source
+      'packages/toolkit/src',
+      // images referenced from docs as /img/usage/...
+      'website/static/img/usage',
+    ],
   },
 }
 
@@ -65,15 +77,17 @@ for (const name of names) {
 
   const localSource = process.env[envKey(name, 'SOURCE')]
   if (localSource) {
-    const from = join(resolve(localSource), source.docsDir)
-    console.log(`[external-docs] ${name}: copying ${from}`)
-    cpSync(from, join(target, source.docsDir), { recursive: true })
+    for (const dir of source.dirs) {
+      const from = join(resolve(localSource), dir)
+      console.log(`[external-docs] ${name}: copying ${from}`)
+      cpSync(from, join(target, dir), { recursive: true })
+    }
     continue
   }
 
   const repo = process.env[envKey(name, 'REPO')] ?? source.repo
   const ref = process.env[envKey(name, 'REF')] ?? source.ref
-  console.log(`[external-docs] ${name}: cloning ${repo}@${ref} (${source.docsDir} only)`)
+  console.log(`[external-docs] ${name}: cloning ${repo}@${ref} (${source.dirs.join(', ')} only)`)
   git(
     externalDir,
     'clone',
@@ -86,5 +100,5 @@ for (const name of names) {
     repo,
     name,
   )
-  git(target, 'sparse-checkout', 'set', source.docsDir)
+  git(target, 'sparse-checkout', 'set', ...source.dirs)
 }
