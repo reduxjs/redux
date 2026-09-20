@@ -835,7 +835,7 @@ export type AppDispatch = Dispatch<RootAction>
 
 **Redux Toolkit is designed to drastically simplify TS usage, and our recommendations include _inferring_ types as much as possible!**
 
-Per [our standard TypeScript setup and usage guidelines](../tutorials/typescript.md), start with setting up the store file to infer `AppDispatch` and `RootState` types directly from the store itself. That will correctly include any modifications to `dispatch` that were added by middleware, such as the ability to dispatch thunks, and update the `RootState` type any time you modify a slice's state definition or add more slices.
+Per [our standard TypeScript setup and usage guidelines](../tutorials/quick-start.md), start with setting up the store file to infer `AppDispatch` and `RootState` types directly from the store itself. That will correctly include any modifications to `dispatch` that were added by middleware, such as the ability to dispatch thunks, and update the `RootState` type any time you modify a slice's state definition or add more slices.
 
 ```ts no-transpile title="app/store.ts"
 import { configureStore } from '@reduxjs/toolkit'
@@ -1107,7 +1107,7 @@ export default connector(TodoListItem)
 
 **The React-Redux hooks API is _much_ simpler to use with TypeScript!** Instead of dealing with layers of component wrapping, type inference, and generics, the hooks are simple functions that take arguments and return a result. All that you need to pass around are the types for `RootState` and `AppDispatch`.
 
-Per [our standard TypeScript setup and usage guidelines](../tutorials/typescript.md), we specifically teach setting up "pre-typed" aliases for the hooks, so that those have the correct types baked in, and only use those pre-typed hooks in the app.
+Per [our standard TypeScript setup and usage guidelines](../tutorials/quick-start.md), we specifically teach setting up "pre-typed" aliases for the hooks, so that those have the correct types baked in, and only use those pre-typed hooks in the app.
 
 First, set up the hooks:
 
@@ -1156,7 +1156,7 @@ See these docs pages and blog posts for more details:
 - **Tutorials**
   - [Redux Essentials: Redux Toolkit App Structure](../tutorials/essentials/part-2-app-structure.md)
   - [Redux Fundamentals: Modern Redux with Redux Toolkit](../tutorials/fundamentals/part-8-modern-redux.md)
-  - [Redux TypeScript Quick Start](../tutorials/typescript.md)
+  - [Redux Quick Start](../tutorials/quick-start.md)
 - **Additional Documentation**
   - [Why Redux Toolkit is How to use Redux Today](../introduction/why-rtk-is-redux-today.md)
   - [Redux Style Guide: Best Practices and Recommendations](../style-guide/style-guide.md)

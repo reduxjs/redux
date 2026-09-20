@@ -300,7 +300,7 @@ To test the component, we `render` it into the DOM, and assert that the app resp
 
 ### Setting Up a Reusable Test Render Function
 
-React Testing Library's `render` function accepts a tree of React elements and renders those components. Just like in a real app, any Redux-connected components will need [a React-Redux `<Provider>` component wrapped around them](/react-redux/tutorials/quick-start#provide-the-redux-store-to-react), with a real Redux store set up and provided.
+React Testing Library's `render` function accepts a tree of React elements and renders those components. Just like in a real app, any Redux-connected components will need [a React-Redux `<Provider>` component wrapped around them](../tutorials/quick-start.md#provide-the-redux-store-to-react), with a real Redux store set up and provided.
 
 Additionally, **the test code should create a separate Redux store instance for every test, rather than reusing the same store instance and resetting its state**. That ensures no values accidentally leak between tests.
 
