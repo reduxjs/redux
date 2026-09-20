@@ -82,6 +82,9 @@ const sources: Record<string, ExternalSource> = {
       'packages/toolkit/src',
       // images referenced from docs as /img/usage/...
       'website/static/img/usage',
+      // src/pages/toolkit/errors.tsx; a root file, so sparse checkout already
+      // includes it, but the DOCS_SOURCE copy path needs it listed
+      'errors.json',
     ],
   },
   reselect: {
