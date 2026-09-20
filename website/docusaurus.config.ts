@@ -60,7 +60,7 @@ const libraries: LibraryEntry[] = [
       { label: 'Tutorial', to: 'tutorials/quick-start' },
       {
         label: 'Using React Redux',
-        to: 'react-redux/using-react-redux/usage-with-typescript'
+        to: 'react-redux/using-react-redux/accessing-store'
       },
       { label: 'API', to: 'react-redux/api/hooks' },
       { label: 'GitHub', href: 'https://www.github.com/reduxjs/react-redux' },

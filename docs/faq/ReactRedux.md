@@ -235,7 +235,7 @@ export const useAppSelector = useSelector.withTypes<RootState>()
 **Documentation**
 
 - [Using Redux: Usage with TypeScript](../usage/UsageWithTypescript.md#define-typed-hooks)
-- [React Redux: Usage with TypeScript](/react-redux/using-react-redux/usage-with-typescript)
+- [React Redux: `useSelector` and `useDispatch` API reference](/react-redux/api/hooks)
 
 ### Is `connect` still supported?
 
