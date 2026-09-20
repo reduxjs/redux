@@ -14,6 +14,11 @@ NODE_OPTIONS = "--max_old_space_size=4096"
 # Netlify detects pnpm from the lockfile; Corepack reads the version from
 # `packageManager` in website/package.json.
 NETLIFY_USE_PNPM = "true"
+# Branches in the other library repos that carry the combined-site cleanup
+# (pages that now live only on the core site). Switch back to "master" once
+# those PRs merge.
+DOCS_REF_REDUX_TOOLKIT = "combined-docs"
+DOCS_REF_REACT_REDUX = "combined-docs"
 
 # Pages that use the `LiveExample` StackBlitz embed. WebContainers need the host
 # page to be cross-origin isolated. Any other cross-origin iframe on these pages
