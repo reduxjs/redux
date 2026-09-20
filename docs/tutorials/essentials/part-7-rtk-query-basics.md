@@ -6,6 +6,8 @@ description: 'The official Redux Essentials tutorial: learn how to use RTK Query
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
+import { LiveExample } from '@site/src/components/LiveExample'
+import { VideoEmbed } from '@site/src/components/VideoEmbed'
 
 :::tip What You'll Learn
 
@@ -25,15 +27,12 @@ import { DetailedExplanation } from '../../components/DetailedExplanation'
 
 If you prefer a video course, you can [watch this RTK Query video course by Lenz Weber-Tronic, the creator of RTK Query, for free at Egghead](https://egghead.io/courses/rtk-query-basics-query-endpoints-data-flow-and-typescript-57ea3c43?af=7pnhj6) or take a look at the first lesson right here:
 
-<div style={{position:"relative",paddingTop:"56.25%"}}>
-  <iframe 
-    src="https://app.egghead.io/lessons/redux-course-introduction-and-application-walk-through-for-rtk-query-basics/embed?af=7pnhj6" 
-    title="RTK Query Video course at Egghead: Course Introduction and Application Walk through for RTK Query Basics"
-    frameborder="0" 
-    allowfullscreen
-    style={{position:"absolute",top:0,left:0,width:"100%",height:"100%"}}
-  ></iframe>
-</div>
+<VideoEmbed
+  src="https://app.egghead.io/lessons/redux-course-introduction-and-application-walk-through-for-rtk-query-basics/embed?af=7pnhj6"
+  href="https://app.egghead.io/lessons/redux-course-introduction-and-application-walk-through-for-rtk-query-basics?af=7pnhj6"
+  title="RTK Query Video course at Egghead: Course Introduction and Application Walk through for RTK Query Basics"
+  linkText="Watch the first lesson on Egghead"
+/>
 
 :::
 
@@ -831,13 +830,12 @@ Note that there's nothing special about the literal string `'Post'` here. We cou
 
 With RTK Query, the actual details of how to manage data fetching, caching, and loading state are abstracted away. This simplifies application code considerably, and lets us focus on higher-level concerns about intended app behavior instead. Since RTK Query is implemented using the same Redux Toolkit APIs we've already seen, we can still use the Redux DevTools to view the changes in our state over time.
 
-<iframe
-  class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/ts-checkpoint-5-createApi?fontsize=14&hidenavigation=1&module=%2fsrc%2Ffeatures%2Fposts%2FpostsSlice.ts&theme=dark&runonclick=1"
-  title="redux-essentials-example"
-  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-></iframe>
+<LiveExample
+  repo="reduxjs/redux-essentials-example-app"
+  ref="sb-ts-checkpoint-5-createApi"
+  file="src/features/api/apiSlice.ts"
+  title="Redux Essentials: end of Part 7"
+/>
 
 :::tip Summary
 
