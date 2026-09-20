@@ -57,16 +57,16 @@ const libraries: LibraryEntry[] = [
         label: 'Getting Started',
         to: 'react-redux/introduction/getting-started'
       },
-        { label: 'Tutorial', to: 'tutorials/quick-start' },
+      { label: 'Tutorial', to: 'tutorials/quick-start' },
       {
         label: 'Using React Redux',
-        to: 'react-redux/using-react-redux/connect-mapstate'
+        to: 'react-redux/using-react-redux/usage-with-typescript'
       },
       { label: 'API', to: 'react-redux/api/hooks' },
       { label: 'GitHub', href: 'https://www.github.com/reduxjs/react-redux' },
       {
         label: 'Need help?',
-        to: 'react-redux/introduction/getting-started#help-and-discussion'
+        to: 'introduction/getting-started#help-and-discussion'
       }
     ]
   },

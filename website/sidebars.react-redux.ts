@@ -22,8 +22,7 @@ const sidebars: SidebarsConfig = {
           type: 'link',
           label: 'Quick Start',
           href: '/tutorials/quick-start'
-        },
-        'tutorials/connect'
+        }
       ]
     },
     {
@@ -32,15 +31,24 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'using-react-redux/usage-with-typescript',
-        'using-react-redux/connect-mapstate',
-        'using-react-redux/connect-mapdispatch',
         'using-react-redux/accessing-store'
       ]
     },
     {
       type: 'category',
       label: 'API Reference',
-      items: ['api/provider', 'api/hooks', 'api/connect', 'api/batch']
+      items: ['api/provider', 'api/hooks', 'api/batch']
+    },
+    {
+      type: 'category',
+      label: 'Legacy: connect',
+      collapsed: true,
+      items: [
+        'api/connect',
+        'using-react-redux/connect-mapstate',
+        'using-react-redux/connect-mapdispatch',
+        'tutorials/connect'
+      ]
     },
     {
       type: 'category',
