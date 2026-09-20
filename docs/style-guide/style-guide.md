@@ -86,13 +86,13 @@ Ideally, no app logic will import the store directly. It should be passed to a R
 
 ### Use Redux Toolkit for Writing Redux Logic
 
-**[Redux Toolkit](../redux-toolkit/overview.md) is our recommended toolset for using Redux**. It has functions that build in our suggested best practices, including setting up the store to catch mutations and enable the Redux DevTools Extension, simplifying immutable update logic with Immer, and more.
+**[Redux Toolkit](/toolkit/introduction/getting-started) is our recommended toolset for using Redux**. It has functions that build in our suggested best practices, including setting up the store to catch mutations and enable the Redux DevTools Extension, simplifying immutable update logic with Immer, and more.
 
 You are not required to use RTK with Redux, and you are free to use other approaches if desired, but **using RTK will simplify your logic and ensure that your application is set up with good defaults**.
 
 ### Use Immer for Writing Immutable Updates
 
-Writing immutable update logic by hand is frequently difficult and prone to errors. [Immer](https://immerjs.github.io/immer/) allows you to write simpler immutable updates using "mutative" logic, and even freezes your state in development to catch mutations elsewhere in the app. **We recommend using Immer for writing immutable update logic, preferably as part of [Redux Toolkit](../redux-toolkit/overview.md)**.
+Writing immutable update logic by hand is frequently difficult and prone to errors. [Immer](https://immerjs.github.io/immer/) allows you to write simpler immutable updates using "mutative" logic, and even freezes your state in development to catch mutations elsewhere in the app. **We recommend using Immer for writing immutable update logic, preferably as part of [Redux Toolkit](/toolkit/introduction/getting-started)**.
 
 <a id="structure-files-as-feature-folders-or-ducks"></a>
 

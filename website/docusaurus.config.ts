@@ -41,7 +41,7 @@ const libraries: LibraryEntry[] = [
     routeBasePath: 'toolkit',
     navbarItems: [
       { label: 'Getting Started', to: 'toolkit/introduction/getting-started' },
-      { label: 'Tutorials', to: 'toolkit/tutorials/overview' },
+      { label: 'Tutorials', to: 'tutorials/index' },
       { label: 'Usage Guide', to: 'toolkit/usage/usage-guide' },
       { label: 'API', to: 'toolkit/api/configureStore' },
       { label: 'RTK Query', to: 'toolkit/rtk-query/overview' },
@@ -57,7 +57,7 @@ const libraries: LibraryEntry[] = [
         label: 'Getting Started',
         to: 'react-redux/introduction/getting-started'
       },
-      { label: 'Tutorial', to: 'react-redux/tutorials/quick-start' },
+        { label: 'Tutorial', to: 'tutorials/quick-start' },
       {
         label: 'Using React Redux',
         to: 'react-redux/using-react-redux/connect-mapstate'
@@ -253,7 +253,7 @@ const config: Config = {
           sidebarPath: require.resolve('./sidebars.js'),
           showLastUpdateTime: true,
           include: [
-            '{api,faq,introduction,redux-toolkit,style-guide,tutorials,understanding,usage}/**/*.{md,mdx}',
+            '{api,faq,introduction,style-guide,tutorials,understanding,usage}/**/*.{md,mdx}',
             'FAQ.md'
           ], // no other way to exclude node_modules
           editUrl: 'https://github.com/reduxjs/redux/edit/master/website',

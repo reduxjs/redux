@@ -148,6 +148,7 @@
 
 # PR preview for the new tutorial
 /tutorials/quick-start/quick-start-part-1        /tutorials/essentials/part-1-overview-concepts
+/tutorials/typescript-quick-start                /tutorials/quick-start
 
 
 # New "Fundamentals" tutorial replaces old "Basics/Advanced" tutorials
@@ -229,19 +230,34 @@
 /react-redux/7.0/*          /react-redux/:splat
 /react-redux/7.1/*          /react-redux/:splat
 /react-redux/versions       /react-redux/introduction/getting-started
+# Stale page folded into the core Troubleshooting guide
+/react-redux/troubleshooting    /usage/troubleshooting
+# Quick Start tutorials merged into the single core Quick Start
+/react-redux/tutorials/quick-start              /tutorials/quick-start
+/react-redux/tutorials/typescript-quick-start   /tutorials/quick-start
+
+/redux-toolkit/overview    /toolkit/introduction/getting-started
 
 # Redux Toolkit (/toolkit)
 /toolkit/docs/*          /toolkit/:splat
 # Deleted old tutorials
-/toolkit/tutorials/basic-tutorial               /toolkit/tutorials/overview
-/toolkit/tutorials/intermediate-tutorial        /toolkit/tutorials/overview
-/toolkit/tutorials/advanced-tutorial            /toolkit/tutorials/overview
+/toolkit/tutorials/basic-tutorial               /tutorials/index
+/toolkit/tutorials/intermediate-tutorial        /tutorials/index
+/toolkit/tutorials/advanced-tutorial            /tutorials/index
 # Renamed start page
 /toolkit/introduction/quick-start               /toolkit/introduction/getting-started
 # Relocated content
 /toolkit/rtk-query/usage/optimistic-updates     /toolkit/rtk-query/usage/manual-cache-updates#optimistic-updates
 /toolkit/rtk-query/api/created-api/cache-management-utils     /toolkit/rtk-query/api/created-api/api-slice-utils
-/toolkit/migrations/migrating-1.x-to-2.x     /toolkit/usage/migrating-rtk-2
+/toolkit/migrations/migrating-1.x-to-2.x     /usage/migrations/migrating-rtk-2
+# Pages that duplicated core docs and now live only on the core site
+/toolkit/introduction/why-rtk-is-redux-today    /introduction/why-rtk-is-redux-today
+/toolkit/usage/nextjs                           /usage/nextjs
+/toolkit/usage/migrating-to-modern-redux        /usage/migrating-to-modern-redux
+/toolkit/usage/migrating-rtk-2                  /usage/migrations/migrating-rtk-2
+/toolkit/tutorials/overview                     /tutorials/index
+/toolkit/tutorials/quick-start                  /tutorials/quick-start
+/toolkit/tutorials/typescript                   /tutorials/quick-start
 
 # Reselect (/reselect)
 /reselect/api/development-only-stability-checks /reselect/api/development-only-checks 301

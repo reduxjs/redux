@@ -69,7 +69,6 @@ const todosSlice = createSlice({
 **Documentation**
 
 - [Troubleshooting](../usage/Troubleshooting.md)
-- [React Redux: Troubleshooting](/react-redux/troubleshooting)
 - [Redux Toolkit: Immutability Middleware](/toolkit/api/immutabilityMiddleware)
 - [Using Redux: Structuring Reducers - Prerequisite Concepts](../usage/structuring-reducers/PrerequisiteConcepts.md)
 - [Using Redux: Structuring Reducers - Immutable Update Patterns](../usage/structuring-reducers/ImmutableUpdatePatterns.md)
