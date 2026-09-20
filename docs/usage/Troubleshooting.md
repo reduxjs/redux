@@ -171,6 +171,8 @@ See [Why is my component re-rendering too often?](../faq/ReactRedux.md#why-is-my
 
 `useSelector` and `useDispatch` read the store from React context. This error means a component called one of them without a `<Provider store={store}>` above it in the tree. Check that `Provider` wraps your root component, and that anything rendered outside the main tree (portals are fine, but a separate `createRoot` call or a test render is not) gets its own `Provider`. In tests, render the component inside a `Provider` with a store created for that test, as shown in [Writing Tests](./WritingTests.mdx).
 
+If `Provider` is definitely there, check for duplicate packages. Two copies of `react-redux` in `node_modules` (for example, one hoisted and one nested under a component library) create two different context objects, so a `Provider` from one copy is invisible to hooks from the other. Two copies of `react` cause the same problem. Run `npm ls react react-redux` (or the pnpm/yarn equivalent) and dedupe so each resolves to a single version.
+
 ### TypeScript says a thunk is not assignable to `UnknownAction`
 
 Calling `dispatch(someThunk())` from a component fails with an error like `Argument of type 'ThunkAction<...>' is not assignable to parameter of type 'UnknownAction'`. The plain `useDispatch()` hook returns the base `Dispatch` type, which does not know about the thunk middleware. Use a `useAppDispatch` hook typed with your store's `AppDispatch` instead:

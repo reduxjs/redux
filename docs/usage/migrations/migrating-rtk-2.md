@@ -50,7 +50,7 @@ We've updated the build output in several ways:
 
 - **Build output is no longer transpiled!** Instead we target modern JS syntax (ES2020)
 - Moved all build artifacts to live under `./dist/`, instead of separate top-level folders
-- The lowest Typescript version we test against is now **TS 4.7**.
+- The lowest TypeScript version we test against is now **TS 4.7**.
 
 #### Dropping UMD builds
 
@@ -58,7 +58,7 @@ Redux has always shipped with UMD build artifacts. These are primarily meant for
 
 For now, we're dropping those build artifacts from the published package, on the grounds that the use cases seem pretty rare today.
 
-We do have a browser-ready ESM build artifact included at `dist/$PACKAGE_NAME.browser.mjs`, which can be loaded via a script tag that points to that file on Unpkg.
+We do have a browser-ready ESM build artifact included at `dist/$PACKAGE_NAME.browser.mjs`, which can be loaded via a `<script type="module">` tag. Since the browser build still imports dependencies by package name, no-bundler usage also needs an import map that maps those package names to browser-loadable ESM files.
 
 If you have strong use cases for us continuing to include UMD build artifacts, please let us know!
 
@@ -92,7 +92,7 @@ To fix this, there are three options:
 
 <div class="typescript-only">
 
-#### Typescript rewrite
+#### TypeScript rewrite
 
 In 2019, we began a community-powered conversion of the Redux codebase to TypeScript. The original effort was discussed in [#3500: Port to TypeScript](https://github.com/reduxjs/redux/issues/3500), and the work was integrated in PR [#3536: Convert to TypeScript](https://github.com/reduxjs/redux/issues/3536).
 
@@ -100,7 +100,7 @@ However, the TS-converted code sat around in the repo for several years, unused 
 
 Redux core v5 is now built from that TS-converted source code. In theory, this should be almost identical in both runtime behavior and types to the 4.x build, but it's very likely that some of the changes may cause types issues.
 
-Please report any unexpected compatibility issues on [Github](https://github.com/reduxjs/redux/issues)!
+Please report any unexpected compatibility issues on [GitHub](https://github.com/reduxjs/redux/issues)!
 
 #### `AnyAction` deprecated in favour of `UnknownAction`
 
@@ -291,11 +291,11 @@ The standalone version of `getDefaultMiddleware` has been deprecated since v1.6.
 
 We have also removed the `getType` export, which was used to extract a type string from action creators made with `createAction`. Instead, use the static property `actionCreator.type`.
 
-#### RTK Query behaviour changes
+#### RTK Query behavior changes
 
 We've had a number of reports where RTK Query had issues around usage of `dispatch(endpoint.initiate(arg, {subscription: false}))`. There were also reports that multiple triggered lazy queries were resolving the promises at the wrong time. Both of these had the same underlying issue, which was that RTKQ wasn't tracking cache entries in these cases (intentionally). We've reworked the logic to always track cache entries (and remove them as needed), which should resolve those behavior issues.
 
-We also have had issues raised about trying to run multiple mutations in a row and how tag invalidation behaves. RTKQ now has internal logic to delay tag invalidation briefly, to allow multiple invalidations to get handled together. This is controlled by a new `invalidationBehavior: 'immediate' | 'delayed'` flag on `createApi`. The new default behavior is `'delayed'`. Set it to `'immediate'` to revert to the behavior in RTK 1.9.
+We also have had issues raised about trying to run multiple mutations in a row and how tag invalidation behaves. RTKQ now has internal logic to delay tag invalidation briefly, to allow multiple invalidations to get handled together. This is controlled by a new `invalidationBehavior: 'immediately' | 'delayed'` flag on `createApi`. The new default behavior is `'delayed'`. Set it to `'immediately'` to revert to the behavior in RTK 1.9.
 
 In RTK 1.9, we reworked RTK Query's internals to keep most of the subscription status inside the RTKQ middleware. The values are still synced to the Redux store state, but this is primarily for display by the Redux DevTools "RTK Query" panel. Related to the cache entry changes above, we've optimized how often those values get synced to the Redux state for perf.
 
@@ -433,6 +433,54 @@ The `ParametricSelector` and `OutputParametricSelector` types have been removed.
 React-Redux v7 and v8 worked with all versions of React that supported hooks (16.8+, 17, and 18). v8 switched from internal subscription management to React's new `useSyncExternalStore` hook, but used the "shim" implementation to provide support for React 16.8 and 17, which did not have that hook built in.
 
 **React-Redux v9 switches to _requiring_ React 18, and does _not_ support React 16 or 17**. This allows us to drop the shim and save a small bit of bundle size.
+
+<div class="typescript-only">
+
+#### Custom context typing
+
+React Redux supports creating `hooks` (and `connect`) with a [custom context](/react-redux/api/hooks#custom-context), but typing this has been fairly non-standard. The pre-v9 types required `Context<ReactReduxContextValue>`, but the context default value was usually initialised with `null` (as the hooks use this to make sure they actually have a provided context). This, in "best" cases, would result in something like the below:
+
+```ts title="Pre-v9 custom context"
+import { createContext } from 'react'
+import {
+  ReactReduxContextValue,
+  createDispatchHook,
+  createSelectorHook,
+  createStoreHook
+} from 'react-redux'
+import { AppStore, RootState, AppDispatch } from './store'
+
+// highlight-next-line
+const context = createContext<ReactReduxContextValue>(null as any)
+
+export const useStore = createStoreHook(context).withTypes<AppStore>()
+export const useDispatch = createDispatchHook(context).withTypes<AppDispatch>()
+export const useSelector = createSelectorHook(context).withTypes<RootState>()
+```
+
+In v9, the types now match the runtime behavior. The context is typed to hold `ReactReduxContextValue | null`, and the hooks know that if they receive `null` they'll throw an error so it doesn't affect the return type.
+
+The above example now becomes:
+
+```ts title="v9+ custom context"
+import { createContext } from 'react'
+import {
+  ReactReduxContextValue,
+  createDispatchHook,
+  createSelectorHook,
+  createStoreHook
+} from 'react-redux'
+import { AppStore, RootState, AppDispatch } from './store'
+
+// highlight-next-line
+const context = createContext<ReactReduxContextValue | null>(null)
+
+export const useStore = createStoreHook(context).withTypes<AppStore>()
+export const useDispatch = createDispatchHook(context).withTypes<AppDispatch>()
+export const useSelector = createSelectorHook(context).withTypes<RootState>()
+```
+
+</div>
 
 ### Redux Thunk
 
@@ -601,11 +649,11 @@ In practice, we hope these are reasonable tradeoffs. Creating thunks inside of `
 Here's what the new callback syntax looks like:
 
 ```ts
-const createSliceWithThunks = buildCreateSlice({
+const createAppSlice = buildCreateSlice({
   creators: { asyncThunk: asyncThunkCreator }
 })
 
-const todosSlice = createSliceWithThunks({
+const todosSlice = createAppSlice({
   name: 'todos',
   initialState: {
     loading: false,
@@ -715,9 +763,7 @@ We've updated RTK to depend on the final Immer 10.0 release.
 
 ### Next.js Setup Guide
 
-We now have a docs page that covers [how to set up Redux properly with Next.js](https://redux.js.org/usage/nextjs). We've seen a lot of questions around using Redux, Next, and the App Router together, and this guide should help provide advice.
-
-(At this time, the Next.js `with-redux` example is still showing outdated patterns - we're going to file a PR shortly to update that to match our docs guide.)
+We now have a docs page that covers [how to set up Redux properly with Next.js](https://redux.js.org/usage/nextjs). We've seen a lot of questions around using Redux, Next, and the App Router together, and this guide should help provide advice. The [Next.js `with-redux` example](https://github.com/vercel/next.js/tree/canary/examples/with-redux) has been updated to match that guide.
 
 ## Overriding dependencies
 
@@ -787,14 +833,14 @@ createReducer(initialState, {
 })
 ```
 
-While this was convenient (and other libraries in the Redux ecosystem such as `redux-saga` and `redux-observable` have supported this to various capacities), it didn't play well with Typescript and was generally a bit too "magic".
+While this was convenient (and other libraries in the Redux ecosystem such as `redux-saga` and `redux-observable` have supported this to various capacities), it didn't play well with TypeScript and was generally a bit too "magic".
 
 ```ts
 const test = todoAdded.toString()
 //    ^? typed as string, rather than specific action type
 ```
 
-Over time, the action creator also gained a static `type` property and `match` method which were more explicit and worked better with Typescript.
+Over time, the action creator also gained a static `type` property and `match` method which were more explicit and worked better with TypeScript.
 
 ```ts
 const test = todoAdded.type
@@ -845,9 +891,9 @@ yield takeEvery(todoAdded.type, saga)
 
 ### Custom slice reducer creators
 
-With the addition of the [callback syntax for createSlice](#callback-syntax-for-createslicereducers), the [suggestion](https://github.com/reduxjs/redux-toolkit/issues/3837) was made to enable custom slice reducer creators. These creators would be able to:
+With the addition of the [callback syntax for createSlice](#createslicereducers-callback-syntax-and-thunk-support), the [suggestion](https://github.com/reduxjs/redux-toolkit/issues/3837) was made to enable custom slice reducer creators. These creators would be able to:
 
-- Modify reducer behaviour by adding case or matcher reducers
+- Modify reducer behavior by adding case or matcher reducers
 - Attach actions (or any other useful functions) to `slice.actions`
 - Attach provided case reducers to `slice.caseReducers`
 
@@ -903,7 +949,7 @@ const createSlice = buildCreateSlice({
 })
 ```
 
-We're not sure how many people/libraries would actually make use of this though, so any feedback over on the [Github issue](https://github.com/reduxjs/redux-toolkit/issues/3837) is welcome!
+We're not sure how many people/libraries would actually make use of this though, so any feedback over on the [GitHub issue](https://github.com/reduxjs/redux-toolkit/issues/3837) is welcome!
 
 ### `createSlice.selector` selector factories
 
@@ -946,7 +992,7 @@ function AuthorTodos({ author }: { author: string }) {
 
 Of course, with `createSlice.selectors` this is no longer possible, as you need the selector instance when creating your slice.
 
-In 2.0.0 we have no set solution for this - a few APIs have been floated ([PR 1](https://github.com/reduxjs/redux-toolkit/pull/3671), [PR 2](https://github.com/reduxjs/redux-toolkit/pull/3836)) but nothing was decided upon. If this is something you'd like to see supported, consider providing feedback in the [Github discussion](https://github.com/reduxjs/redux-toolkit/discussions/3387)!
+In 2.0.0 we have no set solution for this - a few APIs have been floated ([PR 1](https://github.com/reduxjs/redux-toolkit/pull/3671), [PR 2](https://github.com/reduxjs/redux-toolkit/pull/3836)) but nothing was decided upon. If this is something you'd like to see supported, consider providing feedback in the [GitHub discussion](https://github.com/reduxjs/redux-toolkit/discussions/3387)!
 
 ### 3.0 - RTK Query
 
