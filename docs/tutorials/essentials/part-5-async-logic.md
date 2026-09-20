@@ -6,6 +6,7 @@ description: 'The official Redux Essentials tutorial: learn how async logic work
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
+import { LiveExample } from '@site/src/components/LiveExample'
 
 :::tip What You'll Learn
 
@@ -42,6 +43,12 @@ We'll cover how to use RTK Query starting in [Part 7: RTK Query Basics](./part-7
 ### Example REST API and Client
 
 To keep the example project isolated but realistic, the initial project setup already includes a fake in-memory REST API for our data (configured using [the Mock Service Worker mock API tool](https://mswjs.io/)). The API uses `/fakeApi` as the base URL for the endpoints, and supports the typical `GET/POST/PUT/DELETE` HTTP methods for `/fakeApi/posts`, `/fakeApi/users`, and `fakeApi/notifications`. It's defined in `src/api/server.ts`.
+
+:::note
+
+The fake API intercepts `fetch()` calls directly inside the page, rather than through a browser Service Worker, so that the project can also run inside StackBlitz. Because of that, **these requests will not show up in the "Network" tab of your browser's DevTools**. You can still see the requests happen by watching the dispatched actions in the Redux DevTools, or by adding `console.log` statements in `src/api/client.ts`.
+
+:::
 
 The project also includes a small HTTP API client object that exposes `client.get()` and `client.post()` methods, similar to popular HTTP libraries like `axios`. It's defined in `src/api/client.ts`.
 
@@ -307,7 +314,7 @@ We _could_ track that information using some booleans, like `isLoading: true`, b
 ```ts
 {
   // Multiple possible status string union values
-  status: 'idle' | 'pending' | 'succeeded' | 'failed',
+  status: 'idle' | 'pending' | 'succeeded' | 'rejected',
   error: string | null
 }
 ```
@@ -326,7 +333,7 @@ import { createSlice, nanoid } from '@reduxjs/toolkit'
 // highlight-start
 interface PostsState {
   posts: Post[]
-  status: 'idle' | 'pending' | 'succeeded' | 'failed'
+  status: 'idle' | 'pending' | 'succeeded' | 'rejected'
   error: string | null
 }
 
@@ -508,7 +515,7 @@ const postsSlice = createSlice({
         state.posts.push(...action.payload)
       })
       .addCase(fetchPosts.rejected, (state, action) => {
-        state.status = 'failed'
+        state.status = 'rejected'
         state.error = action.error.message ?? 'Unknown Error'
       })
     // highlight-end
@@ -520,7 +527,7 @@ We'll handle all three action types that could be dispatched by the thunk, based
 
 - When the request starts, we'll set the `status` to `'pending'`
 - If the request succeeds, we mark the `status` as `'succeeded'`, and add the fetched posts to `state.posts`
-- If the request fails, we'll mark the `status` as `'failed'`, and save any error message into the state so we can display it
+- If the request fails, we'll mark the `status` as `'rejected'`, and save any error message into the state so we can display it
 
 ### Dispatching Thunks from Components
 
@@ -955,7 +962,7 @@ import { worker } from './api/server'
 
 async function start() {
   // Start our mock API server
-  await worker.start({ onUnhandledRequest: 'bypass' })
+  worker.listen({ onUnhandledRequest: 'bypass' })
 
   // highlight-next-line
   store.dispatch(fetchUsers())
@@ -1067,7 +1074,7 @@ export const AddPostForm = () => {
   const userId = useAppSelector(selectCurrentUsername)!
 
   // highlight-next-line
-  const handleSubmit = async (e: React.FormEvent<AddPostFormElements>) => {
+  const handleSubmit = async (e: React.SubmitEvent<AddPostFormElements>) => {
     // Prevent server submission
     e.preventDefault()
 
@@ -1111,13 +1118,12 @@ Async logic and data fetching are always a complex topic. As you've seen, Redux 
 
 Here's what our app looks like now that we're fetching data from that fake API:
 
-<iframe
-  class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/ts-checkpoint-3-postRequests?fontsize=14&hidenavigation=1&module=%2fsrc%2Ffeatures%2Fposts%2FpostsSlice.ts&theme=dark&runonclick=1"
-  title="redux-essentials-example"
-  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-></iframe>
+<LiveExample
+  repo="reduxjs/redux-essentials-example-app"
+  ref="sb-ts-checkpoint-3-postRequests"
+  file="src/features/posts/postsSlice.ts"
+  title="Redux Essentials: end of Part 5"
+/>
 
 As a reminder, here's what we covered in this section:
 

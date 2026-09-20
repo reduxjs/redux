@@ -623,7 +623,7 @@ export const AddPostForm = () => {
   // highlight-next-line
   const [addNewPost, { isLoading }] = useAddNewPostMutation()
 
-  const handleSubmit = async (e: React.FormEvent<AddPostFormElements>) => {
+  const handleSubmit = async (e: React.SubmitEvent<AddPostFormElements>) => {
     // Prevent server submission
     e.preventDefault()
 
@@ -681,7 +681,7 @@ As with the previous thunk dispatch, we call `addNewPost` with the initial post 
 
 ## Refreshing Cached Data
 
-When we click "Save Post", we can view the Network tab in the browser DevTools and confirm that the HTTP `POST` request succeeded. But, the new post isn't showing up in our `<PostsList>` if we go back there. The Redux store state hasn't changed, and we still have the same cached data in memory.
+When we click "Save Post", we can look at the Redux DevTools and confirm that the `addNewPost` mutation went through the `pending` and `fulfilled` states, so the HTTP `POST` request succeeded. (Remember that the fake API intercepts requests inside the page, so they won't show up in the browser's Network tab.) But, the new post isn't showing up in our `<PostsList>` if we go back there. The Redux store state hasn't changed, and we still have the same cached data in memory.
 
 We need to tell RTK Query to refresh its cached list of posts so that we can see the new post we just added.
 

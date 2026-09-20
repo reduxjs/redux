@@ -30,6 +30,42 @@ NETLIFY_USE_PNPM = "true"
     Cross-Origin-Opener-Policy = "same-origin"
 
 [[headers]]
+  for = "/tutorials/essentials/part-4-using-data"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-4-using-data/*"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-5-async-logic"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-5-async-logic/*"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-6-performance-normalization"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-6-performance-normalization/*"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
   for = "/tutorials/essentials/part-7-rtk-query-basics"
   [headers.values]
     Cross-Origin-Embedder-Policy = "credentialless"
@@ -37,6 +73,18 @@ NETLIFY_USE_PNPM = "true"
 
 [[headers]]
   for = "/tutorials/essentials/part-7-rtk-query-basics/*"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-8-rtk-query-advanced"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-8-rtk-query-advanced/*"
   [headers.values]
     Cross-Origin-Embedder-Policy = "credentialless"
     Cross-Origin-Opener-Policy = "same-origin"

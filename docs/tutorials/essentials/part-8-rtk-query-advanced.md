@@ -6,6 +6,7 @@ description: 'The official Redux Essentials tutorial: learn advanced patterns fo
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
+import { LiveExample } from '@site/src/components/LiveExample'
 
 :::tip What You'll Learn
 
@@ -120,7 +121,7 @@ export const EditPostForm = () => {
   // highlight-start
   const onSavePostClicked = async (
     // highlight-end
-    e: React.FormEvent<EditPostFormElements>
+    e: React.SubmitEvent<EditPostFormElements>
   ) => {
     // Prevent server submission
     e.preventDefault()
@@ -142,9 +143,9 @@ export const EditPostForm = () => {
 
 ### Cache Data Subscription Lifetimes
 
-Let's try this out and see what happens. Open up your browser's DevTools, go to the Network tab, refresh the page, clear the network tab, then login. You should see a `GET` request to `/posts` as we fetch the initial data. When you click on a "View Post" button, you should see a second request to `/posts/:postId` that returns that single post entry.
+Let's try this out and see what happens. Open up the Redux DevTools, refresh the page, then login. You should see a pair of `api/executeQuery/pending` and `api/executeQuery/fulfilled` actions for `getPosts` as we fetch the initial data. When you click on a "View Post" button, you should see a second pair of actions for `getPost` that fetches that single post entry. (The fake API intercepts requests inside the page, so they won't show up in the browser's Network tab, but every request RTK Query makes shows up as these actions, and also in the "RTK Query" tab of the Redux DevTools.)
 
-Now click "Edit Post" inside the single post page. The UI switches over to show `<EditPostForm>`, but this time there's no network request for the individual post. Why not?
+Now click "Edit Post" inside the single post page. The UI switches over to show `<EditPostForm>`, but this time there's no new request for the individual post. Why not?
 
 ![RTK Query network requests](/img/tutorials/essentials/devtools-cached-requests.png)
 
@@ -220,7 +221,7 @@ export const apiSlice = createApi({
 
 It's possible for the `result` argument in these callbacks to be undefined if the response has no data or there's an error, so we have to handle that safely. For `getPosts` we can do that by using a default argument array value to map over, and for `getPost` we're already returning a single-item array based on the argument ID. For `editPost`, we know the ID of the post from the partial post object that was passed into the trigger function, so we can read it from there.
 
-With those changes in place, let's go back and try editing a post again, with the Network tab open in the browser DevTools.
+With those changes in place, let's go back and try editing a post again, with the Redux DevTools open.
 
 ![RTK Query invalidation and refetching](/img/tutorials/essentials/devtools-cached-invalidation-refetching.png)
 
@@ -351,7 +352,7 @@ import { apiSlice } from './features/api/apiSlice'
 
 async function main() {
   // Start our mock API server
-  await worker.start({ onUnhandledRequest: 'bypass' })
+  worker.listen({ onUnhandledRequest: 'bypass' })
 
   // highlight-next-line
   store.dispatch(apiSlice.endpoints.getUsers.initiate())
@@ -508,7 +509,7 @@ import './index.css'
 // Wrap app rendering so we can wait for the mock API to initialize
 async function start() {
   // Start our mock API server
-  await worker.start({ onUnhandledRequest: 'bypass' })
+  worker.listen({ onUnhandledRequest: 'bypass' })
 
   // highlight-next-line
   store.dispatch(apiSliceWithUsers.endpoints.getUsers.initiate())
@@ -928,7 +929,7 @@ export const apiSlice = createApi({
 
 For this case, we've also removed the `invalidatesTags` line we'd just added, since we _don't_ want to refetch the posts when we click a reaction button.
 
-Now, if we click several times on a reaction button quickly, we should see the number increment in the UI each time. If we look at the Network tab, we'll also see each individual request go out to the server as well.
+Now, if we click several times on a reaction button quickly, we should see the number increment in the UI each time. If we look at the Redux DevTools, we'll also see a separate `executeMutation` request go out to the server for each click.
 
 Sometimes mutation requests come back with meaningful data in the server response, such as a final item ID that should replace a temporary client-side ID, or other related data. If we did the `const res = await lifecycleApi.queryFulfilled` first, we could then use the data from the response after that to apply cache updates as a "pessimistic" update.
 
@@ -1426,13 +1427,12 @@ As we've seen, RTK Query includes some powerful options for controlling how we m
 
 Let's take one last look at the whole application in action:
 
-<iframe
-  class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/ts-checkpoint-6-rtkqConversion?fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
-  title="redux-essentials-example-app"
-  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-></iframe>
+<LiveExample
+  repo="reduxjs/redux-essentials-example-app"
+  ref="sb-ts-checkpoint-6-rtkqConversion"
+  file="src/features/api/apiSlice.ts"
+  title="Redux Essentials: finished application"
+/>
 
 :::tip Summary
 
