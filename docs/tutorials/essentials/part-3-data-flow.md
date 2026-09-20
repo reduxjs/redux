@@ -51,7 +51,7 @@ To get started, you can open and fork this StackBlitz project:
   title="Redux Essentials: starter project"
 />
 
-You can also [clone the same project from this Github repo](https://github.com/reduxjs/redux-essentials-example-app). The project is configured to use [pnpm](https://pnpm.io/) as the package manager, but you can use any package manager ([NPM](https://docs.npmjs.com/cli/v10), [Yarn](https://yarnpkg.com/), or [Bun](https://bun.sh/docs/cli/install)) as you prefer. After installing packages, you can start the local dev server with the `pnpm dev` command.
+You can also [clone the same project from this Github repo](https://github.com/reduxjs/redux-essentials-example-app). The project is configured to use [NPM](https://docs.npmjs.com/cli/v10) as the package manager, but you can use any package manager ([pnpm](https://pnpm.io/), [Yarn](https://yarnpkg.com/), or [Bun](https://bun.sh/docs/cli/install)) as you prefer. After installing packages, you can start the local dev server with the `npm run dev` command.
 
 If you'd like to see the final version of what we're going to build, you can check out [the **`tutorial-steps-ts` branch**](https://github.com/reduxjs/redux-essentials-example-app/tree/tutorial-steps-ts), or [open the final version on StackBlitz](https://stackblitz.com/github/reduxjs/redux-essentials-example-app/tree/sb-ts-checkpoint-6-rtkqConversion).
 
