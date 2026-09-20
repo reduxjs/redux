@@ -39,7 +39,7 @@
     "src"
   ],
   "scripts": {
-    "clean": "node -e \"for (const path of ['dist', 'coverage']) require('node:fs').rmSync(path, { recursive: true, force: true, maxRetries: 3, retryDelay: 100 })\"",
+    "clean": "tsx scripts/clean.mts",
     "format": "oxfmt \"{src,test}/**/*.{js,ts}\" \"docs/**/*.md\"",
     "format:check": "oxfmt --check \"{src,test}/**/*.{js,ts}\" \"docs/**/*.md\"",
     "lint": "oxlint src test",
