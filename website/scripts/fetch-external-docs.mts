@@ -22,6 +22,11 @@ interface ExternalSource {
   /** Directories to check out, relative to the repo root. The first one is the docs folder. */
   dirs: string[]
   /**
+   * Root-level files the site reads. Sparse checkout always includes files at
+   * the repo root, so these only matter for the DOCS_SOURCE copy path.
+   */
+  files?: string[]
+  /**
    * TEMPORARY local rewrites applied after fetching, so the combined site builds
    * before the matching upstream docs changes land. Each patch should go away
    * once the library repo has been updated.
@@ -82,10 +87,9 @@ const sources: Record<string, ExternalSource> = {
       'packages/toolkit/src',
       // images referenced from docs as /img/usage/...
       'website/static/img/usage',
-      // src/pages/toolkit/errors.tsx; a root file, so sparse checkout already
-      // includes it, but the DOCS_SOURCE copy path needs it listed
-      'errors.json',
     ],
+    // src/pages/toolkit/errors.tsx
+    files: ['errors.json'],
   },
   reselect: {
     repo: 'https://github.com/reduxjs/reselect.git',
@@ -137,10 +141,10 @@ for (const name of names) {
 
   const localSource = process.env[envKey(name, 'SOURCE')]
   if (localSource) {
-    for (const dir of source.dirs) {
-      const from = join(resolve(localSource), dir)
+    for (const entry of [...source.dirs, ...(source.files ?? [])]) {
+      const from = join(resolve(localSource), entry)
       console.log(`[external-docs] ${name}: copying ${from}`)
-      cpSync(from, join(target, dir), { recursive: true })
+      cpSync(from, join(target, entry), { recursive: true })
     }
     source.patch?.(target)
     continue
