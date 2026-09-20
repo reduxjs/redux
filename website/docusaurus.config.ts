@@ -76,6 +76,8 @@ const libraries: LibraryEntry[] = [
     routeBasePath: 'reselect',
     navbarItems: [
       { label: 'Getting Started', to: 'reselect/introduction/getting-started' },
+      { label: 'Tutorials', to: 'tutorials/index' },
+      { label: 'Usage Guide', to: 'usage/deriving-data-selectors' },
       { label: 'API', to: 'reselect/api/createSelector' },
       { label: 'GitHub', href: 'https://www.github.com/reduxjs/reselect' }
     ]

@@ -35,6 +35,11 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Using Reselect',
       items: [
+        {
+          type: 'link',
+          label: 'Deriving Data with Selectors',
+          href: '/usage/deriving-data-selectors'
+        },
         'usage/best-practices',
         'usage/common-mistakes',
         'usage/handling-empty-array-results'
