@@ -19,6 +19,7 @@ NETLIFY_USE_PNPM = "true"
 # those PRs merge.
 DOCS_REF_REDUX_TOOLKIT = "combined-docs"
 DOCS_REF_REACT_REDUX = "combined-docs"
+DOCS_REF_RESELECT = "combined-docs"
 
 # Pages that use the `LiveExample` StackBlitz embed. WebContainers need the host
 # page to be cross-origin isolated. Any other cross-origin iframe on these pages
