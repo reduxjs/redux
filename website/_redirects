@@ -261,3 +261,4 @@
 
 # Reselect (/reselect)
 /reselect/api/development-only-stability-checks /reselect/api/development-only-checks 301
+/reselect/usage/common-mistakes /reselect/usage/best-practices#common-mistakes 301

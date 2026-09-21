@@ -150,7 +150,7 @@ _Explanations of how and why to use selector functions to read values from state
   Our own guide to writing selectors, memoizing them with Reselect, and using them with React-Redux.
 
 - **Reselect docs** <br/>
-  https://reselect.js.org/ <br/>
+  [https://redux.js.org/reselect/](/reselect/) <br/>
   The official Reselect docs, including the `createSelector` API, memoization options, and the development-mode checks that catch common selector mistakes.
 
 - **Idiomatic Redux: Using Reselect Selectors for Encapsulation and Performance** <br/>

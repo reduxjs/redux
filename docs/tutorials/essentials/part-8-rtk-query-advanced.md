@@ -705,7 +705,7 @@ Because this selector is receiving something other than the usual `RootState` ty
 
 :::tip Selectors and Memoizing Varying Arguments
 
-As of RTK 2.x and Reselect 5.x, memoized selectors have [an infinite cache size](https://reselect.js.org/api/weakMapMemoize), so changing the arguments should still keep earlier memoized results available. If you're using RTK 1.x or Reselect 4.x, note that memoized selectors only have a default cache size of 1. You'll need to [create a unique selector instance per component](../../usage/deriving-data-selectors.md#creating-unique-selector-instances) to ensure the selector memoizes consistently when passed different arguments like IDs.
+As of RTK 2.x and Reselect 5.x, memoized selectors have [an infinite cache size](/reselect/api/weakMapMemoize), so changing the arguments should still keep earlier memoized results available. If you're using RTK 1.x or Reselect 4.x, note that memoized selectors only have a default cache size of 1. You'll need to [create a unique selector instance per component](../../usage/deriving-data-selectors.md#creating-unique-selector-instances) to ensure the selector memoizes consistently when passed different arguments like IDs.
 
 :::
 

@@ -41,7 +41,6 @@ const sidebars: SidebarsConfig = {
           href: '/usage/deriving-data-selectors'
         },
         'usage/best-practices',
-        'usage/common-mistakes',
         'usage/handling-empty-array-results'
       ]
     },

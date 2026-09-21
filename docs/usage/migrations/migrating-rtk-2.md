@@ -414,7 +414,7 @@ const addNumbersStable = createSelector(
 )
 ```
 
-This is done the first time the selector is called, unless configured otherwise. More details are available in the [Reselect docs on dev-mode checks](https://reselect.js.org/api/development-only-stability-checks).
+This is done the first time the selector is called, unless configured otherwise. More details are available in the [Reselect docs on dev-mode checks](/reselect/api/development-only-checks).
 
 Note that while RTK re-exports `createSelector`, it intentionally does not re-export the function to configure this check globally - if you wish to do so, you should instead depend on `reselect` directly and import it yourself.
 

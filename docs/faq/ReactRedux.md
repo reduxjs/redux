@@ -168,7 +168,7 @@ Both `createSelector` and `shallowEqual` are workarounds for one specific proble
 **Documentation**
 
 - [Using Redux: Deriving Data with Selectors](../usage/deriving-data-selectors.md)
-- [Reselect docs](https://reselect.js.org/)
+- [Reselect docs](/reselect/introduction/getting-started)
 - [React Redux: Hooks - Equality Comparisons and Updates](/react-redux/api/hooks#equality-comparisons-and-updates)
 
 ### How do I use Redux with React 18 and React 19?

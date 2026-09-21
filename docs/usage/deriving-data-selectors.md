@@ -9,7 +9,7 @@ description: 'Usage > Redux Logic > Selectors: deriving data from the Redux stat
 - Why good Redux architecture keeps state minimal and derives additional data
 - Principles of using selector functions to derive data and encapsulate lookups
 - How to use the Reselect library to write memoized selectors for optimization
-- Advanced techniques for using Reselect
+- How memoized selectors work with `useSelector` and component arguments
 - Additional tools and libraries for creating selectors
 - Best practices for writing selectors
 
@@ -31,9 +31,9 @@ This has several benefits:
 
 This is _also_ a good principle for React state as well! Many times users tried to define a `useEffect` hook that waits for a state value to change, and then sets state with some derived value like `setAllCompleted(allCompleted)`. Instead, that value can be derived during the rendering process and used directly, without having to save the value into state at all:
 
-```js
+```tsx
 function TodoList() {
-  const [todos, setTodos] = useState([])
+  const [todos, setTodos] = useState<Todo[]>([])
 
   // highlight-start
   // Derive the data while rendering
@@ -60,22 +60,22 @@ You are not _required_ to use selectors for all state lookups, but they are a st
 
 **Selectors don't have to be written using a special library**, and it doesn't matter whether you write them as arrow functions or the `function` keyword. For example, all of these are valid selector functions:
 
-```js
+```ts
 // Arrow function, direct lookup
-const selectEntities = state => state.entities
+const selectEntities = (state: RootState) => state.entities
 
 // Function declaration, mapping over an array to derive values
-function selectItemIds(state) {
+function selectItemIds(state: RootState) {
   return state.items.map(item => item.id)
 }
 
 // Function declaration, encapsulating a deep lookup
-function selectSomeSpecificField(state) {
+function selectSomeSpecificField(state: RootState) {
   return state.some.deeply.nested.field
 }
 
 // Arrow function, deriving values from an array
-const selectItemsWhoseNamesStartWith = (items, namePrefix) =>
+const selectItemsWhoseNamesStartWith = (items: Item[], namePrefix: string) =>
   items.filter(item => item.name.startsWith(namePrefix))
 ```
 
@@ -83,11 +83,11 @@ A selector function can have any name you want. However, [**we recommend prefixi
 
 If you've used [the `useSelector` hook from React-Redux](../tutorials/fundamentals/part-5-ui-and-react.md), you're probably already familiar with the basic idea of a selector function - the functions that we pass to `useSelector` must be selectors:
 
-```js
+```tsx
 function TodoList() {
   // highlight-start
   // This anonymous arrow function is a selector!
-  const todos = useSelector(state => state.todos)
+  const todos = useAppSelector(state => state.todos)
   // highlight-end
 }
 ```
@@ -99,8 +99,8 @@ Selector functions are typically defined in two different parts of a Redux appli
 
 A selector function can be used anywhere you have access to the entire Redux root state value. This includes the `useSelector` hook, middleware, thunks, listeners, and sagas. For example, thunks and middleware have access to the `getState` argument, so you can call a selector there:
 
-```js
-function addTodosIfAllowed(todoText) {
+```ts
+function addTodosIfAllowed(todoText: string): AppThunk {
   return (dispatch, getState) => {
     const state = getState()
     const canAddTodos = selectCanAddTodos(state)
@@ -136,8 +136,8 @@ The first reason to use selector functions is for encapsulation and reusability 
 
 Let's say that one of your `useSelector` hooks makes a very specific lookup into part of your Redux state:
 
-```js
-const data = useSelector(state => state.some.deeply.nested.field)
+```ts
+const data = useAppSelector(state => state.some.deeply.nested.field)
 ```
 
 That is legal code, and will run fine. But, it might not be the best idea architecturally. Imagine that you've got several components that need to access that field. What happens if you need to make a change to where that piece of state lives? You would now have to go change _every_ `useSelector` hook that references that value. So, in the same way that [we recommend using action creators to encapsulate details of creating actions](../style-guide/style-guide.md#use-action-creators), we recommend defining reusable selectors to encapsulate the knowledge of where a given piece of state lives. Then, you can use a given selector function many times in the codebase, anywhere that your app needs to retrieve that particular data.
@@ -157,11 +157,11 @@ Selector functions often need to perform relatively "expensive" calculations, or
 
 As an example, this component is written badly, because its `useSelector` call _always_ returns a new array reference. That means the component will re-render after _every_ dispatched action, even if the input `state.todos` slice hasn't changed:
 
-```js
+```tsx
 function TodoList() {
   // highlight-start
   // ❌ WARNING: this _always_ returns a new reference, so it will _always_ re-render!
-  const completedTodos = useSelector(state =>
+  const completedTodos = useAppSelector(state =>
     state.todos.filter(todo => todo.completed)
   )
   // highlight-end
@@ -170,9 +170,9 @@ function TodoList() {
 
 Another example is a component that needs to do some "expensive" work to transform data:
 
-```js
+```tsx
 function ExampleComplexComponent() {
-  const data = useSelector(state => {
+  const data = useAppSelector(state => {
     const initialData = state.data
     const filteredData = expensiveFiltering(initialData)
     const sortedData = expensiveSorting(filteredData)
@@ -193,73 +193,34 @@ Next, we'll look at some options for writing memoized selectors.
 
 ## Writing Memoized Selectors with Reselect
 
-The Redux ecosystem has traditionally used a library called [**Reselect**](https://reselect.js.org) to create memoized selector functions. There also are other similar libraries, as well as multiple variations and wrappers around Reselect - we'll look at those later.
+The Redux ecosystem uses a library called [**Reselect**](/reselect/introduction/getting-started) to create memoized selector functions. Reselect is a separate package, but `createSelector` and the other Reselect APIs are re-exported from [Redux Toolkit](/toolkit), so you do not need to install it separately.
+
+This page covers how memoized selectors fit into a Redux app. The [Reselect docs](/reselect/introduction/getting-started) are the reference for the library itself: [how the memoization works internally](/reselect/introduction/how-does-reselect-work), the [`createSelector` API](/reselect/api/createSelector) and its options, the [memoization functions](/reselect/api/weakMapMemoize), and a [FAQ](/reselect/FAQ).
 
 ### `createSelector` Overview
 
-Reselect provides a function called [`createSelector`](https://reselect.js.org/api/createselector/) to generate memoized selectors. `createSelector` accepts one or more "input selector" functions, plus an "output selector" function, and returns a new selector function for you to use.
+Reselect's [`createSelector`](/reselect/api/createSelector) accepts one or more "input selector" functions, plus a "result function", and returns a new memoized selector.
 
-`createSelector` is included as part of [our official Redux Toolkit package](/toolkit), and is re-exported for ease of use.
+When you call the generated selector, Reselect runs all of the input selectors with the arguments you passed, and compares their results to the results from the previous call. If any of the results are `===` different, it re-runs the result function with those values as its arguments. If all of the results are the same as last time, it skips the result function and returns the cached result from before.
 
-`createSelector` can accept multiple input selectors, which can be provided as separate arguments or as an array. The results from all the input selectors are provided as separate arguments to the output selector:
+In typical usage, the input selectors are simple functions that return values nested somewhere inside the state object, and the result function does the actual derivation work:
 
-```js
-const selectA = state => state.a
-const selectB = state => state.b
-const selectC = state => state.c
+```ts
+import { createSelector } from '@reduxjs/toolkit'
 
-const selectABC = createSelector([selectA, selectB, selectC], (a, b, c) => {
-  // do something with a, b, and c, and return a result
-  return a + b + c
-})
-
-// Call the selector function and get a result
-const abc = selectABC(state)
-
-// could also be written as separate arguments, and works exactly the same
-const selectABC2 = createSelector(selectA, selectB, selectC, (a, b, c) => {
-  // do something with a, b, and c, and return a result
-  return a + b + c
-})
-```
-
-When you call the selector, Reselect will run your input selectors with all of the arguments you gave, and looks at the returned values. If any of the results are `===` different than before, it will re-run the output selector, and pass in those results as the arguments. If all of the results are the same as the last time, it will skip re-running the output selector, and just return the cached final result from before.
-
-This means that **"input selectors" should usually just extract and return values, and the "output selector" should do the transformation work**.
-
-:::caution
-
-A somewhat common mistake is to write an "input selector" that extracts a value or does some derivation, and an "output selector" that just returns its result:
-
-```js
-// ❌ BROKEN: this will not memoize correctly, and does nothing useful!
-const brokenSelector = createSelector(
-  state => state.todos,
-  todos => todos
-)
-```
-
-**Any "output selector" that just returns its inputs is incorrect!** The output selector should always have the transformation logic.
-
-Similarly, a memoized selector should _never_ use `state => state` as an input! That will force the selector to always recalculate.
-:::
-
-In typical Reselect usage, you write your top-level "input selectors" as simple functions that just return values nested somewhere inside the state object. Then, you use `createSelector` to create memoized selectors that take one or more of these values as input and produce new derived values:
-
-```js
-const selectTodos = state => state.todos.items
-const selectCurrentUser = state => state.users.currentUser
+const selectTodos = (state: RootState) => state.todos.items
+const selectCurrentUser = (state: RootState) => state.users.currentUser
 
 const selectTodosForCurrentUser = createSelector(
   [selectTodos, selectCurrentUser],
   (todos, currentUser) => {
-    console.log('Output selector running')
+    console.log('Result function running')
     return todos.filter(todo => todo.ownerId === currentUser.userId)
   }
 )
 
 const todosForCurrentUser1 = selectTodosForCurrentUser(state)
-// Log: "Output selector running"
+// Log: "Result function running"
 
 const todosForCurrentUser2 = selectTodosForCurrentUser(state)
 // No log output
@@ -268,65 +229,47 @@ console.log(todosForCurrentUser1 === todosForCurrentUser2)
 // true
 ```
 
-Note that the second time we called `selectTodosForCurrentUser`, the "output selector" didn't execute. Because the results of `selectTodos` and `selectCurrentUser` were the same as the first call, `selectTodosForCurrentUser` was able to return the memoized result from the first call.
+The second time we called `selectTodosForCurrentUser`, the result function didn't execute. The results of `selectTodos` and `selectCurrentUser` were the same as the first call, so `selectTodosForCurrentUser` returned the memoized result.
+
+This means that **input selectors should just extract and return values, and the result function should do the transformation work**. A result function that just returns one of its inputs unchanged, or an input selector that is `state => state`, will not memoize anything useful. The Reselect docs cover these and other pitfalls in [Best Practices and Common Mistakes](/reselect/usage/best-practices), and Reselect's [development-mode checks](/reselect/api/development-only-checks) warn about both cases the first time a selector runs.
 
 ### `createSelector` Behavior
 
-Reselect 5 memoizes with [`weakMapMemoize`](https://reselect.js.org/api/weakmapmemoize/) by default. It keeps a separate cache entry for each distinct set of arguments, keyed by reference, so calling a selector with several different inputs in a row does not evict earlier results:
+Reselect memoizes in two layers. It first compares the arguments passed to the selector against the previous call, and if they are identical it returns the cached result without running anything. If the arguments differ (which they will after every dispatch, because the root state object is a new reference), it runs the input selectors and compares _their_ results. Only if one of those changed does the result function run. The Reselect docs describe this in detail in ["How Does Reselect Work?"](/reselect/introduction/how-does-reselect-work#cascading-memoization).
+
+Reselect 5 memoizes with [`weakMapMemoize`](/reselect/api/weakMapMemoize) by default. It keeps a separate cache entry for each distinct set of arguments, keyed by reference, so calling a selector with several different inputs in a row does not evict earlier results:
 
 ```ts
-const a = someSelector(state, 1) // first call: runs the output selector
+const a = someSelector(state, 1) // first call: runs the result function
 const b = someSelector(state, 1) // same inputs: cached
-const c = someSelector(state, 2) // new inputs: runs the output selector
+const c = someSelector(state, 2) // new inputs: runs the result function
 const d = someSelector(state, 1) // still cached from the first call
 ```
 
 Cache entries are held in `WeakMap`s keyed by the argument objects, so they are released when those objects are garbage collected. There is no size limit to configure.
 
-Reselect 4 and earlier used `lruMemoize` with a cache size of 1, which only remembered the most recent set of arguments. In that version, `c` would have evicted the result for `(state, 1)`, and `d` would have recalculated. `lruMemoize` is still available if you want a bounded cache, and the ["Selector Factories"](#selector-factories) section below explains when it still matters.
+Reselect 4 and earlier used [`lruMemoize`](/reselect/api/lruMemoize) with a cache size of 1, which only remembered the most recent set of arguments. In that version, `c` would have evicted the result for `(state, 1)`, and `d` would have recalculated. `lruMemoize` is still available if you want a bounded cache, and the ["Selector Factories"](#selector-factories) section below explains when it still matters.
 
-Also, you can pass multiple arguments into a selector. Reselect will call all of the input selectors with those exact inputs:
+Because every input selector receives the full argument list, **all of the input selectors you provide should accept the same types of parameters**:
 
-```js
-const selectItems = state => state.items
-const selectItemId = (state, itemId) => itemId
-
-const selectItemById = createSelector(
-  [selectItems, selectItemId],
-  (items, itemId) => items[itemId]
-)
-
-const item = selectItemById(state, 42)
-
-/*
-Internally, Reselect does something like this:
-
-const firstArg = selectItems(state, 42);  
-const secondArg = selectItemId(state, 42);  
-  
-const result = outputSelector(firstArg, secondArg);  
-return result;  
-*/
-```
-
-Because of this, **it's important that all of the "input selectors" you provide should accept the same types of parameters**. Otherwise, the selectors will break.
-
-```js
-const selectItems = state => state.items
+```ts
+const selectItems = (state: RootState) => state.items
 
 // expects a number as the second argument
-const selectItemId = (state, itemId) => itemId
+const selectItemId = (state: RootState, itemId: number) => itemId
 
 // expects an object as the second argument
-const selectOtherField = (state, someObject) => someObject.someField
+const selectOtherField = (state: RootState, someObject: { someField: string }) =>
+  someObject.someField
 
+// ❌ These input selectors disagree about what the second argument is
 const selectItemById = createSelector(
   [selectItems, selectItemId, selectOtherField],
   (items, itemId, someField) => items[itemId]
 )
 ```
 
-In this example, `selectItemId` expects that its second argument will be some simple value, while `selectOtherField` expects that the second argument is an object. If you call `selectItemById(state, 42)`, `selectOtherField` will break because it's trying to access `42.someField`.
+If you call `selectItemById(state, 42)`, `selectOtherField` will break because it's trying to access `42.someField`. TypeScript will report this mismatch; in plain JavaScript it fails at runtime.
 
 ### Reselect Usage Patterns and Limitations
 
@@ -334,8 +277,8 @@ In this example, `selectItemId` expects that its second argument will be some si
 
 It's possible to take selectors generated with `createSelector`, and use them as inputs for other selectors as well. In this example, the `selectCompletedTodos` selector is used as an input to `selectCompletedTodoDescriptions`:
 
-```js
-const selectTodos = state => state.todos
+```ts
+const selectTodos = (state: RootState) => state.todos
 
 const selectCompletedTodos = createSelector([selectTodos], todos =>
   todos.filter(todo => todo.completed)
@@ -349,34 +292,28 @@ const selectCompletedTodoDescriptions = createSelector(
 
 #### Passing Input Parameters
 
-A Reselect-generated selector function can be called with as many arguments as you want: `selectThings(a, b, c, d, e)`. However, what matters for re-running the output is not the number of arguments, or whether the arguments themselves have changed to be new references. Instead, it's about the "input selectors" that were defined, and whether _their_ results have changed. Similarly, the arguments for the "output selector" are solely based on what the input selectors return.
+A Reselect-generated selector can be called with as many arguments as you want: `selectThings(a, b, c, d, e)`. What matters for re-running the result function is not the arguments themselves, but whether the _input selectors'_ results changed. So if you want to pass additional parameters through to the result function, you must define input selectors that extract those values from the original selector arguments:
 
-This means that if you want to pass additional parameters through to the output selector, you must define input selectors that extract those values from the original selector arguments:
-
-```js
+```ts
 const selectItemsByCategory = createSelector(
   [
     // Usual first input - extract value from `state`
-    state => state.items,
-    // Take the second arg, `category`, and forward to the output selector
-    (state, category) => category
+    (state: RootState) => state.items,
+    // Take the second arg, `category`, and forward to the result function
+    (state: RootState, category: string) => category
   ],
-  // Output selector gets (`items, category)` as args
+  // Result function gets (items, category) as args
   (items, category) => items.filter(item => item.category === category)
 )
-```
 
-You can then use the selector like this:
-
-```js
 const electronicItems = selectItemsByCategory(state, 'electronics')
 ```
 
-For consistency, you may want to consider passing additional parameters to a selector as a single object, such as `selectThings(state, otherArgs)`, and then extracting values from the `otherArgs` object.
+For consistency, you may want to consider passing additional parameters to a selector as a single object, such as `selectThings(state, otherArgs)`, and then extracting values from the `otherArgs` object. See also the Reselect FAQ entry on [selectors that take an argument](/reselect/FAQ#how-do-i-create-a-selector-that-takes-an-argument).
 
 #### Selector Factories
 
-With Reselect 4's `lruMemoize` and its default cache size of 1, a single selector instance could only remember one set of arguments. If several components called `selectItemsByCategory(state, category)` with different categories, each call evicted the previous result and the output selector re-ran every time. The workaround was a "selector factory" - a function that calls `createSelector()` and returns a fresh selector instance for each component:
+With Reselect 4's `lruMemoize` and its default cache size of 1, a single selector instance could only remember one set of arguments. If several components called `selectItemsByCategory(state, category)` with different categories, each call evicted the previous result and the result function re-ran every time. The workaround was a "selector factory" - a function that calls `createSelector()` and returns a fresh selector instance for each component:
 
 ```ts
 const makeSelectItemsByCategory = () =>
@@ -386,15 +323,15 @@ const makeSelectItemsByCategory = () =>
   )
 ```
 
-With Reselect 5's default `weakMapMemoize`, one shared selector already keeps a cache entry per distinct argument set, so **you usually do not need a factory**. A factory is still useful if you have opted back into `lruMemoize` for a bounded cache, or if you want a component's cached results released as soon as it unmounts rather than when the argument objects are garbage collected. See ["Creating Unique Selector Instances"](#creating-unique-selector-instances) for how to use one with `useSelector`.
+With Reselect 5's default `weakMapMemoize`, one shared selector already keeps a cache entry per distinct argument set, so **you usually do not need a factory**. A factory is still useful if you have opted back into `lruMemoize` for a bounded cache, or if you want a component's cached results released as soon as it unmounts rather than when the argument objects are garbage collected. See ["Creating Unique Selector Instances"](#creating-unique-selector-instances) for how to use one with `useSelector`, and the Reselect FAQ on [sharing a selector across component instances](/reselect/FAQ#can-i-share-a-selector-across-multiple-component-instances).
 
 ### Reselect 5
 
 Reselect 5 (released December 2023) is written in TypeScript and changes a few defaults that are worth knowing about:
 
-- **`weakMapMemoize` is the default memoizer.** As described above, it caches per distinct argument set with no size limit. To get the previous behavior, pass `memoize: lruMemoize` (and optionally `memoizeOptions: { maxSize: 10 }`) to `createSelector` or build a custom `createSelector` with [`createSelectorCreator`](https://reselect.js.org/api/createselectorcreator/).
-- **`createSelector.withTypes<RootState>()`** returns a `createSelector` whose input selectors are pre-typed to receive your root state, so you do not have to annotate `state` in every input selector.
-- **Development-mode checks** warn about the two common mistakes shown earlier on this page: an input selector that returns a new reference on every call, and an output selector that just returns its input. They run on the first call to each selector in development and are disabled in production. See [Development-only checks](https://reselect.js.org/api/development-only-checks/).
+- **`weakMapMemoize` is the default memoizer.** As described above, it caches per distinct argument set with no size limit. To get the previous behavior, pass `memoize: lruMemoize` (and optionally `memoizeOptions: { maxSize: 10 }`) to `createSelector` or build a custom `createSelector` with [`createSelectorCreator`](/reselect/api/createSelectorCreator).
+- **[`createSelector.withTypes<RootState>()`](/reselect/api/createSelector#defining-a-pre-typed-createselector)** returns a `createSelector` whose input selectors are pre-typed to receive your root state, so you do not have to annotate `state` in every input selector.
+- **Development-mode checks** warn about the two common mistakes described earlier on this page: an input selector that returns a new reference on every call, and a result function that just returns its input. They run on the first call to each selector in development and are disabled in production. See [Development-only checks](/reselect/api/development-only-checks).
 
 ```ts title="src/app/selectors.ts"
 import { createSelector, lruMemoize } from '@reduxjs/toolkit'
@@ -416,7 +353,7 @@ export const selectItemsByCategory = createAppSelector(
 )
 ```
 
-Redux Toolkit re-exports `createSelector`, `createSelectorCreator`, `lruMemoize`, and `weakMapMemoize` from Reselect, so you do not need to install Reselect separately. The [Reselect docs](https://reselect.js.org) cover the full API.
+Redux Toolkit re-exports `createSelector`, `createSelectorCreator`, `lruMemoize`, and `weakMapMemoize` from Reselect, so you do not need to install Reselect separately. The [Reselect 5 summary](/reselect/introduction/v5-summary) lists the full set of changes.
 
 ## Alternative Selector Libraries
 
@@ -464,20 +401,20 @@ It has some tradeoffs and differences from Reselect:
 
 [`re-reselect`](https://github.com/toomuchdesign/re-reselect) wraps Reselect and adds a "key selector" that picks a cache key from the selector arguments, managing a separate Reselect selector instance per key. With Reselect 5's `weakMapMemoize` already caching per argument set, this is mostly useful when you want an explicit key (such as a string ID) rather than reference identity to decide which cache entry to use.
 
-```js
+```ts
 import { createCachedSelector } from 're-reselect'
 
-const getUsersByLibrary = createCachedSelector(
+const selectUsersByLibrary = createCachedSelector(
   // inputSelectors
-  getUsers,
-  getLibraryId,
+  selectUsers,
+  selectLibraryId,
 
   // resultFunc
   (users, libraryId) => expensiveComputation(users, libraryId)
 )(
   // re-reselect keySelector (receives selectors' arguments)
   // Use "libraryName" as cacheKey
-  (_state_, libraryName) => libraryName
+  (_state: RootState, libraryName: string) => libraryName
 )
 ```
 
@@ -489,14 +426,15 @@ It's common to want to pass additional arguments to a selector function. However
 
 The simplest solution is to pass an anonymous selector to `useSelector`, and then immediately call the real selector with both `state` and any additional arguments:
 
-```js
+```tsx
 import { selectTodoById } from './todosSlice'
+import { useAppSelector } from '../../app/hooks'
 
-function TodoListitem({ todoId }) {
+function TodoListItem({ todoId }: { todoId: string }) {
   // highlight-start
   // Captures `todoId` from scope, gets `state` as an arg, and forwards both
   // to the actual selector function to extract the result
-  const todo = useSelector(state => selectTodoById(state, todoId))
+  const todo = useAppSelector(state => selectTodoById(state, todoId))
   // highlight-end
 }
 ```
@@ -534,13 +472,13 @@ Selector functions are often defined in the UI layer, directly inside of `useSel
 
 Like any other function, you can extract an anonymous function outside the component to give it a name:
 
-```js
+```tsx
 // highlight-next-line
-const selectTodos = state => state.todos
+const selectTodos = (state: RootState) => state.todos
 
 function TodoList() {
   // highlight-next-line
-  const todos = useSelector(selectTodos)
+  const todos = useAppSelector(selectTodos)
 }
 ```
 
@@ -548,14 +486,23 @@ However, multiple parts of the application may want to use the same lookups. Als
 
 Because of this, **it's a good idea to define reusable selectors alongside their corresponding reducers**. In this case, we could export `selectTodos` from the `todosSlice` file:
 
-```js title="src/features/todos/todosSlice.js"
-import { createSlice } from '@reduxjs/toolkit'
+```ts title="src/features/todos/todosSlice.ts"
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import type { RootState } from '../../app/store'
+
+interface Todo {
+  id: string
+  text: string
+  completed: boolean
+}
+
+const initialState: Todo[] = []
 
 const todosSlice = createSlice({
   name: 'todos',
-  initialState: [],
+  initialState,
   reducers: {
-    todoAdded(state, action) {
+    todoAdded(state, action: PayloadAction<Todo>) {
       state.push(action.payload)
     }
   }
@@ -566,7 +513,7 @@ export default todosSlice.reducer
 
 // highlight-start
 // Export a reusable selector here
-export const selectTodos = state => state.todos
+export const selectTodos = (state: RootState) => state.todos
 // highlight-end
 ```
 
@@ -580,24 +527,26 @@ Similarly, **don't make every single selector memoized!**. Memoization is only n
 
 Some examples of when and when not to memoize:
 
-```js
+```ts
 // ❌ DO NOT memoize: will always return a consistent reference
-const selectTodos = state => state.todos
-const selectNestedValue = state => state.some.deeply.nested.field
-const selectTodoById = (state, todoId) => state.todos[todoId]
+const selectTodos = (state: RootState) => state.todos
+const selectNestedValue = (state: RootState) => state.some.deeply.nested.field
+const selectTodoById = (state: RootState, todoId: string) => state.todos[todoId]
 
 // 🤔 MAYBE memoize: deriving data, but will return a consistent result.
 //    Memoization might be useful if the selector is used in many places
 //    or the list being iterated over is long.
-const selectItemsTotal = state => {
+const selectItemsTotal = (state: RootState) => {
   return state.items.reduce((result, item) => {
     return result + item.total
   }, 0)
 }
-const selectAllCompleted = state => state.todos.every(todo => todo.completed)
+const selectAllCompleted = (state: RootState) =>
+  state.todos.every(todo => todo.completed)
 
 // ✅ SHOULD memoize: returns new references when called
-const selectTodoDescriptions = state => state.todos.map(todo => todo.text)
+const selectTodoDescriptions = (state: RootState) =>
+  state.todos.map(todo => todo.text)
 ```
 
 ### Reshape State as Needed for Components
@@ -616,13 +565,13 @@ A typical slice file often has both of these patterns side-by-side. That's fine,
 
 We refer to this pattern as "globalizing" selectors. A **"globalized" selector** is one that accepts the Redux root state as an argument, and knows how to find the relevant slice of state to perform the real logic. A **"localized" selector** is one that expects _just a piece_ of the state as an argument, without knowing or caring where that is in the root state:
 
-```js
+```ts
 // "Globalized" - accepts root state, knows to find data at `state.todos`
-const selectAllTodosCompletedGlobalized = state =>
+const selectAllTodosCompletedGlobalized = (state: RootState) =>
   state.todos.every(todo => todo.completed)
 
 // "Localized" - only accepts `todos` as argument, doesn't know where that came from
-const selectAllTodosCompletedLocalized = todos =>
+const selectAllTodosCompletedLocalized = (todos: Todo[]) =>
   todos.every(todo => todo.completed)
 ```
 
@@ -635,7 +584,7 @@ There may also be other benefits to having "localized" versions of selectors as 
 ## Further Information
 
 - Selector libraries:
-  - Reselect: https://reselect.js.org
+  - [Reselect](/reselect/introduction/getting-started)
   - `proxy-memoize`: https://github.com/dai-shi/proxy-memoize
   - `re-reselect`: https://github.com/toomuchdesign/re-reselect
 - Randy Coulman has an excellent series of blog posts on selector architecture and different approaches for globalizing Redux selectors, with tradeoffs:
