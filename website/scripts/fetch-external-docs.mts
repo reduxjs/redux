@@ -12,8 +12,8 @@
  * An existing `external/<name>` is left alone unless `--force` is passed.
  */
 import { execFileSync } from 'node:child_process'
-import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
-import { dirname, join, relative, resolve } from 'node:path'
+import { cpSync, existsSync, mkdirSync, rmSync } from 'node:fs'
+import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 interface ExternalSource {
@@ -26,50 +26,6 @@ interface ExternalSource {
    * the repo root, so these only matter for the DOCS_SOURCE copy path.
    */
   files?: string[]
-  /**
-   * TEMPORARY local rewrites applied after fetching, so the combined site builds
-   * before the matching upstream docs changes land. Each patch should go away
-   * once the library repo has been updated.
-   */
-  patch?: (target: string) => void
-}
-
-function walk(dir: string, matches: (file: string) => boolean): string[] {
-  return readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
-    const file = join(dir, entry.name)
-    return entry.isDirectory() ? walk(file, matches) : matches(file) ? [file] : []
-  })
-}
-
-function rewriteFile(file: string, rewrite: (content: string) => string) {
-  const before = readFileSync(file, 'utf8')
-  const after = rewrite(before)
-  if (after !== before) {
-    writeFileSync(file, after)
-    console.log(`[external-docs] patched ${file}`)
-  }
-}
-
-function patchReselect(target: string) {
-  const docsDir = join(target, 'website', 'docs')
-  const staticImgDir = join(target, 'website', 'static', 'img')
-  for (const file of walk(docsDir, f => f.endsWith('.mdx'))) {
-    rewriteFile(file, content =>
-      content
-        // `@site/static/img/...` resolves against this site, not Reselect's.
-        // Upstream fix: reference the images relative to the doc file.
-        .replaceAll('@site/static/img/', `${relative(dirname(file), staticImgDir).replaceAll('\\', '/')}/`)
-        // Site-absolute markdown links and `<Link to='/...'>` assume Reselect
-        // owns the URL root. Upstream fix: use relative links (`./api/weakMapMemoize`).
-        .replaceAll(/\]\(\/(api|introduction|usage)\//g, '](/reselect/$1/')
-        .replaceAll(/(<Link to=['"])\/(api|introduction|usage)\//g, '$1/reselect/$2/'),
-    )
-  }
-  // InternalLinks hard-codes site-absolute `to="/..."` paths.
-  // Upstream fix: derive the prefix from the docs plugin's routeBasePath.
-  rewriteFile(join(target, 'website', 'src', 'components', 'InternalLinks.tsx'), content =>
-    content.replaceAll('to="/', 'to="/reselect/'),
-  )
 }
 
 const sources: Record<string, ExternalSource> = {
@@ -102,7 +58,6 @@ const sources: Record<string, ExternalSource> = {
       'website/src/components',
       'website/static/img',
     ],
-    patch: patchReselect,
   },
 }
 
@@ -146,7 +101,6 @@ for (const name of names) {
       console.log(`[external-docs] ${name}: copying ${from}`)
       cpSync(from, join(target, entry), { recursive: true })
     }
-    source.patch?.(target)
     continue
   }
 
@@ -166,5 +120,4 @@ for (const name of names) {
     name,
   )
   git(target, 'sparse-checkout', 'set', ...source.dirs)
-  source.patch?.(target)
 }
