@@ -2,7 +2,7 @@
 
 This example does not require a build system or a view framework, and exists to show the raw Redux API used with ES5.
 
-As Dan said [in the original PR for this example]():
+As Dan said [in the original PR for this example](https://github.com/reduxjs/redux/pull/1289):
 
 > The new Counter Vanilla example is aimed to dispel the myth that Redux requires Webpack, React, hot reloading, sagas, action creators, constants, Babel, npm, CSS modules, decorators, fluent Latin, an Egghead subscription, a PhD, or an Exceeds Expectations O.W.L. level.
 >
