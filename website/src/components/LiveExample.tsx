@@ -58,11 +58,16 @@ function Links({ open, github }: { open: string; github: string }) {
   )
 }
 
+// Every StackBlitz frame boots a full WebContainer (a Node runtime in wasm).
+// Docusaurus navigates client-side, so all the embeds a reader scrolls past
+// share one Chrome renderer process for stackblitz.com; a few boots in a row
+// crash it. The container only boots when the reader asks for it.
 function Embed(props: LiveExampleProps) {
   const { title, height = 500 } = props
   const { colorMode } = useColorMode()
   const urls = buildUrls(props)
   const [isolated, setIsolated] = useState<boolean | null>(null)
+  const [started, setStarted] = useState(false)
 
   useEffect(() => {
     setIsolated(window.crossOriginIsolated === true)
@@ -76,15 +81,28 @@ function Embed(props: LiveExampleProps) {
         <span className={styles.title}>{title}</span>
         <Links open={urls.open} github={urls.github} />
       </div>
-      {isolated ? (
+      {isolated && started ? (
         <iframe
           className={styles.frame}
           src={embedSrc}
           title={title}
           style={{ height }}
           allow="cross-origin-isolated"
-          loading="lazy"
         />
+      ) : isolated ? (
+        <div className={styles.placeholder} style={{ height }}>
+          <button
+            type="button"
+            className="button button--primary button--lg"
+            onClick={() => setStarted(true)}
+          >
+            Run this example
+          </button>
+          <span className={styles.placeholderNote}>
+            Starts a live dev server in your browser. This can take a few
+            seconds.
+          </span>
+        </div>
       ) : (
         <div className={styles.fallback}>
           {isolated === null ? (
