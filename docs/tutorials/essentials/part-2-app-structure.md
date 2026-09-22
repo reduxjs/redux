@@ -6,6 +6,7 @@ description: 'The official Redux Essentials tutorial: learn the structure of a t
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
+import { LiveExample } from '@site/src/components/LiveExample'
 
 :::tip What You'll Learn
 
@@ -28,13 +29,13 @@ The project has been created using a smaller version of [the official Redux Tool
 
 Here's the live version of the project. You can play around with it by clicking the buttons in the app preview on the right, and browse through the source files on the left.
 
-<iframe
-  class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-templates/tree/master/packages/rtk-app-structure-example?fontsize=14&hidenavigation=1&module=%2Fsrc%2Ffeatures%2Fcounter%2FcounterSlice.ts&theme=dark&runonclick=1"
-  title="redux-essentials-example"
-  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-></iframe>
+<LiveExample
+  repo="reduxjs/redux-templates"
+  ref="master"
+  path="packages/rtk-app-structure-example"
+  file="src/features/counter/counterSlice.ts"
+  title="Redux Toolkit app structure: counter example"
+/>
 
 If you'd like to set up this project on your own computer, you can create a local copy with this command:
 

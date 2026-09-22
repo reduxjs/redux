@@ -18,6 +18,18 @@ NETLIFY_USE_PNPM = "true"
 # is added here only once every embed on it has been converted to `LiveExample`
 # or `VideoEmbed`.
 [[headers]]
+  for = "/tutorials/essentials/part-2-app-structure"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-2-app-structure/*"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
   for = "/tutorials/essentials/part-3-data-flow"
   [headers.values]
     Cross-Origin-Embedder-Policy = "credentialless"
