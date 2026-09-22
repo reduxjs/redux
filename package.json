@@ -39,7 +39,7 @@
     "src"
   ],
   "scripts": {
-    "clean": "rimraf dist/ coverage/",
+    "clean": "tsx scripts/clean.mts",
     "format": "oxfmt \"{src,test}/**/*.{js,ts}\" \"docs/**/*.md\"",
     "format:check": "oxfmt --check \"{src,test}/**/*.{js,ts}\" \"docs/**/*.md\"",
     "lint": "oxlint src test",
@@ -65,7 +65,6 @@
     "oxfmt": "^0.63.0",
     "oxlint": "^1.81.0",
     "pkg-pr-new": "^0.0.75",
-    "rimraf": "^6.1.3",
     "rxjs": "^7.8.1",
     "tsdown": "^0.23.0",
     "tsx": "^4.23.13",
