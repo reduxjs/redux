@@ -1429,7 +1429,7 @@ Let's take one last look at the whole application in action:
 
 <LiveExample
   repo="reduxjs/redux-essentials-example-app"
-  ref="sb-ts-checkpoint-6-rtkqConversion"
+  ref="ts-checkpoint-6-rtkqConversion"
   file="src/features/api/apiSlice.ts"
   title="Redux Essentials: finished application"
 />

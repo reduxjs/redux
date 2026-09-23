@@ -832,7 +832,7 @@ With RTK Query, the actual details of how to manage data fetching, caching, and 
 
 <LiveExample
   repo="reduxjs/redux-essentials-example-app"
-  ref="sb-ts-checkpoint-5-createApi"
+  ref="ts-checkpoint-5-createApi"
   file="src/features/api/apiSlice.ts"
   title="Redux Essentials: end of Part 7"
 />

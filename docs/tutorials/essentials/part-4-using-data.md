@@ -1483,7 +1483,7 @@ Here's what our app looks like after all these changes:
 
 <LiveExample
   repo="reduxjs/redux-essentials-example-app"
-  ref="sb-ts-checkpoint-2-authHandling"
+  ref="ts-checkpoint-2-authHandling"
   file="src/features/posts/postsSlice.ts"
   title="Redux Essentials: end of Part 4"
 />

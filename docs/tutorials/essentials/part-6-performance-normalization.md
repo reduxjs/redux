@@ -1594,7 +1594,7 @@ We've built a lot of new behavior in this section. Let's see how the app looks w
 
 <LiveExample
   repo="reduxjs/redux-essentials-example-app"
-  ref="sb-ts-checkpoint-4-listenerToasts"
+  ref="ts-checkpoint-4-listenerToasts"
   file="src/features/posts/postsSlice.ts"
   title="Redux Essentials: end of Part 6"
 />

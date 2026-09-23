@@ -1120,7 +1120,7 @@ Here's what our app looks like now that we're fetching data from that fake API:
 
 <LiveExample
   repo="reduxjs/redux-essentials-example-app"
-  ref="sb-ts-checkpoint-3-postRequests"
+  ref="ts-checkpoint-3-postRequests"
   file="src/features/posts/postsSlice.ts"
   title="Redux Essentials: end of Part 5"
 />

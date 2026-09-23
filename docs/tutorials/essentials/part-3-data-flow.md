@@ -46,14 +46,14 @@ To get started, you can open and fork this StackBlitz project:
 
 <LiveExample
   repo="reduxjs/redux-essentials-example-app"
-  ref="sb-ts-checkpoint-0-setup"
+  ref="ts-checkpoint-0-setup"
   file="src/main.tsx"
   title="Redux Essentials: starter project"
 />
 
 You can also [clone the same project from this Github repo](https://github.com/reduxjs/redux-essentials-example-app). The project is configured to use [NPM](https://docs.npmjs.com/cli/v10) as the package manager, but you can use any package manager ([pnpm](https://pnpm.io/), [Yarn](https://yarnpkg.com/), or [Bun](https://bun.sh/docs/cli/install)) as you prefer. After installing packages, you can start the local dev server with the `npm run dev` command.
 
-If you'd like to see the final version of what we're going to build, you can check out [the **`tutorial-steps-ts` branch**](https://github.com/reduxjs/redux-essentials-example-app/tree/tutorial-steps-ts), or [open the final version on StackBlitz](https://stackblitz.com/github/reduxjs/redux-essentials-example-app/tree/sb-ts-checkpoint-6-rtkqConversion).
+If you'd like to see the final version of what we're going to build, you can check out [the **`tutorial-steps-ts` branch**](https://github.com/reduxjs/redux-essentials-example-app/tree/tutorial-steps-ts), or [open the final version on StackBlitz](https://stackblitz.com/github/reduxjs/redux-essentials-example-app/tree/ts-checkpoint-6-rtkqConversion).
 
 > We'd like to thank [Tania Rascia](https://www.taniarascia.com/), whose [Using Redux with React](https://www.taniarascia.com/redux-react-guide/) tutorial helped inspire the example in this page. It also uses her [Primitive UI CSS starter](https://taniarascia.github.io/primitive/) for styling.
 
@@ -659,7 +659,7 @@ We've set up the basics of a Redux app - store, slice with reducers, and UI to d
 
 <LiveExample
   repo="reduxjs/redux-essentials-example-app"
-  ref="sb-ts-checkpoint-1-postAdded"
+  ref="ts-checkpoint-1-postAdded"
   file="src/features/posts/postsSlice.ts"
   title="Redux Essentials: end of Part 3"
 />
