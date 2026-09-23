@@ -6,6 +6,7 @@ description: 'The official Redux Essentials tutorial: learn how to improve app p
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
+import { LiveExample } from '@site/src/components/LiveExample'
 
 :::tip What You'll Learn
 
@@ -285,7 +286,7 @@ export const LoginPage = () => {
   const navigate = useNavigate()
 
   // highlight-next-line
-  const handleSubmit = async (e: React.FormEvent<LoginPageFormElements>) => {
+  const handleSubmit = async (e: React.SubmitEvent<LoginPageFormElements>) => {
     e.preventDefault()
 
     const username = e.currentTarget.elements.username.value
@@ -1591,13 +1592,12 @@ Now when we add a new post, we should see a small green toast pop up in the lowe
 
 We've built a lot of new behavior in this section. Let's see how the app looks with all those changes:
 
-<iframe
-  class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/ts-checkpoint-4-listenerToasts?fontsize=14&hidenavigation=1&module=%2fsrc%2Ffeatures%2Fposts%2FpostsSlice.ts&theme=dark&runonclick=1"
-  title="redux-essentials-example"
-  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-></iframe>
+<LiveExample
+  repo="reduxjs/redux-essentials-example-app"
+  ref="ts-checkpoint-4-listenerToasts"
+  file="src/features/posts/postsSlice.ts"
+  title="Redux Essentials: end of Part 6"
+/>
 
 Here's what we covered in this section:
 

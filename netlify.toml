@@ -12,6 +12,95 @@ NODE_OPTIONS = "--max_old_space_size=4096"
 # `packageManager` in website/package.json.
 NETLIFY_USE_PNPM = "true"
 
+# Pages that use the `LiveExample` StackBlitz embed. WebContainers need the host
+# page to be cross-origin isolated. Any other cross-origin iframe on these pages
+# (CodeSandbox, YouTube, Egghead) is blocked unless it also sends COEP, so a page
+# is added here only once every embed on it has been converted to `LiveExample`
+# or `VideoEmbed`.
+[[headers]]
+  for = "/tutorials/essentials/part-2-app-structure"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-2-app-structure/*"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-3-data-flow"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-3-data-flow/*"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-4-using-data"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-4-using-data/*"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-5-async-logic"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-5-async-logic/*"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-6-performance-normalization"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-6-performance-normalization/*"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-7-rtk-query-basics"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-7-rtk-query-basics/*"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-8-rtk-query-advanced"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
+[[headers]]
+  for = "/tutorials/essentials/part-8-rtk-query-advanced/*"
+  [headers.values]
+    Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Opener-Policy = "same-origin"
+
 [[plugins]]
   package = "netlify-plugin-cache"
   [plugins.inputs]

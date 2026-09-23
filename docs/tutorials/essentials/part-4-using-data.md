@@ -6,6 +6,7 @@ description: 'The official Redux Essentials tutorial: learn how to work with com
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
+import { LiveExample } from '@site/src/components/LiveExample'
 
 :::tip What You'll Learn
 
@@ -276,7 +277,7 @@ export const EditPostForm = () => {
     )
   }
 
-  const onSavePostClicked = (e: React.FormEvent<EditPostFormElements>) => {
+  const onSavePostClicked = (e: React.SubmitEvent<EditPostFormElements>) => {
     // Prevent server submission
     e.preventDefault()
 
@@ -423,7 +424,7 @@ const postsSlice = createSlice({
 Now our component doesn't have to worry about what the payload object looks like - the action creator will take care of putting it together the right way. So, we can update the component so that it passes in `title` and `content` as arguments when it dispatches `postAdded`:
 
 ```ts title="features/posts/AddPostForm.tsx"
-const handleSubmit = (e: React.FormEvent<AddPostFormElements>) => {
+const handleSubmit = (e: React.SubmitEvent<AddPostFormElements>) => {
   // Prevent server submission
   e.preventDefault()
 
@@ -720,7 +721,7 @@ const AddPostForm = () => {
   // highlight-next-line
   const users = useAppSelector(selectAllUsers)
 
-  const handleSubmit = (e: React.FormEvent<AddPostFormElements>) => {
+  const handleSubmit = (e: React.SubmitEvent<AddPostFormElements>) => {
     // Prevent server submission
     e.preventDefault()
 
@@ -1141,7 +1142,7 @@ export const LoginPage = () => {
   const users = useAppSelector(selectAllUsers)
   const navigate = useNavigate()
 
-  const handleSubmit = (e: React.FormEvent<LoginPageFormElements>) => {
+  const handleSubmit = (e: React.SubmitEvent<LoginPageFormElements>) => {
     e.preventDefault()
 
     const username = e.currentTarget.elements.username.value
@@ -1330,7 +1331,7 @@ export const AddPostForm = () => {
   // highlight-next-line
   const userId = useAppSelector(selectCurrentUsername)!
 
-  const handleSubmit = (e: React.FormEvent<AddPostFormElements>) => {
+  const handleSubmit = (e: React.SubmitEvent<AddPostFormElements>) => {
     // Prevent server submission
     e.preventDefault()
 
@@ -1480,13 +1481,12 @@ And that's it for this section! We've done a lot of work. We can now view and ed
 
 Here's what our app looks like after all these changes:
 
-<iframe
-  class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-essentials-example-app/tree/ts-checkpoint-2-authHandling?fontsize=14&hidenavigation=1&module=%2fsrc%2Ffeatures%2Fposts%2FpostsSlice.ts&theme=dark&runonclick=1"
-  title="redux-essentials-example"
-  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-></iframe>
+<LiveExample
+  repo="reduxjs/redux-essentials-example-app"
+  ref="ts-checkpoint-2-authHandling"
+  file="src/features/posts/postsSlice.ts"
+  title="Redux Essentials: end of Part 4"
+/>
 
 It's actually starting to look more useful and interesting!
 
