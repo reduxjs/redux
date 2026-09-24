@@ -220,7 +220,7 @@
 /react-redux/next/introduction/quick-started        /react-redux/introduction/getting-started
 /react-redux/introduction/basic-tutorial            /react-redux/tutorials/connect
 /react-redux/next/introduction/basic-tutorial       /react-redux/tutorials/connect
-/react-redux/using-react-redux/static-typing        /react-redux/using-react-redux/usage-with-typescript
+/react-redux/using-react-redux/static-typing        /usage/usage-with-typescript#usage-with-react-redux
 # Legacy versioned docs
 /react-redux/next/*         /react-redux/:splat
 /react-redux/5.x/*          /react-redux/:splat
