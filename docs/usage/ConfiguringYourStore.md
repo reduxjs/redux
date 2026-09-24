@@ -12,7 +12,7 @@ We will now explore how to customize the store to add extra functionality: middl
 
 ## Creating the store
 
-Redux Toolkit's [`configureStore`](https://redux-toolkit.js.org/api/configureStore) creates the store. It accepts an object with named options, and the only required one is `reducer`:
+Redux Toolkit's [`configureStore`](/toolkit/api/configureStore) creates the store. It accepts an object with named options, and the only required one is `reducer`:
 
 ```ts title="app/store.ts"
 import { configureStore } from '@reduxjs/toolkit'
@@ -50,7 +50,7 @@ createRoot(document.getElementById('root')!).render(
 With no other options, `configureStore` already does several things:
 
 - Adds the [`redux-thunk` middleware](https://github.com/reduxjs/redux-thunk), so you can dispatch functions for async logic
-- In development, adds middleware that warn about [accidental state mutations](https://redux-toolkit.js.org/api/immutabilityMiddleware) and [non-serializable values](https://redux-toolkit.js.org/api/serializabilityMiddleware) in state or actions
+- In development, adds middleware that warn about [accidental state mutations](/toolkit/api/immutabilityMiddleware) and [non-serializable values](/toolkit/api/serializabilityMiddleware) in state or actions
 - Enables the [Redux DevTools Extension](https://github.com/reduxjs/redux-devtools/tree/main/extension) if it is installed in the browser
 
 The rest of this page covers how to add to or change those defaults.
@@ -122,7 +122,7 @@ export const store = configureStore({
 A few details worth knowing:
 
 - Middleware run in array order when an action is dispatched. `concat` puts your middleware after the defaults, so the thunk middleware has already resolved any thunk functions by the time the logger sees the action. Use `prepend` to run before the defaults instead.
-- `getDefaultMiddleware()` and `getDefaultEnhancers()` accept options to turn off or tune individual defaults. See the [`getDefaultMiddleware`](https://redux-toolkit.js.org/api/getDefaultMiddleware) and [`getDefaultEnhancers`](https://redux-toolkit.js.org/api/getDefaultEnhancers) docs.
+- `getDefaultMiddleware()` and `getDefaultEnhancers()` accept options to turn off or tune individual defaults. See the [`getDefaultMiddleware`](/toolkit/api/getDefaultMiddleware) and [`getDefaultEnhancers`](/toolkit/api/getDefaultEnhancers) docs.
 - If you return a list that does not include the defaults, they are not added. That is occasionally what you want, but usually you should keep them. In TypeScript, a list built without the defaults should be a `new Tuple(...)` from Redux Toolkit rather than a plain array, so that the store's `dispatch` type is inferred correctly.
 
 It is common to add some middleware only in development. Since the callback is a normal function, an `if` statement works:
@@ -209,4 +209,4 @@ If you want to understand these pieces in more detail, see [Understanding Middle
 
 ## Next Steps
 
-Now that you know how to configure the store, you can [look at the full Redux Toolkit `configureStore` API](https://redux-toolkit.js.org/api/configureStore), read about [writing custom middleware](./WritingCustomMiddleware.md), or take a closer look at the [DevTools and debugging tools in the Redux ecosystem](../introduction/Ecosystem.md#devtools-and-debugging).
+Now that you know how to configure the store, you can [look at the full Redux Toolkit `configureStore` API](/toolkit/api/configureStore), read about [writing custom middleware](./WritingCustomMiddleware.md), or take a closer look at the [DevTools and debugging tools in the Redux ecosystem](../introduction/Ecosystem.md#devtools-and-debugging).

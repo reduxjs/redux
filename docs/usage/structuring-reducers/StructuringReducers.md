@@ -17,7 +17,7 @@ Redux puts some basic constraints on how that write logic function should work. 
 
 Beyond that, Redux does not really care how you actually structure your logic inside that reducer function, as long as it obeys those basic rules. This is both a source of freedom and a source of confusion. However, there are a number of common patterns that are widely used when writing reducers, as well as a number of related topics and concepts to be aware of. As an application grows, these patterns play a crucial role in managing reducer code complexity, handling real-world data, and optimizing UI performance.
 
-The pages in this section show these patterns written by hand, with `switch` statements and object spreads. Redux Toolkit's [`createSlice`](https://redux-toolkit.js.org/api/createSlice) implements the same patterns: each "case function" becomes an entry in its `reducers` object, the immutable update logic is handled by Immer, and `configureStore` combines the resulting slice reducers for you. Read the pages here to understand what `createSlice` is doing, then write your own reducers with it.
+The pages in this section show these patterns written by hand, with `switch` statements and object spreads. Redux Toolkit's [`createSlice`](/toolkit/api/createSlice) implements the same patterns: each "case function" becomes an entry in its `reducers` object, the immutable update logic is handled by Immer, and `configureStore` combines the resulting slice reducers for you. Read the pages here to understand what `createSlice` is doing, then write your own reducers with it.
 
 ### Prerequisite Concepts for Writing Reducers
 

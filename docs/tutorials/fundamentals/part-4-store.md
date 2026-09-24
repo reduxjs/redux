@@ -35,10 +35,10 @@ Now, it's time to pull those pieces together, with the central piece of a Redux 
 The Redux **store** brings together the state, actions, and reducers that make up your app. The store has several responsibilities:
 
 - Holds the current application state inside
-- Allows access to the current state via [`store.getState()`](../../api/Store.md#getState);
-- Allows state to be updated via [`store.dispatch(action)`](../../api/Store.md#dispatch);
-- Registers listener callbacks via [`store.subscribe(listener)`](../../api/Store.md#subscribe);
-- Handles unregistering of listeners via the `unsubscribe` function returned by [`store.subscribe(listener)`](../../api/Store.md#subscribe).
+- Allows access to the current state via [`store.getState()`](../../api/Store.md#getstate);
+- Allows state to be updated via [`store.dispatch(action)`](../../api/Store.md#dispatchaction);
+- Registers listener callbacks via [`store.subscribe(listener)`](../../api/Store.md#subscribelistener);
+- Handles unregistering of listeners via the `unsubscribe` function returned by [`store.subscribe(listener)`](../../api/Store.md#subscribelistener).
 
 It's important to note that **you'll only have a single store in a Redux application**. When you want to split your data handling logic, you'll use [reducer composition](./part-3-state-actions-reducers.md#splitting-reducers) and create multiple reducers that
 can be combined together, instead of creating separate stores.

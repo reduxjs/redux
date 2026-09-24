@@ -5,7 +5,7 @@ title: Reducing Boilerplate
 
 # Reducing Boilerplate
 
-Redux is in part [inspired by Flux](../understanding/history-and-design/PriorArt.md), and the most common complaint about Flux is how it makes you write a lot of boilerplate. In this recipe, we will consider which parts of Redux are actual design decisions, which parts are conventions you can drop, and how [Redux Toolkit](https://redux-toolkit.js.org) generates the repetitive parts for you.
+Redux is in part [inspired by Flux](../understanding/history-and-design/PriorArt.md), and the most common complaint about Flux is how it makes you write a lot of boilerplate. In this recipe, we will consider which parts of Redux are actual design decisions, which parts are conventions you can drop, and how [Redux Toolkit](/toolkit) generates the repetitive parts for you.
 
 ## Actions
 
@@ -38,7 +38,7 @@ Why is this beneficial? For larger projects, there are some benefits to having a
 - The list of action types that were added, removed, and changed in a Pull Request helps everyone on the team keep track of scope and implementation of new features.
 - If you make a typo when importing an action constant, you will get `undefined`. Redux will immediately throw when dispatching such an action, and you'll find the mistake sooner.
 
-Those benefits come from having a single definition per action, not from the constants themselves. With Redux Toolkit's [`createSlice`](https://redux-toolkit.js.org/api/createSlice), the definition is the case reducer, and the type string is generated from the slice name and the reducer name:
+Those benefits come from having a single definition per action, not from the constants themselves. With Redux Toolkit's [`createSlice`](/toolkit/api/createSlice), the definition is the case reducer, and the type string is generated from the slice name and the reducer name:
 
 ```ts
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
@@ -102,7 +102,7 @@ We just modified how the `addTodo` action creator behaves, completely invisible 
 
 ### Generating Action Creators
 
-Writing an action creator for every action type by hand is repetitive: each one is a function that takes some arguments and puts them in an object with a `type` field. `createSlice` generates one action creator per case reducer, as shown above, and that covers most actions in an app. For an action that is not tied to one slice, [`createAction`](https://redux-toolkit.js.org/api/createAction) generates a single action creator from a type string:
+Writing an action creator for every action type by hand is repetitive: each one is a function that takes some arguments and puts them in an object with a `type` field. `createSlice` generates one action creator per case reducer, as shown above, and that covers most actions in an app. For an action that is not tied to one slice, [`createAction`](/toolkit/api/createAction) generates a single action creator from a type string:
 
 ```ts
 import { createAction } from '@reduxjs/toolkit'
@@ -147,7 +147,7 @@ export function loadPosts(userId: number): AppThunk {
 }
 ```
 
-The request / success / failure pattern itself is boilerplate, and Redux Toolkit's [`createAsyncThunk`](https://redux-toolkit.js.org/api/createAsyncThunk) generates it. You provide the type prefix and a function that returns a promise; it dispatches `pending`, `fulfilled`, and `rejected` actions around that promise, and gives you the action creators to handle in a slice:
+The request / success / failure pattern itself is boilerplate, and Redux Toolkit's [`createAsyncThunk`](/toolkit/api/createAsyncThunk) generates it. You provide the type prefix and a function that returns a promise; it dispatches `pending`, `fulfilled`, and `rejected` actions around that promise, and gives you the action creators to handle in a slice:
 
 ```ts
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
@@ -196,7 +196,7 @@ const postsSlice = createSlice({
 })
 ```
 
-For data that comes from a server and is cached in the store, [RTK Query](https://redux-toolkit.js.org/rtk-query/overview) goes one step further and generates the thunks, the reducers, the cache, and the React hooks from a description of the endpoints, so none of this is written per endpoint. See [Side Effects Approaches](./side-effects-approaches.mdx) for how to choose between these.
+For data that comes from a server and is cached in the store, [RTK Query](/toolkit/rtk-query/overview) goes one step further and generates the thunks, the reducers, the cache, and the React hooks from a description of the endpoints, so none of this is written per endpoint. See [Side Effects Approaches](./side-effects-approaches.mdx) for how to choose between these.
 
 ## Reducers
 

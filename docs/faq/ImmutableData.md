@@ -14,12 +14,14 @@ In particular, immutability in the context of a Web app enables sophisticated ch
 
 #### Further information
 
+**Documentation**
+
+- [Redux Toolkit: Writing Reducers with Immer - Immutability and Redux](/toolkit/usage/immer-reducers#immutability-and-redux)
+- [React docs: Updating Objects in State](https://react.dev/learn/updating-objects-in-state)
+
 **Articles**
 
-- [Introduction to Immer](https://immerjs.github.io/immer/)
-- [JavaScript Immutability presentation (PDF - see slide 12 for benefits)](https://www.jfokus.se/jfokus16/preso/JavaScript-Immutability--Dont-Go-Changing.pdf)
-- [React: Optimizing Performance](https://legacy.reactjs.org/docs/optimizing-performance.html)
-- [JavaScript Application Architecture On The Road To 2015](https://medium.com/google-developers/javascript-application-architecture-on-the-road-to-2015-d8125811101b#.djje0rfys)
+- [Dave Ceddia: The Complete Guide to Immutability in React and Redux](https://daveceddia.com/react-redux-immutability-guide/)
 
 ## Why is immutability required by Redux?
 
@@ -121,7 +123,7 @@ That single comparison is why immutability matters on the React side. If a reduc
 
 - [Redux FAQ: Why isn't my component re-rendering?](./ReactRedux.md#why-isnt-my-component-re-rendering)
 - [Redux FAQ: Why is my component re-rendering too often?](./ReactRedux.md#why-is-my-component-re-rendering-too-often)
-- [React Redux: `useSelector`](https://react-redux.js.org/api/hooks#useselector)
+- [React Redux: `useSelector`](/react-redux/api/hooks#useselector)
 
 ### Why will shallow equality checking not work with mutable objects?
 
@@ -170,7 +172,7 @@ Redux Toolkit's `configureStore` adds a development-only immutability check midd
 
 - [Using Redux: Immutable Update Patterns](../usage/structuring-reducers/ImmutableUpdatePatterns.md)
 - [Troubleshooting: The reducer mutated the state](../usage/Troubleshooting.md#the-reducer-mutated-the-state)
-- [Redux Toolkit: Immutability Middleware](https://redux-toolkit.js.org/api/immutabilityMiddleware)
+- [Redux Toolkit: Immutability Middleware](/toolkit/api/immutabilityMiddleware)
 
 ### How does immutability enable a shallow check to detect object mutations?
 
@@ -204,47 +206,25 @@ The same problem applies on the selector side, where a selector that returns a n
 
 ## What approaches are there for handling data immutability? Do I have to use Immer?
 
-You do not need to use Immer with Redux. Plain JavaScript, if written correctly, is perfectly capable of providing immutability without having to use an immutable-focused library.
+Redux itself only requires that reducers return new values instead of mutating the existing ones. How you produce those values is up to you.
 
-However, guaranteeing immutability with JavaScript is difficult, and it can be easy to mutate an object accidentally, causing bugs in your app that are extremely difficult to locate. For this reason, using an immutable update utility library such as Immer can significantly improve the reliability of your app, and make your app’s development much easier.
+Redux Toolkit's `createSlice` and `createReducer` use [Immer](https://immerjs.github.io/immer/) internally, so case reducers written with them can use "mutating" syntax and Immer produces the immutable result. This is the approach we recommend, and it is what all of the current Redux tutorials use. Immer is not optional in Redux Toolkit; [Writing Reducers with Immer](/toolkit/usage/immer-reducers) explains how it works, the patterns to follow, the gotchas to avoid, and why it is built in.
 
-#### Further Information
-
-**Discussions**
-
-- [#1185: Question: Should I use immutable data structures?](https://github.com/reduxjs/redux/issues/1422)
-- [Introduction to Immer](https://immerjs.github.io/immer/)
-
-## What are the issues with using plain JavaScript for immutable operations?
-
-JavaScript was never designed to provide guaranteed immutable operations. Accordingly, there are several issues you need to be aware of if you choose to use it for your immutable operations in your Redux app.
-
-### Accidental Object Mutation
-
-With JavaScript, you can accidentally mutate an object (such as the Redux state tree) quite easily without realizing it. For example, updating deeply nested properties, creating a new _reference_ to an object instead of a new object, or performing a shallow copy rather than a deep copy, can all lead to inadvertent object mutations, and can trip up even the most experienced JavaScript coder.
-
-To avoid these issues, ensure you follow the recommended [immutable update patterns](../usage/structuring-reducers/ImmutableUpdatePatterns.md).
-
-### Verbose Code
-
-Updating complex nested state trees can lead to verbose code that is tedious to write and difficult to debug.
-
-### Poor Performance
-
-Operating on JavaScript objects and arrays in an immutable way can be slow, particularly as your state tree grows larger.
-
-Remember, to change an immutable object, you must mutate a _copy_ of it, and copying large objects can be slow as every property must be copied.
-
-In contrast, immutable libraries such as Immer can employ structural sharing, which effectively returns a new object that reuses much of the existing object being copied from.
+If you write reducers by hand without Redux Toolkit, you need to copy every level of nesting that changes using object spreads and non-mutating array methods. [Immutable Update Patterns](../usage/structuring-reducers/ImmutableUpdatePatterns.md) shows how to do that correctly and lists the mistakes that most often cause accidental mutations. You can also call Immer's `produce` directly inside a hand-written reducer.
 
 #### Further Information
 
 **Documentation**
 
-- [Immutable Update Patterns](../usage/structuring-reducers/ImmutableUpdatePatterns.md)
+- [Redux Toolkit: Writing Reducers with Immer](/toolkit/usage/immer-reducers)
+- [Using Redux: Immutable Update Patterns](../usage/structuring-reducers/ImmutableUpdatePatterns.md)
+- [Redux Toolkit: Immutability Middleware](/toolkit/api/immutabilityMiddleware)
 
-**Articles**
+## What are the issues with writing immutable updates by hand?
 
-- [A deep dive into Clojure’s data structures](https://www.slideshare.net/mohitthatte/a-deep-dive-into-clojures-data-structures-euroclojure-2015)
-- [Immutable Javascript using ES6 and beyond](https://wecodetheweb.com/2016/02/12/immutable-javascript-using-es6-and-beyond/)
-- [Pros and Cons of using immutability with React.js - React Kung Fu](https://reactkungfu.com/2015/08/pros-and-cons-of-using-immutability-with-react-js/)
+Writing immutable updates by hand in plain JavaScript has two problems, both of which Immer removes:
+
+- **Accidental mutation.** It is easy to update a nested property, reuse a reference instead of copying, or copy only the top level of an object without realizing it. Accidental mutation is the most common cause of Redux bugs, and it usually shows up as a component that does not re-render. Redux Toolkit's `configureStore` includes a development-only immutability check middleware that throws when a reducer mutates state.
+- **Verbose code.** Correctly copying every level of a nested update takes several lines of spreads per level, which hides the intent of the update and gives more places to make a mistake.
+
+See [Immutable Update Patterns](../usage/structuring-reducers/ImmutableUpdatePatterns.md) for the hand-written patterns and the common mistakes, and [Writing Reducers with Immer](/toolkit/usage/immer-reducers) for how Immer handles the same updates.

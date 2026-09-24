@@ -19,7 +19,7 @@ description: 'Instructions on setting up Redux in a Next.js project'
 - Familiarity with [ES2015 syntax and features](https://www.taniarascia.com/es6-syntax-and-feature-overview/)
 - Knowledge of React terminology: [JSX](https://react.dev/learn/writing-markup-with-jsx), [State](https://react.dev/learn/state-a-components-memory), [Function Components, Props](https://react.dev/learn/passing-props-to-a-component), and [Hooks](https://react.dev/reference/react/hooks)
 - Understanding of [Redux terms and concepts](https://redux.js.org/tutorials/fundamentals/part-2-concepts-data-flow)
-- Working through the [Quick Start tutorial](../tutorials/quick-start.md) and [TypeScript Quick Start tutorial](../tutorials/typescript.md) is recommended, and ideally the full [Redux Essentials](https://redux.js.org/tutorials/essentials/part-1-overview-concepts) tutorial as well
+- Working through the [Quick Start tutorial](../tutorials/quick-start.md) is recommended, and ideally the full [Redux Essentials](https://redux.js.org/tutorials/essentials/part-1-overview-concepts) tutorial as well
 
 :::
 
@@ -84,7 +84,7 @@ We'll use that approach for this guide.
 
 ## Initial Setup
 
-Similar to the [RTK TypeScript Tutorial](../tutorials/typescript.md), we need to create a file for the Redux store, as well as the inferred `RootState` and `AppDispatch` types.
+Similar to the [Quick Start tutorial](../tutorials/quick-start.md), we need to create a file for the Redux store, as well as the inferred `RootState` and `AppDispatch` types.
 
 However, Next's multi-page architecture requires some differences from that single-page app setup.
 
@@ -112,7 +112,7 @@ Now we have a function, `makeStore`, that we can use to create a store instance 
 
 We don't have a `store` variable exported, but we can infer the `RootState` and `AppDispatch` types from the return type of `makeStore`.
 
-You'll also want to create and export [pre-typed versions of the React-Redux hooks as well](../tutorials/typescript.md#define-typed-hooks), to simplify usage later:
+You'll also want to create and export [pre-typed versions of the React-Redux hooks as well](../tutorials/quick-start.md#define-typed-hooks), to simplify usage later:
 
 ```ts title="lib/hooks.ts"
 // file: lib/store.ts noEmit
@@ -168,7 +168,7 @@ export type AppDispatch = AppStore['dispatch']
 
 // file: app/StoreProvider.tsx
 'use client'
-import { useRef } from 'react'
+import { useState } from 'react'
 import { Provider } from 'react-redux'
 // highlight-start
 import { makeStore, AppStore } from '../lib/store'
@@ -180,18 +180,15 @@ export default function StoreProvider({
   children: React.ReactNode
 }) {
   // highlight-start
-  const storeRef = useRef<AppStore | null>(null)
-  if (!storeRef.current) {
-    // Create the store instance the first time this renders
-    storeRef.current = makeStore()
-  }
+  // Create the store instance the first time this renders
+  const [store] = useState<AppStore>(makeStore)
   // highlight-end
 
-  return <Provider store={storeRef.current}>{children}</Provider>
+  return <Provider store={store}>{children}</Provider>
 }
 ```
 
-In this example code we are ensuring that this client component is re-render safe by checking the value of the reference to ensure that the store is only created once. This component will only be rendered once per request on the server, but might be re-rendered multiple times on the client if there are stateful client components located above this component in the tree, or if this component also contains other mutable state that causes a re-render.
+In this example code we are ensuring that this client component is re-render safe. The lazy initializer passed to `useState` runs only on the first render, so the store is created exactly once. This component will only be rendered once per request on the server, but might be re-rendered multiple times on the client if there are stateful client components located above this component in the tree, or if this component also contains other mutable state that causes a re-render.
 
 :::tip Why Client Components?
 
@@ -247,7 +244,7 @@ export type AppDispatch = AppStore['dispatch']
 
 // file: app/StoreProvider.tsx
 'use client'
-import { useRef } from 'react'
+import { useState } from 'react'
 import { Provider } from 'react-redux'
 import { makeStore, AppStore } from '../lib/store'
 // highlight-start
@@ -261,15 +258,15 @@ export default function StoreProvider({
   count: number
   children: React.ReactNode
 }) {
-  const storeRef = useRef<AppStore | null>(null)
-  if (!storeRef.current) {
-    storeRef.current = makeStore()
+  const [store] = useState<AppStore>(() => {
+    const newStore = makeStore()
     // highlight-start
-    storeRef.current.dispatch(initializeCount(count))
+    newStore.dispatch(initializeCount(count))
     // highlight-end
-  }
+    return newStore
+  })
 
-  return <Provider store={storeRef.current}>{children}</Provider>
+  return <Provider store={store}>{children}</Provider>
 }
 ```
 
@@ -279,7 +276,7 @@ export default function StoreProvider({
 
 If you use Next.js's support for client side SPA-style navigation by using `next/navigation`, then when customers navigate from page to page only the route component will be re-rendered. This means that if you have a Redux store created and provided in the layout component it will be preserved across route changes. This is not a problem if you are only using the store for global, mutable data. However, if you are using the store for per-route data then you will need to reset the route-specific data in the store when the route changes.
 
-Shown below is a `ProductName` example component that uses the Redux store to manage the mutable name of a product. The `ProductName` component part of a product detail route. In order to ensure that we have the correct name in the store we need to set the value in the store any time the `ProductName` component is initially rendered, which happens on any route change to the product detail route.
+Shown below is a `ProductName` example component that uses the Redux store to manage the mutable name of a product. The `ProductName` component is part of a product detail route. In order to ensure that we have the correct name in the store we need to set the value in the store any time the `ProductName` component is initially rendered, which happens on any route change to the product detail route.
 
 ```ts title="app/ProductName.tsx"
 // file: lib/features/product/productSlice.ts noEmit
@@ -389,7 +386,7 @@ After a mutation you should also invalidate the cache by calling [`revalidatePat
 
 We recommend using RTK Query for data fetching **on the client only**. Data fetching on the server should use `fetch` requests from `async` RSCs.
 
-You can learn more about Redux Toolkit Query in the [Redux Toolkit Query tutorial](https://redux-toolkit.js.org/tutorials/rtk-query).
+You can learn more about Redux Toolkit Query in the [Redux Toolkit Query tutorial](/toolkit/tutorials/rtk-query).
 
 :::note
 

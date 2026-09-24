@@ -104,7 +104,7 @@ Thunks work by passing a function into `dispatch`. The thunk middleware intercep
 
 Thunks are best used for complex sync logic that needs access to `dispatch` and `getState`, or moderate async logic such as one-shot "fetch some async data and dispatch an action with the result" requests.
 
-We have traditionally recommended thunks as the default approach, and Redux Toolkit specifically includes the [`createAsyncThunk` API](https://redux-toolkit.js.org/api/createAsyncThunk) for the "request and dispatch" use case. For other use cases, you can write your own thunk functions.
+We have traditionally recommended thunks as the default approach, and Redux Toolkit specifically includes the [`createAsyncThunk` API](/toolkit/api/createAsyncThunk) for the "request and dispatch" use case. For other use cases, you can write your own thunk functions.
 
 #### Thunk Tradeoffs
 
@@ -253,7 +253,7 @@ const fetchReposEpic = action$ =>
 
 ### Listeners
 
-Redux Toolkit includes [the `createListenerMiddleware` API](https://redux-toolkit.js.org/api/createListenerMiddleware) to handle "reactive" logic. It's specifically intended to be a lighter-weight alternative to sagas and observables that handles 90% of the same use cases, with a smaller bundle size, simpler API, and better TypeScript support.
+Redux Toolkit includes [the `createListenerMiddleware` API](/toolkit/api/createListenerMiddleware) to handle "reactive" logic. It's specifically intended to be a lighter-weight alternative to sagas and observables that handles 90% of the same use cases, with a smaller bundle size, simpler API, and better TypeScript support.
 
 Conceptually, this is similar to React's `useEffect` hook, but for Redux store updates.
 
@@ -329,7 +329,7 @@ listenerMiddleware.startListening({
 
 ### RTK Query
 
-Redux Toolkit includes [RTK Query](https://redux-toolkit.js.org/rtk-query/overview), a purpose-built data fetching and caching solution for Redux apps. It's designed to simplify common cases for loading data in a web application, eliminating the need to hand-write data fetching & caching logic yourself.
+Redux Toolkit includes [RTK Query](/toolkit/rtk-query/overview), a purpose-built data fetching and caching solution for Redux apps. It's designed to simplify common cases for loading data in a web application, eliminating the need to hand-write data fetching & caching logic yourself.
 
 RTK Query relies on creating an API definition consisting of many "endpoints". An endpoint can be a "query" for fetching data, or a "mutation" for sending an update to the server. RTKQ manages fetching and caching data internally, including tracking usage of each cache entry and removing cached data that's no longer needed. It features a unique "tag" system for triggering automatic refetches of data as mutations update state on the server.
 
@@ -447,7 +447,7 @@ While there currently is no official integration between XState and Redux, it _i
   - [Redux Essentials, Part 5: Async Logic and Data Fetching](../tutorials/essentials/part-5-async-logic.md)
   - [Redux Essentials, Part 7: RTK Query Basics](../tutorials/essentials/part-7-rtk-query-basics.md)
   - [Using Redux: Writing Logic with Thunks](./writing-logic-thunks.mdx)
-  - [Redux Toolkit: RTK Query Overview](https://redux-toolkit.js.org/rtk-query/overview)
+  - [Redux Toolkit: RTK Query Overview](/toolkit/rtk-query/overview)
 - Articles and comparisons
   - [Designing the RTK Listener Middleware](https://blog.isquaredsoftware.com/2022/03/designing-rtk-listener-middleware/)
   - [Thoughts on Async Redux: comparing thunks, sagas, and observables](https://nordfjord.io/2020/08/31/async-redux.html)

@@ -149,6 +149,30 @@ a:visited:not(.menu__link, .table-of-contents__link, .navbar__link:not([target="
   flex: 1 1 auto;
 }
 
+.navbar .navbar__item {
+  white-space: nowrap;
+}
+
+/* The Redux links need about 1400px at full size. Between that and the mobile
+   breakpoint, drop the logo text and "Library:" label and tighten the links. */
+@media screen and (min-width: 997px) and (max-width: 1399px) {
+  .navbar {
+    --ifm-navbar-item-padding-horizontal: 0.5rem;
+  }
+
+  .navbar__title,
+  .navbar__library-prefix {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 997px) and (max-width: 1149px) {
+  .navbar {
+    --ifm-navbar-item-padding-horizontal: 0.3rem;
+    font-size: 0.875rem;
+  }
+}
+
 .footer__logo {
   width: 50px;
   height: 50px;
@@ -285,4 +309,49 @@ details.detailed-explanation p {
 .course-callout.home-mid {
   max-width: 900px;
   margin: 1rem auto 2rem;
+}
+
+/* library switcher in the navbar */
+.navbar__library-prefix {
+  opacity: 0.7;
+  font-weight: normal;
+  margin-right: 0.3em;
+}
+
+.navbar__library-name {
+  font-weight: 600;
+}
+
+.navbar__library-mobile {
+  display: none;
+}
+
+@media screen and (max-width: 996px) {
+  .navbar__title {
+    display: none;
+  }
+
+  .navbar__library-mobile {
+    display: inline-block;
+    color: var(--ifm-navbar-link-color);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .navbar__library-mobile:hover {
+    text-decoration: none;
+    color: var(--ifm-navbar-link-hover-color);
+  }
+}
+
+.navbar-sidebar__library {
+  display: block;
+  padding: 0.5rem 1rem 0;
+  color: var(--ifm-font-base-color);
+}
+
+.navbar-sidebar__library:hover {
+  text-decoration: none;
 }

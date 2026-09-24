@@ -33,7 +33,7 @@ So far, we've covered the basics of how Redux actually works. However, real worl
 
 It's important to note that **none of these patterns are _required_ to use Redux!** But, there are very good reasons why each of these patterns exists, and you'll see some or all of them in almost every Redux codebase.
 
-In this section, we'll rework our existing todo app code to use some of these patterns, and talk about why they're commonly used in Redux apps. Then, in [**Part 8**](./part-8-modern-redux.md), we'll talk about "modern Redux", including **how to use our official [Redux Toolkit](https://redux-toolkit.js.org) package to simplify all the Redux logic we've written "by hand"** in our app, and why **we recommend using Redux Toolkit as the standard approach for writing Redux apps**.
+In this section, we'll rework our existing todo app code to use some of these patterns, and talk about why they're commonly used in Redux apps. Then, in [**Part 8**](./part-8-modern-redux.md), we'll talk about "modern Redux", including **how to use our official [Redux Toolkit](/toolkit) package to simplify all the Redux logic we've written "by hand"** in our app, and why **we recommend using Redux Toolkit as the standard approach for writing Redux apps**.
 
 <FundamentalsWarning />
 
@@ -993,7 +993,7 @@ Here's how our app looks after it's been fully converted to use these patterns:
 
 ## What's Next?
 
-Writing all this code "by hand" can be time-consuming and difficult. **That's why we recommend that you use our official [Redux Toolkit](https://redux-toolkit.js.org) package to write your Redux logic instead**.
+Writing all this code "by hand" can be time-consuming and difficult. **That's why we recommend that you use our official [Redux Toolkit](/toolkit) package to write your Redux logic instead**.
 
 Redux Toolkit includes APIs that **help you write all the typical Redux usage patterns, but with less code**. It also helps **prevent common mistakes** like accidentally mutating state.
 

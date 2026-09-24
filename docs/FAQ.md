@@ -36,7 +36,7 @@ description: 'FAQ Index: Frequently Asked Questions about Redux'
   - [What are the benefits of immutability?](faq/ImmutableData.md#what-are-the-benefits-of-immutability)
   - [Why is immutability required by Redux?](faq/ImmutableData.md#why-is-immutability-required-by-redux)
   - [What approaches are there for handling data immutability? Do I have to use Immer?](faq/ImmutableData.md#what-approaches-are-there-for-handling-data-immutability-do-i-have-to-use-immer)
-  - [What are the issues with using JavaScript for immutable operations?](faq/ImmutableData.md#what-are-the-issues-with-using-plain-javascript-for-immutable-operations)
+  - [What are the issues with writing immutable updates by hand?](faq/ImmutableData.md#what-are-the-issues-with-writing-immutable-updates-by-hand)
 - **Code Structure**
   - [What should my file structure look like? How should I group my action creators and reducers in my project? Where should my selectors go?](faq/CodeStructure.md#what-should-my-file-structure-look-like-how-should-i-group-my-action-creators-and-reducers-in-my-project-where-should-my-selectors-go)
   - [How should I split my logic between reducers and action creators? Where should my “business logic” go?](faq/CodeStructure.md#how-should-i-split-my-logic-between-reducers-and-action-creators-where-should-my-business-logic-go)

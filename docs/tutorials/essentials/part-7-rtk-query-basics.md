@@ -114,8 +114,8 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 
 RTK Query primarily consists of two APIs:
 
-- [`createApi()`](https://redux-toolkit.js.org/rtk-query/api/createApi): The core of RTK Query's functionality. It allows you to define a set of endpoints that describe how to retrieve data from a series of endpoints, including configuration of how to fetch and transform that data. In most cases, you should use this once per app, with "one API slice per base URL" as a rule of thumb.
-- [`fetchBaseQuery()`](https://redux-toolkit.js.org/rtk-query/api/fetchBaseQuery): A small wrapper around [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) that aims to simplify HTTP requests. RTK Query can be used to cache the result of _any_ async request, but since HTTP requests are the most common use case, `fetchBaseQuery` provides HTTP support out of the box.
+- [`createApi()`](/toolkit/rtk-query/api/createApi): The core of RTK Query's functionality. It allows you to define a set of endpoints that describe how to retrieve data from a series of endpoints, including configuration of how to fetch and transform that data. In most cases, you should use this once per app, with "one API slice per base URL" as a rule of thumb.
+- [`fetchBaseQuery()`](/toolkit/rtk-query/api/fetchBaseQuery): A small wrapper around [`fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) that aims to simplify HTTP requests. RTK Query can be used to cache the result of _any_ async request, but since HTTP requests are the most common use case, `fetchBaseQuery` provides HTTP support out of the box.
 
 #### Bundle Size
 
@@ -182,13 +182,13 @@ export const apiSlice = createApi({
 export const { useGetPostsQuery } = apiSlice
 ```
 
-RTK Query's functionality is based on a single method, called [**`createApi`**](https://redux-toolkit.js.org/rtk-query/api/createApi). All of the Redux Toolkit APIs we've seen so far are UI-agnostic, and could be used with _any_ UI layer. The RTK Query core logic is the same way. However, RTK Query also includes a React-specific version of `createApi`, and since we're using RTK and React together, we need to use that to take advantage of RTK's React integration. So, we import from `'@reduxjs/toolkit/query/react'` specifically.
+RTK Query's functionality is based on a single method, called [**`createApi`**](/toolkit/rtk-query/api/createApi). All of the Redux Toolkit APIs we've seen so far are UI-agnostic, and could be used with _any_ UI layer. The RTK Query core logic is the same way. However, RTK Query also includes a React-specific version of `createApi`, and since we're using RTK and React together, we need to use that to take advantage of RTK's React integration. So, we import from `'@reduxjs/toolkit/query/react'` specifically.
 
 :::tip
 
 **Your application is expected to have only one `createApi` call in it**. This one API slice should contain _all_ endpoint definitions that talk to the same base URL. For example, endpoints `/api/posts` and `/api/users` are both fetching data from the same server, so they would go in the same API slice. If your app does fetch data from multiple servers, you can either specify full URLs in each endpoint, or if absolutely necessary create separate API slices for each server.
 
-Endpoints are normally defined directly inside the `createApi` call. If you're looking to split up your endpoints between multiple files, see [the "Injecting Endpoints" section in Part 8](./part-8-rtk-query-advanced.md#injecting-endpoints) section of the docs!
+Endpoints are normally defined directly inside the `createApi` call. If you're looking to split up your endpoints between multiple files, see [the "Injecting Endpoints" section in Part 8](./part-8-rtk-query-advanced.md#splitting-and-injecting-endpoints) section of the docs!
 
 :::
 
@@ -196,7 +196,7 @@ Endpoints are normally defined directly inside the `createApi` call. If you're l
 
 When we call `createApi`, there are two fields that are required:
 
-- `baseQuery`: a function that knows how to fetch data from the server. RTK Query includes `fetchBaseQuery`, a small wrapper around the standard `fetch()` function that handles typical processing of HTTP requests and responses. When we create a `fetchBaseQuery` instance, we can pass in the base URL of all future requests, as well as override behavior such as modifying request headers. You can [create custom base queries](https://redux-toolkit.js.org/rtk-query/usage/customizing-queries#customizing-queries-with-basequery) to customize behavior like error handling and auth.
+- `baseQuery`: a function that knows how to fetch data from the server. RTK Query includes `fetchBaseQuery`, a small wrapper around the standard `fetch()` function that handles typical processing of HTTP requests and responses. When we create a `fetchBaseQuery` instance, we can pass in the base URL of all future requests, as well as override behavior such as modifying request headers. You can [create custom base queries](/toolkit/rtk-query/usage/customizing-queries#customizing-queries-with-basequery) to customize behavior like error handling and auth.
 - `endpoints`: a set of operations that we've defined for interacting with this server. Endpoints can be **_queries_**, which return data for caching, or **_mutations_**, which send an update to the server. The endpoints are defined using a callback function that accepts a `builder` parameter and returns an object containing endpoint definitions created with `builder.query()` and `builder.mutation()`.
 
 `createApi` also accepts a `reducerPath` field, which defines the expected top-level state slice field for the generated reducer. For our other slices like `postsSlice`, there's no guarantee that it will be used to update `state.posts` - we _could_ have attached the reducer anywhere in the root state, like `someOtherField: postsReducer`. Here, `createApi` expects us to tell it where the cache state will exist when we add the cache reducer to the store. If you don't provide a `reducerPath` option, it defaults to `'api'`, so all your RTKQ cache data will be stored under `state.api`.
@@ -376,7 +376,7 @@ It's common to destructure fields from the result object, and possibly rename `d
 
 #### Loading State Fields
 
-Note that [`isLoading` and `isFetching` are different flags with different behavior](https://redux-toolkit.js.org/rtk-query/usage/queries#query-loading-state). You can decide which one to use based on when and how you need to show loading states in the UI. For example, you might want to check `isLoading` if you want to show a skeleton while loading a page for the first time, or you might choose to check `isFetching` to show a spinner or gray out existing results every time there's any request happening as the user selects different items.
+Note that [`isLoading` and `isFetching` are different flags with different behavior](/toolkit/rtk-query/usage/queries#query-loading-state). You can decide which one to use based on when and how you need to show loading states in the UI. For example, you might want to check `isLoading` if you want to show a skeleton while loading a page for the first time, or you might choose to check `isFetching` to show a spinner or gray out existing results every time there's any request happening as the user selects different items.
 
 Similarly, `data` and `currentData` will change at different times. Most of the time, you should use the values in `data`, but `currentData` is available to give you more granularity for loading behavior. For example, if you wanted to show data in the UI as translucent to represent a re-fetching state, you can use `data` in combination with `isFetching` to achieve this, because `data` will stay the same until the new request has completed. However, if you also wish to only show values corresponding to the current arg (such as clearing out the UI until the new request is done), you can instead use `currentData` to achieve this.
 

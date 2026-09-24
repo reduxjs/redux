@@ -24,7 +24,7 @@ Middleware in Redux can be mainly used to either
 - modify or cancel actions, or to
 - modify the input accepted by dispatch.
 
-Most use cases fall into the first category: For example [Redux-Saga](https://github.com/redux-saga/redux-saga/), [redux-observable](https://github.com/redux-observable/redux-observable), and [RTK listener middleware](https://redux-toolkit.js.org/api/createListenerMiddleware) all create side effects that react to actions. These examples also show that this is a very common need: To be able to react to an action other than with a state change.
+Most use cases fall into the first category: For example [Redux-Saga](https://github.com/redux-saga/redux-saga/), [redux-observable](https://github.com/redux-observable/redux-observable), and [RTK listener middleware](/toolkit/api/createListenerMiddleware) all create side effects that react to actions. These examples also show that this is a very common need: To be able to react to an action other than with a state change.
 
 Modifying actions can be used to e.g. enhance an action with information from the state or from an external input, or to throttle, debounce or gate them.
 
@@ -32,7 +32,7 @@ The most obvious example for modifying the input of dispatch is [Redux Thunk](ht
 
 ## When to use custom middleware
 
-Most of the time, you won't actually need custom middleware. The most likely use case for middleware is side effects, and there is plenty of packages who nicely package side effects for Redux and have been in use long enough to get rid of the subtle problems you would run into when building this yourself. A good starting point is [RTK Query](https://redux-toolkit.js.org/rtk-query/overview) for managing server-side state and [RTK listener middleware](https://redux-toolkit.js.org/api/createListenerMiddleware) for other side effects.
+Most of the time, you won't actually need custom middleware. The most likely use case for middleware is side effects, and there is plenty of packages who nicely package side effects for Redux and have been in use long enough to get rid of the subtle problems you would run into when building this yourself. A good starting point is [RTK Query](/toolkit/rtk-query/overview) for managing server-side state and [RTK listener middleware](/toolkit/api/createListenerMiddleware) for other side effects.
 
 You might still want to use custom middleware in one of two cases:
 

@@ -70,10 +70,10 @@ _Using Redux with TypeScript_
   [Usage with TypeScript](../usage/UsageWithTypescript.md) <br />
   Our own guide to setting up a typed store, typed hooks, and typed slices and thunks.
 
-- **Redux Toolkit: TypeScript Quick Start** <br />
-  https://redux-toolkit.js.org/tutorials/typescript <br />
-  https://redux-toolkit.js.org/usage/usage-with-typescript <br />
-  The Redux Toolkit docs on using RTK with TypeScript, from the initial store setup through typing each RTK API.
+- **Redux Toolkit: Usage with TypeScript** <br />
+  [Quick Start](../tutorials/quick-start.md) <br />
+  [Redux Toolkit: Usage with TypeScript](/toolkit/usage/usage-with-typescript) <br />
+  The initial typed store setup is covered in the Quick Start; the Redux Toolkit guide goes through typing each RTK API.
 
 ## Data Fetching with RTK Query
 
@@ -150,7 +150,7 @@ _Explanations of how and why to use selector functions to read values from state
   Our own guide to writing selectors, memoizing them with Reselect, and using them with React-Redux.
 
 - **Reselect docs** <br/>
-  https://reselect.js.org/ <br/>
+  [https://redux.js.org/reselect/](/reselect/) <br/>
   The official Reselect docs, including the `createSelector` API, memoization options, and the development-mode checks that catch common selector mistakes.
 
 - **Idiomatic Redux: Using Reselect Selectors for Encapsulation and Performance** <br/>

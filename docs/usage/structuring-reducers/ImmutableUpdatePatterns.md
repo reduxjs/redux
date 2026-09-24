@@ -43,41 +43,9 @@ Obviously, each layer of nesting makes this harder to read, and gives more chanc
 
 ##### Simplifying Nested Updates with Redux Toolkit and Immer
 
-Redux Toolkit's [`createSlice`](https://redux-toolkit.js.org/api/createSlice) and [`createReducer`](https://redux-toolkit.js.org/api/createReducer) wrap your case reducers in Immer's [`produce` function](https://immerjs.github.io/immer/produce). Inside them, you can write code that appears to "mutate" `state`, and Immer applies the update immutably, copying exactly the levels that changed. The nested example above becomes:
+Redux Toolkit's [`createSlice`](/toolkit/api/createSlice) and [`createReducer`](/toolkit/api/createReducer) wrap your case reducers in Immer's [`produce` function](https://immerjs.github.io/immer/produce). Inside them, the update above is a single line: `state.first.second[action.payload.id].fourth = action.payload.value`. Immer copies exactly the levels that changed. **This only works inside `createSlice`, `createReducer`, or a manual `produce` call; the same line outside Immer really mutates the state.** See [Writing Reducers with Immer](/toolkit/usage/immer-reducers) for how Immer works, its usage patterns, and its gotchas.
 
-```ts
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
-
-interface NestedState {
-  first: {
-    second: Record<string, { fourth: string }>
-  }
-}
-
-const initialState: NestedState = {
-  first: {
-    second: {
-      id1: { fourth: 'a' },
-      id2: { fourth: 'b' }
-    }
-  }
-}
-
-const nestedSlice = createSlice({
-  name: 'nested',
-  initialState,
-  reducers: {
-    itemUpdated(state, action: PayloadAction<{ id: string; value: string }>) {
-      state.first.second[action.payload.id].fourth = action.payload.value
-    }
-  }
-})
-```
-
-This is clearly _much_ shorter and easier to read. However, **this _only_ works correctly inside `createSlice` or `createReducer`**, or inside a manual `produce` call. **If the same function body runs without Immer, it will actually mutate the state!** It's also not obvious just by looking at the code that the update is safe. Make sure you understand the rest of this page even if you write all of your reducers with Redux Toolkit. When something goes wrong, you'll need to know what Immer is doing on your behalf.
-
-The remaining sections show how to write these updates by hand.
+Even if you write all of your reducers with Redux Toolkit, understanding the rest of this page tells you what Immer is doing on your behalf when something goes wrong. The remaining sections show how to write these updates by hand.
 
 ##### Common Mistake #1: New variables that point to the same objects
 
@@ -183,12 +151,12 @@ function updateObjectInArray(array, action) {
 
 ## Immutable Update Utility Libraries
 
-There are libraries that shorten this code. [Immer](https://immerjs.github.io/immer/) is the one we recommend and the one Redux Toolkit uses internally: you write mutating code against a draft, and `produce` returns a new immutably-updated value. You can call `produce` directly in a hand-written reducer if you're not using `createSlice`. Other utilities take a string path or an update spec instead, but they solve the same problem with a less familiar syntax, and Immer covers the cases they were written for.
+[Immer](https://immerjs.github.io/immer/) is the library we recommend and the one Redux Toolkit uses internally: you write mutating code against a draft, and `produce` returns a new immutably-updated value. You can call `produce` directly in a hand-written reducer if you're not using `createSlice`. Other utilities take a string path or an update spec instead, but they solve the same problem with a less familiar syntax, and Immer covers the cases they were written for.
 
 ## Further Information
 
+- [Redux Toolkit: Writing Reducers with Immer](/toolkit/usage/immer-reducers)
 - [Immer docs](https://immerjs.github.io/immer/)
-- [Redux Toolkit: Writing Reducers with Immer](https://redux-toolkit.js.org/usage/immer-reducers)
 - [Dave Ceddia: The Complete Guide to Immutability in React and Redux](https://daveceddia.com/react-redux-immutability-guide/)
 - [React docs: Updating Objects in State](https://react.dev/learn/updating-objects-in-state)
 - [React docs: Updating Arrays in State](https://react.dev/learn/updating-arrays-in-state)

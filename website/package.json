@@ -36,6 +36,7 @@
     "vfile": "^6.0.3"
   },
   "devDependencies": {
+    "@manaflair/redux-batch": "^1.0.0",
     "@reduxjs/toolkit": "^2.12.0",
     "@testing-library/jest-dom": "^6.2.0",
     "@testing-library/react": "^14.1.2",
@@ -45,15 +46,25 @@
     "@types/react": "^19",
     "@types/unist": "^3.0.3",
     "@vitest/browser-playwright": "^4.0.5",
+    "async-mutex": "^0.3.2",
+    "axios": "^0.20.0",
+    "formik": "^2.4.9",
+    "graphql-request": "^3.7.0",
+    "immutable": "^3.8.4",
     "msw": "^2.0.0",
     "netlify-plugin-cache": "^1.0.3",
+    "next-redux-wrapper": "^7.0.5",
     "react-redux": "^9.1.0",
+    "redux-persist": "^6.0.0",
+    "rxjs": "^6.6.7",
     "vitest": "^4.0.5",
     "vitest-browser-react": "^2.0.2"
   },
   "scripts": {
     "build": "docusaurus build",
     "deploy": "docusaurus deploy",
+    "dev": "node --experimental-strip-types scripts/fetch-external-docs.mts --watch",
+    "fetch-docs": "node --experimental-strip-types scripts/fetch-external-docs.mts",
     "start": "docusaurus start",
     "swizzle": "docusaurus swizzle"
   },
