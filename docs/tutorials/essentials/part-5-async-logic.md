@@ -482,7 +482,7 @@ console.log(
 */
 ```
 
-We've also seen that we can use [the `extraReducers` field in `createSlice` to respond to actions that were defined outside of the slice](./part-4-using-data.md##using-extrareducers-to-handle-other-actions).
+We've also seen that we can use [the `extraReducers` field in `createSlice` to respond to actions that were defined outside of the slice](./part-4-using-data.md#using-extrareducers-to-handle-other-actions).
 
 In this case, we need to listen for the "pending" and "fulfilled" action types dispatched by our `fetchPosts` thunk. Those action creators are attached to our actual `fetchPosts` function, and we can pass those to `extraReducers` to listen for those actions:
 

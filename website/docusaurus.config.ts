@@ -326,6 +326,8 @@ const config: Config = {
         include: [
           '{api,assets,introduction,migrations,rtk-query,tutorials,usage}/**/*.{md,mdx}'
         ],
+        // Maintainer notes on RTK Query internals, read on GitHub
+        exclude: ['rtk-query/internal/**'],
         editUrl: libraryEditUrl('redux-toolkit'),
         showLastUpdateTime: false,
         remarkPlugins: [

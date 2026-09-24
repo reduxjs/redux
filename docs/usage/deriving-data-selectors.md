@@ -259,8 +259,10 @@ const selectItems = (state: RootState) => state.items
 const selectItemId = (state: RootState, itemId: number) => itemId
 
 // expects an object as the second argument
-const selectOtherField = (state: RootState, someObject: { someField: string }) =>
-  someObject.someField
+const selectOtherField = (
+  state: RootState,
+  someObject: { someField: string }
+) => someObject.someField
 
 // ❌ These input selectors disagree about what the second argument is
 const selectItemById = createSelector(
