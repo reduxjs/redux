@@ -211,12 +211,10 @@
 /react-redux/docs/using-react-redux/connect-dispatching-actions-with-mapDispatchToProps /react-redux/using-react-redux/connect-mapdispatch
 /react-redux/docs/using-react-redux/connect-dispatching-actions-with-mapdispatchtoprops /react-redux/using-react-redux/connect-mapdispatch
 /react-redux/docs/*          /react-redux/:splat
-# Lowercase aliases for camelCase API page URLs
-/react-redux/api/useselector          /react-redux/api/useSelector
-/react-redux/api/usedispatch          /react-redux/api/useDispatch
-/react-redux/api/usestore             /react-redux/api/useStore
-/react-redux/api/usesignalselector    /react-redux/api/useSignalSelector
-/react-redux/api/signalprovider       /react-redux/api/SignalProvider
+# Individual hook URLs point at their section of the hooks page
+/react-redux/api/useselector          /react-redux/api/hooks#useselector
+/react-redux/api/usedispatch          /react-redux/api/hooks#usedispatch
+/react-redux/api/usestore             /react-redux/api/hooks#usestore
 # Renamed pages
 /react-redux/introduction/quick-start               /react-redux/introduction/getting-started
 /react-redux/next/introduction/quick-started        /react-redux/introduction/getting-started
@@ -236,9 +234,8 @@
 /react-redux/tutorials/quick-start              /tutorials/quick-start
 /react-redux/tutorials/typescript-quick-start   /tutorials/quick-start
 
-/redux-toolkit/overview    /toolkit/introduction/getting-started
-
 # Redux Toolkit (/toolkit)
+/redux-toolkit/overview    /toolkit/introduction/getting-started
 /toolkit/docs/*          /toolkit/:splat
 # Deleted old tutorials
 /toolkit/tutorials/basic-tutorial               /tutorials/index

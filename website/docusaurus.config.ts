@@ -112,13 +112,15 @@ const config: Config = {
     [
       require.resolve('@getcanary/docusaurus-theme-search-pagefind'),
       {
-        // Search tabs match picomatch patterns against `hostname + pathname`
+        // Search tabs match picomatch patterns against `hostname + pathname`.
+        // The leading `*` is the hostname only, so core pages like
+        // `/faq/react-redux` stay in the Redux tab.
         tabs: [
           { name: 'All', pattern: '**/*' },
-          { name: 'Redux', pattern: '!**/{react-redux,toolkit,reselect}/**' },
-          { name: 'Redux Toolkit', pattern: '**/toolkit/**' },
-          { name: 'React Redux', pattern: '**/react-redux/**' },
-          { name: 'Reselect', pattern: '**/reselect/**' }
+          { name: 'Redux', pattern: '!*/{react-redux,toolkit,reselect}/**' },
+          { name: 'Redux Toolkit', pattern: '*/toolkit/**' },
+          { name: 'React Redux', pattern: '*/react-redux/**' },
+          { name: 'Reselect', pattern: '*/reselect/**' }
         ]
       }
     ]
