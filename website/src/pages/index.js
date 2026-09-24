@@ -105,7 +105,7 @@ const otherLibraries = [
   },
   {
     content: 'Official React bindings for Redux',
-    title: 'React-Redux',
+    title: 'React Redux',
     link: '/react-redux'
   },
   {

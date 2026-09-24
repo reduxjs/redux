@@ -52,11 +52,15 @@ const libraries: LibraryEntry[] = [
     routeBasePath: 'toolkit',
     navbarItems: [
       { label: 'Getting Started', to: 'toolkit/introduction/getting-started' },
-      { label: 'Tutorials', to: 'tutorials/index' },
+      { label: 'Tutorial', to: 'tutorials/index' },
       { label: 'Usage Guide', to: 'toolkit/usage/usage-guide' },
       { label: 'API', to: 'toolkit/api/configureStore' },
       { label: 'RTK Query', to: 'toolkit/rtk-query/overview' },
-      { label: 'GitHub', href: 'https://github.com/reduxjs/redux-toolkit' }
+      { label: 'GitHub', href: 'https://github.com/reduxjs/redux-toolkit' },
+      {
+        label: 'Need help?',
+        to: 'introduction/getting-started#help-and-discussion'
+      }
     ]
   },
   {
@@ -87,10 +91,14 @@ const libraries: LibraryEntry[] = [
     routeBasePath: 'reselect',
     navbarItems: [
       { label: 'Getting Started', to: 'reselect/introduction/getting-started' },
-      { label: 'Tutorials', to: 'tutorials/index' },
+      { label: 'Tutorial', to: 'tutorials/index' },
       { label: 'Usage Guide', to: 'usage/deriving-data-selectors' },
       { label: 'API', to: 'reselect/api/createSelector' },
-      { label: 'GitHub', href: 'https://www.github.com/reduxjs/reselect' }
+      { label: 'GitHub', href: 'https://www.github.com/reduxjs/reselect' },
+      {
+        label: 'Need help?',
+        to: 'introduction/getting-started#help-and-discussion'
+      }
     ]
   }
 ]

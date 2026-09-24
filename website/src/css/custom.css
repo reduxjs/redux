@@ -149,6 +149,30 @@ a:visited:not(.menu__link, .table-of-contents__link, .navbar__link:not([target="
   flex: 1 1 auto;
 }
 
+.navbar .navbar__item {
+  white-space: nowrap;
+}
+
+/* The Redux links need about 1400px at full size. Between that and the mobile
+   breakpoint, drop the logo text and "Library:" label and tighten the links. */
+@media screen and (min-width: 997px) and (max-width: 1399px) {
+  .navbar {
+    --ifm-navbar-item-padding-horizontal: 0.5rem;
+  }
+
+  .navbar__title,
+  .navbar__library-prefix {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 997px) and (max-width: 1149px) {
+  .navbar {
+    --ifm-navbar-item-padding-horizontal: 0.3rem;
+    font-size: 0.875rem;
+  }
+}
+
 .footer__logo {
   width: 50px;
   height: 50px;
