@@ -1,3 +1,4 @@
+import { existsSync, readdirSync } from 'fs'
 import { resolve } from 'path'
 import {
   linkDocblocks,
@@ -348,10 +349,13 @@ const config: Config = {
             transpileCodeblocks,
             {
               compilerSettings: {
-                // RTK's own tsconfig. Its `paths` point at the unbuilt
-                // `packages/toolkit/dist`, so TypeScript falls back to
-                // normal resolution and finds `@reduxjs/toolkit` (and the
-                // docs' other devDependencies) in this site's node_modules.
+                // RTK's own tsconfig. Its `paths` point at
+                // `packages/toolkit/dist`, which only exists when an RTK
+                // preview build links its freshly built package there (see
+                // `optionalLinks` in scripts/fetch-external-docs.mts).
+                // Otherwise TypeScript falls back to normal resolution and
+                // finds the published `@reduxjs/toolkit` (and the docs'
+                // other devDependencies) in this site's node_modules.
                 tsconfig: resolve(
                   __dirname,
                   'external/redux-toolkit/docs/tsconfig.json'
@@ -399,6 +403,47 @@ const config: Config = {
           config.resolve.alias = { ...aliases, ...config.resolve.alias }
           return {}
         }
+      }
+    },
+    // The persistent build cache keys each page on its own contents, so a
+    // cached RTK page would skip re-checking its code blocks after only the
+    // RTK types changed. Make every RTK .mdx page depend on the type
+    // declarations its code blocks compile against.
+    function toolkitTypesDependency() {
+      const linkedDist = resolve(
+        __dirname,
+        'external/redux-toolkit/packages/toolkit/dist'
+      )
+      const typesDir = existsSync(linkedDist)
+        ? linkedDist
+        : resolve(__dirname, 'node_modules/@reduxjs/toolkit/dist')
+      const files = [
+        resolve(__dirname, 'external/redux-toolkit/docs/tsconfig.json'),
+        ...readdirSync(typesDir, { recursive: true, encoding: 'utf8' })
+          .filter(file => /\.d\.m?ts$/.test(file))
+          .map(file => resolve(typesDir, file))
+      ]
+      return {
+        name: 'toolkit-types-dependency',
+        configureWebpack: () => ({
+          module: {
+            rules: [
+              {
+                test: /\.mdx$/,
+                include: resolve(__dirname, 'external/redux-toolkit/docs'),
+                enforce: 'pre',
+                use: [
+                  {
+                    loader: require.resolve(
+                      './plugins/toolkit-types-dependency.cjs'
+                    ),
+                    options: { files }
+                  }
+                ]
+              }
+            ]
+          }
+        })
       }
     },
     [

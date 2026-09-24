@@ -5,14 +5,15 @@
  * Usage: node --experimental-strip-types scripts/fetch-external-docs.ts [--force] [name...]
  *
  * Per library, in order of precedence:
- *   DOCS_SOURCE_<NAME>  local repo checkout whose listed dirs are copied as-is (for per-PR previews)
+ *   DOCS_SOURCE_<NAME>  local repo checkout whose listed dirs are copied as-is (for per-PR previews);
+ *                       `optionalLinks` dirs are symlinked instead when present
  *   DOCS_REPO_<NAME>    git URL or local path to clone (default: GitHub)
  *   DOCS_REF_<NAME>     branch or tag to clone (default: master)
  *
  * An existing `external/<name>` is left alone unless `--force` is passed.
  */
 import { execFileSync } from 'node:child_process'
-import { cpSync, existsSync, mkdirSync, rmSync } from 'node:fs'
+import { cpSync, existsSync, mkdirSync, rmSync, symlinkSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -26,6 +27,12 @@ interface ExternalSource {
    * the repo root, so these only matter for the DOCS_SOURCE copy path.
    */
   files?: string[]
+  /**
+   * DOCS_SOURCE only: directories symlinked (not copied) from the local checkout
+   * when they exist. Linking keeps module resolution inside the source repo, so
+   * imports from these files find that repo's node_modules.
+   */
+  optionalLinks?: string[]
 }
 
 const sources: Record<string, ExternalSource> = {
@@ -46,6 +53,10 @@ const sources: Record<string, ExternalSource> = {
     ],
     // src/pages/toolkit/errors.tsx
     files: ['errors.json'],
+    // A built package in the source checkout makes RTK's docs/tsconfig.json
+    // `paths` resolve, so code blocks type-check against that branch. Without
+    // it they fall back to the published @reduxjs/toolkit in website/node_modules.
+    optionalLinks: ['packages/toolkit/dist'],
   },
   reselect: {
     repo: 'https://github.com/reduxjs/reselect.git',
@@ -100,6 +111,16 @@ for (const name of names) {
       const from = join(resolve(localSource), entry)
       console.log(`[external-docs] ${name}: copying ${from}`)
       cpSync(from, join(target, entry), { recursive: true })
+    }
+    for (const entry of source.optionalLinks ?? []) {
+      const from = join(resolve(localSource), entry)
+      if (!existsSync(from)) {
+        console.log(`[external-docs] ${name}: ${from} not found, skipping link`)
+        continue
+      }
+      console.log(`[external-docs] ${name}: linking ${from}`)
+      mkdirSync(dirname(join(target, entry)), { recursive: true })
+      symlinkSync(from, join(target, entry), 'junction')
     }
     continue
   }
