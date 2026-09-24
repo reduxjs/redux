@@ -2,19 +2,31 @@
  * Pulls the docs folders of the other Redux library repos into `website/external/`
  * so the combined site can build them as extra docs-plugin instances.
  *
- * Usage: node --experimental-strip-types scripts/fetch-external-docs.ts [--force] [name...]
+ * Usage: node --experimental-strip-types scripts/fetch-external-docs.mts [--force] [--watch] [name...]
  *
  * Per library, in order of precedence:
- *   DOCS_SOURCE_<NAME>  local repo checkout whose listed dirs are copied as-is (for per-PR previews);
- *                       `optionalLinks` dirs are symlinked instead when present
+ *   DOCS_SOURCE_<NAME>  local repo checkout whose listed dirs are copied as-is (for per-PR previews
+ *                       and local editing); `optionalLinks` dirs are symlinked instead when present
  *   DOCS_REPO_<NAME>    git URL or local path to clone (default: GitHub)
  *   DOCS_REF_<NAME>     branch or tag to clone (default: master)
  *
- * An existing `external/<name>` is left alone unless `--force` is passed.
+ * An existing clone in `external/<name>` is left alone unless `--force` is passed.
+ * DOCS_SOURCE copies are always refreshed.
+ *
+ * `--watch` keeps copying changed files from every DOCS_SOURCE checkout and runs
+ * `docusaurus start`, so edits in a library repo show up in the dev server.
  */
-import { execFileSync } from 'node:child_process'
-import { cpSync, existsSync, mkdirSync, rmSync, symlinkSync } from 'node:fs'
-import { dirname, join, resolve } from 'node:path'
+import { execFileSync, spawn } from 'node:child_process'
+import {
+  cpSync,
+  existsSync,
+  mkdirSync,
+  rmSync,
+  statSync,
+  symlinkSync,
+  watch,
+} from 'node:fs'
+import { dirname, join, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 interface ExternalSource {
@@ -70,8 +82,13 @@ const externalDir = join(websiteDir, 'external')
 
 const args = process.argv.slice(2)
 const force = args.includes('--force')
+const watchMode = args.includes('--watch')
 const requested = args.filter(arg => !arg.startsWith('--'))
 const names = requested.length > 0 ? requested : Object.keys(sources)
+
+function log(name: string, message: string) {
+  console.log(`[external-docs] ${name}: ${message}`)
+}
 
 function envKey(name: string, suffix: string) {
   return `DOCS_${suffix}_${name.toUpperCase().replaceAll('-', '_')}`
@@ -81,6 +98,95 @@ function git(cwd: string, ...gitArgs: string[]) {
   execFileSync('git', gitArgs, { cwd, stdio: 'inherit' })
 }
 
+function copyLocalSource(name: string, source: ExternalSource, from: string, target: string) {
+  for (const entry of [...source.dirs, ...(source.files ?? [])]) {
+    log(name, `copying ${join(from, entry)}`)
+    cpSync(join(from, entry), join(target, entry), { recursive: true })
+  }
+  for (const entry of source.optionalLinks ?? []) {
+    const linkSource = join(from, entry)
+    if (!existsSync(linkSource)) {
+      log(name, `${linkSource} not found, skipping link`)
+      continue
+    }
+    log(name, `linking ${linkSource}`)
+    mkdirSync(dirname(join(target, entry)), { recursive: true })
+    symlinkSync(linkSource, join(target, entry), 'junction')
+  }
+}
+
+function cloneSource(name: string, source: ExternalSource, target: string) {
+  const repo = process.env[envKey(name, 'REPO')] ?? source.repo
+  const ref = process.env[envKey(name, 'REF')] ?? source.ref
+  for (let attempt = 1; ; attempt++) {
+    log(name, `cloning ${repo}@${ref} (${source.dirs.join(', ')} only)`)
+    try {
+      git(
+        externalDir,
+        'clone',
+        '--depth',
+        '1',
+        '--filter=blob:none',
+        '--sparse',
+        '--branch',
+        ref,
+        repo,
+        name,
+      )
+      git(target, 'sparse-checkout', 'set', ...source.dirs)
+      break
+    } catch (error) {
+      // A half-populated clone would be skipped by the next run without --force
+      rmSync(target, { recursive: true, force: true })
+      if (attempt === 2) throw error
+      log(name, 'clone failed, retrying in 5 seconds')
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 5000)
+    }
+  }
+  const commit = execFileSync('git', ['rev-parse', 'HEAD'], {
+    cwd: target,
+    encoding: 'utf8',
+  }).trim()
+  log(name, `checked out ${commit}`)
+}
+
+function watchLocalSource(name: string, source: ExternalSource, from: string, target: string) {
+  const pending = new Set<string>()
+  let timer: ReturnType<typeof setTimeout> | undefined
+
+  function sync() {
+    for (const changed of pending) {
+      const dest = join(target, relative(from, changed))
+      try {
+        if (existsSync(changed)) {
+          mkdirSync(dirname(dest), { recursive: true })
+          cpSync(changed, dest, { recursive: true })
+        } else {
+          rmSync(dest, { recursive: true, force: true })
+        }
+        log(name, `synced ${relative(from, changed)}`)
+      } catch (error) {
+        log(name, `failed to sync ${relative(from, changed)}: ${error}`)
+      }
+    }
+    pending.clear()
+  }
+
+  for (const entry of [...source.dirs, ...(source.files ?? [])]) {
+    const root = join(from, entry)
+    const isDir = statSync(root).isDirectory()
+    watch(root, { recursive: isDir }, (_event, file) => {
+      pending.add(isDir && file ? join(root, file) : root)
+      clearTimeout(timer)
+      // Editors often save by writing a temp file and renaming it
+      timer = setTimeout(sync, 100)
+    })
+  }
+  log(name, `watching ${from}`)
+}
+
+const watched: Array<() => void> = []
+
 for (const name of names) {
   const source = sources[name]
   if (!source) {
@@ -89,49 +195,31 @@ for (const name of names) {
   }
 
   const target = join(externalDir, name)
+  const localSource = process.env[envKey(name, 'SOURCE')]
   if (existsSync(target)) {
-    if (!force) {
-      console.log(`[external-docs] ${name}: ${target} exists, skipping (use --force to refetch)`)
+    if (!force && !localSource) {
+      log(name, `${target} exists, skipping (use --force to refetch)`)
       continue
     }
     rmSync(target, { recursive: true, force: true })
   }
   mkdirSync(externalDir, { recursive: true })
 
-  const localSource = process.env[envKey(name, 'SOURCE')]
   if (localSource) {
-    for (const entry of [...source.dirs, ...(source.files ?? [])]) {
-      const from = join(resolve(localSource), entry)
-      console.log(`[external-docs] ${name}: copying ${from}`)
-      cpSync(from, join(target, entry), { recursive: true })
-    }
-    for (const entry of source.optionalLinks ?? []) {
-      const from = join(resolve(localSource), entry)
-      if (!existsSync(from)) {
-        console.log(`[external-docs] ${name}: ${from} not found, skipping link`)
-        continue
-      }
-      console.log(`[external-docs] ${name}: linking ${from}`)
-      mkdirSync(dirname(join(target, entry)), { recursive: true })
-      symlinkSync(from, join(target, entry), 'junction')
-    }
-    continue
+    const from = resolve(localSource)
+    copyLocalSource(name, source, from, target)
+    watched.push(() => watchLocalSource(name, source, from, target))
+  } else {
+    cloneSource(name, source, target)
   }
+}
 
-  const repo = process.env[envKey(name, 'REPO')] ?? source.repo
-  const ref = process.env[envKey(name, 'REF')] ?? source.ref
-  console.log(`[external-docs] ${name}: cloning ${repo}@${ref} (${source.dirs.join(', ')} only)`)
-  git(
-    externalDir,
-    'clone',
-    '--depth',
-    '1',
-    '--filter=blob:none',
-    '--sparse',
-    '--branch',
-    ref,
-    repo,
-    name,
-  )
-  git(target, 'sparse-checkout', 'set', ...source.dirs)
+if (watchMode) {
+  for (const startWatching of watched) startWatching()
+  const server = spawn('pnpm', ['start'], {
+    cwd: websiteDir,
+    stdio: 'inherit',
+    shell: true,
+  })
+  server.on('exit', code => process.exit(code ?? 0))
 }

@@ -63,6 +63,7 @@
   "scripts": {
     "build": "docusaurus build",
     "deploy": "docusaurus deploy",
+    "dev": "node --experimental-strip-types scripts/fetch-external-docs.mts --watch",
     "fetch-docs": "node --experimental-strip-types scripts/fetch-external-docs.mts",
     "start": "docusaurus start",
     "swizzle": "docusaurus swizzle"
