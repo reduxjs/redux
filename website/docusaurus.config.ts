@@ -10,6 +10,16 @@ import type { Config } from '@docusaurus/types'
 import type { Options as UmamiOptions } from '@dipakparmar/docusaurus-plugin-umami'
 import type { LibraryEntry } from './src/components/useCurrentLibrary'
 
+// "Edit this page" links for library docs target the branch that
+// scripts/fetch-external-docs.mts cloned (DOCS_REF_<NAME>, default master).
+function libraryEditUrl(repo: string) {
+  const ref =
+    process.env[`DOCS_REF_${repo.toUpperCase().replaceAll('-', '_')}`] ??
+    'master'
+  return ({ docPath }: { docPath: string }) =>
+    `https://github.com/reduxjs/${repo}/edit/${ref}/docs/${docPath}`
+}
+
 // One entry per docs plugin instance. Read by the two custom navbar items in
 // src/components/ (LibraryDropdownNavbarItem, LibraryLinksNavbarItem), which
 // are registered in src/theme/NavbarItem/ComponentTypes.tsx. `navbarItems`
@@ -299,8 +309,7 @@ const config: Config = {
         routeBasePath: 'react-redux',
         sidebarPath: resolve(__dirname, 'external/react-redux/docs/sidebars.ts'),
         include: ['{api,introduction,using-react-redux,tutorials}/*.{md,mdx}'],
-        editUrl: ({ docPath }) =>
-          `https://github.com/reduxjs/react-redux/edit/master/docs/${docPath}`,
+        editUrl: libraryEditUrl('react-redux'),
         showLastUpdateTime: false
       } satisfies DocsOptions
     ],
@@ -317,8 +326,7 @@ const config: Config = {
         include: [
           '{api,assets,introduction,migrations,rtk-query,tutorials,usage}/**/*.{md,mdx}'
         ],
-        editUrl: ({ docPath }) =>
-          `https://github.com/reduxjs/redux-toolkit/edit/master/docs/${docPath}`,
+        editUrl: libraryEditUrl('redux-toolkit'),
         showLastUpdateTime: false,
         remarkPlugins: [
           [
@@ -374,8 +382,9 @@ const config: Config = {
         path: 'external/reselect/docs',
         routeBasePath: 'reselect',
         sidebarPath: resolve(__dirname, 'external/reselect/docs/sidebars.ts'),
-        editUrl: ({ docPath }) =>
-          `https://github.com/reduxjs/reselect/edit/master/docs/${docPath}`,
+        // README.md is the contributor guide for this folder, not a page
+        exclude: ['README.md'],
+        editUrl: libraryEditUrl('reselect'),
         showLastUpdateTime: false
       } satisfies DocsOptions
     ],
