@@ -94,8 +94,6 @@ const config: Config = {
   favicon: 'img/favicon/favicon.ico',
   organizationName: 'reduxjs',
   projectName: 'redux',
-  // RTK docs reference /img/usage/... from their own website/static
-  staticDirectories: ['static', 'external/redux-toolkit/website/static'],
   headTags: [
     {
       // Rspack (`future.v4.fasterByDefault`) bundles the dynamic
@@ -299,11 +297,8 @@ const config: Config = {
         id: 'react-redux',
         path: 'external/react-redux/docs',
         routeBasePath: 'react-redux',
-        sidebarPath: require.resolve('./sidebars.react-redux.ts'),
-        include: [
-          '{api,introduction,using-react-redux,tutorials}/*.{md,mdx}',
-          'troubleshooting.md'
-        ],
+        sidebarPath: resolve(__dirname, 'external/react-redux/docs/sidebars.ts'),
+        include: ['{api,introduction,using-react-redux,tutorials}/*.{md,mdx}'],
         editUrl: ({ docPath }) =>
           `https://github.com/reduxjs/react-redux/edit/master/docs/${docPath}`,
         showLastUpdateTime: false
@@ -315,7 +310,10 @@ const config: Config = {
         id: 'toolkit',
         path: 'external/redux-toolkit/docs',
         routeBasePath: 'toolkit',
-        sidebarPath: require.resolve('./sidebars.toolkit.ts'),
+        sidebarPath: resolve(
+          __dirname,
+          'external/redux-toolkit/docs/sidebars.ts'
+        ),
         include: [
           '{api,assets,introduction,migrations,rtk-query,tutorials,usage}/**/*.{md,mdx}'
         ],
@@ -373,40 +371,14 @@ const config: Config = {
       '@docusaurus/plugin-content-docs',
       {
         id: 'reselect',
-        path: 'external/reselect/website/docs',
+        path: 'external/reselect/docs',
         routeBasePath: 'reselect',
-        sidebarPath: require.resolve('./sidebars.reselect.ts'),
+        sidebarPath: resolve(__dirname, 'external/reselect/docs/sidebars.ts'),
         editUrl: ({ docPath }) =>
-          `https://github.com/reduxjs/reselect/edit/master/website/docs/${docPath}`,
+          `https://github.com/reduxjs/reselect/edit/master/docs/${docPath}`,
         showLastUpdateTime: false
       } satisfies DocsOptions
     ],
-    // Reselect's docs import shared components as `@site/src/components/*`,
-    // which resolves against this site. Point those specifiers at the fetched
-    // Reselect copies instead. The resolver stops at the first matching alias
-    // key and Docusaurus registers `@site` itself, so these exact-match keys
-    // have to come before it; mutating the existing alias map is the only way
-    // to control that order.
-    function reselectComponentAliases() {
-      const components = resolve(
-        __dirname,
-        'external/reselect/website/src/components'
-      )
-      const aliases = Object.fromEntries(
-        ['InternalLinks', 'ExternalLinks', 'PackageManagerTabs'].map(name => [
-          `@site/src/components/${name}$`,
-          resolve(components, `${name}.tsx`)
-        ])
-      )
-      return {
-        name: 'reselect-component-aliases',
-        configureWebpack: config => {
-          config.resolve ??= {}
-          config.resolve.alias = { ...aliases, ...config.resolve.alias }
-          return {}
-        }
-      }
-    },
     // The persistent build cache keys each page on its own contents, so a
     // cached RTK page would skip re-checking its code blocks after only the
     // RTK types changed. Make every RTK .mdx page depend on the type

@@ -48,8 +48,6 @@ const sources: Record<string, ExternalSource> = {
       'docs',
       // linkDocblocks reads doc comments straight from the library source
       'packages/toolkit/src',
-      // images referenced from docs as /img/usage/...
-      'website/static/img/usage',
     ],
     // src/pages/toolkit/errors.tsx
     files: ['errors.json'],
@@ -61,14 +59,9 @@ const sources: Record<string, ExternalSource> = {
   reselect: {
     repo: 'https://github.com/reduxjs/reselect.git',
     ref: 'master',
-    dirs: [
-      // Reselect keeps its docs inside website/. The TS/JS example tabs are
-      // committed into the .mdx files, so compileExamples.ts does not need to run.
-      'website/docs',
-      // docs import these via @site/src/components/*; aliased in docusaurus.config.ts
-      'website/src/components',
-      'website/static/img',
-    ],
+    // The TS/JS example tabs are committed into the .mdx files, so Reselect's
+    // `docs:examples` script does not need to run here.
+    dirs: ['docs'],
   },
 }
 
