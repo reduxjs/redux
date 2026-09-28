@@ -1,0 +1,17 @@
+---
+id: errors
+title: Production Error Codes
+sidebar_label: Error Messages
+slug: /errors
+description: 'API > Production Error Codes: the full text of each Redux production error code'
+hide_table_of_contents: true
+---
+
+import ErrorCodesPage from '@site/src/components/ErrorCodesPage'
+import errorCodes from '../../errors.json'
+
+# Production Error Codes
+
+When Redux is built and running in production, error text is replaced by indexed error codes to save on bundle size. These errors will provide a link to this page with more information about the error below.
+
+<ErrorCodesPage errorCodes={errorCodes} />

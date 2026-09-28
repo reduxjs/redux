@@ -61,7 +61,7 @@ const sources: Record<string, ExternalSource> = {
       // linkDocblocks reads doc comments straight from the library source
       'packages/toolkit/src',
     ],
-    // src/pages/toolkit/errors.tsx
+    // Imported by docs/api/errors.mdx for the /toolkit/errors page
     files: ['errors.json'],
     // A built package in the source checkout makes RTK's docs/tsconfig.json
     // `paths` resolve, so code blocks type-check against that branch. Without

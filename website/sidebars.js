@@ -153,7 +153,7 @@ module.exports = {
       'api/bindactioncreators',
       'api/compose',
       'api/utils',
-      { type: 'link', label: 'Error Messages', href: '/errors' }
+      'api/errors'
     ]
   }
 }

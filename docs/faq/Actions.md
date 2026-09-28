@@ -6,6 +6,9 @@ sidebar_label: Actions
 
 ## Redux FAQ: Actions
 
+{/* Anchor for the old heading id, linked from RTK's serializable check warning */}
+<a id="why-should-type-be-a-string-or-at-least-serializable-why-should-my-action-types-be-constants"></a>
+
 ### Why should `type` be a string? Why should my action types be constants?
 
 As with state, serializable actions enable several of Redux's defining features, such as time travel debugging, and recording and replaying actions. Using something like a `Symbol` for the `type` value or using `instanceof` checks for actions themselves would break that. Strings are serializable and easily self-descriptive, and so are a better choice. Note that it _is_ okay to use Symbols, Promises, or other non-serializable values in an action if the action is intended for use by middleware. Actions only need to be serializable by the time they actually reach the store and are passed to the reducers.
