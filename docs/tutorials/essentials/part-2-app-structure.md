@@ -32,7 +32,7 @@ Here's the live version of the project. You can play around with it by clicking 
 <LiveExample
   repo="reduxjs/redux-templates"
   ref="master"
-  path="packages/rtk-app-structure-example"
+  path="examples/rtk-app-structure-example"
   file="src/features/counter/counterSlice.ts"
   title="Redux Toolkit app structure: counter example"
 />
@@ -40,7 +40,7 @@ Here's the live version of the project. You can play around with it by clicking 
 If you'd like to set up this project on your own computer, you can create a local copy with this command:
 
 ```sh
-npx tiged reduxjs/redux-templates/packages/rtk-app-structure-example my-app
+npx tiged reduxjs/redux-templates/examples/rtk-app-structure-example my-app
 ```
 
 You can also create a new project using the full Redux Toolkit template for Vite:
