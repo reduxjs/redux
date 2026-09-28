@@ -32,7 +32,7 @@ In this section, we'll convert our social media app to fetch the posts and users
 
 :::tip
 
-Redux Toolkit includes the [**RTK Query data fetching and caching API**](https://redux-toolkit.js.org/rtk-query/overview). RTK Query is a purpose built data fetching and caching solution for Redux apps, and **can eliminate the need to write _any_ additional Redux logic like thunks or reducers to manage data fetching**. We specifically teach RTK Query as the default approach for data fetching.
+Redux Toolkit includes the [**RTK Query data fetching and caching API**](/toolkit/rtk-query/overview). RTK Query is a purpose built data fetching and caching solution for Redux apps, and **can eliminate the need to write _any_ additional Redux logic like thunks or reducers to manage data fetching**. We specifically teach RTK Query as the default approach for data fetching.
 
 RTK Query is built on the same patterns shown in this page, so **this section will help you understand the underlying mechanics of how data fetching works with Redux**.
 
@@ -94,7 +94,7 @@ Middleware update the Redux data flow by adding an extra step at the start of `d
 
 ## Thunks and Async Logic
 
-There are many kinds of async middleware for Redux, and each lets you write your logic using different syntax. The most common async middleware is [`redux-thunk`](https://github.com/reduxjs/redux-thunk), which lets you write plain functions that may contain async logic directly. Redux Toolkit's `configureStore` function [automatically sets up the thunk middleware by default](https://redux-toolkit.js.org/api/getDefaultMiddleware#included-default-middleware), and [we recommend using thunks as a standard approach for writing async logic with Redux](../../style-guide/style-guide.md#use-thunks-and-listeners-for-other-async-logic).
+There are many kinds of async middleware for Redux, and each lets you write your logic using different syntax. The most common async middleware is [`redux-thunk`](https://github.com/reduxjs/redux-thunk), which lets you write plain functions that may contain async logic directly. Redux Toolkit's `configureStore` function [automatically sets up the thunk middleware by default](/toolkit/api/getDefaultMiddleware#included-default-middleware), and [we recommend using thunks as a standard approach for writing async logic with Redux](../../style-guide/style-guide.md#use-thunks-and-listeners-for-other-async-logic).
 
 :::info What is a "Thunk"?
 
@@ -166,7 +166,7 @@ Data fetching logic for Redux typically follows a predictable pattern:
 
 These steps are not _required_, but are commonly used. (If all you care about is a successful result, you can just dispatch a single "success" action when the request finishes, and skip the "start" and "failure" actions.)
 
-**Redux Toolkit provides a [`createAsyncThunk`](https://redux-toolkit.js.org/api/createAsyncThunk) API to implement the creation and dispatching of actions describing an async request**.
+**Redux Toolkit provides a [`createAsyncThunk`](/toolkit/api/createAsyncThunk) API to implement the creation and dispatching of actions describing an async request**.
 
 Basic `createAsyncThunk` usage looks like this:
 
@@ -482,7 +482,7 @@ console.log(
 */
 ```
 
-We've also seen that we can use [the `extraReducers` field in `createSlice` to respond to actions that were defined outside of the slice](./part-4-using-data.md##using-extrareducers-to-handle-other-actions).
+We've also seen that we can use [the `extraReducers` field in `createSlice` to respond to actions that were defined outside of the slice](./part-4-using-data.md#using-extrareducers-to-handle-other-actions).
 
 In this case, we need to listen for the "pending" and "fulfilled" action types dispatched by our `fetchPosts` thunk. Those action creators are attached to our actual `fetchPosts` function, and we can pass those to `extraReducers` to listen for those actions:
 
@@ -945,7 +945,7 @@ The initial state was an empty array, and we probably could have done `state.pus
 
 :::info
 
-To learn more about how state updates with Immer work, see the ["Writing Reducers with Immer" guide in the RTK docs](https://redux-toolkit.js.org/usage/immer-reducers#immer-usage-patterns).
+To learn more about how state updates with Immer work, see the ["Writing Reducers with Immer" guide in the RTK docs](/toolkit/usage/immer-reducers#immer-usage-patterns).
 
 :::
 

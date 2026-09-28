@@ -171,6 +171,18 @@ export const transpileCodeblocks: Plugin<[TranspileCodeblocksSettings]> =
         const transpilationResult = compiler.compile(virtualFiles);
         //console.timeEnd(virtualFolder)
 
+        // Core production builds check against the published package, which can
+        // lag behind the library's docs, so they report errors without failing.
+        // Library PR previews check against the PR's own build and stay strict.
+        const report = (
+          reason: string,
+          place: Parameters<typeof file.message>[1]
+        ) => {
+          if (process.env.DOCS_TYPECHECK !== 'warn') file.fail(reason, place);
+          file.message(reason, place);
+          console.warn(`[WARNING] ${file.path}\n${reason}`);
+        };
+
         for (const [fileName, result] of Object.entries(transpilationResult)) {
           for (const diagnostic of result.diagnostics) {
             if (diagnostic.line && node.position) {
@@ -181,7 +193,7 @@ export const transpileCodeblocks: Plugin<[TranspileCodeblocksSettings]> =
                     `${String(lineNo).padStart(3, ' ')}  ${line}`
                 );
 
-              file.fail(
+              report(
                 `
 TypeScript error in code block in line ${diagnostic.line} of ${fileName}
 ${diagnostic.message}
@@ -194,7 +206,7 @@ ${lines.slice(Math.max(0, diagnostic.line - 5), diagnostic.line + 6).join('\n')}
                 }
               );
             } else {
-              file.fail(diagnostic.message, node);
+              report(`${fileName}\n${diagnostic.message}`, node);
             }
           }
         }

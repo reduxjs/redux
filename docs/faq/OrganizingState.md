@@ -52,7 +52,7 @@ If you are okay with things like persistence and time-travel debugging potential
 
 Data with IDs, nesting, or relationships should generally be stored in a “normalized” fashion: each object should be stored once, keyed by ID, and other objects that reference it should only store the ID rather than a copy of the entire object. It may help to think of parts of your store as a database, with individual “tables” per item type.
 
-For most applications, use Redux Toolkit's [`createEntityAdapter`](https://redux-toolkit.js.org/api/createEntityAdapter) to manage normalized collections in your slices. It uses an `{ ids, entities }` state structure and provides reducer functions to add, update, and remove items, along with selectors to read them.
+For most applications, use Redux Toolkit's [`createEntityAdapter`](/toolkit/api/createEntityAdapter) to manage normalized collections in your slices. It uses an `{ ids, entities }` state structure and provides reducer functions to add, update, and remove items, along with selectors to read them.
 
 The adapter does not turn nested objects into separate entities or replace relationships with IDs. If your API returns nested data, transform it into the normalized shape before adding it to the store. See [Normalizing Nested Data](../usage/structuring-reducers/NormalizingStateShape.md#normalizing-nested-data) for more on this step and tools such as Normalizr.
 
@@ -61,7 +61,7 @@ The adapter does not turn nested objects into separate entities or replace relat
 **Documentation**
 
 - [Redux Essentials: Normalizing Data](../tutorials/essentials/part-6-performance-normalization#normalizing-data)
-- [Redux Toolkit: `createEntityAdapter`](https://redux-toolkit.js.org/api/createEntityAdapter)
+- [Redux Toolkit: `createEntityAdapter`](/toolkit/api/createEntityAdapter)
 - [Redux Fundamentals: Async Logic and Data Flow](../tutorials/fundamentals/part-6-async-logic.md)
 - [Redux Fundamentals: Standard Redux Patterns](../tutorials/fundamentals/part-7-standard-patterns.md)
 - [Using Redux: Structuring Reducers - Prerequisite Concepts](../usage/structuring-reducers/PrerequisiteConcepts.md#normalizing-data)

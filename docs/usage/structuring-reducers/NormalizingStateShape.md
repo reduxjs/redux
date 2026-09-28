@@ -75,7 +75,7 @@ The basic concepts of normalizing data are:
 - Any references to individual items should be done by storing the item's ID.
 - Arrays of IDs should be used to indicate ordering.
 
-Redux Toolkit's [`createEntityAdapter`](https://redux-toolkit.js.org/api/createEntityAdapter) implements this shape for you as `{ ids: [], entities: {} }`, and generates the reducer functions and selectors for working with it. The examples on this page use the equivalent field names `allIds` and `byId` so that the structure is spelled out, but the idea is the same: one lookup object keyed by ID, plus one array of IDs for ordering.
+Redux Toolkit's [`createEntityAdapter`](/toolkit/api/createEntityAdapter) implements this shape for you as `{ ids: [], entities: {} }`, and generates the reducer functions and selectors for working with it. The examples on this page use the equivalent field names `allIds` and `byId` so that the structure is spelled out, but the idea is the same: one lookup object keyed by ID, plus one array of IDs for ordering.
 
 An example of a normalized state structure for the blog example above might look like:
 
@@ -260,6 +260,6 @@ If profiling shows that a particular relationship lookup is a bottleneck, you ca
 
 Because APIs frequently send back data in a nested form, that data needs to be transformed into a normalized shape before it can be included in the state tree.
 
-For most applications, [Redux Toolkit's `createEntityAdapter`](https://redux-toolkit.js.org/api/createEntityAdapter) is the recommended way to store and update normalized entity collections in your slices. It provides a standard `{ ids, entities }` state shape along with generated reducers and selectors. See [Performance and Normalizing Data](../../tutorials/essentials/part-6-performance-normalization.md) for a walkthrough.
+For most applications, [Redux Toolkit's `createEntityAdapter`](/toolkit/api/createEntityAdapter) is the recommended way to store and update normalized entity collections in your slices. It provides a standard `{ ids, entities }` state shape along with generated reducers and selectors. See [Performance and Normalizing Data](../../tutorials/essentials/part-6-performance-normalization.md) for a walkthrough.
 
 If you need to transform deeply nested API responses with complex relational schemas into normalized data, the [Normalizr](https://github.com/paularmstrong/normalizr) library is still a common option. You can define schema types and relations, feed the schema and the response data to Normalizr, and it will output a normalized transformation of the response. That output can then be included in an action and used to update the store (including slices that use `createEntityAdapter`). Normalizr is stable and feature-rich for relational normalization, but it is [no longer actively maintained](https://github.com/paularmstrong/normalizr/discussions/493#discussioncomment-2395540).

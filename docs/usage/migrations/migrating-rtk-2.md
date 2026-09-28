@@ -50,7 +50,7 @@ We've updated the build output in several ways:
 
 - **Build output is no longer transpiled!** Instead we target modern JS syntax (ES2020)
 - Moved all build artifacts to live under `./dist/`, instead of separate top-level folders
-- The lowest Typescript version we test against is now **TS 4.7**.
+- The lowest TypeScript version we test against is now **TS 4.7**.
 
 #### Dropping UMD builds
 
@@ -58,7 +58,7 @@ Redux has always shipped with UMD build artifacts. These are primarily meant for
 
 For now, we're dropping those build artifacts from the published package, on the grounds that the use cases seem pretty rare today.
 
-We do have a browser-ready ESM build artifact included at `dist/$PACKAGE_NAME.browser.mjs`, which can be loaded via a script tag that points to that file on Unpkg.
+We do have a browser-ready ESM build artifact included at `dist/$PACKAGE_NAME.browser.mjs`, which can be loaded via a `<script type="module">` tag. Since the browser build still imports dependencies by package name, no-bundler usage also needs an import map that maps those package names to browser-loadable ESM files.
 
 If you have strong use cases for us continuing to include UMD build artifacts, please let us know!
 
@@ -92,7 +92,7 @@ To fix this, there are three options:
 
 <div class="typescript-only">
 
-#### Typescript rewrite
+#### TypeScript rewrite
 
 In 2019, we began a community-powered conversion of the Redux codebase to TypeScript. The original effort was discussed in [#3500: Port to TypeScript](https://github.com/reduxjs/redux/issues/3500), and the work was integrated in PR [#3536: Convert to TypeScript](https://github.com/reduxjs/redux/issues/3536).
 
@@ -100,7 +100,7 @@ However, the TS-converted code sat around in the repo for several years, unused 
 
 Redux core v5 is now built from that TS-converted source code. In theory, this should be almost identical in both runtime behavior and types to the 4.x build, but it's very likely that some of the changes may cause types issues.
 
-Please report any unexpected compatibility issues on [Github](https://github.com/reduxjs/redux/issues)!
+Please report any unexpected compatibility issues on [GitHub](https://github.com/reduxjs/redux/issues)!
 
 #### `AnyAction` deprecated in favour of `UnknownAction`
 
@@ -112,7 +112,7 @@ We now export an `UnknownAction` type, which treats all fields other than `actio
 
 `AnyAction` still exists for compatibility, but has been marked as deprecated.
 
-Note that [Redux Toolkit's action creators have a `.match()` method](https://redux-toolkit.js.org/api/createAction#actioncreatormatch) that acts as a useful type guard:
+Note that [Redux Toolkit's action creators have a `.match()` method](/toolkit/api/createAction#actioncreatormatch) that acts as a useful type guard:
 
 ```ts
 if (todoAdded.match(someUnknownAction)) {
@@ -215,7 +215,7 @@ createSlice({
 
 To simplify upgrading codebases, we've published a set of codemods that will automatically transform the deprecated "object" syntax into the equivalent "builder" syntax.
 
-The codemods package is available on NPM as [`@reduxjs/rtk-codemods`](https://www.npmjs.com/package/@reduxjs/rtk-codemods). More details are available [here](https://redux-toolkit.js.org/api/codemods).
+The codemods package is available on NPM as [`@reduxjs/rtk-codemods`](https://www.npmjs.com/package/@reduxjs/rtk-codemods). More details are available [here](/toolkit/api/codemods).
 
 To run the codemods against your codebase, run `npx @reduxjs/rtk-codemods <TRANSFORM NAME> path/of/files/ or/some**/*glob.js.`
 
@@ -291,11 +291,11 @@ The standalone version of `getDefaultMiddleware` has been deprecated since v1.6.
 
 We have also removed the `getType` export, which was used to extract a type string from action creators made with `createAction`. Instead, use the static property `actionCreator.type`.
 
-#### RTK Query behaviour changes
+#### RTK Query behavior changes
 
 We've had a number of reports where RTK Query had issues around usage of `dispatch(endpoint.initiate(arg, {subscription: false}))`. There were also reports that multiple triggered lazy queries were resolving the promises at the wrong time. Both of these had the same underlying issue, which was that RTKQ wasn't tracking cache entries in these cases (intentionally). We've reworked the logic to always track cache entries (and remove them as needed), which should resolve those behavior issues.
 
-We also have had issues raised about trying to run multiple mutations in a row and how tag invalidation behaves. RTKQ now has internal logic to delay tag invalidation briefly, to allow multiple invalidations to get handled together. This is controlled by a new `invalidationBehavior: 'immediate' | 'delayed'` flag on `createApi`. The new default behavior is `'delayed'`. Set it to `'immediate'` to revert to the behavior in RTK 1.9.
+We also have had issues raised about trying to run multiple mutations in a row and how tag invalidation behaves. RTKQ now has internal logic to delay tag invalidation briefly, to allow multiple invalidations to get handled together. This is controlled by a new `invalidationBehavior: 'immediately' | 'delayed'` flag on `createApi`. The new default behavior is `'delayed'`. Set it to `'immediately'` to revert to the behavior in RTK 1.9.
 
 In RTK 1.9, we reworked RTK Query's internals to keep most of the subscription status inside the RTKQ middleware. The values are still synced to the Redux store state, but this is primarily for display by the Redux DevTools "RTK Query" panel. Related to the cache entry changes above, we've optimized how often those values get synced to the Redux state for perf.
 
@@ -414,7 +414,7 @@ const addNumbersStable = createSelector(
 )
 ```
 
-This is done the first time the selector is called, unless configured otherwise. More details are available in the [Reselect docs on dev-mode checks](https://reselect.js.org/api/development-only-stability-checks).
+This is done the first time the selector is called, unless configured otherwise. More details are available in the [Reselect docs on dev-mode checks](/reselect/api/development-only-checks).
 
 Note that while RTK re-exports `createSelector`, it intentionally does not re-export the function to configure this check globally - if you wish to do so, you should instead depend on `reselect` directly and import it yourself.
 
@@ -434,6 +434,54 @@ React-Redux v7 and v8 worked with all versions of React that supported hooks (16
 
 **React-Redux v9 switches to _requiring_ React 18, and does _not_ support React 16 or 17**. This allows us to drop the shim and save a small bit of bundle size.
 
+<div class="typescript-only">
+
+#### Custom context typing
+
+React Redux supports creating `hooks` (and `connect`) with a [custom context](/react-redux/api/hooks#custom-context), but typing this has been fairly non-standard. The pre-v9 types required `Context<ReactReduxContextValue>`, but the context default value was usually initialised with `null` (as the hooks use this to make sure they actually have a provided context). This, in "best" cases, would result in something like the below:
+
+```ts title="Pre-v9 custom context"
+import { createContext } from 'react'
+import {
+  ReactReduxContextValue,
+  createDispatchHook,
+  createSelectorHook,
+  createStoreHook
+} from 'react-redux'
+import { AppStore, RootState, AppDispatch } from './store'
+
+// highlight-next-line
+const context = createContext<ReactReduxContextValue>(null as any)
+
+export const useStore = createStoreHook(context).withTypes<AppStore>()
+export const useDispatch = createDispatchHook(context).withTypes<AppDispatch>()
+export const useSelector = createSelectorHook(context).withTypes<RootState>()
+```
+
+In v9, the types now match the runtime behavior. The context is typed to hold `ReactReduxContextValue | null`, and the hooks know that if they receive `null` they'll throw an error so it doesn't affect the return type.
+
+The above example now becomes:
+
+```ts title="v9+ custom context"
+import { createContext } from 'react'
+import {
+  ReactReduxContextValue,
+  createDispatchHook,
+  createSelectorHook,
+  createStoreHook
+} from 'react-redux'
+import { AppStore, RootState, AppDispatch } from './store'
+
+// highlight-next-line
+const context = createContext<ReactReduxContextValue | null>(null)
+
+export const useStore = createStoreHook(context).withTypes<AppStore>()
+export const useDispatch = createDispatchHook(context).withTypes<AppDispatch>()
+export const useSelector = createSelectorHook(context).withTypes<RootState>()
+```
+
+</div>
+
 ### Redux Thunk
 
 #### Thunk Uses Named Exports
@@ -452,7 +500,7 @@ These features are new in Redux Toolkit 2.0, and help cover additional use cases
 
 The Redux core has always included `combineReducers`, which takes an object full of "slice reducer" functions and generates a reducer that calls those slice reducers. RTK's `createSlice` generates slice reducers + associated action creators, and we've taught the pattern of exporting individual action creators as named exports and the slice reducer as a default export. Meanwhile, we've never had official support for lazy-loading reducers, although we've had [sample code for some "reducer injection" patterns in our docs](https://redux.js.org/usage/code-splitting).
 
-This release includes a new [`combineSlices`](https://redux-toolkit.js.org/api/combineSlices) API that is designed to enable lazy-loading of reducers at runtime. It accepts individual slices or an object full of slices as arguments, and automatically calls `combineReducers` using the `sliceObject.name` field as the key for each state field. The generated reducer function has an additional `.inject()` method attached that can be used to dynamically inject additional slices at runtime. It also includes a `.withLazyLoadedSlices()` method that can be used to generate TS types for reducers that will be added later. See [#2776](https://github.com/reduxjs/redux-toolkit/issues/2776) for the original discussion around this idea.
+This release includes a new [`combineSlices`](/toolkit/api/combineSlices) API that is designed to enable lazy-loading of reducers at runtime. It accepts individual slices or an object full of slices as arguments, and automatically calls `combineReducers` using the `sliceObject.name` field as the key for each state field. The generated reducer function has an additional `.inject()` method attached that can be used to dynamically inject additional slices at runtime. It also includes a `.withLazyLoadedSlices()` method that can be used to generate TS types for reducers that will be added later. See [#2776](https://github.com/reduxjs/redux-toolkit/issues/2776) for the original discussion around this idea.
 
 For now, we are not building this into `configureStore`, so you'll need to call `const rootReducer = combineSlices(.....)` yourself and pass that to `configureStore({reducer: rootReducer})`.
 
@@ -519,7 +567,7 @@ expect(combinedReducer(undefined, dummyAction()).number).toBe(
 
 ### `selectors` field in `createSlice`
 
-The existing `createSlice` API now has support for defining [`selectors`](https://redux-toolkit.js.org/api/createSlice#selectors) directly as part of the slice. By default, these will be generated with the assumption that the slice is mounted in the root state using `slice.name` as the field, such as `name: "todos"` -> `rootState.todos`. Additionally, there's now a `slice.selectSlice` method that does that default root state lookup.
+The existing `createSlice` API now has support for defining [`selectors`](/toolkit/api/createSlice#selectors) directly as part of the slice. By default, these will be generated with the assumption that the slice is mounted in the root state using `slice.name` as the field, such as `name: "todos"` -> `rootState.todos`. Additionally, there's now a `slice.selectSlice` method that does that default root state lookup.
 
 You can call `sliceObject.getSelectors(selectSliceState)` to generate the selectors with an alternate location, similar to how `entityAdapter.getSelectors()` works.
 
@@ -592,7 +640,7 @@ We've _wanted_ to include a way to define thunks directly inside of `createSlice
 
 We've settled on these compromises:
 
-- **In order to create async thunks with `createSlice`, you specifically need to [set up a custom version of `createSlice` that has access to `createAsyncThunk`](https://redux-toolkit.js.org/api/createSlice#createasyncthunk)**.
+- **In order to create async thunks with `createSlice`, you specifically need to [set up a custom version of `createSlice` that has access to `createAsyncThunk`](/toolkit/api/createSlice#createasyncthunk)**.
 - You can declare thunks inside of `createSlice.reducers`, by using a "creator callback" syntax for the `reducers` field that is similar to the `build` callback syntax in RTK Query's `createApi` (using typed functions to create fields in an object). Doing this does look a bit different than the existing "object" syntax for the `reducers` field, but is still fairly similar.
 - You can customize _some_ of the types for thunks inside of `createSlice`, but you _cannot_ customize the `state` or `dispatch` types. If those are needed, you can manually do an `as` cast, like `getState() as RootState`.
 
@@ -601,11 +649,11 @@ In practice, we hope these are reasonable tradeoffs. Creating thunks inside of `
 Here's what the new callback syntax looks like:
 
 ```ts
-const createSliceWithThunks = buildCreateSlice({
+const createAppSlice = buildCreateSlice({
   creators: { asyncThunk: asyncThunkCreator }
 })
 
-const todosSlice = createSliceWithThunks({
+const todosSlice = createAppSlice({
   name: 'todos',
   initialState: {
     loading: false,
@@ -662,7 +710,7 @@ export const { addTodo, deleteTodo, fetchTodo } = todosSlice.actions
 
 #### Codemod
 
-**Using the new callback syntax is entirely optional (the object syntax is still standard)**, but an existing slice would need to be converted before it can take advantage of the new capabilities this syntax provides. To make this easier, a [codemod](https://redux-toolkit.js.org/api/codemods) is provided.
+**Using the new callback syntax is entirely optional (the object syntax is still standard)**, but an existing slice would need to be converted before it can take advantage of the new capabilities this syntax provides. To make this easier, a [codemod](/toolkit/api/codemods) is provided.
 
 ```sh
 npx @reduxjs/rtk-codemods createSliceReducerBuilder ./src/features/todos/slice.ts
@@ -672,7 +720,7 @@ npx @reduxjs/rtk-codemods createSliceReducerBuilder ./src/features/todos/slice.t
 
 A Redux store's middleware pipeline is fixed at store creation time and can't be changed later. We _have_ seen ecosystem libraries that tried to allow dynamically adding and removing middleware, potentially useful for things like code splitting.
 
-This is a relatively niche use case, but we've built [our own version of a "dynamic middleware" middleware](https://redux-toolkit.js.org/api/createDynamicMiddleware). Add it to the Redux store at setup time, and it lets you add middleware later at runtime. It also comes with a [React hook integration that will automatically add a middleware to the store and return the updated dispatch method.](https://redux-toolkit.js.org/api/createDynamicMiddleware#react-integration).
+This is a relatively niche use case, but we've built [our own version of a "dynamic middleware" middleware](/toolkit/api/createDynamicMiddleware). Add it to the Redux store at setup time, and it lets you add middleware later at runtime. It also comes with a [React hook integration that will automatically add a middleware to the store and return the updated dispatch method.](/toolkit/api/createDynamicMiddleware#react-integration).
 
 ```ts
 import { createDynamicMiddleware, configureStore } from '@reduxjs/toolkit'
@@ -699,7 +747,7 @@ We've updated `configureStore` to add the `autoBatchEnhancer` to the store setup
 
 ### `entityAdapter.getSelectors` accepts a `createSelector` function
 
-[`entityAdapter.getSelectors()`](https://redux-toolkit.js.org/api/createEntityAdapter#selector-functions) now accepts an options object as its second argument. This allows you to pass in your own preferred `createSelector` method, which will be used to memoize the generated selectors. This could be useful if you want to use one of Reselect's new alternate memoizers, or some other memoization library with an equivalent signature.
+[`entityAdapter.getSelectors()`](/toolkit/api/createEntityAdapter#selector-functions) now accepts an options object as its second argument. This allows you to pass in your own preferred `createSelector` method, which will be used to memoize the generated selectors. This could be useful if you want to use one of Reselect's new alternate memoizers, or some other memoization library with an equivalent signature.
 
 ### Immer 10.0
 
@@ -715,9 +763,7 @@ We've updated RTK to depend on the final Immer 10.0 release.
 
 ### Next.js Setup Guide
 
-We now have a docs page that covers [how to set up Redux properly with Next.js](https://redux.js.org/usage/nextjs). We've seen a lot of questions around using Redux, Next, and the App Router together, and this guide should help provide advice.
-
-(At this time, the Next.js `with-redux` example is still showing outdated patterns - we're going to file a PR shortly to update that to match our docs guide.)
+We now have a docs page that covers [how to set up Redux properly with Next.js](https://redux.js.org/usage/nextjs). We've seen a lot of questions around using Redux, Next, and the App Router together, and this guide should help provide advice. The [Next.js `with-redux` example](https://github.com/vercel/next.js/tree/canary/examples/with-redux) has been updated to match that guide.
 
 ## Overriding dependencies
 
@@ -787,14 +833,14 @@ createReducer(initialState, {
 })
 ```
 
-While this was convenient (and other libraries in the Redux ecosystem such as `redux-saga` and `redux-observable` have supported this to various capacities), it didn't play well with Typescript and was generally a bit too "magic".
+While this was convenient (and other libraries in the Redux ecosystem such as `redux-saga` and `redux-observable` have supported this to various capacities), it didn't play well with TypeScript and was generally a bit too "magic".
 
 ```ts
 const test = todoAdded.toString()
 //    ^? typed as string, rather than specific action type
 ```
 
-Over time, the action creator also gained a static `type` property and `match` method which were more explicit and worked better with Typescript.
+Over time, the action creator also gained a static `type` property and `match` method which were more explicit and worked better with TypeScript.
 
 ```ts
 const test = todoAdded.type
@@ -845,9 +891,9 @@ yield takeEvery(todoAdded.type, saga)
 
 ### Custom slice reducer creators
 
-With the addition of the [callback syntax for createSlice](#callback-syntax-for-createslicereducers), the [suggestion](https://github.com/reduxjs/redux-toolkit/issues/3837) was made to enable custom slice reducer creators. These creators would be able to:
+With the addition of the [callback syntax for createSlice](#createslicereducers-callback-syntax-and-thunk-support), the [suggestion](https://github.com/reduxjs/redux-toolkit/issues/3837) was made to enable custom slice reducer creators. These creators would be able to:
 
-- Modify reducer behaviour by adding case or matcher reducers
+- Modify reducer behavior by adding case or matcher reducers
 - Attach actions (or any other useful functions) to `slice.actions`
 - Attach provided case reducers to `slice.caseReducers`
 
@@ -903,7 +949,7 @@ const createSlice = buildCreateSlice({
 })
 ```
 
-We're not sure how many people/libraries would actually make use of this though, so any feedback over on the [Github issue](https://github.com/reduxjs/redux-toolkit/issues/3837) is welcome!
+We're not sure how many people/libraries would actually make use of this though, so any feedback over on the [GitHub issue](https://github.com/reduxjs/redux-toolkit/issues/3837) is welcome!
 
 ### `createSlice.selector` selector factories
 
@@ -946,7 +992,7 @@ function AuthorTodos({ author }: { author: string }) {
 
 Of course, with `createSlice.selectors` this is no longer possible, as you need the selector instance when creating your slice.
 
-In 2.0.0 we have no set solution for this - a few APIs have been floated ([PR 1](https://github.com/reduxjs/redux-toolkit/pull/3671), [PR 2](https://github.com/reduxjs/redux-toolkit/pull/3836)) but nothing was decided upon. If this is something you'd like to see supported, consider providing feedback in the [Github discussion](https://github.com/reduxjs/redux-toolkit/discussions/3387)!
+In 2.0.0 we have no set solution for this - a few APIs have been floated ([PR 1](https://github.com/reduxjs/redux-toolkit/pull/3671), [PR 2](https://github.com/reduxjs/redux-toolkit/pull/3836)) but nothing was decided upon. If this is something you'd like to see supported, consider providing feedback in the [GitHub discussion](https://github.com/reduxjs/redux-toolkit/discussions/3387)!
 
 ### 3.0 - RTK Query
 

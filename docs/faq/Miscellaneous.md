@@ -34,17 +34,17 @@ Authentication is essential to any real application. When going about authentica
 
 1. Create an `auth` slice with `createSlice` that holds the current user and token (or a flag indicating whether the user is logged in), plus loading and error fields for the login request.
 
-2. Make the login request either with an [RTK Query mutation](https://redux-toolkit.js.org/rtk-query/usage/mutations) or with a [`createAsyncThunk`](https://redux-toolkit.js.org/api/createAsyncThunk) that takes the credentials and returns the token. Handle the pending, fulfilled, and rejected cases in the slice's `extraReducers` (or with `addMatcher` for the mutation's lifecycle actions) to save the token or the error message.
+2. Make the login request either with an [RTK Query mutation](/toolkit/rtk-query/usage/mutations) or with a [`createAsyncThunk`](/toolkit/api/createAsyncThunk) that takes the credentials and returns the token. Handle the pending, fulfilled, and rejected cases in the slice's `extraReducers` (or with `addMatcher` for the mutation's lifecycle actions) to save the token or the error message.
 
-3. Read the token from the store when making other requests. With RTK Query, do this in `baseQuery`'s [`prepareHeaders`](https://redux-toolkit.js.org/rtk-query/api/fetchBaseQuery#setting-default-headers-on-requests) callback, which receives `getState`. For other code that needs the token outside a component, see [How can I use the Redux store in non-component files?](./CodeStructure.md#how-can-i-use-the-redux-store-in-non-component-files).
+3. Read the token from the store when making other requests. With RTK Query, do this in `baseQuery`'s [`prepareHeaders`](/toolkit/rtk-query/api/fetchBaseQuery#setting-default-headers-on-requests) callback, which receives `getState`. For other code that needs the token outside a component, see [How can I use the Redux store in non-component files?](./CodeStructure.md#how-can-i-use-the-redux-store-in-non-component-files).
 
-4. If you want the session to survive a page reload, persist the token from a [listener middleware](https://redux-toolkit.js.org/api/createListenerMiddleware) effect that runs when the login succeeds, and read it back into `preloadedState` when you create the store.
+4. If you want the session to survive a page reload, persist the token from a [listener middleware](/toolkit/api/createListenerMiddleware) effect that runs when the login succeeds, and read it back into `preloadedState` when you create the store.
 
 #### Further information
 
 **Documentation**
 
-- [RTK Query: Authentication example](https://redux-toolkit.js.org/rtk-query/usage/examples#authentication)
+- [RTK Query: Authentication example](/toolkit/rtk-query/usage/examples#authentication)
 
 **Articles**
 

@@ -15,7 +15,7 @@ Turns an object whose values are [action creators](../understanding/thinking-in-
 
 :::info
 
-Normally you should just call [`dispatch`](Store.md#dispatchaction) directly. If you use Redux with React, [React-Redux's `useDispatch` hook](https://react-redux.js.org/api/hooks#usedispatch) gives you the `dispatch` function inside components.
+Normally you should just call [`dispatch`](Store.md#dispatchaction) directly. If you use Redux with React, [React-Redux's `useDispatch` hook](/react-redux/api/hooks#usedispatch) gives you the `dispatch` function inside components.
 
 The only use case for `bindActionCreators` is when you want to pass some action creators down to a component that isn't aware of Redux, and you don't want to pass `dispatch` or the Redux store to it. It was originally intended for use with the legacy React-Redux `connect` method, and is rarely needed today.
 

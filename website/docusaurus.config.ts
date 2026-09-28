@@ -1,11 +1,107 @@
+import { existsSync, readdirSync } from 'fs'
 import { resolve } from 'path'
 import {
   linkDocblocks,
   transpileCodeblocks
 } from './plugins/remark-typescript-tools/index.js'
 import type { Options, ThemeConfig } from '@docusaurus/preset-classic'
+import type { Options as DocsOptions } from '@docusaurus/plugin-content-docs'
 import type { Config } from '@docusaurus/types'
 import type { Options as UmamiOptions } from '@dipakparmar/docusaurus-plugin-umami'
+import type { LibraryEntry } from './src/components/useCurrentLibrary'
+
+// "Edit this page" links for library docs target the branch that
+// scripts/fetch-external-docs.mts cloned (DOCS_REF_<NAME>, default master).
+function libraryEditUrl(repo: string) {
+  const ref =
+    process.env[`DOCS_REF_${repo.toUpperCase().replaceAll('-', '_')}`] ??
+    'master'
+  return ({ docPath }: { docPath: string }) =>
+    `https://github.com/reduxjs/${repo}/edit/${ref}/docs/${docPath}`
+}
+
+// One entry per docs plugin instance. Read by the two custom navbar items in
+// src/components/ (LibraryDropdownNavbarItem, LibraryLinksNavbarItem), which
+// are registered in src/theme/NavbarItem/ComponentTypes.tsx. `navbarItems`
+// are the right-hand links shown while that library's pages are active.
+const libraries: LibraryEntry[] = [
+  {
+    label: 'Redux',
+    to: 'introduction/getting-started',
+    routeBasePath: '/',
+    navbarItems: [
+      { label: 'Getting Started', to: 'introduction/getting-started' },
+      {
+        label: 'Tutorial',
+        to: 'tutorials/essentials/part-1-overview-concepts'
+      },
+      { label: 'Usage Guide', type: 'doc', docId: 'usage/index' },
+      { label: 'API', type: 'doc', docId: 'api/api-reference' },
+      { label: 'FAQ', to: 'faq' },
+      { label: 'Best Practices', type: 'doc', docId: 'style-guide/style-guide' },
+      { label: 'GitHub', href: 'https://www.github.com/reduxjs/redux' },
+      {
+        label: 'Need help?',
+        to: 'introduction/getting-started#help-and-discussion'
+      }
+    ]
+  },
+  {
+    label: 'Redux Toolkit',
+    to: 'toolkit/introduction/getting-started',
+    routeBasePath: 'toolkit',
+    navbarItems: [
+      { label: 'Getting Started', to: 'toolkit/introduction/getting-started' },
+      { label: 'Tutorial', to: 'tutorials/index' },
+      { label: 'Usage Guide', to: 'toolkit/usage/usage-guide' },
+      { label: 'API', to: 'toolkit/api/configureStore' },
+      { label: 'RTK Query', to: 'toolkit/rtk-query/overview' },
+      { label: 'GitHub', href: 'https://github.com/reduxjs/redux-toolkit' },
+      {
+        label: 'Need help?',
+        to: 'introduction/getting-started#help-and-discussion'
+      }
+    ]
+  },
+  {
+    label: 'React Redux',
+    to: 'react-redux/introduction/getting-started',
+    routeBasePath: 'react-redux',
+    navbarItems: [
+      {
+        label: 'Getting Started',
+        to: 'react-redux/introduction/getting-started'
+      },
+      { label: 'Tutorial', to: 'tutorials/quick-start' },
+      {
+        label: 'Using React Redux',
+        to: 'react-redux/using-react-redux/accessing-store'
+      },
+      { label: 'API', to: 'react-redux/api/hooks' },
+      { label: 'GitHub', href: 'https://www.github.com/reduxjs/react-redux' },
+      {
+        label: 'Need help?',
+        to: 'introduction/getting-started#help-and-discussion'
+      }
+    ]
+  },
+  {
+    label: 'Reselect',
+    to: 'reselect/introduction/getting-started',
+    routeBasePath: 'reselect',
+    navbarItems: [
+      { label: 'Getting Started', to: 'reselect/introduction/getting-started' },
+      { label: 'Tutorial', to: 'tutorials/index' },
+      { label: 'Usage Guide', to: 'usage/deriving-data-selectors' },
+      { label: 'API', to: 'reselect/api/createSelector' },
+      { label: 'GitHub', href: 'https://www.github.com/reduxjs/reselect' },
+      {
+        label: 'Need help?',
+        to: 'introduction/getting-started#help-and-discussion'
+      }
+    ]
+  }
+]
 
 const config: Config = {
   title: 'Redux',
@@ -28,7 +124,23 @@ const config: Config = {
       innerHTML: `import('/pagefind/pagefind.js').then(m => { window.pagefind = m }).catch(() => {})`
     }
   ],
-  themes: [require.resolve('@getcanary/docusaurus-theme-search-pagefind')],
+  themes: [
+    [
+      require.resolve('@getcanary/docusaurus-theme-search-pagefind'),
+      {
+        // Search tabs match picomatch patterns against `hostname + pathname`.
+        // The leading `*` is the hostname only, so core pages like
+        // `/faq/react-redux` stay in the Redux tab.
+        tabs: [
+          { name: 'All', pattern: '**/*' },
+          { name: 'Redux', pattern: '!*/{react-redux,toolkit,reselect}/**' },
+          { name: 'Redux Toolkit', pattern: '*/toolkit/**' },
+          { name: 'React Redux', pattern: '*/react-redux/**' },
+          { name: 'Reselect', pattern: '*/reselect/**' }
+        ]
+      }
+    ]
+  ],
   themeConfig: {
     tableOfContents: {
       minHeadingLevel: 2,
@@ -50,43 +162,14 @@ const config: Config = {
       },
       items: [
         {
-          label: 'Getting Started',
-          to: 'introduction/getting-started',
-          position: 'right'
+          type: 'custom-libraryDropdown',
+          position: 'left',
+          libraries
         },
         {
-          label: 'Tutorial',
-          to: 'tutorials/essentials/part-1-overview-concepts',
-          position: 'right'
-        },
-        {
-          label: 'Usage Guide',
-          type: 'doc',
-          docId: 'usage/index',
-          position: 'right'
-        },
-        {
-          label: 'API',
-          type: 'doc',
-          docId: 'api/api-reference',
-          position: 'right'
-        },
-        { label: 'FAQ', to: 'faq', position: 'right' },
-        {
-          label: 'Best Practices',
-          type: 'doc',
-          docId: 'style-guide/style-guide',
-          position: 'right'
-        },
-        {
-          label: 'GitHub',
-          href: 'https://www.github.com/reduxjs/redux',
-          position: 'right'
-        },
-        {
-          label: 'Need help?',
-          to: 'introduction/getting-started#help-and-discussion',
-          position: 'right'
+          type: 'custom-libraryLinks',
+          position: 'right',
+          libraries
         }
       ]
     },
@@ -114,6 +197,21 @@ const config: Config = {
               type: 'doc',
               to: 'api/api-reference'
             }
+          ]
+        },
+        {
+          title: 'Libraries',
+          items: [
+            { label: 'Redux', to: '/' },
+            {
+              label: 'Redux Toolkit',
+              to: 'toolkit/introduction/getting-started'
+            },
+            {
+              label: 'React Redux',
+              to: 'react-redux/introduction/getting-started'
+            },
+            { label: 'Reselect', to: 'reselect/introduction/getting-started' }
           ]
         },
         {
@@ -176,7 +274,7 @@ const config: Config = {
           sidebarPath: require.resolve('./sidebars.js'),
           showLastUpdateTime: true,
           include: [
-            '{api,faq,introduction,redux-toolkit,style-guide,tutorials,understanding,usage}/**/*.{md,mdx}',
+            '{api,faq,introduction,style-guide,tutorials,understanding,usage}/**/*.{md,mdx}',
             'FAQ.md'
           ], // no other way to exclude node_modules
           editUrl: 'https://github.com/reduxjs/redux/edit/master/website',
@@ -211,6 +309,136 @@ const config: Config = {
     ]
   ],
   plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'react-redux',
+        path: 'external/react-redux/docs',
+        routeBasePath: 'react-redux',
+        sidebarPath: resolve(__dirname, 'external/react-redux/docs/sidebars.ts'),
+        include: ['{api,introduction,using-react-redux,tutorials}/*.{md,mdx}'],
+        editUrl: libraryEditUrl('react-redux'),
+        showLastUpdateTime: false
+      } satisfies DocsOptions
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'toolkit',
+        path: 'external/redux-toolkit/docs',
+        routeBasePath: 'toolkit',
+        sidebarPath: resolve(
+          __dirname,
+          'external/redux-toolkit/docs/sidebars.ts'
+        ),
+        include: [
+          '{api,assets,introduction,migrations,rtk-query,tutorials,usage}/**/*.{md,mdx}'
+        ],
+        // Maintainer notes on RTK Query internals, read on GitHub
+        exclude: ['rtk-query/internal/**'],
+        editUrl: libraryEditUrl('redux-toolkit'),
+        showLastUpdateTime: false,
+        remarkPlugins: [
+          [
+            linkDocblocks,
+            {
+              extractorSettings: {
+                tsconfig: resolve(
+                  __dirname,
+                  'external/redux-toolkit/docs/tsconfig.json'
+                ),
+                basedir: resolve(
+                  __dirname,
+                  'external/redux-toolkit/packages/toolkit/src'
+                ),
+                rootFiles: [
+                  'index.ts',
+                  'query/index.ts',
+                  'query/createApi.ts',
+                  'query/endpointDefinitions.ts',
+                  'query/react/index.ts',
+                  'query/react/ApiProvider.tsx',
+                  'query/core/buildMiddleware/cacheCollection.ts'
+                ]
+              }
+            }
+          ],
+          [
+            transpileCodeblocks,
+            {
+              compilerSettings: {
+                // RTK's own tsconfig. Its `paths` point at
+                // `packages/toolkit/dist`, which only exists when an RTK
+                // preview build links its freshly built package there (see
+                // `optionalLinks` in scripts/fetch-external-docs.mts).
+                // Otherwise TypeScript falls back to normal resolution and
+                // finds the published `@reduxjs/toolkit` (and the docs'
+                // other devDependencies) in this site's node_modules.
+                tsconfig: resolve(
+                  __dirname,
+                  'external/redux-toolkit/docs/tsconfig.json'
+                ),
+                externalResolutions: {}
+              }
+            }
+          ]
+        ]
+      } satisfies DocsOptions
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'reselect',
+        path: 'external/reselect/docs',
+        routeBasePath: 'reselect',
+        sidebarPath: resolve(__dirname, 'external/reselect/docs/sidebars.ts'),
+        // README.md is the contributor guide for this folder, not a page
+        exclude: ['README.md'],
+        editUrl: libraryEditUrl('reselect'),
+        showLastUpdateTime: false
+      } satisfies DocsOptions
+    ],
+    // The persistent build cache keys each page on its own contents, so a
+    // cached RTK page would skip re-checking its code blocks after only the
+    // RTK types changed. Make every RTK .mdx page depend on the type
+    // declarations its code blocks compile against.
+    function toolkitTypesDependency() {
+      const linkedDist = resolve(
+        __dirname,
+        'external/redux-toolkit/packages/toolkit/dist'
+      )
+      const typesDir = existsSync(linkedDist)
+        ? linkedDist
+        : resolve(__dirname, 'node_modules/@reduxjs/toolkit/dist')
+      const files = [
+        resolve(__dirname, 'external/redux-toolkit/docs/tsconfig.json'),
+        ...readdirSync(typesDir, { recursive: true, encoding: 'utf8' })
+          .filter(file => /\.d\.m?ts$/.test(file))
+          .map(file => resolve(typesDir, file))
+      ]
+      return {
+        name: 'toolkit-types-dependency',
+        configureWebpack: () => ({
+          module: {
+            rules: [
+              {
+                test: /\.mdx$/,
+                include: resolve(__dirname, 'external/redux-toolkit/docs'),
+                enforce: 'pre',
+                use: [
+                  {
+                    loader: require.resolve(
+                      './plugins/toolkit-types-dependency.cjs'
+                    ),
+                    options: { files }
+                  }
+                ]
+              }
+            ]
+          }
+        })
+      }
+    },
     [
       '@dipakparmar/docusaurus-plugin-umami',
       {

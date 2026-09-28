@@ -48,7 +48,7 @@ Where multiple, equally good options exist, an arbitrary choice can be made to e
 
 Mutating state is the most common cause of bugs in Redux applications, including components failing to re-render properly, and will also break time-travel debugging in the Redux DevTools. **Actual mutation of state values should always be avoided**, both inside reducers and in all other application code.
 
-Redux Toolkit's `configureStore` includes [an immutability check middleware](https://redux-toolkit.js.org/api/immutabilityMiddleware) that catches mutations during development, and `createSlice` uses [Immer](https://immerjs.github.io/immer/) so that state updates can't accidentally mutate the real data.
+Redux Toolkit's `configureStore` includes [an immutability check middleware](/toolkit/api/immutabilityMiddleware) that catches mutations during development, and `createSlice` uses [Immer](https://immerjs.github.io/immer/) so that state updates can't accidentally mutate the real data.
 
 > **Note**: it is okay to modify _copies_ of existing values - that is a normal part of writing immutable update logic. Also, if you are using the Immer library for immutable updates, writing "mutating" logic is acceptable because the real data isn't being mutated - Immer safely tracks changes and generates immutably-updated values internally.
 
@@ -86,13 +86,13 @@ Ideally, no app logic will import the store directly. It should be passed to a R
 
 ### Use Redux Toolkit for Writing Redux Logic
 
-**[Redux Toolkit](../redux-toolkit/overview.md) is our recommended toolset for using Redux**. It has functions that build in our suggested best practices, including setting up the store to catch mutations and enable the Redux DevTools Extension, simplifying immutable update logic with Immer, and more.
+**[Redux Toolkit](/toolkit/introduction/getting-started) is our recommended toolset for using Redux**. It has functions that build in our suggested best practices, including setting up the store to catch mutations and enable the Redux DevTools Extension, simplifying immutable update logic with Immer, and more.
 
 You are not required to use RTK with Redux, and you are free to use other approaches if desired, but **using RTK will simplify your logic and ensure that your application is set up with good defaults**.
 
 ### Use Immer for Writing Immutable Updates
 
-Writing immutable update logic by hand is frequently difficult and prone to errors. [Immer](https://immerjs.github.io/immer/) allows you to write simpler immutable updates using "mutative" logic, and even freezes your state in development to catch mutations elsewhere in the app. **We recommend using Immer for writing immutable update logic, preferably as part of [Redux Toolkit](../redux-toolkit/overview.md)**.
+Writing immutable update logic by hand is frequently difficult and prone to errors. [Immer](https://immerjs.github.io/immer/) allows you to write simpler immutable updates using "mutative" logic, and even freezes your state in development to catch mutations elsewhere in the app. **We recommend using Immer for writing immutable update logic, preferably as part of [Redux Toolkit](/toolkit/introduction/getting-started)**.
 
 <a id="structure-files-as-feature-folders-or-ducks"></a>
 
@@ -470,13 +470,13 @@ Because of this, it is up to you as a developer to decide what state should actu
 
 ### Use the React-Redux Hooks API
 
-**Prefer using [the React-Redux hooks API (`useSelector` and `useDispatch`)](https://react-redux.js.org/api/hooks) as the default way to interact with a Redux store from your React components**. While the classic `connect` API still works fine and will continue to be supported, the hooks API is generally easier to use in several ways. The hooks have less indirection, less code to write, and are simpler to use with TypeScript than `connect` is.
+**Prefer using [the React-Redux hooks API (`useSelector` and `useDispatch`)](/react-redux/api/hooks) as the default way to interact with a Redux store from your React components**. While the classic `connect` API still works fine and will continue to be supported, the hooks API is generally easier to use in several ways. The hooks have less indirection, less code to write, and are simpler to use with TypeScript than `connect` is.
 
 The hooks API does introduce some different tradeoffs than `connect` does in terms of performance and data flow, but we now recommend them as the default.
 
 <DetailedExplanation>
 
-The [classic `connect` API](https://react-redux.js.org/api/connect) is a [Higher Order Component](https://legacy.reactjs.org/docs/higher-order-components.html). It generates a new wrapper component that subscribes to the store, renders your own component, and passes down data from the store and action creators as props.
+The [classic `connect` API](/react-redux/api/connect) is a [Higher Order Component](https://legacy.reactjs.org/docs/higher-order-components.html). It generates a new wrapper component that subscribes to the store, renders your own component, and passes down data from the store and action creators as props.
 
 This is a deliberate level of indirection, and allows you to write "presentational"-style components that receive all their values as props, without being specifically dependent on Redux.
 
@@ -491,7 +491,7 @@ For more details, see Redux maintainer Mark Erikson's post and conference talk o
 - [Thoughts on React Hooks, Redux, and Separation of Concerns](https://blog.isquaredsoftware.com/2019/07/blogged-answers-thoughts-on-hooks/)
 - [ReactBoston 2019: Hooks, HOCs, and Tradeoffs](https://blog.isquaredsoftware.com/2019/09/presentation-hooks-hocs-tradeoffs/)
 
-Also see the [React-Redux hooks API docs](https://react-redux.js.org/api/hooks) for info on how to correctly optimize components and handle rare edge cases.
+Also see the [React-Redux hooks API docs](/react-redux/api/hooks) for info on how to correctly optimize components and handle rare edge cases.
 
 </DetailedExplanation>
 
@@ -507,7 +507,7 @@ This applies for both the `useSelector()` hook and the legacy `connect()` API.
 
 This rule only applies if you are still using the legacy `connect` API. Components written with hooks call `useDispatch` directly.
 
-The `mapDispatch` argument to `connect` can be defined as either a function that receives `dispatch` as an argument, or an object containing action creators. **We recommend always using [the "object shorthand" form of `mapDispatch`](https://react-redux.js.org/using-react-redux/connect-mapdispatch#defining-mapdispatchtoprops-as-an-object)**, as it simplifies the code considerably. There is almost never a real need to write `mapDispatch` as a function.
+The `mapDispatch` argument to `connect` can be defined as either a function that receives `dispatch` as an argument, or an object containing action creators. **We recommend always using [the "object shorthand" form of `mapDispatch`](/react-redux/using-react-redux/connect-mapdispatch#defining-mapdispatchtoprops-as-an-object)**, as it simplifies the code considerably. There is almost never a real need to write `mapDispatch` as a function.
 
 ### Call `useSelector` Multiple Times in Function Components
 
@@ -614,7 +614,7 @@ This led to a wide variety of Redux async middleware addons being created, and t
 
 **We recommend using [the Redux thunk middleware](../usage/writing-logic-thunks.mdx) for imperative logic**, such as complex sync logic that needs access to `dispatch` or `getState`, and moderately complex async logic. This includes use cases like moving logic out of components.
 
-**We recommend using [the RTK "listener" middleware"](https://redux-toolkit.js.org/api/createListenerMiddleware) for "reactive" logic that needs to respond to dispatched actions or state changes**, such as longer-running async workflows and "background thread"-type behavior.
+**We recommend using [the RTK "listener" middleware"](/toolkit/api/createListenerMiddleware) for "reactive" logic that needs to respond to dispatched actions or state changes**, such as longer-running async workflows and "background thread"-type behavior.
 
 We recommend _against_ using the more complex Redux-Saga and Redux-Observable libraries in most cases, especially for async data fetching. Only use these libraries if no other tool is powerful enough to handle your use case.
 

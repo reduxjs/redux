@@ -14,7 +14,7 @@ We can't reliably enforce serializable actions for performance reasons, so Redux
 
 Encapsulating and centralizing commonly used pieces of code is a key concept in programming. While it is certainly possible to manually create action objects everywhere, and write each `type` value by hand, defining reusable constants makes maintaining code easier. If you put constants in a separate file, you can [check your `import` statements against typos](https://www.npmjs.com/package/eslint-plugin-import) so you can't accidentally use the wrong string.
 
-In practice, you rarely write action type constants yourself anymore. [`createSlice`](https://redux-toolkit.js.org/api/createSlice) generates the type strings (as `sliceName/reducerName`, such as `'todos/todoAdded'`) and the matching action creators from the slice's `name` and `reducers` fields, and the reducer is already wired to those types. Dispatch the generated action creator and let TypeScript catch the typos.
+In practice, you rarely write action type constants yourself anymore. [`createSlice`](/toolkit/api/createSlice) generates the type strings (as `sliceName/reducerName`, such as `'todos/todoAdded'`) and the matching action creators from the slice's `name` and `reducers` fields, and the reducer is already wired to those types. Dispatch the generated action creator and let TypeScript catch the typos.
 
 #### Further information
 
@@ -61,7 +61,7 @@ Redux is inspired by functional programming, and out of the box, has no place fo
 
 In general, Redux suggests that code with side effects should be part of the action creation process. While that logic _can_ be performed inside of a UI component, it generally makes sense to extract that logic into a reusable function so that the same logic can be called from multiple places—in other words, an action creator function.
 
-The simplest and most common way to do this is with the [Redux Thunk](https://github.com/reduxjs/redux-thunk) middleware, which lets you write action creators with more complex and asynchronous logic. `configureStore` adds it by default, and [`createAsyncThunk`](https://redux-toolkit.js.org/api/createAsyncThunk) generates the pending/fulfilled/rejected actions for a promise-based thunk. For data fetching and caching specifically, [RTK Query](https://redux-toolkit.js.org/rtk-query/overview) handles the whole request lifecycle so you don't write that logic at all. The [listener middleware](https://redux-toolkit.js.org/api/createListenerMiddleware) covers "run this effect after that action was dispatched" cases. Beyond that, [Redux Saga](https://github.com/redux-saga/redux-saga) lets you write more synchronous-looking code using generators and can act like “background threads” in a Redux app, and there are other community libraries with their own take on side effects.
+The simplest and most common way to do this is with the [Redux Thunk](https://github.com/reduxjs/redux-thunk) middleware, which lets you write action creators with more complex and asynchronous logic. `configureStore` adds it by default, and [`createAsyncThunk`](/toolkit/api/createAsyncThunk) generates the pending/fulfilled/rejected actions for a promise-based thunk. For data fetching and caching specifically, [RTK Query](/toolkit/rtk-query/overview) handles the whole request lifecycle so you don't write that logic at all. The [listener middleware](/toolkit/api/createListenerMiddleware) covers "run this effect after that action was dispatched" cases. Beyond that, [Redux Saga](https://github.com/redux-saga/redux-saga) lets you write more synchronous-looking code using generators and can act like “background threads” in a Redux app, and there are other community libraries with their own take on side effects.
 
 #### Further information
 
@@ -96,11 +96,11 @@ The simplest and most common way to do this is with the [Redux Thunk](https://gi
 
 ### What async middleware should I use? How do you decide between thunks, sagas, observables, or something else?
 
-There are many async/side effect middlewares available, but the most commonly used ones are [`redux-thunk`](https://github.com/reduxjs/redux-thunk), Redux Toolkit's [listener middleware](https://redux-toolkit.js.org/api/createListenerMiddleware), [`redux-saga`](https://github.com/redux-saga/redux-saga), and [`redux-observable`](https://github.com/redux-observable/redux-observable). These are different tools, with different strengths, weaknesses, and use cases.
+There are many async/side effect middlewares available, but the most commonly used ones are [`redux-thunk`](https://github.com/reduxjs/redux-thunk), Redux Toolkit's [listener middleware](/toolkit/api/createListenerMiddleware), [`redux-saga`](https://github.com/redux-saga/redux-saga), and [`redux-observable`](https://github.com/redux-observable/redux-observable). These are different tools, with different strengths, weaknesses, and use cases.
 
 As a general rule of thumb:
 
-- If the logic is fetching and caching data from a server, use [RTK Query](https://redux-toolkit.js.org/rtk-query/overview) rather than writing that logic yourself.
+- If the logic is fetching and caching data from a server, use [RTK Query](/toolkit/rtk-query/overview) rather than writing that logic yourself.
 - Thunks are best for complex synchronous logic (especially code that needs access to the entire Redux store state), and simple async logic (like basic AJAX calls). With the use of `async/await`, it can be reasonable to use thunks for some more complex promise-based logic as well.
 - The listener middleware is best for logic that should run _in response to_ a dispatched action or state change, such as "when the user logs in, start polling" or "when a todo is added, persist the list". It can also cancel or debounce work. This covers most of what sagas were used for, without generator functions.
 - Sagas are best for complex async workflows and decoupled "background thread"-type behavior beyond what the listener middleware handles. They require familiarity with generator functions and `redux-saga`'s "effects" operators.

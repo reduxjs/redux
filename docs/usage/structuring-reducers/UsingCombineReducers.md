@@ -91,4 +91,4 @@ console.log(reducerInitializedStore.getState())
 
 This state shape better reflects the data involved, because we took care to set up the keys we passed to `combineReducers`.
 
-`configureStore` does this step for you when its `reducer` option is an object of slice reducers: it calls `combineReducers` on that object, so the keys you write there become the top-level state keys. Redux Toolkit also has [`combineSlices`](https://redux-toolkit.js.org/api/combineSlices), which builds the root reducer from slice objects and supports adding reducers lazily.
+`configureStore` does this step for you when its `reducer` option is an object of slice reducers: it calls `combineReducers` on that object, so the keys you write there become the top-level state keys. Redux Toolkit also has [`combineSlices`](/toolkit/api/combineSlices), which builds the root reducer from slice objects and supports adding reducers lazily.

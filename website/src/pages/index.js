@@ -98,37 +98,20 @@ const features = [
 
 const otherLibraries = [
   {
-    content: 'Official React bindings for Redux',
-    title: 'React-Redux',
-    link: 'https://react-redux.js.org',
-    image: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        ariaHidden="true"
-        data-icon="external-link-square-alt"
-        data-prefix="fas"
-        viewBox="0 0 448 512"
-      >
-        <path d="M448 80v352c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48V80c0-26.51 21.49-48 48-48h352c26.51 0 48 21.49 48 48zm-88 16H248.029c-21.313 0-32.08 25.861-16.971 40.971l31.984 31.987L67.515 364.485c-4.686 4.686-4.686 12.284 0 16.971l31.029 31.029c4.687 4.686 12.285 4.686 16.971 0l195.526-195.526 31.988 31.991C358.058 263.977 384 253.425 384 231.979V120c0-13.255-10.745-24-24-24z" />
-      </svg>
-    )
-  },
-  {
     content:
       'The official, opinionated, batteries-included toolset for efficient Redux development',
     title: 'Redux Toolkit',
-    link: 'https://redux-toolkit.js.org',
-    image: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-        data-icon="external-link-square-alt"
-        data-prefix="fas"
-        viewBox="0 0 448 512"
-      >
-        <path d="M448 80v352c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48V80c0-26.51 21.49-48 48-48h352c26.51 0 48 21.49 48 48zm-88 16H248.029c-21.313 0-32.08 25.861-16.971 40.971l31.984 31.987L67.515 364.485c-4.686 4.686-4.686 12.284 0 16.971l31.029 31.029c4.687 4.686 12.285 4.686 16.971 0l195.526-195.526 31.988 31.991C358.058 263.977 384 253.425 384 231.979V120c0-13.255-10.745-24-24-24z" />
-      </svg>
-    )
+    link: '/toolkit'
+  },
+  {
+    content: 'Official React bindings for Redux',
+    title: 'React Redux',
+    link: '/react-redux'
+  },
+  {
+    content: 'A memoized selector library for Redux',
+    title: 'Reselect',
+    link: '/reselect'
   }
 ]
 
@@ -196,16 +179,15 @@ function Home() {
                 </div>
               </div>
               <div className="row">
-                {otherLibraries.map(({ image, title, content, link }, idx) => (
+                {otherLibraries.map(({ title, content, link }, idx) => (
                   <div
                     key={idx}
-                    className={classnames('col col--6', styles.feature)}
+                    className={classnames('col col--4', styles.feature)}
                   >
                     <h2 className="text--center">
-                      <a href={link} className={styles.featureAnchor}>
+                      <Link to={link} className={styles.featureAnchor}>
                         {title}
-                        {image}
-                      </a>
+                      </Link>
                     </h2>
                     <p className="text--center">{content}</p>
                   </div>

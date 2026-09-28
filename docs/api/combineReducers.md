@@ -31,7 +31,7 @@ const store = configureStore({
 })
 ```
 
-You can still call `combineReducers()` directly if you need to construct the root reducer manually first, and Redux Toolkit's [`combineSlices`](https://redux-toolkit.js.org/api/combineSlices) does the same job with support for lazy-loaded slices.
+You can still call `combineReducers()` directly if you need to construct the root reducer manually first, and Redux Toolkit's [`combineSlices`](/toolkit/api/combineSlices) does the same job with support for lazy-loaded slices.
 
 ### State Slices
 

@@ -22,7 +22,7 @@ In this section, we'll add a User Interface for our todo app. We'll see how Redu
 
 :::caution
 
-Note that **this page and all of the "Essentials" tutorial teach how to use [our modern React-Redux hooks API](https://react-redux.js.org/api/hooks)**. The old-style [`connect` API](https://react-redux.js.org/api/connect) still works, but today we want all Redux users using the hooks API.
+Note that **this page and all of the "Essentials" tutorial teach how to use [our modern React-Redux hooks API](/react-redux/api/hooks)**. The old-style [`connect` API](/react-redux/api/connect) still works, but today we want all Redux users using the hooks API.
 
 Also, the other pages in this tutorial intentionally show older-style Redux logic patterns that require more code than the "modern Redux" patterns with Redux Toolkit we teach as the right approach for building apps with Redux today, in order to explain the principles and concepts behind Redux.
 
@@ -91,7 +91,7 @@ Since Redux is a separate library, there are different "binding" libraries to he
 
 ## Using Redux with React
 
-The official [**React-Redux UI bindings library**](https://react-redux.js.org) is a separate package from the Redux core. You'll need to install that in addition:
+The official [**React-Redux UI bindings library**](/react-redux) is a separate package from the Redux core. You'll need to install that in addition:
 
 ```sh
 npm install react-redux
@@ -137,9 +137,9 @@ We know that we need to be able to show a list of todo items. Let's start by cre
 
 You should be familiar with [React hooks like `useState`](https://react.dev/reference/react/useState), which can be called in React function components to give them access to React state values. React also lets us write [custom hooks](https://react.dev/learn/reusing-logic-with-custom-hooks), which let us extract reusable hooks to add our own behavior on top of React's built-in hooks.
 
-Like many other libraries, React-Redux includes [its own custom hooks](https://react-redux.js.org/api/hooks), which you can use in your own components. The React-Redux hooks give your React component the ability to talk to the Redux store by reading state and dispatching actions.
+Like many other libraries, React-Redux includes [its own custom hooks](/react-redux/api/hooks), which you can use in your own components. The React-Redux hooks give your React component the ability to talk to the Redux store by reading state and dispatching actions.
 
-The first React-Redux hook that we'll look at is the [**`useSelector` hook**](https://react-redux.js.org/api/hooks#useselector), which **lets your React components read data from the Redux store**.
+The first React-Redux hook that we'll look at is the [**`useSelector` hook**](/react-redux/api/hooks#useselector), which **lets your React components read data from the Redux store**.
 
 `useSelector` accepts a single function, which we call a **selector** function. **A selector is a function that takes the entire Redux store state as its argument, reads some value from the state, and returns that result**.
 
@@ -228,7 +228,7 @@ const todos = useSelector(state => state.todos)
 
 We now know how to read data from the Redux store into our components. But, how can we dispatch actions to the store from a component? We know that outside of React, we can call `store.dispatch(action)`. Since we don't have access to the store in a component file, we need some way to get access to the `dispatch` function by itself inside our components.
 
-The React-Redux [**`useDispatch` hook**](https://react-redux.js.org/api/hooks#usedispatch) gives us the store's `dispatch` method as its result. (In fact, the implementation of the hook really is `return store.dispatch`.)
+The React-Redux [**`useDispatch` hook**](/react-redux/api/hooks#usedispatch) gives us the store's `dispatch` method as its result. (In fact, the implementation of the hook really is `return store.dispatch`.)
 
 So, we can call `const dispatch = useDispatch()` in any component that needs to dispatch actions, and then call `dispatch(someAction)` as needed.
 

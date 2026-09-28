@@ -90,7 +90,7 @@ In a sense, a thunk is a loophole where **you can write any code that needs to i
 
 Historically, another reason to use thunks was to help keep React components "unaware of Redux". The `connect` API allowed passing action creators and "binding" them to automatically dispatch actions when called. Since components typically did not have access to `dispatch` internally, passing thunks to `connect` made it possible for components to just call `this.props.doSomething()`, without needing to know if it was a callback from a parent, dispatching a plain Redux action, dispatching a thunk performing sync or async logic, or a mock function in a test.
 
-With the arrival of [the React-Redux hooks API](https://react-redux.js.org/api/hooks), that situation has changed. The community has switched away from the "container/presentational" pattern in general, and [components now have access to `dispatch` directly via the `useDispatch` hook](../tutorials/fundamentals/part-5-ui-and-react.md#dispatching-actions-with-usedispatch). This _does_ mean that it's possible to have more logic directly inside of a component, such as an async fetch + dispatch of the results. However, thunks have access to `getState`, which components do not, and there's still value in moving that logic outside of components.
+With the arrival of [the React-Redux hooks API](/react-redux/api/hooks), that situation has changed. The community has switched away from the "container/presentational" pattern in general, and [components now have access to `dispatch` directly via the `useDispatch` hook](../tutorials/fundamentals/part-5-ui-and-react.md#dispatching-actions-with-usedispatch). This _does_ mean that it's possible to have more logic directly inside of a component, such as an async fetch + dispatch of the results. However, thunks have access to `getState`, which components do not, and there's still value in moving that logic outside of components.
 
 </DetailedExplanation>
 
@@ -103,7 +103,7 @@ Because thunks are a general-purpose tool that can contain arbitrary logic, they
 - Writing logic that needs to dispatch multiple actions in a row or over time
 - Writing logic that needs access to `getState` to make decisions or include other state values in an action
 
-Thunks are "one-shot" functions, with no sense of a lifecycle. They also cannot see other dispatched actions. So, they should not generally be used for initializing persistent connections like websockets, and you can't use them to respond to other actions. For those cases, use Redux Toolkit's [listener middleware](https://redux-toolkit.js.org/api/createListenerMiddleware), which runs logic in response to dispatched actions or state changes. See [Side Effects Approaches](./side-effects-approaches.mdx) for a comparison.
+Thunks are "one-shot" functions, with no sense of a lifecycle. They also cannot see other dispatched actions. So, they should not generally be used for initializing persistent connections like websockets, and you can't use them to respond to other actions. For those cases, use Redux Toolkit's [listener middleware](/toolkit/api/createListenerMiddleware), which runs logic in response to dispatched actions or state changes. See [Side Effects Approaches](./side-effects-approaches.mdx) for a comparison.
 
 **Thunks are best used for complex synchronous logic, and simple to moderate async logic such as making a standard AJAX request and dispatching actions based on the request results.**
 
@@ -170,7 +170,7 @@ const serviceApi = createServiceApi('/some/url')
 const thunkMiddlewareWithArg = withExtraArgument({ serviceApi })
 ```
 
-Redux Toolkit's `configureStore` supports [this as part of its middleware customization in `getDefaultMiddleware`](https://redux-toolkit.js.org/api/getDefaultMiddleware):
+Redux Toolkit's `configureStore` supports [this as part of its middleware customization in `getDefaultMiddleware`](/toolkit/api/getDefaultMiddleware):
 
 ```js title="Thunk extra argument with configureStore"
 const store = configureStore({
@@ -451,7 +451,7 @@ const todosSlice = createSlice({
 
 ## Fetching Data with RTK Query
 
-Redux Toolkit includes the [**RTK Query data fetching API**](https://redux-toolkit.js.org/rtk-query/overview). RTK Query is a purpose built data fetching and caching solution for Redux apps, and **can eliminate the need to write _any_ thunks or reducers to manage data fetching**.
+Redux Toolkit includes the [**RTK Query data fetching API**](/toolkit/rtk-query/overview). RTK Query is a purpose built data fetching and caching solution for Redux apps, and **can eliminate the need to write _any_ thunks or reducers to manage data fetching**.
 
 RTK Query actually uses `createAsyncThunk` internally for all requests, along with a custom middleware to manage cache data lifetimes.
 

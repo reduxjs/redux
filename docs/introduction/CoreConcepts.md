@@ -78,4 +78,4 @@ function todoApp(state = {}, action) {
 
 This is basically the whole idea of Redux. Note that we haven’t used any Redux APIs. It comes with a few utilities to facilitate this pattern, but the main idea is that you describe how your state is updated over time in response to action objects, and 90% of the code you write is just plain JavaScript, with no use of Redux itself, its APIs, or any magic.
 
-In practice, Redux Toolkit's [`createSlice`](https://redux-toolkit.js.org/api/createSlice) generates reducers like `todos` and `visibilityFilter` for you, along with the matching action creators, and [`configureStore`](https://redux-toolkit.js.org/api/configureStore) combines them into `todoApp`. The pattern underneath is exactly what you see above.
+In practice, Redux Toolkit's [`createSlice`](/toolkit/api/createSlice) generates reducers like `todos` and `visibilityFilter` for you, along with the matching action creators, and [`configureStore`](/toolkit/api/configureStore) combines them into `todoApp`. The pattern underneath is exactly what you see above.

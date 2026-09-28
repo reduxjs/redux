@@ -18,7 +18,7 @@ Middleware is the suggested way to extend Redux with custom functionality. Middl
 
 <CoreApiNote />
 
-You shouldn't have to call `applyMiddleware` directly. [`configureStore`](https://redux-toolkit.js.org/api/configureStore) applies it for you, adds a default set of middleware (including `redux-thunk`), and accepts a `middleware` callback for adding more.
+You shouldn't have to call `applyMiddleware` directly. [`configureStore`](/toolkit/api/configureStore) applies it for you, adds a default set of middleware (including `redux-thunk`), and accepts a `middleware` callback for adding more.
 
 The most common use case for middleware is to support asynchronous actions without much boilerplate code or a dependency on a library like [Rx](https://github.com/Reactive-Extensions/RxJS). It does so by letting you dispatch [async actions](../understanding/thinking-in-redux/Glossary.md#async-action) in addition to normal actions.
 

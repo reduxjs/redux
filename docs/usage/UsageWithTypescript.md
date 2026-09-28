@@ -38,15 +38,15 @@ There are multiple possible approaches to type checking Redux code. **This page 
 
 We assume that a typical Redux project is using Redux Toolkit and React Redux together.
 
-[Redux Toolkit](https://redux-toolkit.js.org) (RTK) is the standard approach for writing modern Redux logic. RTK is already written in TypeScript, and its API is designed to provide a good experience for TypeScript usage.
+[Redux Toolkit](/toolkit) (RTK) is the standard approach for writing modern Redux logic. RTK is already written in TypeScript, and its API is designed to provide a good experience for TypeScript usage.
 
-[React Redux](https://react-redux.js.org) is also written in TypeScript and ships its own type definitions, so no separate `@types` package is needed. In addition to typing the library functions, the types also export some helpers to make it easier to write typesafe interfaces between your Redux store and your React components.
+[React Redux](/react-redux) is also written in TypeScript and ships its own type definitions, so no separate `@types` package is needed. In addition to typing the library functions, the types also export some helpers to make it easier to write typesafe interfaces between your Redux store and your React components.
 
 The [Redux+TS project templates](https://github.com/reduxjs/redux-templates) come with a working example of these patterns already configured.
 
 ### Define Root State and Dispatch Types
 
-Using [configureStore](https://redux-toolkit.js.org/api/configureStore) should not need any additional typings. You will, however, want to extract the `RootState` type and the `Dispatch` type so that they can be referenced as needed. Inferring these types from the store itself means that they correctly update as you add more state slices or modify middleware settings.
+Using [configureStore](/toolkit/api/configureStore) should not need any additional typings. You will, however, want to extract the `RootState` type and the `Dispatch` type so that they can be referenced as needed. Inferring these types from the store itself means that they correctly update as you add more state slices or modify middleware settings.
 
 Since those are types, it's safe to export them directly from your store setup file such as `app/store.ts` and import them directly into other files.
 
@@ -81,7 +81,7 @@ While it's possible to import the `RootState` and `AppDispatch` types into each 
 
 Since these are actual variables, not types, it's important to define them in a separate file such as `app/hooks.ts`, not the store setup file. This allows you to import them into any component file that needs to use the hooks, and avoids potential circular import dependency issues.
 
-Each of the React Redux hooks has a `.withTypes()` method (added in React Redux v9.1.0) that returns a copy of the hook with the given types built in, analogous to the [`.withTypes`](https://redux-toolkit.js.org/usage/usage-with-typescript#defining-a-pre-typed-createasyncthunk) method on Redux Toolkit's `createAsyncThunk`:
+Each of the React Redux hooks has a `.withTypes()` method (added in React Redux v9.1.0) that returns a copy of the hook with the given types built in, analogous to the [`.withTypes`](/toolkit/usage/usage-with-typescript#defining-a-pre-typed-createasyncthunk) method on Redux Toolkit's `createAsyncThunk`:
 
 ```ts title="app/hooks.ts"
 import { useDispatch, useSelector, useStore } from 'react-redux'
@@ -352,11 +352,9 @@ Don't forget that **the default `useDispatch` hook does not know about thunks**,
 
 ## Usage with React Redux
 
-While [React Redux](https://react-redux.js.org) is a separate library from Redux itself, it is commonly used with React.
+While [React Redux](/react-redux) is a separate library from Redux itself, it is commonly used with React.
 
-For a complete guide on how to correctly use React Redux with TypeScript, see **[the "Static Typing" page in the React Redux docs](https://react-redux.js.org/using-react-redux/static-typing)**. This section will highlight the standard patterns.
-
-React Redux ships its own type definitions as part of the `react-redux` package, so there is nothing extra to install.
+React Redux ships its own type definitions as part of the `react-redux` package, so there is nothing extra to install. The recommended approach is the pre-typed `useAppSelector` and `useAppDispatch` hooks shown in [Define Typed Hooks](#define-typed-hooks) above. This section covers what those hooks are doing, in case you need to type the base hooks by hand.
 
 ### Typing the `useSelector` hook
 
@@ -394,244 +392,24 @@ However, prefer creating a pre-typed `useAppDispatch` hook with the correct type
 
 ### Typing the `connect` higher order component
 
-If you are still using the legacy `connect` API, use the `ConnectedProps<T>` type exported by `react-redux` to infer the props that `connect` injects. See [Static Typing with `connect`](https://react-redux.js.org/using-react-redux/usage-with-typescript#typing-the-connect-higher-order-component) in the React Redux docs for the full pattern.
+If you are still using the deprecated `connect` API, use the `ConnectedProps<T>` type exported by `react-redux` to infer the props that `connect` injects. See [Typing `connect` with TypeScript](/react-redux/using-react-redux/usage-with-typescript) in the React Redux docs for the full pattern.
 
 ## Usage with Redux Toolkit
 
-The [Standard Redux Toolkit Project Setup with TypeScript](#standard-redux-toolkit-project-setup-with-typescript) section already covered the normal usage patterns for `configureStore` and `createSlice`, and the [Redux Toolkit "Usage with TypeScript" page](https://redux-toolkit.js.org/usage/usage-with-typescript) covers all of the RTK APIs in detail.
+The [Standard Redux Toolkit Project Setup with TypeScript](#standard-redux-toolkit-project-setup-with-typescript) section above covers the normal usage patterns for `configureStore` and `createSlice`. The [Redux Toolkit "Usage with TypeScript" page](/toolkit/usage/usage-with-typescript) is the detailed reference for typing every RTK API. The points below are the ones that come up most often:
 
-Here are some additional typing patterns you will commonly see when using RTK.
+- **`configureStore`** infers the state type from the root reducer, so no type declarations are needed. When adding middleware, use the `.concat()` and `.prepend()` methods on the array returned by `getDefaultMiddleware()` rather than array spreads, so the middleware types are preserved. See [Correct typings for the `Dispatch` type](/toolkit/usage/usage-with-typescript#correct-typings-for-the-dispatch-type).
+- **Matching actions**: RTK action creators have a `match` method that acts as a type predicate, so `if (increment.match(action))` narrows `action` to the right type. This is useful in middleware and in RxJS `filter` calls. See [Alternative to using a literally-typed `action.type`](/toolkit/usage/usage-with-typescript#alternative-to-using-a-literally-typed-actiontype).
+- **`createSlice`**: declare `action: PayloadAction<T>` on each case reducer; use the `CaseReducer<State, Action>` type to define case reducers outside the slice; always use the builder callback form of `extraReducers` so action types can be inferred; use the `{ reducer, prepare }` form when an action needs `meta` or a customized `payload`. See the [`createSlice` section](/toolkit/usage/usage-with-typescript#createslice).
+- **`createAsyncThunk`**: for basic usage, type the payload creator's argument and return value and let the rest infer. To type the `thunkApi` fields (`state`, `dispatch`, `extra`), pass the return type, argument type, and a config object as the three generic arguments, or define a [pre-typed `createAsyncThunk`](/toolkit/usage/usage-with-typescript#defining-a-pre-typed-createasyncthunk) once per app. See the [`createAsyncThunk` section](/toolkit/usage/usage-with-typescript#createasyncthunk).
+- **`createEntityAdapter`**: pass the entity type as the single generic argument when entities have an `id` field; when they use a different key, pass a typed `selectId` function instead so the ID type is inferred. See the [`createEntityAdapter` section](/toolkit/usage/usage-with-typescript#createentityadapter).
 
-### Typing `configureStore`
+### Fixing Circular Types in Exported Slices
 
-`configureStore` infers the type of the state value from the provided root reducer function, so no specific type declarations should be needed.
-
-If you want to add additional middleware to the store, be sure to use the specialized `.concat()` and `.prepend()` methods included in the array returned by `getDefaultMiddleware()`, as those will correctly preserve the types of the middleware you're adding. (Using plain JS array spreads often loses those types.)
-
-```ts
-const store = configureStore({
-  reducer: rootReducer,
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware()
-      .prepend(
-        // correctly typed middlewares can just be used
-        additionalMiddleware,
-        // you can also type middlewares manually
-        untypedMiddleware as Middleware<
-          (action: Action<'specialAction'>) => number,
-          RootState
-        >
-      )
-      // prepend and concat calls can be chained
-      .concat(logger)
-})
-```
-
-### Matching Actions
-
-RTK-generated action creators have a `match` method that acts as a [type predicate](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates). Calling `someActionCreator.match(action)` will do a string comparison against the `action.type` string, and if used as a condition, narrow the type of `action` down to be the correct TS type:
-
-```ts
-const increment = createAction<number>('increment')
-function test(action: Action) {
-  if (increment.match(action)) {
-    // action.payload inferred correctly here
-    const num = 5 + action.payload
-  }
-}
-```
-
-This is particularly useful when checking for action types in Redux middleware, such as custom middleware, `redux-observable`, and RxJS's `filter` method.
-
-### Typing `createSlice`
-
-#### Defining Separate Case Reducers
-
-If you have too many case reducers and defining them inline would be messy, or you want to reuse case reducers across slices, you can also define them outside the `createSlice` call and type them as `CaseReducer`:
-
-```ts
-type State = number
-const increment: CaseReducer<State, PayloadAction<number>> = (state, action) =>
-  state + action.payload
-
-createSlice({
-  name: 'test',
-  initialState: 0,
-  reducers: {
-    increment
-  }
-})
-```
-
-#### Typing `extraReducers`
-
-If you are adding an `extraReducers` field in `createSlice`, be sure to use the "builder callback" form, as the "plain object" form cannot infer action types correctly. Passing an RTK-generated action creator to `builder.addCase()` will correctly infer the type of the `action`:
-
-```ts
-const usersSlice = createSlice({
-  name: 'users',
-  initialState,
-  reducers: {
-    // fill in primary logic here
-  },
-  // highlight-start
-  extraReducers: builder => {
-    builder.addCase(fetchUserById.pending, (state, action) => {
-      // both `state` and `action` are now correctly typed
-      // based on the slice state and the `pending` action creator
-    })
-  }
-  // highlight-end
-})
-```
-
-#### Typing `prepare` Callbacks
-
-If you want to add a `meta` or `error` property to your action, or customize the `payload` of your action, you have to use the `prepare` notation for defining the case reducer. Using this notation with TypeScript looks like:
-
-```ts
-const blogSlice = createSlice({
-  name: 'blogData',
-  initialState,
-  reducers: {
-    // highlight-start
-    receivedAll: {
-      reducer(
-        state,
-        action: PayloadAction<Page[], string, { currentPage: number }>
-      ) {
-        state.all = action.payload
-        state.meta = action.meta
-      },
-      prepare(payload: Page[], currentPage: number) {
-        return { payload, meta: { currentPage } }
-      }
-    }
-    // highlight-end
-  }
-})
-```
-
-#### Fixing Circular Types in Exported Slices
-
-Finally, on rare occasions you might need to export the slice reducer with a specific type in order to break a circular type dependency problem. This might look like:
+On rare occasions you might need to export the slice reducer with a specific type in order to break a circular type dependency problem. This might look like:
 
 ```ts
 export default counterSlice.reducer as Reducer<Counter>
-```
-
-### Typing `createAsyncThunk`
-
-For basic usage, the only type you need to provide for `createAsyncThunk` is the type of the single argument for your payload creation callback. You should also ensure that the return value of the callback is typed correctly:
-
-```ts
-const fetchUserById = createAsyncThunk(
-  'users/fetchById',
-  // Declare the type your function argument here:
-  // highlight-next-line
-  async (userId: number) => {
-    const response = await fetch(`/api/users/${userId}`)
-    // Inferred return type: Promise<MyData>
-    // highlight-next-line
-    return (await response.json()) as MyData
-  }
-)
-
-// the parameter of `fetchUserById` is automatically inferred to `number` here
-// and dispatching the resulting thunkAction will return a Promise of a correctly
-// typed "fulfilled" or "rejected" action.
-const lastReturnedAction = await store.dispatch(fetchUserById(3))
-```
-
-If you need to modify the types of the `thunkApi` parameter, such as supplying the type of the `state` returned by `getState()`, you must supply the first two generic arguments for return type and payload argument, plus whichever "thunkApi argument fields" are relevant in an object:
-
-```ts
-const fetchUserById = createAsyncThunk<
-  // highlight-start
-  // Return type of the payload creator
-  MyData,
-  // First argument to the payload creator
-  number,
-  {
-    // Optional fields for defining thunkApi field types
-    dispatch: AppDispatch
-    state: State
-    extra: {
-      jwt: string
-    }
-  }
-  // highlight-end
->('users/fetchById', async (userId, thunkApi) => {
-  const response = await fetch(`/api/users/${userId}`, {
-    headers: {
-      Authorization: `Bearer ${thunkApi.extra.jwt}`
-    }
-  })
-  return (await response.json()) as MyData
-})
-```
-
-### Typing `createEntityAdapter`
-
-Usage of `createEntityAdapter` with Typescript varies based on whether your entities are normalized by an `id` property, or whether a custom `selectId` is needed.
-
-If your entities are normalized by an `id` property, `createEntityAdapter` only requires you to specify the entity type as the single generic argument. For example:
-
-```ts
-interface Book {
-  id: number
-  title: string
-}
-
-// no selectId needed here, as the entity has an `id` property we can default to
-// highlight-next-line
-const booksAdapter = createEntityAdapter<Book>({
-  sortComparer: (a, b) => a.title.localeCompare(b.title)
-})
-
-const booksSlice = createSlice({
-  name: 'books',
-  // highlight-start
-  // The type of the state is inferred here
-  initialState: booksAdapter.getInitialState(),
-  // highlight-end
-  reducers: {
-    bookAdded: booksAdapter.addOne,
-    booksReceived(state, action: PayloadAction<{ books: Book[] }>) {
-      booksAdapter.setAll(state, action.payload.books)
-    }
-  }
-})
-```
-
-On the other hand, if the entity needs to be normalized by a different property, we instead recommend passing a custom `selectId` function and annotating there. This allows proper inference of the ID's type, instead of having to provide it manually.
-
-```ts
-interface Book {
-  bookId: number
-  title: string
-  // ...
-}
-
-const booksAdapter = createEntityAdapter({
-  // highlight-next-line
-  selectId: (book: Book) => book.bookId,
-  sortComparer: (a, b) => a.title.localeCompare(b.title)
-})
-
-const booksSlice = createSlice({
-  name: 'books',
-  // highlight-start
-  // The type of the state is inferred here
-  initialState: booksAdapter.getInitialState(),
-  // highlight-end
-  reducers: {
-    bookAdded: booksAdapter.addOne,
-    booksReceived(state, action: PayloadAction<{ books: Book[] }>) {
-      booksAdapter.setAll(state, action.payload.books)
-    }
-  }
-})
 ```
 
 ## Additional Recommendations
@@ -653,8 +431,9 @@ In addition, if you're using `createSlice`, you already know that all actions de
 For further information, see these additional resources:
 
 - Redux library documentation:
-  - [React Redux docs: Usage with TypeScript](https://react-redux.js.org/using-react-redux/usage-with-typescript): Examples of how to use the React Redux APIs with TypeScript
-  - [Redux Toolkit docs: Usage with TypeScript](https://redux-toolkit.js.org/usage/usage-with-typescript): Examples of how to use the Redux Toolkit APIs with TypeScript
+  - [Redux Toolkit docs: Usage with TypeScript](/toolkit/usage/usage-with-typescript): Detailed typing patterns for each Redux Toolkit API
+  - [RTK Query docs: Usage with TypeScript](/toolkit/rtk-query/usage-with-typescript): Typing `createApi`, endpoints, and hooks
+  - [React Redux docs: Typing `connect`](/react-redux/using-react-redux/usage-with-typescript): Typing the deprecated `connect` API
 - React + TypeScript guides:
   - [React+TypeScript Cheatsheet](https://github.com/typescript-cheatsheets/react): a comprehensive guide to using React with TypeScript
 - Other articles:

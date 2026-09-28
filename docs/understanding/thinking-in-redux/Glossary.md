@@ -164,6 +164,6 @@ See [Writing Logic with Thunks](../../usage/writing-logic-thunks.mdx) for detail
 
 ## Slice
 
-A _slice_ is the reducer logic and actions for one feature of the app, usually corresponding to one top-level key in the state tree, such as `state.todos` or `state.users`. Redux Toolkit's [`createSlice`](https://redux-toolkit.js.org/api/createSlice) generates a slice reducer and matching action creators from a set of case reducer functions. The slice reducers are then combined into the root reducer with `combineReducers`, or by passing them as an object to `configureStore`.
+A _slice_ is the reducer logic and actions for one feature of the app, usually corresponding to one top-level key in the state tree, such as `state.todos` or `state.users`. Redux Toolkit's [`createSlice`](/toolkit/api/createSlice) generates a slice reducer and matching action creators from a set of case reducer functions. The slice reducers are then combined into the root reducer with `combineReducers`, or by passing them as an object to `configureStore`.
 
 See [Splitting Up Reducer Logic](../../usage/structuring-reducers/SplittingReducerLogic.md) for details.

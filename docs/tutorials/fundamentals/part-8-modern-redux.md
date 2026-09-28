@@ -57,7 +57,7 @@ If you'd like a reminder of what we've covered so far, take a look at this summa
 
 As you've seen, many aspects of Redux involve writing some code that can be verbose, such as immutable updates, action types and action creators, and normalizing state. There's good reasons why these patterns exist, but writing that code "by hand" can be difficult. In addition, the process for setting up a Redux store takes several steps, and we've had to come up with our own logic for things like dispatching "loading" actions in thunks or processing normalized data. Finally, many times users aren't sure what "the right way" is to write Redux logic.
 
-That's why the Redux team created [**Redux Toolkit**: our official, opinionated, "batteries included" toolset for efficient Redux development](https://redux-toolkit.js.org).
+That's why the Redux team created [**Redux Toolkit**: our official, opinionated, "batteries included" toolset for efficient Redux development](/toolkit).
 
 Redux Toolkit contains packages and functions that we think are essential for building a Redux app. Redux Toolkit builds in our suggested best practices, simplifies most Redux tasks, prevents common mistakes, and makes it easier to write Redux applications.
 
@@ -455,9 +455,9 @@ Because this pattern is so common, **Redux Toolkit has a `createAsyncThunk` API 
 
 :::tip
 
-Redux Toolkit has a new [**RTK Query data fetching API**](https://redux-toolkit.js.org/rtk-query/overview). RTK Query is a purpose built data fetching and caching solution for Redux apps, and **can eliminate the need to write _any_ thunks or reducers to manage data fetching**. We encourage you to try it out and see if it can help simplify the data fetching code in your own apps!
+Redux Toolkit has a new [**RTK Query data fetching API**](/toolkit/rtk-query/overview). RTK Query is a purpose built data fetching and caching solution for Redux apps, and **can eliminate the need to write _any_ thunks or reducers to manage data fetching**. We encourage you to try it out and see if it can help simplify the data fetching code in your own apps!
 
-We'll be updating the Redux tutorials soon to include sections on using RTK Query. Until then, see [the RTK Query section in the Redux Toolkit docs](https://redux-toolkit.js.org/rtk-query/overview).
+We'll be updating the Redux tutorials soon to include sections on using RTK Query. Until then, see [the RTK Query section in the Redux Toolkit docs](/toolkit/rtk-query/overview).
 
 :::
 

@@ -1427,7 +1427,7 @@ Happily, we can! `createSlice` accepts an option called **`extraReducers`**, whi
 The `extraReducers` field is a function that receives a parameter named `builder`. The `builder` object has three methods attached, each of which lets the slice listen for other actions and do its own state updates:
 
 - `builder.addCase(actionCreator, caseReducer)`: listens for one specific action type
-- `builder.addMatcher(matcherFunction, caseReducer)`: listens for any one of multiple action types, using [a Redux Toolkit "matcher" function](https://redux-toolkit.js.org/api/matching-utilities) for comparing action objects
+- `builder.addMatcher(matcherFunction, caseReducer)`: listens for any one of multiple action types, using [a Redux Toolkit "matcher" function](/toolkit/api/matching-utilities) for comparing action objects
 - `builder.addDefaultCase(caseReducer)`: adds a case reducer that runs if nothing else in this slice matched the action (equivalent to a `default` case inside of a `switch`).
 
 You can chain these together, like `builder.addCase().addCase().addMatcher().addDefaultCase()`. If multiple matchers match the action, they will run in the order they were defined.
