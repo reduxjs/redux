@@ -35,11 +35,8 @@ npx tiged reduxjs/redux-templates/packages/vite-template-redux my-app
 # Expo + TypeScript
 npx tiged reduxjs/redux-templates/packages/expo-template-redux-typescript my-app
 
-# React Native + TypeScript
-npx tiged reduxjs/redux-templates/packages/react-native-template-redux-typescript my-app
-
 # Standalone Redux Toolkit app structure example
-npx tiged reduxjs/redux-templates/packages/rtk-app-structure-example my-app
+npx tiged reduxjs/redux-templates/examples/rtk-app-structure-example my-app
 ```
 
 For Next.js, use [Next's `with-redux` example](https://github.com/vercel/next.js/tree/canary/examples/with-redux) and see our [Redux with Next.js guide](../usage/nextjs.mdx):
