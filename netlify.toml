@@ -18,12 +18,6 @@ NETLIFY_USE_PNPM = "true"
 # lag behind RTK's master docs. Report type errors as warnings here; RTK PR
 # previews check against their own build and still fail on errors.
 DOCS_TYPECHECK = "warn"
-# Branches in the other library repos that carry the combined-site cleanup
-# (pages that now live only on the core site). Switch back to "master" once
-# those PRs merge.
-DOCS_REF_REDUX_TOOLKIT = "combined-docs"
-DOCS_REF_REACT_REDUX = "combined-docs"
-DOCS_REF_RESELECT = "combined-docs"
 
 # Pages that use the `LiveExample` StackBlitz embed. WebContainers need the host
 # page to be cross-origin isolated. Any other cross-origin iframe on these pages
