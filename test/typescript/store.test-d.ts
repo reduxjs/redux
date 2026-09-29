@@ -98,7 +98,7 @@ describe('type tests', () => {
 
     const storeWithCombineReducerAndBadPreloadedState =
       // @ts-expect-error
-      // prettier-ignore
+      // oxfmt-ignore
       createStore( combinedReducer, { b: { c: 'c' }, e: brandedString  }  )
 
     const nestedCombinedReducer = combineReducers({
@@ -110,11 +110,10 @@ describe('type tests', () => {
       e: (state: BrandedString = brandedString) => state
     })
 
-    // @ts-expect-error
-    const storeWithNestedCombineReducer = createStore(nestedCombinedReducer, {
-      b: { c: 5 },
-      e: brandedString
-    })
+    const storeWithNestedCombineReducer =
+      // @ts-expect-error
+      // oxfmt-ignore
+      createStore(nestedCombinedReducer, { b: { c: 5 }, e: brandedString })
 
     const simpleCombinedReducer = combineReducers({
       c: (state: string = 'c') => state,
@@ -123,7 +122,7 @@ describe('type tests', () => {
 
     const storeWithSimpleCombinedReducer =
       // @ts-expect-error
-      // prettier-ignore
+      // oxfmt-ignore
       createStore(simpleCombinedReducer, { c: 5 })
 
     // Note: It's not necessary that the errors occur on the lines specified, just as long as something errors somewhere
@@ -136,7 +135,7 @@ describe('type tests', () => {
 
     const storeWithSimpleCombinedReducerWithImplicitState =
       // @ts-expect-error
-      // prettier-ignore
+      // oxfmt-ignore
       createStore( simpleCombinedReducerWithImplicitState,  { c: 5 } )
 
     const storeWithActionReducer = createStore(reducerWithAction)
@@ -158,7 +157,7 @@ describe('type tests', () => {
 
     const storeWithActionReducerAndBadPreloadedState =
       // @ts-expect-error
-      // prettier-ignore
+      // oxfmt-ignore
       createStore( reducerWithAction,  {   b: { c: 'c' },  e: brandedString  } )
 
     const enhancer: StoreEnhancer = next => next
