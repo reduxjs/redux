@@ -84,7 +84,7 @@ npm install @reduxjs/toolkit
 
 We've gone through a few iterations of setup logic for our Redux store. Currently, it looks like this:
 
-```js title="src/rootReducer.js"
+```js title="src/reducer.js"
 import { combineReducers } from 'redux'
 
 import todosReducer from './features/todos/todosSlice'
@@ -448,7 +448,7 @@ Here's how our code looks with all the slices converted:
 
 <LiveExample
   repo="reduxjs/redux-fundamentals-example-app"
-  ref="sb-checkpoint-9-createSlice"
+  ref="checkpoint-9-createSlice"
   file="src/features/todos/todosSlice.js"
   title="Redux Fundamentals: createSlice"
 />
@@ -836,7 +836,7 @@ Let's take one final look at the completed todo application, including all the c
 
 <LiveExample
   repo="reduxjs/redux-fundamentals-example-app"
-  ref="sb-checkpoint-10-finalCode"
+  ref="checkpoint-10-finalCode"
   file="src/features/todos/todosSlice.js"
   title="Redux Fundamentals: final code"
 />

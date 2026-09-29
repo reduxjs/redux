@@ -41,14 +41,14 @@ To get started, you can open and fork this StackBlitz project:
 
 <LiveExample
   repo="reduxjs/redux-fundamentals-example-app"
-  ref="sb-master"
+  ref="master"
   file="src/main.jsx"
   title="Redux Fundamentals: starter project"
 />
 
 You can also [clone the same project from this Github repo](https://github.com/reduxjs/redux-fundamentals-example-app). The project is configured to use [NPM](https://docs.npmjs.com/cli/v10) as the package manager, but you can use any package manager ([pnpm](https://pnpm.io/), [Yarn](https://yarnpkg.com/), or [Bun](https://bun.sh/docs/cli/install)) as you prefer. After installing packages, you can start the local dev server with the `npm run dev` command.
 
-If you'd like to see the final version of what we're going to build, you can check out [the **`tutorial-steps` branch**](https://github.com/reduxjs/redux-fundamentals-example-app/tree/tutorial-steps), or [open the final version on StackBlitz](https://stackblitz.com/github/reduxjs/redux-fundamentals-example-app/tree/sb-checkpoint-10-finalCode).
+If you'd like to see the final version of what we're going to build, you can check out [the **`tutorial-steps` branch**](https://github.com/reduxjs/redux-fundamentals-example-app/tree/tutorial-steps), or [open the final version on StackBlitz](https://stackblitz.com/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-10-finalCode).
 
 #### Creating a New Redux + React Project
 
@@ -700,7 +700,7 @@ Here's the contents of our app so far:
 
 <LiveExample
   repo="reduxjs/redux-fundamentals-example-app"
-  ref="sb-checkpoint-1-combinedReducers"
+  ref="checkpoint-1-combinedReducers"
   file="src/reducer.js"
   title="Redux Fundamentals: combined reducers"
 />

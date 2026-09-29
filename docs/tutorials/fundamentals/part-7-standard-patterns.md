@@ -639,7 +639,7 @@ Here's what the app looks like with that loading status enabled (to see the spin
 
 <LiveExample
   repo="reduxjs/redux-fundamentals-example-app"
-  ref="sb-checkpoint-7-asyncLoading"
+  ref="checkpoint-7-asyncLoading"
   title="Redux Fundamentals: async loading status"
 />
 
@@ -963,7 +963,7 @@ Here's how our app looks after it's been fully converted to use these patterns:
 
 <LiveExample
   repo="reduxjs/redux-fundamentals-example-app"
-  ref="sb-checkpoint-8-normalizedState"
+  ref="checkpoint-8-normalizedState"
   title="Redux Fundamentals: standard patterns"
 />
 

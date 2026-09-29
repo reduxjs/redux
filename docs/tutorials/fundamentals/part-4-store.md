@@ -601,7 +601,7 @@ Let's see how our example app looks now:
 
 <LiveExample
   repo="reduxjs/redux-fundamentals-example-app"
-  ref="sb-checkpoint-2-storeSetup"
+  ref="checkpoint-2-storeSetup"
   file="src/store.js"
   title="Redux Fundamentals: store setup"
 />

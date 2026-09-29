@@ -458,7 +458,7 @@ Here's what the current app looks like:
 
 <LiveExample
   repo="reduxjs/redux-fundamentals-example-app"
-  ref="sb-checkpoint-6-asyncThunks"
+  ref="checkpoint-6-asyncThunks"
   title="Redux Fundamentals: async thunks"
 />
 

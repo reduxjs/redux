@@ -126,7 +126,7 @@ Here's the initial React UI of this app before we start adding any Redux-related
 
 <LiveExample
   repo="reduxjs/redux-fundamentals-example-app"
-  ref="sb-checkpoint-3-initialUI"
+  ref="checkpoint-3-initialUI"
   view="preview"
   title="Redux Fundamentals: initial UI"
 />
@@ -318,7 +318,7 @@ We should now be able to actually interact with the app! Here's the working UI s
 
 <LiveExample
   repo="reduxjs/redux-fundamentals-example-app"
-  ref="sb-checkpoint-4-initialHooks"
+  ref="checkpoint-4-initialHooks"
   title="Redux Fundamentals: initial hooks"
 />
 
@@ -551,7 +551,7 @@ Let's see how the app looks now, including the components and sections we skippe
 
 <LiveExample
   repo="reduxjs/redux-fundamentals-example-app"
-  ref="sb-checkpoint-5-uiAllActions"
+  ref="checkpoint-5-uiAllActions"
   title="Redux Fundamentals: UI with all actions"
 />
 
