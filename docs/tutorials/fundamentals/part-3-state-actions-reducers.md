@@ -6,6 +6,7 @@ description: 'The official Redux Fundamentals tutorial: learn how reducers updat
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
+import { LiveExample } from '@site/src/components/LiveExample'
 
 <!-- prettier-ignore -->
 import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
@@ -36,19 +37,18 @@ Now that you have some idea of what these pieces are, it's time to put that know
 
 For this tutorial, we've created a pre-configured starter project that already has React set up, includes some default styling, and has a fake REST API that will allow us to write actual API requests in our app. You'll use this as the basis for writing the actual application code.
 
-To get started, you can open and fork this CodeSandbox:
+To get started, you can open and fork this StackBlitz project:
 
-<iframe
-  class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/master/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
-  title="redux-fundamentals-example-app"
-  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-></iframe>
+<LiveExample
+  repo="reduxjs/redux-fundamentals-example-app"
+  ref="master"
+  file="src/main.jsx"
+  title="Redux Fundamentals: starter project"
+/>
 
-You can also [clone the same project from this Github repo](https://github.com/reduxjs/redux-fundamentals-example-app). After cloning the repo, you can install the tools for the project with `npm install`, and start it with `npm start`.
+You can also [clone the same project from this Github repo](https://github.com/reduxjs/redux-fundamentals-example-app). The project is configured to use [NPM](https://docs.npmjs.com/cli/v10) as the package manager, but you can use any package manager ([pnpm](https://pnpm.io/), [Yarn](https://yarnpkg.com/), or [Bun](https://bun.sh/docs/cli/install)) as you prefer. After installing packages, you can start the local dev server with the `npm run dev` command.
 
-If you'd like to see the final version of what we're going to build, you can check out [the **`tutorial-steps` branch**](https://github.com/reduxjs/redux-fundamentals-example-app/tree/tutorial-steps), or [look at the final version in this CodeSandbox](https://codesandbox.io/s/github/reduxjs/redux-fundamentals-example-app/tree/tutorial-steps).
+If you'd like to see the final version of what we're going to build, you can check out [the **`tutorial-steps` branch**](https://github.com/reduxjs/redux-fundamentals-example-app/tree/tutorial-steps), or [open the final version on StackBlitz](https://stackblitz.com/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-10-finalCode).
 
 #### Creating a New Redux + React Project
 
@@ -66,7 +66,7 @@ The Redux template for Vite comes with Redux Toolkit and React-Redux already con
 
 - Add the `@reduxjs/toolkit` and `react-redux` packages
 - Create a Redux store using RTK's `configureStore` API, and pass in at least one reducer function
-- Import the Redux store into your application's entry point file (such as `src/index.js`)
+- Import the Redux store into your application's entry point file (such as `src/main.jsx`)
 - Wrap your root React component with the `<Provider>` component from React-Redux, like:
 
 ```jsx
@@ -87,12 +87,12 @@ This initial project is based on [the standard Vite](https://vite.dev/guide/) Re
 Let's take a quick look at what the initial project contains:
 
 - `/src`
-  - `index.js`: the entry point file for the application. It renders the main `<App>` component.
-  - `App.js`: the main application component.
+  - `main.jsx`: the entry point file for the application. It renders the main `<App>` component.
+  - `App.jsx`: the main application component.
   - `index.css`: styles for the complete application
   - `/api`
     - `client.js`: a small `fetch` wrapper client that allows us to make HTTP GET and POST requests
-    - `server.js`: provides a fake REST API for our data. Our app will fetch data from these fake endpoints later.
+    - `server.js`: provides a fake REST API for our data, using [Mock Service Worker](https://mswjs.io/). Our app will fetch data from these fake endpoints later.
   - `/exampleAddons`: contains some additional Redux addons that we'll use later in the tutorial to show how things work
 
 If you load the app now, you should see a welcome message, but the rest of the app is otherwise empty.
@@ -244,7 +244,7 @@ Now that we know what our state structure and our actions look like, it's time t
 
 **A Redux app really only has one reducer function: the "root reducer" function** that you will pass to `createStore` later on. That one root reducer function is responsible for handling _all_ of the actions that are dispatched, and calculating what the _entire_ new state result should be every time.
 
-Let's start by creating a `reducer.js` file in the `src` folder, alongside `index.js` and `App.js`.
+Let's start by creating a `reducer.js` file in the `src` folder, alongside `main.jsx` and `App.jsx`.
 
 Every reducer needs some initial state, so we'll add some fake todo entries to get us started. Then, we can write an outline for the logic inside the reducer function:
 
@@ -627,7 +627,7 @@ To keep this page shorter, we'll skip showing how to write the reducer update lo
 
 **Try writing the updates for those yourself**, based on [the requirements described above](#defining-requirements).
 
-If you get stuck, see [the CodeSandbox at the end of this page](#what-youve-learned) for the complete implementation of these reducers.
+If you get stuck, see [the live example at the end of this page](#what-youve-learned) for the complete implementation of these reducers.
 
 :::
 
@@ -698,13 +698,12 @@ values are the slice reducer functions that know how to update those slices of t
 
 Here's the contents of our app so far:
 
-<iframe
-  class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-1-combinedReducers/?codemirror=1&fontsize=14&hidenavigation=1&module=%2Fsrc%2Freducer.js&theme=dark&runonclick=1"
-  title="redux-fundamentals-example-app"
-  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-></iframe>
+<LiveExample
+  repo="reduxjs/redux-fundamentals-example-app"
+  ref="checkpoint-1-combinedReducers"
+  file="src/reducer.js"
+  title="Redux Fundamentals: combined reducers"
+/>
 
 :::tip Summary
 

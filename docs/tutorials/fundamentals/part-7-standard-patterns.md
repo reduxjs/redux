@@ -6,6 +6,7 @@ description: 'The official Fundamentals tutorial for Redux: learn the standard p
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
+import { LiveExample } from '@site/src/components/LiveExample'
 
 <!-- prettier-ignore -->
 import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
@@ -150,7 +151,7 @@ export const colorFilterChanged = (color, changeType) => {
 
 And since this action was being dispatched from the `<Footer>` component, we'll need to import the `colorFilterChanged` action creator over there and use it:
 
-```js title="src/features/footer/Footer.js"
+```js title="src/features/footer/Footer.jsx"
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -204,9 +205,9 @@ export function fetchTodos() {
 }
 ```
 
-And that means we have to change the place it's dispatched in `index.js` to call the outer thunk action creator function, and pass the returned inner thunk function to `dispatch`:
+And that means we have to change the place it's dispatched in `main.jsx` to call the outer thunk action creator function, and pass the returned inner thunk function to `dispatch`:
 
-```js title="src/index.js"
+```js title="src/main.jsx"
 import store from './store'
 import { fetchTodos } from './features/todos/todosSlice'
 
@@ -283,7 +284,7 @@ First, we need to install Reselect:
 npm install reselect
 ```
 
-Then, we can import and call `createSelector`. Our original `selectTodoIds` function was defined over in `TodoList.js`, but it's more common for selector functions to be written in the relevant slice file. So, let's add this to the todos slice:
+Then, we can import and call `createSelector`. Our original `selectTodoIds` function was defined over in `TodoList.jsx`, but it's more common for selector functions to be written in the relevant slice file. So, let's add this to the todos slice:
 
 ```js title="src/features/todos/todosSlice.js"
 // highlight-next-line
@@ -306,7 +307,7 @@ export const selectTodoIds = createSelector(
 
 Then, let's use it in `<TodoList>`:
 
-```js title="src/features/todos/TodoList.js"
+```js title="src/features/todos/TodoList.jsx"
 import React from 'react'
 import { useSelector, shallowEqual } from 'react-redux'
 
@@ -592,25 +593,22 @@ export const fetchTodos = () => async dispatch => {
 }
 ```
 
-However, before we try to show this in the UI, we need to modify the fake server API to add an artificial delay to our API calls. Open up `src/api/server.js`, and look for this commented-out line around line 63:
+However, before we try to show this in the UI, we need to modify the fake server API to add an artificial delay to our API calls. Open up `src/api/server.js`, and change the `ARTIFICIAL_DELAY_MS` value near the top of the file from `0` to `2000`:
 
 ```js title="src/api/server.js"
-new Server({
-  routes() {
-    this.namespace = 'fakeApi'
-    // highlight-next-line
-    // this.timing = 2000
+// Add an extra delay to all endpoints, so loading spinners show up.
+// Set this to 2000 to simulate a slow network.
+// highlight-next-line
+const ARTIFICIAL_DELAY_MS = 2000
 
-    // omit other code
-  }
-})
+// omit other code
 ```
 
-If you uncomment that line, the fake server will add a 2-second delay to every API call our app makes, which gives us enough time to actually see a loading spinner being displayed.
+With that change, the fake server will add a 2-second delay to every API call our app makes, which gives us enough time to actually see a loading spinner being displayed.
 
 Now, we can read the loading state value in our `<TodoList>` component, and show a loading spinner instead based on that value.
 
-```js title="src/features/todos/TodoList.js"
+```js title="src/features/todos/TodoList.jsx"
 // omit imports
 
 const TodoList = () => {
@@ -639,13 +637,11 @@ In a real app, we'd also want to handle API failure errors and other potential c
 
 Here's what the app looks like with that loading status enabled (to see the spinner again, reload the app preview or open it in a new tab):
 
-<iframe
-  class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-7-asyncLoading/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
-  title="redux-fundamentals-example-app"
-  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-></iframe>
+<LiveExample
+  repo="reduxjs/redux-fundamentals-example-app"
+  ref="checkpoint-7-asyncLoading"
+  title="Redux Fundamentals: async loading status"
+/>
 
 ## Flux Standard Actions
 
@@ -896,7 +892,7 @@ This means that **we can write thunk functions that return a promise, and wait o
 
 We already have our `<Header>` component dispatching a thunk to save new todo entries to the server. Let's add some loading state inside the `<Header>` component, then disable the text input and show another loading spinner while we're waiting for the server:
 
-```js title="src/features/header/Header.js"
+```js title="src/features/header/Header.jsx"
 const Header = () => {
   const [text, setText] = useState('')
   // highlight-next-line
@@ -965,13 +961,11 @@ For more details on why these patterns exist and how Redux is meant to be used, 
 
 Here's how our app looks after it's been fully converted to use these patterns:
 
-<iframe
-  class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-8-normalizedState/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
-  title="redux-fundamentals-example-app"
-  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-></iframe>
+<LiveExample
+  repo="reduxjs/redux-fundamentals-example-app"
+  ref="checkpoint-8-normalizedState"
+  title="Redux Fundamentals: standard patterns"
+/>
 
 :::tip Summary
 
