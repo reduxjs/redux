@@ -5,6 +5,8 @@ sidebar_label: 'Async Logic and Data Fetching'
 description: 'The official Redux Fundamentals tutorial: learn how to use async logic with Redux'
 ---
 
+import { LiveExample } from '@site/src/components/LiveExample'
+
 <!-- prettier-ignore -->
 import FundamentalsWarning from "../../components/_FundamentalsWarning.mdx";
 
@@ -43,7 +45,9 @@ Learn how to use RTK Query for data fetching in [Redux Essentials, Part 7: RTK Q
 
 ### Example REST API and Client
 
-To keep the example project isolated but realistic, the initial project setup already included a fake in-memory REST API for our data (configured using [the Mirage.js mock API tool](https://miragejs.com/)). The API uses `/fakeApi` as the base URL for the endpoints, and supports the typical `GET/POST/PUT/DELETE` HTTP methods for `/fakeApi/todos`. It's defined in `src/api/server.js`.
+To keep the example project isolated but realistic, the initial project setup already included a fake in-memory REST API for our data (configured using the [Mock Service Worker](https://mswjs.io/) library). The API uses `/fakeApi` as the base URL for the endpoints, and supports the typical `GET/POST/PUT/DELETE` HTTP methods for `/fakeApi/todos`. It's defined in `src/api/server.js`.
+
+The fake API intercepts `fetch` calls directly in the page, so these requests won't show up in the browser DevTools Network tab. You can use the Redux DevTools to see the actions that are dispatched as the data is loaded.
 
 The project also includes a small HTTP API client object that exposes `client.get()` and `client.post()` methods, similar to popular HTTP libraries like `axios`. It's defined in `src/api/client.js`.
 
@@ -204,7 +208,7 @@ Once it's installed, we can update the Redux store in our todo app to use that m
 import { createStore, applyMiddleware } from 'redux'
 // highlight-next-line
 import { thunk } from 'redux-thunk'
-import { composeWithDevTools } from 'redux-devtools-extension'
+import { composeWithDevTools } from '@redux-devtools/extension'
 import rootReducer from './reducer'
 
 // highlight-next-line
@@ -243,11 +247,11 @@ We only want to make this API call once, when the application loads for the firs
 
 - In the `<App>` component, in a `useEffect` hook
 - In the `<TodoList>` component, in a `useEffect` hook
-- In the `index.js` file directly, right after we import the store
+- In the `main.jsx` file directly, right after we import the store
 
-For now, let's try putting this directly in `index.js`:
+For now, let's try putting this directly in `main.jsx`:
 
-```js title="src/index.js"
+```js title="src/main.jsx"
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
@@ -358,7 +362,7 @@ export function saveNewTodo(text) {
 
 Now we can use this in our `<Header>` component:
 
-```js title="src/features/header/Header.js"
+```js title="src/features/header/Header.jsx"
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -392,7 +396,7 @@ const Header = () => {
 Since we know we're going to immediately pass the thunk function to `dispatch` in the
 component, we can skip creating the temporary variable. Instead, we can call `saveNewTodo(text)`, and pass the resulting thunk function straight to `dispatch`:
 
-```js title="src/features/header/Header.js"
+```js title="src/features/header/Header.jsx"
 const handleKeyDown = e => {
   // If the user pressed the Enter key:
   const trimmedText = text.trim()
@@ -452,13 +456,11 @@ In the process, we saw how Redux middleware are used to let us make async calls 
 
 Here's what the current app looks like:
 
-<iframe
-  class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-6-asyncThunks/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
-  title="redux-fundamentals-example-app"
-  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-></iframe>
+<LiveExample
+  repo="reduxjs/redux-fundamentals-example-app"
+  ref="sb-checkpoint-6-asyncThunks"
+  title="Redux Fundamentals: async thunks"
+/>
 
 :::tip Summary
 

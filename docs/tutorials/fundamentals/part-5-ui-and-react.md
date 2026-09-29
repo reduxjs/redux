@@ -6,6 +6,7 @@ description: 'The official Redux Fundamentals tutorial: learn how to use Redux w
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
+import { LiveExample } from '@site/src/components/LiveExample'
 
 :::tip What You'll Learn
 
@@ -123,13 +124,12 @@ For now, we'll start with this small list of components to keep things easier to
 
 Here's the initial React UI of this app before we start adding any Redux-related logic:
 
-<iframe
-  class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-3-initialUI/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&view=preview&runonclick=1"
-  title="redux-fundamentals-example-app"
-  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-></iframe>
+<LiveExample
+  repo="reduxjs/redux-fundamentals-example-app"
+  ref="sb-checkpoint-3-initialUI"
+  view="preview"
+  title="Redux Fundamentals: initial UI"
+/>
 
 ### Reading State from the Store with `useSelector`
 
@@ -162,7 +162,7 @@ So, **selectors can return values from the Redux store state, and also return _d
 
 Let's read the array of todos into our `<TodoList>` component. First, we'll import the `useSelector` hook from the `react-redux` library, then call it with a selector function as its argument:
 
-```jsx title="src/features/todos/TodoList.js"
+```jsx title="src/features/todos/TodoList.jsx"
 import React from 'react'
 // highlight-next-line
 import { useSelector } from 'react-redux'
@@ -236,7 +236,7 @@ Let's try that in our `<Header>` component. We know that we need to let the user
 
 We'll write a typical React form component that uses ["controlled inputs"](https://react.dev/reference/react-dom/components/input#controlling-an-input-with-a-state-variable) to let the user type in the form text. Then, when the user presses the Enter key specifically, we'll dispatch that action.
 
-```jsx title="src/features/header/Header.js"
+```jsx title="src/features/header/Header.jsx"
 import React, { useState } from 'react'
 // highlight-next-line
 import { useDispatch } from 'react-redux'
@@ -282,9 +282,9 @@ Our components can now read state from the store, and dispatch actions to the st
 
 Instead, we have to specifically tell React-Redux what store we want to use in our components. We do this by **rendering a `<Provider>` component around our entire `<App>`, and passing the Redux store as a prop to `<Provider>`**. After we do this once, every component in the application will be able to access the Redux store if it needs to.
 
-Let's add that to our main `index.js` file:
+Let's add that to our main `main.jsx` file:
 
-```jsx title="src/index.js"
+```jsx title="src/main.jsx"
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 // highlight-next-line
@@ -316,13 +316,11 @@ That covers the key parts of using React-Redux with React:
 
 We should now be able to actually interact with the app! Here's the working UI so far:
 
-<iframe
-  class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-4-initialHooks/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
-  title="redux-fundamentals-example-app"
-  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-></iframe>
+<LiveExample
+  repo="reduxjs/redux-fundamentals-example-app"
+  ref="sb-checkpoint-4-initialHooks"
+  title="Redux Fundamentals: initial hooks"
+/>
 
 Now, let's look at a couple more ways we can use these together in our todo app.
 
@@ -377,7 +375,7 @@ As we mentioned earlier, we could put all the input handling directly into `<Foo
 
 Given that assumption, the React-Redux parts of the component might look like this:
 
-```jsx title="src/features/footer/Footer.js"
+```jsx title="src/features/footer/Footer.jsx"
 import React from 'react'
 // highlight-next-line
 import { useSelector } from 'react-redux'
@@ -436,7 +434,7 @@ Another option is to have the `<TodoList>` component only read an array of todo 
 
 Let's give that a shot.
 
-```jsx title="src/features/todos/TodoList.js"
+```jsx title="src/features/todos/TodoList.jsx"
 import React from 'react'
 import { useSelector } from 'react-redux'
 import TodoListItem from './TodoListItem'
@@ -461,7 +459,7 @@ This time, we only select an array of todo IDs from the store in `<TodoList>`, a
 
 Then, in `<TodoListItem>`, we can use that ID value to read our todo item. We can also update `<TodoListItem>` to dispatch the "toggled" action based on the todo's ID.
 
-```jsx title="src/features/todos/TodoListItem.js"
+```jsx title="src/features/todos/TodoListItem.jsx"
 import React from 'react'
 // highlight-next-line
 import { useSelector, useDispatch } from 'react-redux'
@@ -509,7 +507,7 @@ One possible solution to this is to change how `useSelector` compares its values
 
 React-Redux has a `shallowEqual` comparison function we can use to check if the items _inside_ the array are still the same. Let's try that:
 
-```jsx title="src/features/todos/TodoList.js"
+```jsx title="src/features/todos/TodoList.jsx"
 import React from 'react'
 // highlight-next-line
 import { useSelector, shallowEqual } from 'react-redux'
@@ -551,13 +549,11 @@ We'll cover implementing the filters in [Part 7: Standard Redux Patterns](./part
 
 Let's see how the app looks now, including the components and sections we skipped to keep this shorter:
 
-<iframe
-  class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-5-uiAllActions/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&runonclick=1"
-  title="redux-fundamentals-example-app"
-  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-></iframe>
+<LiveExample
+  repo="reduxjs/redux-fundamentals-example-app"
+  ref="sb-checkpoint-5-uiAllActions"
+  title="Redux Fundamentals: UI with all actions"
+/>
 
 :::tip Summary
 

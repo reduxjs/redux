@@ -6,6 +6,7 @@ description: 'The official Fundamentals tutorial for Redux: learn the modern way
 ---
 
 import { DetailedExplanation } from '../../components/DetailedExplanation'
+import { LiveExample } from '@site/src/components/LiveExample'
 
 :::tip What You'll Learn
 
@@ -101,7 +102,7 @@ export default rootReducer
 ```js title="src/store.js"
 import { createStore, applyMiddleware } from 'redux'
 import { thunk } from 'redux-thunk'
-import { composeWithDevTools } from 'redux-devtools-extension'
+import { composeWithDevTools } from '@redux-devtools/extension'
 import rootReducer from './reducer'
 
 const composedEnhancer = composeWithDevTools(applyMiddleware(thunk))
@@ -188,6 +189,12 @@ npm uninstall redux redux-thunk reselect
 ```
 
 To be clear, **we're still using these packages and need to have them installed**. However, because Redux Toolkit depends on them, they'll be installed automatically when we install `@reduxjs/toolkit`, so we don't need to have the other packages specifically listed in our `package.json` file.
+
+We can also remove the `@redux-devtools/extension` package entirely, since `configureStore` sets up the Redux DevTools connection for us:
+
+```js
+npm uninstall @redux-devtools/extension
+```
 
 ## Writing Slices
 
@@ -439,13 +446,12 @@ We can use these same patterns to go rewrite the rest of our reducers in `todosS
 
 Here's how our code looks with all the slices converted:
 
-<iframe
-  class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-9-createSlice/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&module=%2Fsrc%2Ffeatures%2Ftodos%2FtodosSlice.js&runonclick=1"
-  title="redux-fundamentals-example-app"
-  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-></iframe>
+<LiveExample
+  repo="reduxjs/redux-fundamentals-example-app"
+  ref="sb-checkpoint-9-createSlice"
+  file="src/features/todos/todosSlice.js"
+  title="Redux Fundamentals: createSlice"
+/>
 
 ## Writing Thunks
 
@@ -828,13 +834,12 @@ For more info on Redux Toolkit, including usage guides and API references, see:
 
 Let's take one final look at the completed todo application, including all the code that's been converted to use Redux Toolkit:
 
-<iframe
-  class="codesandbox"
-  src="https://codesandbox.io/embed/github/reduxjs/redux-fundamentals-example-app/tree/checkpoint-10-finalCode/?codemirror=1&fontsize=14&hidenavigation=1&theme=dark&module=%2Fsrc%2Ffeatures%2Ftodos%2FtodosSlice.js&runonclick=1"
-  title="redux-fundamentals-example-app"
-  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
-  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
-></iframe>
+<LiveExample
+  repo="reduxjs/redux-fundamentals-example-app"
+  ref="sb-checkpoint-10-finalCode"
+  file="src/features/todos/todosSlice.js"
+  title="Redux Fundamentals: final code"
+/>
 
 And we'll do a final recap of the key points you learned in this section:
 
