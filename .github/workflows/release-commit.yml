@@ -11,6 +11,9 @@ permissions:
 jobs:
   release:
     name: Release Commit
+    # The pkg-pr-new app is only installed on the main repo. Pushes to fork
+    # branches would otherwise run this in the fork and fail.
+    if: github.repository == 'reduxjs/redux'
     runs-on: ubuntu-latest
 
     steps:
