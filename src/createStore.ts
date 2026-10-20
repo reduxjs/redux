@@ -14,6 +14,15 @@ import { kindOf } from './utils/kindOf'
 import $$observable from './utils/symbol-observable'
 
 /**
+ * Prevents TypeScript from inferring a generic type parameter.
+ *
+ * @template T - The type to prevent inference for.
+ *
+ * @internal
+ */
+export type NoInfer<T> = [T][T extends any ? 0 : never]
+
+/**
  * @deprecated
  *
  * **We recommend using the `configureStore` method

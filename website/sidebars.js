@@ -152,6 +152,7 @@ module.exports = {
       'api/applymiddleware',
       'api/bindactioncreators',
       'api/compose',
+      'api/reducereducers',
       'api/utils',
       'api/errors'
     ]
