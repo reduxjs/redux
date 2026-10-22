@@ -153,7 +153,7 @@ export type AppDispatch = AppStore['dispatch']
 export type AppThunk<ThunkReturnType = void> = ThunkAction<
   ThunkReturnType,
   RootState,
-  unknown,
+  undefined,
   Action
 >
 ```
