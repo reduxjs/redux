@@ -55,7 +55,7 @@ Most likely, you'll also need [the `react-redux` bindings for use with React](ht
 npm install react-redux
 ```
 
-Note that unlike Redux itself, many packages in the Redux ecosystem don't provide UMD builds, so we recommend using module bundlers like [Vite](https://vitejs.dev/) and [Webpack](https://webpack.js.org/) for the most comfortable development experience.
+Note that Redux and most packages in the Redux ecosystem no longer provide UMD builds, so we recommend using module bundlers like [Vite](https://vitejs.dev/) and [Webpack](https://webpack.js.org/) for the most comfortable development experience.
 
 ### Redux DevTools Extension
 
