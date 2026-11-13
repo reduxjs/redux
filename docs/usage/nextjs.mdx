@@ -276,7 +276,13 @@ export default function StoreProvider({
 
 If you use Next.js's support for client side SPA-style navigation by using `next/navigation`, then when customers navigate from page to page only the route component will be re-rendered. This means that if you have a Redux store created and provided in the layout component it will be preserved across route changes. This is not a problem if you are only using the store for global, mutable data. However, if you are using the store for per-route data then you will need to reset the route-specific data in the store when the route changes.
 
+For example, consider a product detail route such as `/products/1`. When the user navigates from `/products/1` to `/products/2`, only the route component re-renders. The store provided in the layout is the same instance as before, so it still holds the name of product 1, and product 2's page would render that stale value until the store is initialized for the new route.
+
+You need this pattern whenever the data belongs to a single route: a product detail page, a user profile, a filtered list. Data that is genuinely global - the current user, a theme preference, a shopping cart - does not need to be reset, because it is meant to persist across routes.
+
 Shown below is a `ProductName` example component that uses the Redux store to manage the mutable name of a product. The `ProductName` component is part of a product detail route. In order to ensure that we have the correct name in the store we need to set the value in the store any time the `ProductName` component is initially rendered, which happens on any route change to the product detail route.
+
+The example combines several files. Each `// file:` comment marks the path that the following code should be saved to.
 
 ```ts title="app/ProductName.tsx"
 // file: lib/features/product/productSlice.ts noEmit
