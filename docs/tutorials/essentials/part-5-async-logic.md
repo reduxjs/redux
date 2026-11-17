@@ -981,7 +981,7 @@ async function start() {
 start()
 ```
 
-Notice that this is a valid way to fetch data on startup. This actually starts the fetching process _before_ we start rendering our React components, so the data should be available sooner. (Note that this principle can be applied by using [React Router data loaders](https://reactrouter.com/en/main/route/loader) as well.)
+Notice that this is a valid way to fetch data on startup. This actually starts the fetching process _before_ we start rendering our React components, so the data should be available sooner. (Note that this principle can be applied by using [React Router data loaders](https://reactrouter.com/start/data/data-loading) as well.)
 
 Now, each of the posts should be showing a username again, and we should also have that same list of users shown in the "Author" dropdown in our `<AddPostForm>`.
 
