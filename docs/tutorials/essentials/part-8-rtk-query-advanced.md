@@ -374,7 +374,7 @@ This dispatch happens automatically inside the query hooks, but we can start it 
 
 Note that we didn't provide an argument to `initiate()`. That's because our `getUsers` endpoint doesn't need a specific query argument. Conceptually, this is the same as saying "this cache entry has a query argument of `undefined`". If we did need arguments, we'd pass them to the thunk, like `dispatch(apiSlice.endpoints.getPokemon.initiate('pikachu'))`.
 
-In this case, we're manually dispatching the thunk to start prefetching the data in our app's setup function. In practice, you may want to do the prefetching in [React-Router's "data loaders"](https://reactrouter.com/en/main/route/loader) to start the requests before the components are rendered. (See [the RTK repo discussion thread on React-Router loaders](https://github.com/reduxjs/redux-toolkit/discussions/2751) for some ideas.)
+In this case, we're manually dispatching the thunk to start prefetching the data in our app's setup function. In practice, you may want to do the prefetching in [React-Router's "data loaders"](https://reactrouter.com/start/data/data-loading) to start the requests before the components are rendered. (See [the RTK repo discussion thread on React-Router loaders](https://github.com/reduxjs/redux-toolkit/discussions/2751) for some ideas.)
 
 :::caution
 

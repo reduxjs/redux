@@ -39,7 +39,7 @@ Unlike Redux, Elm is a language, so it is able to benefit from many things like 
 
 ### Immutable
 
-[Immutable](https://facebook.github.io/immutable-js) is a JavaScript library implementing persistent data structures. It is performant and has an idiomatic JavaScript API.
+[Immutable](https://immutable-js.com) is a JavaScript library implementing persistent data structures. It is performant and has an idiomatic JavaScript API.
 
 (Note that while Immutable.js helped inspire Redux, today we recommend [using Immer for immutable updates instead](../../style-guide/style-guide.md#use-immer-for-writing-immutable-updates).)
 
