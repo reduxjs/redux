@@ -5,8 +5,7 @@ on:
   pull_request:
   workflow_dispatch:
 
-permissions:
-  pull-requests: write
+permissions: {}
 
 jobs:
   release:
@@ -15,10 +14,15 @@ jobs:
     # branches would otherwise run this in the fork and fail.
     if: github.repository == 'reduxjs/redux'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
 
       # No `corepack enable` here. pnpm/setup installs pnpm itself and reads the
       # version from the packageManager field; running both means a Corepack
@@ -36,7 +40,7 @@ jobs:
           node-version: '24.x'
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build
         run: pnpm run build
