@@ -20,6 +20,14 @@ function libraryEditUrl(repo: string) {
     `https://github.com/reduxjs/${repo}/edit/${ref}/docs/${docPath}`
 }
 
+// RTK preview builds link their freshly built package here (see `optionalLinks`
+// in scripts/fetch-external-docs.mts). Other builds use the published package.
+const toolkitLinkedDist = resolve(
+  __dirname,
+  'external/redux-toolkit/packages/toolkit/dist'
+)
+const toolkitDistLinked = existsSync(toolkitLinkedDist)
+
 // One entry per docs plugin instance. Read by the two custom navbar items in
 // src/components/ (LibraryDropdownNavbarItem, LibraryLinksNavbarItem), which
 // are registered in src/theme/NavbarItem/ComponentTypes.tsx. `navbarItems`
@@ -379,7 +387,11 @@ const config: Config = {
                   'external/redux-toolkit/docs/tsconfig.json'
                 ),
                 externalResolutions: {}
-              }
+              },
+              // Without the linked build, code blocks are checked against the
+              // published package, which can lag behind RTK's master docs.
+              // Report those errors without failing the build.
+              typeErrors: toolkitDistLinked ? 'error' : 'warn'
             }
           ]
         ]
@@ -403,12 +415,8 @@ const config: Config = {
     // RTK types changed. Make every RTK .mdx page depend on the type
     // declarations its code blocks compile against.
     function toolkitTypesDependency() {
-      const linkedDist = resolve(
-        __dirname,
-        'external/redux-toolkit/packages/toolkit/dist'
-      )
-      const typesDir = existsSync(linkedDist)
-        ? linkedDist
+      const typesDir = toolkitDistLinked
+        ? toolkitLinkedDist
         : resolve(__dirname, 'node_modules/@reduxjs/toolkit/dist')
       const files = [
         resolve(__dirname, 'external/redux-toolkit/docs/tsconfig.json'),

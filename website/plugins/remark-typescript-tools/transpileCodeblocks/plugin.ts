@@ -39,6 +39,12 @@ export interface TranspileCodeblocksSettings {
   postProcessTs?: PostProcessor;
   assembleReplacementNodes?: typeof defaultAssembleReplacementNodes;
   fileExtensions?: string[];
+  /**
+   * `'error'` fails the build on a type error in a code block. `'warn'` only
+   * logs it. The `DOCS_TYPECHECK=warn` environment variable forces `'warn'`.
+   * @default 'error'
+   */
+  typeErrors?: 'error' | 'warn';
 }
 
 const compilers = new WeakMap<CompilerSettings, Compiler>();
@@ -50,7 +56,10 @@ export const transpileCodeblocks: Plugin<[TranspileCodeblocksSettings]> =
     postProcessTs = defaultPostProcessTs,
     assembleReplacementNodes = defaultAssembleReplacementNodes,
     fileExtensions = ['.mdx'],
+    typeErrors = 'error',
   }) {
+    const failOnTypeErrors =
+      typeErrors === 'error' && process.env.DOCS_TYPECHECK !== 'warn';
     if (!compilers.has(compilerSettings)) {
       compilers.set(compilerSettings, new Compiler(compilerSettings));
     }
@@ -171,14 +180,11 @@ export const transpileCodeblocks: Plugin<[TranspileCodeblocksSettings]> =
         const transpilationResult = compiler.compile(virtualFiles);
         //console.timeEnd(virtualFolder)
 
-        // Core production builds check against the published package, which can
-        // lag behind the library's docs, so they report errors without failing.
-        // Library PR previews check against the PR's own build and stay strict.
         const report = (
           reason: string,
           place: Parameters<typeof file.message>[1]
         ) => {
-          if (process.env.DOCS_TYPECHECK !== 'warn') file.fail(reason, place);
+          if (failOnTypeErrors) file.fail(reason, place);
           file.message(reason, place);
           console.warn(`[WARNING] ${file.path}\n${reason}`);
         };
