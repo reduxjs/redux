@@ -14,10 +14,6 @@ NODE_OPTIONS = "--max_old_space_size=4096"
 # Netlify detects pnpm from the lockfile; Corepack reads the version from
 # `packageManager` in website/package.json.
 NETLIFY_USE_PNPM = "true"
-# RTK code blocks are checked against the published @reduxjs/toolkit, which can
-# lag behind RTK's master docs. Report type errors as warnings here; RTK PR
-# previews check against their own build and still fail on errors.
-DOCS_TYPECHECK = "warn"
 
 # Pages that use the `LiveExample` StackBlitz embed. WebContainers need the host
 # page to be cross-origin isolated. Any other cross-origin iframe on these pages
